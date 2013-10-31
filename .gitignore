@@ -1,0 +1,23 @@
+.DS_Store
+
+
+*.sln
+*.userprefs
+*.csproj
+*.pidb
+*.unityproj
+*.scpt
+*.suo
+*.pdb
+*.booproj
+
+
+# Resharper
+*[Rr]e[Ss]harper.user
+_ReSharper.*/
+
+obj
+Build
+build
+Library
+Temp
