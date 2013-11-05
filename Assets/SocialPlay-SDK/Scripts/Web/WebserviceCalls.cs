@@ -130,6 +130,25 @@ public class WebserviceCalls : MonoBehaviour
         StartCoroutine(OnWebServiceCallback(www, callback));
     }
 
+    public void StoreItemPurchase(string URL, Guid userID, int itemID, int amount, string paymentType, Guid appID, Action<string> callback)
+    {
+        string url = URL + "StoreItemPurchase?UserID=" + userID + "&ItemID=" + itemID + "&Amount=" + amount + "&PaymentType=" + paymentType + "&AppID=" + appID;
+
+        WWW www = new WWW(url);
+
+        StartCoroutine(OnWebServiceCallback(www, callback));
+
+    }
+
+    public void GetCreditBundles(string URL, Action<string> callback)
+    {
+        string url = URL + "GetPurchaseBundles";
+
+        WWW www = new WWW(url);
+
+        StartCoroutine(OnWebServiceCallback(www, callback));
+    }
+
     IEnumerator OnWebServiceCallback(WWW www, Action<string> callback)
     {
         yield return www;
