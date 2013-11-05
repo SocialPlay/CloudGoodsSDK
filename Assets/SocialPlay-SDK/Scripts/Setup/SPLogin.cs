@@ -40,7 +40,7 @@ public class SPLogin : MonoBehaviour
     }
 
     public static event Action<SPLogin_Responce> loginMessageResponce;
-    public static event Action<Guid> recivedUserGuid;
+    public static event Action<UserInfo> recivedUserInfo;
 
     public static event Action<SPLogin_Responce> RegisterMessageResponce;
 
@@ -89,7 +89,11 @@ public class SPLogin : MonoBehaviour
     void RecivedRegisterUser(string statusCode)
     {
         SPLogin_Responce responce = Newtonsoft.Json.JsonConvert.DeserializeObject<SPLogin_Responce>(JToken.Parse(statusCode).ToString());
-        if (RegisterMessageResponce != null)
+        if (responce.code == 7)
+        {
+            responce.message = "Server Related Error";
+        }
+        if ( RegisterMessageResponce != null)
         {
             RegisterMessageResponce(responce);
         }
@@ -98,14 +102,17 @@ public class SPLogin : MonoBehaviour
     void RecivedLoginCode(string statusCode)
     {
         SPLogin_Responce responce = Newtonsoft.Json.JsonConvert.DeserializeObject<SPLogin_Responce>(JToken.Parse(statusCode).ToString());
-        Debug.Log(responce.ToString());
+        if (responce.code == 7)
+        {
+            responce.message = "Server Related Error";
+        }
         if (responce.code == 0)
         {
-            if (recivedUserGuid != null)
+            if (recivedUserInfo != null)
             {
                 UserInfo userInfo = Newtonsoft.Json.JsonConvert.DeserializeObject<UserInfo>(responce.message);
                 GameAuthentication.OnUserAuthorized(new WebserviceCalls.UserGuid(userInfo.ID.ToString(), userInfo.name, userInfo.email));
-                recivedUserGuid(userInfo.ID);
+                recivedUserInfo(userInfo);
             }
         }
         else
@@ -120,6 +127,10 @@ public class SPLogin : MonoBehaviour
     void RecivedForgotPassword(string statusCode)
     {
         SPLogin_Responce responce = Newtonsoft.Json.JsonConvert.DeserializeObject<SPLogin_Responce>(JToken.Parse(statusCode).ToString());
+        if (responce.code == 7)
+        {
+            responce.message = "Server Related Error";
+        }
         if (ForgotPasswordResponce != null)
         {
             ForgotPasswordResponce(responce);
@@ -129,6 +140,10 @@ public class SPLogin : MonoBehaviour
     void RecivedVerificationEmailResponce(string statusCode)
     {
         SPLogin_Responce responce = Newtonsoft.Json.JsonConvert.DeserializeObject<SPLogin_Responce>(JToken.Parse(statusCode).ToString());
+        if (responce.code == 7)
+        {
+            responce.message = "Server Related Error";
+        }
         if (ResentVerificationResponce != null)
         {
             ResentVerificationResponce(responce);
