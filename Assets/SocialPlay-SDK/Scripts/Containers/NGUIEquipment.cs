@@ -25,8 +25,8 @@ public class NGUIEquipment : MonoBehaviour
     void Start()
     {
         foreach (SlotData pair in display.slots)
-        {    
-           container.AddSlot(pair.slotID, null, pair.filters,1,pair.priority);
+        {
+            container.AddSlot(pair.slotID, null, pair.filters, pair.slotSizeLimit, pair.priority);
             if (pair.gameObject.GetComponent<SlotKeybinding>())
             {
                 pair.gameObject.GetComponent<SlotKeybinding>().bindingPressed += container.OnItemKeybindClick;
@@ -35,7 +35,7 @@ public class NGUIEquipment : MonoBehaviour
         SetStats();
     }
 
- 
+
 
     void AddItem(ItemData data, bool isSave)
     {
@@ -53,7 +53,7 @@ public class NGUIEquipment : MonoBehaviour
             item.enabled = true;
         }
         SetStats();
-        
+
     }
 
     void SetStats()
@@ -92,7 +92,7 @@ public class NGUIEquipment : MonoBehaviour
         }
     }
 
- }
+}
 
 [System.Serializable]
 public class StatsPairs

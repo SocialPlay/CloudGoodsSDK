@@ -7,7 +7,7 @@ using UnityEngine;
 using Newtonsoft.Json.Linq;
 
 [System.Serializable]
-public class ItemData : MonoBehaviour, IEquatable<ItemData>
+public class ItemData : MonoBehaviour
 {
     internal ItemContainer ownerContainer = null;
     internal int stackSize = 0;
@@ -31,8 +31,7 @@ public class ItemData : MonoBehaviour, IEquatable<ItemData>
     internal Dictionary<string, float> stats;
     internal string assetURL;
     internal List<string> tags;
-
-
+    
     public void AssetBundle(Action<UnityEngine.Object> callBack)
     {
         try
@@ -87,7 +86,7 @@ public class ItemData : MonoBehaviour, IEquatable<ItemData>
     }
 
 
-    public bool Equals(ItemData other)
+    public bool IsSameItemAs( ItemData other)
     {
         if (this == null || other == null)
         {

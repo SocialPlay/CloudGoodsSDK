@@ -176,7 +176,7 @@ public class LimitedItemContainer : ItemContainer
     {
         foreach (ItemData item in containerItems)
         {
-            if (item.Equals(modified))
+            if (item.IsSameItemAs(modified))
             {
                 return item.stackSize;
             }

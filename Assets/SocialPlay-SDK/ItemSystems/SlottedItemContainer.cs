@@ -164,7 +164,7 @@ public class SlottedItemContainer : ItemContainer
             if (selectedSlot.Value.slotData == null)
                 continue;
 
-            if (selectedSlot.Value.slotData.Equals(modified))
+            if (selectedSlot.Value.slotData.gameObject == modified.gameObject)
             {
                 if (selectedSlot.Value.slotData.stackSize <= amount || amount == -1)
                 {
@@ -186,7 +186,7 @@ public class SlottedItemContainer : ItemContainer
         foreach (KeyValuePair<int, SlottedContainerSlotData> selectedSlot in slots)
         {
             if (selectedSlot.Value.slotData == null) continue;
-            if (selectedSlot.Value.slotData.Equals(modified))
+            if (selectedSlot.Value.slotData.IsSameItemAs(modified))
             {
                 return selectedSlot.Value.slotData.stackSize;
             }
@@ -221,11 +221,18 @@ public class SlottedItemContainer : ItemContainer
             {
                 if (SelectedSlots.slotData == null)
                 {
-                    state = new ContainerAddState(ContainerAddState.ActionState.Add, SelectedSlots.slotMaxCountLimit, null);
+                    state = new ContainerAddState(ContainerAddState.ActionState.Add, (modified.stackSize < SelectedSlots.slotMaxCountLimit ? modified.stackSize : SelectedSlots.slotMaxCountLimit), null);
+                    return state;
+                }
+                else if (SelectedSlots.slotData.IsSameItemAs(modified) && SelectedSlots.slotData.stackSize < SelectedSlots.slotMaxCountLimit)
+                {
+                    Debug.Log("Adding " + (SelectedSlots.slotMaxCountLimit - SelectedSlots.slotData.stackSize).ToString());
+                    state = new ContainerAddState(ContainerAddState.ActionState.Add, SelectedSlots.slotMaxCountLimit - SelectedSlots.slotData.stackSize, null);
                     return state;
                 }
                 else
                 {
+
                     Swaping = true;
                     if (firstStack == null)
                     {

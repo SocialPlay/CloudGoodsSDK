@@ -50,7 +50,7 @@ public class ChestItemContainer : ItemContainer
     {
         foreach (ItemData item in chestItems)
         {
-            if (item.Equals(data))
+            if (item.IsSameItemAs(data))
             {
                 item.stackSize += amount;
                 return true;
@@ -63,7 +63,7 @@ public class ChestItemContainer : ItemContainer
     {
         foreach (ItemData item in chestItems)
         {
-            if (item.Equals(modified))
+            if (item.gameObject == modified.gameObject)
             {
                 if (amount == -1 || item.stackSize <= amount)
                 {
@@ -82,7 +82,7 @@ public class ChestItemContainer : ItemContainer
     {
         foreach (ItemData item in chestItems)
         {
-            if (item.Equals(modified))
+            if (item.IsSameItemAs(modified))
                 return item.stackSize;
         }
 
