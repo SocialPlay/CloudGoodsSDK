@@ -33,10 +33,17 @@ public class NGUI_SPLogin : MonoBehaviour
     private UIInputVisualValidation registerUserPasswordConfirmValidator;
     #endregion
 
+    #region Register Confirm Variables
+    public GameObject registerConfirmationTab;
+    public UILabel RegisterConfirmationStatus;
+    public UIButton registerConfirmButton;
+
+    #endregion
+
     void OnEnable()
     {
         SPLogin.loginMessageResponce += RecivedLoginResponce;
-        SPLogin.recivedUserGuid += RecivedUserGuid;
+        SPLogin.recivedUserInfo += RecivedUserGuid;
         SPLogin.RegisterMessageResponce += RegisterMessageResponce;
         SPLogin.ForgotPasswordResponce += ForgotPasswordResponce;
         SPLogin.ResentVerificationResponce += ResentVerificationResponce;
@@ -45,7 +52,7 @@ public class NGUI_SPLogin : MonoBehaviour
     void OnDisable()
     {
         SPLogin.loginMessageResponce -= RecivedLoginResponce;
-        SPLogin.recivedUserGuid -= RecivedUserGuid;
+        SPLogin.recivedUserInfo -= RecivedUserGuid;
         SPLogin.RegisterMessageResponce -= RegisterMessageResponce;
         SPLogin.ForgotPasswordResponce -= ForgotPasswordResponce;
         SPLogin.ResentVerificationResponce -= ResentVerificationResponce;
@@ -56,6 +63,7 @@ public class NGUI_SPLogin : MonoBehaviour
         loginTab.SetActive(true);
         registerErrorLabel.text = "";
         registerTab.SetActive(false);
+        registerConfirmationTab.SetActive(false);
 
         loginUserEmailValidator = loginUserEmail.GetComponent<UIInputVisualValidation>();
         loginUserPasswordValidator = loginUserPassword.GetComponent<UIInputVisualValidation>();
@@ -70,10 +78,11 @@ public class NGUI_SPLogin : MonoBehaviour
 
     #region webservice responce events
 
-    void RecivedUserGuid(Guid obj)
+    void RecivedUserGuid(SPLogin.UserInfo obj)
     {
         resendVerificationTextObject.SetActive(false);
         loginErrorLabel.text = "User logged in";
+        this.gameObject.SetActive(false);
     }
 
     void ResentVerificationResponce(SPLogin.SPLogin_Responce responce)
@@ -98,21 +107,25 @@ public class NGUI_SPLogin : MonoBehaviour
 
         resendVerificationTextObject.SetActive(false);
         loginErrorLabel.text = recivedMessage.message;
-
-
-
     }
 
     void RegisterMessageResponce(SPLogin.SPLogin_Responce responce)
     {
         resendVerificationTextObject.SetActive(false);
+   
         if (responce.code == 0)
         {
-            registerErrorLabel.text = "Verification Email has been sent to your Email";
+            RegisterConfirmationStatus.text = "Verification Email has been sent to your Email";
+            registerConfirmButton.onClick.Clear();
+            registerConfirmButton.onClick.Add(new EventDelegate(this, "SwitchToLogin"));
+            registerConfirmButton.GetComponentInChildren<UILabel>().text = "To Login";
         }
         else
-        {
-            registerErrorLabel.text = responce.message;
+        {            
+            RegisterConfirmationStatus.text = responce.message;
+            registerConfirmButton.onClick.Clear();
+            registerConfirmButton.onClick.Add(new EventDelegate(this, "SwitchToRegister"));
+            registerConfirmButton.GetComponentInChildren<UILabel>().text = "Back";
         }
     }
 
@@ -129,6 +142,7 @@ public class NGUI_SPLogin : MonoBehaviour
         registerErrorLabel.text = "";
         loginTab.SetActive(false);
         registerTab.SetActive(true);
+        registerConfirmationTab.SetActive(false);
     }
 
     public void SwitchToLogin()
@@ -136,6 +150,7 @@ public class NGUI_SPLogin : MonoBehaviour
         loginErrorLabel.text = "";
         registerTab.SetActive(false);
         loginTab.SetActive(true);
+        registerConfirmationTab.SetActive(false);
     }
 
     public void Login()
@@ -143,13 +158,13 @@ public class NGUI_SPLogin : MonoBehaviour
         string ErrorMsg = "";
         if (!loginUserEmailValidator.IsValidCheck())
         {
-            ErrorMsg = "-Not Valid Email";
+            ErrorMsg = "-Invalid Email";
         }
 
         if (!loginUserPasswordValidator.IsValidCheck())
         {
             if (!string.IsNullOrEmpty(ErrorMsg)) ErrorMsg += "\n";
-            ErrorMsg += "-Not Valid Password";
+            ErrorMsg += "-Invalid Password";
         }
         loginErrorLabel.text = ErrorMsg;
         if (string.IsNullOrEmpty(ErrorMsg))
@@ -160,23 +175,23 @@ public class NGUI_SPLogin : MonoBehaviour
 
     public void Register()
     {
+
         string ErrorMsg = "";
         if (!registerUserEmailValidator.IsValidCheck())
         {
-            ErrorMsg = "-Not Valid Email";
+            ErrorMsg = "-Invalid Email";
         }
 
         if (!registerUserPasswordValidator.IsValidCheck() || !registerUserPasswordConfirmValidator.IsValidCheck())
         {
             if (!string.IsNullOrEmpty(ErrorMsg)) ErrorMsg += "\n";
-
-            ErrorMsg += "-Not Valid Password";
-
+            ErrorMsg += "-Invalid Password";
         }
-
         registerErrorLabel.text = ErrorMsg;
         if (string.IsNullOrEmpty(ErrorMsg))
         {
+            registerConfirmationTab.SetActive(true);
+            registerTab.SetActive(false);
             SPLogin.RegisterUser(registerUserEmail.value, registerUserPassword.value, registerUserName.value);
         }
     }
