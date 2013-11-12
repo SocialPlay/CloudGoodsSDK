@@ -124,16 +124,17 @@ public class ItemPurchase : MonoBehaviour {
     void PurchaseItemWithCredits(GameObject button)
     {
         webserviceCalls.StoreItemPurchase("http://socialplaywebservice.azurewebsites.net/publicservice.svc/", ItemSystemGameData.UserID, itemInfo.itemID, int.Parse(itemQuantityAmount.text), "Credits", ItemSystemGameData.AppID, OnReceivedItemPurchaseConfirmation);
+        ClosePanel(null);
     }
 
     void PurchaseItemWithCoins(GameObject button)
     {
         webserviceCalls.StoreItemPurchase("http://socialplaywebservice.azurewebsites.net/publicservice.svc/", ItemSystemGameData.UserID, itemInfo.itemID, int.Parse(itemQuantityAmount.text), "Coins", ItemSystemGameData.AppID, OnReceivedItemPurchaseConfirmation);
+        ClosePanel(null);
     }
 
     void OnReceivedItemPurchaseConfirmation(string msg)
     {
-        ClosePanel(null);
         purchaseConfirmationPanel.SetActive(true);
         currencyBalance.GetCurrencyBalance("");
     }
