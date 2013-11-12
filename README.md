@@ -12,3 +12,7 @@ Create a free account at [developers.socialplay.com](http://developers.socialpla
 + Built-in Kongregate and Facebook Plugins for authentication and purchasing
 + Clean, short and simple C# code
 + Works on all platforms, including Mobile.
+
+## Links
++ Manage your account at [developers.socialplay.com](http://developers.socialplay.com)
++ Download the CloudGoodsSDK as a built unity package [here](http://socialplay.blob.core.windows.net/sdk/CloudGoodsSDK.unitypackage)
