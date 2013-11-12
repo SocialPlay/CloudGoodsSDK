@@ -9,5 +9,5 @@ public abstract class ContianerItemFilter : MonoBehaviour
     }
     public InvertedState type;
 
-    public abstract bool CheckFilter(ItemData item);
+    public abstract bool IsItemFilteredIn(ItemData item);
 }

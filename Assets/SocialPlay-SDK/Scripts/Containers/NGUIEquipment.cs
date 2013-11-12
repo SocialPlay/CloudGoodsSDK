@@ -24,12 +24,12 @@ public class NGUIEquipment : MonoBehaviour
 
     void Start()
     {
-        foreach (SlotData pair in display.slots)
+        foreach (SlotData slot in display.slots)
         {
-            container.AddSlot(pair.slotID, null, pair.filters, pair.slotSizeLimit, pair.priority);
-            if (pair.gameObject.GetComponent<SlotKeybinding>())
+            container.AddSlot(slot.slotID, null, slot.filters,slot.persistantLocationID, slot.slotSizeLimit, slot.priority);
+            if (slot.gameObject.GetComponent<SlotKeybinding>())
             {
-                pair.gameObject.GetComponent<SlotKeybinding>().bindingPressed += container.OnItemKeybindClick;
+                slot.gameObject.GetComponent<SlotKeybinding>().bindingPressed += container.OnItemKeybindClick;
             }
         }
         SetStats();

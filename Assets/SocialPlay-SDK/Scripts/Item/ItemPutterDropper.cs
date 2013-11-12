@@ -11,9 +11,7 @@ public class ItemPutterDropper : MonoBehaviour, IItemPutter
 
     public GameObject defaultDropModelPrefab;
     public Transform dropTransform;
-
-    public ItemPrefabInitilizer PrefabInitilizer;
-
+    public ItemPrefabInitilizer prefabinitilizer;
     ItemDrop gameItemDrop;
 
     void Start()
@@ -38,14 +36,19 @@ public class ItemPutterDropper : MonoBehaviour, IItemPutter
         {
             ItemData data = dropItem.GetComponent<ItemData>();
             GameObject model;
-            if (PrefabInitilizer != null)
+            if (prefabinitilizer != null)
             {
-                model = PrefabInitilizer.GetPrefabToInstantiate(data, defaultDropModelPrefab);
+                model = prefabinitilizer.GetPrefabToInstantiate(data, defaultDropModelPrefab);
+            }
+            else if (GlobalPrefabInitilizer.prefabInit != null)
+            {
+                model = GlobalPrefabInitilizer.prefabInit.GetPrefabToInstantiate(data, defaultDropModelPrefab);
             }
             else
             {
                 model = defaultDropModelPrefab;
             }
+
             gameItemDrop.DropItemIntoWorld(data, dropTransform.position, model);
             Destroy(dropItem);
         }

@@ -126,17 +126,17 @@
 //        for (int i = 0; i < behaviours.arraySize; i++)
 //        {
 //            string behaviourPrefromat = behaviours.GetArrayElementAtIndex(i).stringValue;
-//            ItemFilterSystem.BehaviourPair pair = JsonConvert.DeserializeObject<ItemFilterSystem.BehaviourPair>(behaviourPrefromat);
-//            if (pair == null)
+//            ItemFilterSystem.BehaviourPair slot = JsonConvert.DeserializeObject<ItemFilterSystem.BehaviourPair>(behaviourPrefromat);
+//            if (slot == null)
 //            {
-//                pair = new ItemFilterSystem.BehaviourPair();
+//                slot = new ItemFilterSystem.BehaviourPair();
 //            }
 //            GUILayout.BeginHorizontal();
 //            GUILayout.FlexibleSpace();
 //            GUILayout.FlexibleSpace();
 //            GUILayout.BeginVertical();
-//            int behaviourClass = EditorGUILayout.IntField("Class ID", pair.varianceID);
-//            int behaviourID = EditorGUILayout.IntField("Behaviour ID", pair.behaviourID);
+//            int behaviourClass = EditorGUILayout.IntField("Class ID", slot.varianceID);
+//            int behaviourID = EditorGUILayout.IntField("Behaviour ID", slot.behaviourID);
 //            GUILayout.EndVertical();
 
 
@@ -156,14 +156,14 @@
 
 //            if (behaviourClass >= 0)
 //            {
-//                pair.varianceID = behaviourClass;
+//                slot.varianceID = behaviourClass;
 //            }
 //            if (behaviourID >= 0)
 //            {
-//                pair.behaviourID = behaviourID;
+//                slot.behaviourID = behaviourID;
 //            }
 
-//            behaviours.GetArrayElementAtIndex(i).stringValue = JsonConvert.SerializeObject(pair);
+//            behaviours.GetArrayElementAtIndex(i).stringValue = JsonConvert.SerializeObject(slot);
 //        }
 
 //        GUILayout.BeginHorizontal();

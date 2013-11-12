@@ -44,14 +44,19 @@ public class ContainerActionLink : MonoBehaviour
 
     void PerformActionWithItem(ItemData itemData)
     {
+        bool isfilteredOut = false;
         foreach (ContianerItemFilter filter in filters)
         {
-            if (!filter.CheckFilter(itemData))
+            if (!filter.IsItemFilteredIn(itemData))
             {
-                return;
+                isfilteredOut = true;
+                break;
             }
         }
-        containerAction.DoAction(itemData);
+        if (!isfilteredOut)
+            containerAction.DoAction(itemData);
+
+        container.finishActionCycle();
     }
 }
 

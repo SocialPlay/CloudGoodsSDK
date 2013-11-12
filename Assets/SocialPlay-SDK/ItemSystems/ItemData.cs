@@ -26,12 +26,12 @@ public class ItemData : MonoBehaviour
     internal int quality = 0;
     internal string imageName = "";
     internal bool isOwned = false;
-
+    internal int persistantLocation = -1;
 
     internal Dictionary<string, float> stats;
     internal string assetURL;
     internal List<string> tags;
-    
+
     public void AssetBundle(Action<UnityEngine.Object> callBack)
     {
         try
@@ -66,6 +66,7 @@ public class ItemData : MonoBehaviour
         newItem.stats = stats;
         newItem.assetURL = assetURL;
         newItem.tags = tags;
+        newItem.persistantLocation = persistantLocation;
     }
 
     /// <summary>
@@ -86,7 +87,7 @@ public class ItemData : MonoBehaviour
     }
 
 
-    public bool IsSameItemAs( ItemData other)
+    public bool IsSameItemAs(ItemData other)
     {
         if (this == null || other == null)
         {
@@ -138,6 +139,7 @@ public class ItemData : MonoBehaviour
         stats = itemData.stats;
         assetURL = itemData.assetURL;
         tags = itemData.tags;
+        persistantLocation = itemData.persistantLocation;
     }
 }
 

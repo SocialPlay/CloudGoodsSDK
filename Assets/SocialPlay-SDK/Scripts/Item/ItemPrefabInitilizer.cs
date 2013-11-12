@@ -6,13 +6,24 @@ using System.Collections.Generic;
 public class ItemPrefabInitilizer : MonoBehaviour
 {
 
+    private static ItemPrefabInitilizer instance;
     public List<DropPrefab> dropPrefabs = new List<DropPrefab>();
+
+
+    void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+    }
 
     public GameObject GetPrefabToInstantiate(ItemData itemData, GameObject defaultPrefab = null)
     {
+        Debug.Log("Prefab init");
         var prefab = defaultPrefab;
-
-        foreach (var dropPrefab in dropPrefabs)
+        if (instance == null) return prefab;
+        foreach (var dropPrefab in instance.dropPrefabs)
         {
             if (IsPrefabForItem(itemData, dropPrefab))
             {
@@ -33,6 +44,7 @@ public class ItemPrefabInitilizer : MonoBehaviour
         }
         return false;
     }
+
 
     [System.Serializable]
     public class DropPrefab

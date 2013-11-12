@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using SocialPlay.ItemSystems;
 using System;
 
-public class ItemDrop : MonoBehaviour {
+public class ItemDrop : MonoBehaviour
+{
 
     public IGameObjectAction postDropObjectAction;
 
@@ -20,32 +21,33 @@ public class ItemDrop : MonoBehaviour {
             //List<GameObject> dropItems = ItemConverter.ConvertToItemDropObject(items, true);
 
             //foreach (GameObject dropItem in dropItems)
-          //  {
-            
-
-                item.AssetBundle(
-                    (UnityEngine.Object bundleObj) => {
-                        GameObject dropObject;
-
-                        if (bundleObj != null)
-                            dropObject = GameObjectInitilizer.initilizer.InitilizeGameObject(bundleObj);
-                        else
-                            dropObject = GameObjectInitilizer.initilizer.InitilizeGameObject(dropModelDefault);
-
-                        ItemData itemData = dropObject.AddComponent<ItemData>();
-
-                        itemData.SetItemData(item);
+            //  {
 
 
-                        ItemComponentInitalizer.InitializeItemWithComponents(dropObject.GetComponent<ItemData>(), AddComponetTo.prefab);
+            item.AssetBundle(
+                (UnityEngine.Object bundleObj) =>
+                {
+                    GameObject dropObject;
 
-                        dropObject.transform.position = dropPosition;
+                    if (bundleObj != null)
+                        dropObject = GameObjectInitilizer.initilizer.InitilizeGameObject(bundleObj);
+                    else
+                        dropObject = GameObjectInitilizer.initilizer.InitilizeGameObject(dropModelDefault);
 
-                        if (postDropObjectAction != null)
-                            postDropObjectAction.DoGameObjectAction(dropObject);
-                    }
-                );
-          //  }
+                    ItemData itemData = dropObject.AddComponent<ItemData>();
+
+                    itemData.SetItemData(item);
+
+
+                    ItemComponentInitalizer.InitializeItemWithComponents(dropObject.GetComponent<ItemData>(), AddComponetTo.prefab);
+
+                    dropObject.transform.position = dropPosition;
+
+                    if (postDropObjectAction != null)
+                        postDropObjectAction.DoGameObjectAction(dropObject);
+                }
+            );
+            //  }
 
         }
     }

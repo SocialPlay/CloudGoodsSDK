@@ -21,6 +21,8 @@ namespace SocialPlay.Bundles
 
             public AssetBundle bundle = null;
 
+            public bool isComplete = false;
+
             public void CallEvent()
             {
                 if (callbacks != null)
@@ -150,6 +152,8 @@ namespace SocialPlay.Bundles
                 newAssetObject.asset = null;
                 newAssetObject.bundle = null;
             }
+
+            newAssetObject.isComplete = true;
             if (assetBundleTracker != null)
             {
                 assetBundleTracker.addCompletedCount(groupName);
@@ -238,7 +242,7 @@ namespace SocialPlay.Bundles
         {
             string assetGroupName = AssetGroupRefences[assetName];
 
-            if (AssetGroups[assetGroupName][assetName].asset != null)
+            if (AssetGroups[assetGroupName][assetName].isComplete)
                 return true;
             else
                 return false;

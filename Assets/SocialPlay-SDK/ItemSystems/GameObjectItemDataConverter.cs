@@ -33,7 +33,7 @@ public class GameObjectItemDataConverter : ItemDataConverter
             itemData.stats = ConvertItemDetail(item);
             itemData.assetURL = item.AssetBundleName;
             itemData.tags = ConvertTags(item);
-
+            itemData.persistantLocation = item.Location;
             convertedItems.Add(itemData);
 
             Resources.UnloadUnusedAssets();

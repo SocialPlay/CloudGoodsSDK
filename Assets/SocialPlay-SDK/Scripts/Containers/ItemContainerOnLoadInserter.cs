@@ -8,7 +8,7 @@ public class ItemContainerOnLoadInserter : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        GetComponent<LoadItemsForContainer>().LoadedItemsForContainerEvent += OnContainerLoadItems;   
+        GetComponent<ContainerItemLoader>().LoadedItemsForContainerEvent += OnContainerLoadItems;   
 	}
 
     void OnContainerLoadItems(List<ItemData> items, ItemContainer container)
