@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class ContainerItemComponentInitialier : MonoBehaviour {
+public class ContainerItemComponentInitializer : MonoBehaviour {
 
     ItemContainer itemContainer;
 
