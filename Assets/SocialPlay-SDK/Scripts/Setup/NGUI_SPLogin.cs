@@ -33,10 +33,10 @@ public class NGUI_SPLogin : MonoBehaviour
     private UIInputVisualValidation registerUserPasswordConfirmValidator;
     #endregion
 
-    #region Register Confirm Variables
-    public GameObject registerConfirmationTab;
-    public UILabel RegisterConfirmationStatus;
-    public UIButton registerConfirmButton;
+    #region Confirmations Variables
+    public GameObject confirmationTab;
+    public UILabel confirmationStatus;
+    public UIButton confirmationButton;
 
     #endregion
 
@@ -63,7 +63,7 @@ public class NGUI_SPLogin : MonoBehaviour
         loginTab.SetActive(true);
         registerErrorLabel.text = "";
         registerTab.SetActive(false);
-        registerConfirmationTab.SetActive(false);
+        confirmationTab.SetActive(false);
 
         loginUserEmailValidator = loginUserEmail.GetComponent<UIInputVisualValidation>();
         loginUserPasswordValidator = loginUserPassword.GetComponent<UIInputVisualValidation>();
@@ -93,8 +93,11 @@ public class NGUI_SPLogin : MonoBehaviour
 
     void ForgotPasswordResponce(SPLogin.SPLogin_Responce responce)
     {
-        resendVerificationTextObject.SetActive(false);
-        loginErrorLabel.text = responce.message;
+        //resendVerificationTextObject.SetActive(false);
+        //loginErrorLabel.text = responce.message;
+       
+        confirmationStatus.text = responce.message;
+
     }
 
     void RecivedLoginResponce(SPLogin.SPLogin_Responce recivedMessage)
@@ -112,20 +115,20 @@ public class NGUI_SPLogin : MonoBehaviour
     void RegisterMessageResponce(SPLogin.SPLogin_Responce responce)
     {
         resendVerificationTextObject.SetActive(false);
-   
+
         if (responce.code == 0)
         {
-            RegisterConfirmationStatus.text = "Verification Email has been sent to your Email";
-            registerConfirmButton.onClick.Clear();
-            registerConfirmButton.onClick.Add(new EventDelegate(this, "SwitchToLogin"));
-            registerConfirmButton.GetComponentInChildren<UILabel>().text = "To Login";
+            confirmationStatus.text = "Verification Email has been sent to your Email";
+            confirmationButton.onClick.Clear();
+            confirmationButton.onClick.Add(new EventDelegate(this, "SwitchToLogin"));
+            confirmationButton.GetComponentInChildren<UILabel>().text = "To Login";
         }
         else
-        {            
-            RegisterConfirmationStatus.text = responce.message;
-            registerConfirmButton.onClick.Clear();
-            registerConfirmButton.onClick.Add(new EventDelegate(this, "SwitchToRegister"));
-            registerConfirmButton.GetComponentInChildren<UILabel>().text = "Back";
+        {
+            confirmationStatus.text = responce.message;
+            confirmationButton.onClick.Clear();
+            confirmationButton.onClick.Add(new EventDelegate(this, "SwitchToRegister"));
+            confirmationButton.GetComponentInChildren<UILabel>().text = "Back";
         }
     }
 
@@ -142,7 +145,7 @@ public class NGUI_SPLogin : MonoBehaviour
         registerErrorLabel.text = "";
         loginTab.SetActive(false);
         registerTab.SetActive(true);
-        registerConfirmationTab.SetActive(false);
+        confirmationTab.SetActive(false);
     }
 
     public void SwitchToLogin()
@@ -150,7 +153,15 @@ public class NGUI_SPLogin : MonoBehaviour
         loginErrorLabel.text = "";
         registerTab.SetActive(false);
         loginTab.SetActive(true);
-        registerConfirmationTab.SetActive(false);
+        confirmationTab.SetActive(false);
+    }
+
+    public void SwitchToConfirmation()
+    {
+        confirmationStatus.text = "Waiting ...";
+        confirmationTab.SetActive(true);
+        loginTab.SetActive(false);
+        registerTab.SetActive(false);
     }
 
     public void Login()
@@ -190,21 +201,28 @@ public class NGUI_SPLogin : MonoBehaviour
         registerErrorLabel.text = ErrorMsg;
         if (string.IsNullOrEmpty(ErrorMsg))
         {
-            registerConfirmationTab.SetActive(true);
-            registerTab.SetActive(false);
+            SwitchToConfirmation();
             SPLogin.RegisterUser(registerUserEmail.value, registerUserPassword.value, registerUserName.value);
         }
     }
 
     public void ForgotPassword()
     {
+
         string ErrorMsg = "";
         if (!loginUserEmailValidator.IsValidCheck())
         {
             ErrorMsg = "Password reset requires valid E-mail";
         }
         loginErrorLabel.text = ErrorMsg;
-        SPLogin.ForgotPassword(loginUserEmail.value);
+        if (string.IsNullOrEmpty(ErrorMsg))
+        {
+            SwitchToConfirmation();
+            confirmationButton.onClick.Clear();
+            confirmationButton.onClick.Add(new EventDelegate(this, "SwitchToLogin"));
+            confirmationButton.GetComponentInChildren<UILabel>().text = "Back";
+            SPLogin.ForgotPassword(loginUserEmail.value);
+        }
     }
 
     public void ResendVerificationEmail()
@@ -215,7 +233,14 @@ public class NGUI_SPLogin : MonoBehaviour
             ErrorMsg = "Validation resend requires valid E-mail";
         }
         loginErrorLabel.text = ErrorMsg;
-        SPLogin.ResendVerificationEmail(loginUserEmail.value);
+        if (string.IsNullOrEmpty(ErrorMsg))
+        {
+            SwitchToConfirmation();
+            confirmationButton.onClick.Clear();
+            confirmationButton.onClick.Add(new EventDelegate(this, "SwitchToLogin"));
+            confirmationButton.GetComponentInChildren<UILabel>().text = "Back";
+            SPLogin.ResendVerificationEmail(loginUserEmail.value);
+        }
 
     }
 
