@@ -2,39 +2,56 @@ using UnityEngine;
 using System.Collections;
 using SocialPlay.ItemSystems;
 
-public class ContainerKeybinding : MonoBehaviour {
+public class ContainerKeybinding : MonoBehaviour
+{
+
+    static bool isDisabaled = false;
 
     public KeyCode binding;
     public ActionType actiontype = ActionType.toggle;
-    private ItemContainer container;
+    private ContainerDisplay containerDisplay;
 
     public enum ActionType
     {
-        toggle,open,close
+        toggle, open, close
     }
 
     void Awake()
     {
-        container = gameObject.GetIComponent<ItemContainer>();
+        containerDisplay = gameObject.GetComponent<ContainerDisplay>();
+        Debug.Log(containerDisplay);
     }
 
-	void Update () {
-   
-        if (Input.GetKeyDown(binding)){
+    void Update()
+    {
+        if (!isDisabaled && Input.GetKeyDown(binding))
+        {
             switch (actiontype)
             {
                 case ActionType.toggle:
-                    container.IsActive = !container.IsActive;
+
+                    containerDisplay.SetWindowIsActive(!containerDisplay.IsWindowActive());
+
                     break;
                 case ActionType.open:
-                    container.IsActive = true;
+                    containerDisplay.SetWindowIsActive(true);
                     break;
                 case ActionType.close:
-                    container.IsActive = false;
+                    containerDisplay.SetWindowIsActive(false);
                     break;
                 default:
                     break;
             }
         }
-	}
+    }
+
+    public static void DisableKeybinding()
+    {
+        isDisabaled = true;
+    }
+
+    public static void EnableKeybinding()
+    {
+        isDisabaled = false;
+    }
 }

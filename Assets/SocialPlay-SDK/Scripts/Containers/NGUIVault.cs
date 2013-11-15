@@ -13,18 +13,18 @@ public class NGUIVault : MonoBehaviour
     void OnEnable()
     {
         container.AddedItem += AddItem;
-        container.removedItem += RemoveItem;
+        container.RemovedItem += RemoveItem;
     }
 
     void OnDisable()
     {
         container.AddedItem -= AddItem;
-        container.removedItem -= RemoveItem;
+        container.RemovedItem -= RemoveItem;
     }
 
     void Start()
     {
-        display.SetupWindow();
+        display.PublicSetupWindow();
     }
 
 
@@ -48,11 +48,11 @@ public class NGUIVault : MonoBehaviour
 
     void Update()
     {
-        if (display.isWindowActive && !container.IsActive)
+        if (display.IsWindowActive())
         {
             display.HideWindow();
         }
-        if (!display.isWindowActive && container.IsActive)
+        if (!display.IsWindowActive())
         {
             display.ShowWindow();
         }

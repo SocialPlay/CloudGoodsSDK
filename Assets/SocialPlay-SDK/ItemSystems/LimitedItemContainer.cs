@@ -172,11 +172,11 @@ public class LimitedItemContainer : ItemContainer
         return;
     }
 
-    public override int Contains(ItemData modified)
+    public override int Contains(ItemData itemData)
     {
         foreach (ItemData item in containerItems)
         {
-            if (item.IsSameItemAs(modified))
+            if (item.IsSameItemAs(itemData))
             {
                 return item.stackSize;
             }

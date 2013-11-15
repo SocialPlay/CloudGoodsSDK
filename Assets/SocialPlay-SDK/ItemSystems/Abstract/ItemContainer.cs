@@ -6,17 +6,43 @@ using UnityEngine;
 
 public abstract class ItemContainer : MonoBehaviour
 {
+    [HideInInspector]
     public List<ItemData> containerItems;
-    public bool IsActive = false;
 
-    public virtual event Action<ItemData, bool> AddedItem;
-    public virtual event Action<ItemData, bool> ModifiedItem;
-    public virtual event Action<ItemData, bool> removedItem;
+    /// <summary>
+    /// Called after the contaienr added an item.
+    /// </summary>
+    public event Action<ItemData, bool> AddedItem;
 
-    public Action<ItemData> ItemSingleClicked;
-    public Action<ItemData> ItemDoubleClicked;
-    public Action<ItemData> ItemRightClicked;
-    public Action<ItemData> ItemKeyBindingClicked;
+    /// <summary>
+    /// Called after the container modified the item stack size or location in the container
+    /// </summary>
+    public event Action<ItemData, bool> ModifiedItem;
+
+    /// <summary>
+    /// Called after the Container removes an item.
+    /// </summary>
+    public event Action<ItemData, bool> RemovedItem;
+
+    /// <summary>
+    /// Called After the user clicks an item
+    /// </summary>
+    public event Action<ItemData> ItemSingleClicked;
+
+    /// <summary>
+    /// Called after the user double clicks an item
+    /// </summary>
+    public event Action<ItemData> ItemDoubleClicked;
+
+    /// <summary>
+    /// Called after the user right clicks an item
+    /// </summary>
+    public event Action<ItemData> ItemRightClicked;
+
+    /// <summary>
+    /// Called after a user presses a key that is linked to the container(only for slotted containers)
+    /// </summary>
+    public event Action<ItemData> ItemKeyBindingClicked;
 
     private ItemContainerRestrictor restriction = null;
 
@@ -41,13 +67,13 @@ public abstract class ItemContainer : MonoBehaviour
 
     protected void RemoveItemEvent(ItemData item, bool isMovingToAnotherContainer)
     {
-        if (removedItem != null)
+        if (RemovedItem != null)
         {
-            removedItem(item, isMovingToAnotherContainer);
+            RemovedItem(item, isMovingToAnotherContainer);
         }
     }
 
-    public ContainerAddState GetContainerAddState(ItemData modified)
+    public ContainerAddState GetContainerAddState(ItemData itemData)
     {
         if (restriction == null)
         {
@@ -61,7 +87,7 @@ public abstract class ItemContainer : MonoBehaviour
                 return new ContainerAddState(ContainerAddState.ActionState.No);
             }
         }
-        return MyContainerAddState(modified);
+        return MyContainerAddState(itemData);
     }
 
     protected abstract ContainerAddState MyContainerAddState(ItemData modified);
@@ -69,7 +95,7 @@ public abstract class ItemContainer : MonoBehaviour
 
 
 
-    public void Add(ItemData modified, int amount = -1, bool isSave = true)
+    public void Add(ItemData itemData, int amount = -1, bool isSave = true)
     {
         if (restriction == null)
         {
@@ -84,12 +110,12 @@ public abstract class ItemContainer : MonoBehaviour
             }
         }
 
-        AddItem(modified, amount, isSave);
+        AddItem(itemData, amount, isSave);
 
     }
 
 
-    public void Remove(ItemData modified, bool isMovingToAnotherContainer, int amount = -1)
+    public void Remove(ItemData itemData, bool isSaveNotRequired, int amount = -1)
     {
         if (restriction == null)
         {
@@ -103,7 +129,7 @@ public abstract class ItemContainer : MonoBehaviour
                 return;
             }
         }
-        RemoveItem(modified, isMovingToAnotherContainer, amount);
+        RemoveItem(itemData, isSaveNotRequired, amount);
     }
 
     protected abstract void AddItem(ItemData modified, int amount = -1, bool isSave = true);
@@ -129,6 +155,15 @@ public abstract class ItemContainer : MonoBehaviour
         }
     }
 
+    public void OnItemRightCliked(ItemData item)
+    {
+        if (!isPerformingAction && ItemRightClicked != null)
+        {
+            isPerformingAction = true;
+            ItemRightClicked(item);
+        }
+    }
+
     public void OnItemKeybindClick(ItemData item)
     {
         if (!isPerformingAction && ItemKeyBindingClicked != null)
@@ -138,7 +173,7 @@ public abstract class ItemContainer : MonoBehaviour
         }
     }
 
-    public void finishActionCycle()
+    public void FinishActionCycle()
     {
         isPerformingAction = false;
     }

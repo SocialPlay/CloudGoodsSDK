@@ -7,14 +7,14 @@ using UnityEngine;
 using System.Collections.Generic;
 
 /// <summary>
-/// Storage container that stores items.
+/// Storage containerDisplayDisplay that stores items.
 /// </summary>
 
 [AddComponentMenu("NGUI/Examples/UI Item Storage")]
 public class UIItemStorage : MonoBehaviour
 {
 	/// <summary>
-	/// Maximum size of the container. Adding more items than this number will not work.
+	/// Maximum size of the containerDisplayDisplay. Adding more items than this number will not work.
 	/// </summary>
 
 	public int maxItemCount = 8;
@@ -58,7 +58,7 @@ public class UIItemStorage : MonoBehaviour
 	List<InvGameItem> mItems = new List<InvGameItem>();
 
 	/// <summary>
-	/// List of items in the container.
+	/// List of items in the containerDisplayDisplay.
 	/// </summary>
 
 	public List<InvGameItem> items { get { while (mItems.Count < maxItemCount) mItems.Add(null); return mItems; } }
@@ -70,7 +70,7 @@ public class UIItemStorage : MonoBehaviour
 	public InvGameItem GetItem (int slot) { return (slot < items.Count) ? mItems[slot] : null; }
 
 	/// <summary>
-	/// Replace an item in the container with the specified one.
+	/// Replace an item in the containerDisplayDisplay with the specified one.
 	/// </summary>
 	/// <returns>An item that was replaced.</returns>
 
@@ -86,7 +86,7 @@ public class UIItemStorage : MonoBehaviour
 	}
 
 	/// <summary>
-	/// Initialize the container and create an appropriate number of UI slots.
+	/// Initialize the containerDisplayDisplay and create an appropriate number of UI slots.
 	/// </summary>
 
 	void Start ()

@@ -16,7 +16,7 @@ public class SaveSlotsToLocation : MonoBehaviour
         {
             slotedContainer.AddedItem += AddedItem;
             slotedContainer.ModifiedItem += ModifiedItem;
-            slotedContainer.removedItem += RemovedItem;
+            slotedContainer.RemovedItem += RemovedItem;
         }
     }
 
@@ -26,7 +26,7 @@ public class SaveSlotsToLocation : MonoBehaviour
         {
             slotedContainer.ModifiedItem -= ModifiedItem;
             slotedContainer.AddedItem -= AddedItem;
-            slotedContainer.removedItem -= RemovedItem;
+            slotedContainer.RemovedItem -= RemovedItem;
         }
     }
 

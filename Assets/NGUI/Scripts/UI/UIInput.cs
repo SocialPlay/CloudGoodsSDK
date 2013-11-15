@@ -35,7 +35,7 @@ public class UIInput : UIWidgetContainer
 	static public UIInput current;
 
 	/// <summary>
-	/// Text label modified by this uiInput.
+	/// Text label itemData by this uiInput.
 	/// </summary>
 
 	public UILabel label;

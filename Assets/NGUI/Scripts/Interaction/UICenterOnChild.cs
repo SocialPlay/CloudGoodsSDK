@@ -2,7 +2,7 @@ using UnityEngine;
 
 /// <summary>
 /// Ever wanted to be able to auto-center on an object within a draggable panel?
-/// Attach this script to the container that has the objects to center on as its children.
+/// Attach this script to the containerDisplayDisplay that has the objects to center on as its children.
 /// </summary>
 
 [AddComponentMenu("NGUI/Interaction/Center On Child")]

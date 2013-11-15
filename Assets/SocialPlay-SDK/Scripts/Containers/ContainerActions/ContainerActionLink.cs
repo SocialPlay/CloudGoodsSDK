@@ -56,7 +56,7 @@ public class ContainerActionLink : MonoBehaviour
         if (!isfilteredOut)
             containerAction.DoAction(itemData);
 
-        container.finishActionCycle();
+        container.FinishActionCycle();
     }
 }
 

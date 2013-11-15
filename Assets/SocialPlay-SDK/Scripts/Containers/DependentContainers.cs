@@ -7,13 +7,13 @@ public class DependentContainers : MonoBehaviour
 {
 
 
-    public List<ItemContainer> dependentContainers = new List<ItemContainer>();
+    public List<ContainerDisplay> dependentContainers = new List<ContainerDisplay>();
 
-    ItemContainer myContainer;
+    ContainerDisplay myContainer;
 
     void Awake()
     {
-        myContainer = GetComponent<ItemContainer>();
+        myContainer = GetComponent<ContainerDisplay>();
     }
 
     void Update()
@@ -26,16 +26,17 @@ public class DependentContainers : MonoBehaviour
 
     private void CheckIfDependantContainerIsActive()
     {
-        foreach (ItemContainer container in dependentContainers)
+        if (dependentContainers.Count == 0) return;
+        foreach (ContainerDisplay containerDisplay in dependentContainers)
         {
-            if (container == null) continue;
+            if (containerDisplay == null) continue;
 
-            if (container.IsActive)
+            if (containerDisplay.IsWindowActive())
             {
-                myContainer.IsActive = true;
+                myContainer.SetWindowIsActive(true);
                 return;
             }
         }
-        myContainer.IsActive = false;
+        myContainer.SetWindowIsActive(false);
     }
 }
