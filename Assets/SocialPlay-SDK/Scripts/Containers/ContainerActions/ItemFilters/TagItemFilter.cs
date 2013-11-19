@@ -7,7 +7,7 @@ public class TagItemFilter : ContianerItemFilter
 
     public List<string> Tags = new List<string>();
 
-    override public bool CheckFilter(ItemData item)
+    override public bool IsItemFilteredIn(ItemData item)
     {
         bool found = false;
         foreach (string tag in Tags)

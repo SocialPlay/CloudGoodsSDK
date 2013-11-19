@@ -7,7 +7,7 @@ public class BehaviourItemFilter : ContianerItemFilter
 
     public List<BehaviourPair> Behaviours = new List<BehaviourPair>();
 
-    override public bool CheckFilter(ItemData item)
+    override public bool IsItemFilteredIn(ItemData item)
     {
         bool found = false;
         foreach (BehaviourPair behaviour in Behaviours)

@@ -20,6 +20,11 @@ public class SlotData : MonoBehaviour
     public int slotID;
 
 
+    /// <summary>
+    /// The location to save this slot to. if -1 no persistancy will be applied to this slot.
+    /// </summary>
+    public int persistantLocationID =-1;
+
     internal List<ItemFilterSystem> filters = new List<ItemFilterSystem>();
 
 

@@ -5,16 +5,60 @@ using System.Collections.Generic;
 
 public abstract class ContainerDisplay : MonoBehaviour
 {
-    [HideInInspector]
-    public bool isWindowActive = false;
+
     public GameObject containerDisplay;
-    public ItemContainer ItemContainer = null;
+    public ItemContainer itemContainer = null;
+    public bool StartWindowActive = true;
+
+    protected bool isActive = true;
 
     private List<ContainerDisplayAction> disaplyActions = new List<ContainerDisplayAction>();
 
-    public virtual void SetupWindow()
+
+    protected virtual void OnEnable()
     {
-        isWindowActive = true;
+        Debug.Log("test");
+        itemContainer.AddedItem += AddedItem;
+        itemContainer.RemovedItem += RemovedItem;
+    }
+
+
+    protected virtual void OnDisable()
+    {
+        itemContainer.AddedItem -= AddedItem;
+        itemContainer.RemovedItem -= RemovedItem;
+    }
+
+    protected virtual void Start()
+    {
+        SetupWindow();
+    }
+
+    protected virtual void Update()
+    {
+        if (!isActive)
+        {
+            HideWindow();
+        }
+        if (isActive)
+        {
+            ShowWindow();
+        }
+    }
+
+    protected virtual void AddedItem(ItemData data, bool isSave)
+    {
+        AddDisplayItem(data as ItemData, this.transform);
+    }
+
+    protected virtual void RemovedItem(ItemData data, bool isSaveNeeded)
+    {
+        RemoveDisplayItem(data as ItemData);
+    }
+
+    protected virtual void SetupWindow()
+    {
+        isActive = StartWindowActive;
         containerDisplay.SetActive(true);
     }
 
@@ -35,12 +79,13 @@ public abstract class ContainerDisplay : MonoBehaviour
                 disaplyActions.Add(action);
             }
         }
-     
+
     }
 
     public virtual void ShowWindow()
     {
-        isWindowActive = true;
+        if (isActive) return;
+        isActive = true;
         foreach (ContainerDisplayAction action in disaplyActions)
         {
             action.Activate();
@@ -49,11 +94,22 @@ public abstract class ContainerDisplay : MonoBehaviour
 
     public virtual void HideWindow()
     {
+        if (!isActive) return;
         foreach (ContainerDisplayAction action in disaplyActions)
         {
             action.Deactivate();
         }
-        isWindowActive = false;
+        isActive = false;
+    }
+
+    public bool IsWindowActive()
+    {
+        return isActive;
+    }
+
+    public void SetWindowIsActive(bool state)
+    {
+        isActive = state;
     }
 
     public abstract void AddDisplayItem(ItemData itemData, Transform parent);

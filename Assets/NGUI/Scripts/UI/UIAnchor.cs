@@ -35,7 +35,7 @@ public class UIAnchor : MonoBehaviour
 	public Camera uiCamera = null;
 
 	/// <summary>
-	/// Object used to determine the container's bounds. Overwrites the camera-based anchoring if the value was specified.
+	/// Object used to determine the containerDisplayDisplay's bounds. Overwrites the camera-based anchoring if the value was specified.
 	/// </summary>
 
 	public GameObject container = null;

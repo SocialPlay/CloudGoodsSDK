@@ -21,8 +21,8 @@ public class UIStretch : MonoBehaviour
 		Vertical,
 		Both,
 		BasedOnHeight,
-		FillKeepingRatio, // Fits the image so that it entirely fills the specified container keeping its ratio
-		FitInternalKeepingRatio // Fits the image/item inside of the specified container keeping its ratio
+		FillKeepingRatio, // Fits the image so that it entirely fills the specified containerDisplayDisplay keeping its ratio
+		FitInternalKeepingRatio // Fits the image/item inside of the specified containerDisplayDisplay keeping its ratio
 	}
 
 	/// <summary>
@@ -32,7 +32,7 @@ public class UIStretch : MonoBehaviour
 	public Camera uiCamera = null;
 
 	/// <summary>
-	/// Object used to determine the container's bounds. Overwrites the camera-based anchoring if the value was specified.
+	/// Object used to determine the containerDisplayDisplay's bounds. Overwrites the camera-based anchoring if the value was specified.
 	/// </summary>
 
 	public GameObject container = null;

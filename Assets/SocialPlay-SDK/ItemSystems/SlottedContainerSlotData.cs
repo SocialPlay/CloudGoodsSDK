@@ -10,6 +10,7 @@ public class SlottedContainerSlotData
     public ItemData slotData = null;
     public int slotMaxCountLimit = 1;
     public int priority = 0;
+    public int persistantID;
    public List<ItemFilterSystem> filters;
 }
 

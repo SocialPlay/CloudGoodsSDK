@@ -37,13 +37,13 @@ public class DragDropItem : MonoBehaviour
 
 	void Drop ()
 	{
-		// Is there a droppable container?
+		// Is there a droppable containerDisplayDisplay?
 		Collider col = UICamera.lastHit.collider;
 		DragDropContainer container = (col != null) ? col.gameObject.GetComponent<DragDropContainer>() : null;
 
 		if (container != null)
 		{
-			// Container found -- parent this object to the container
+			// Container found -- parent this object to the containerDisplayDisplay
 			mTrans.parent = container.transform;
 
 			Vector3 pos = mTrans.localPosition;
@@ -52,7 +52,7 @@ public class DragDropItem : MonoBehaviour
 		}
 		else
 		{
-			// No valid container under the mouse -- revert the item's parent
+			// No valid containerDisplayDisplay under the mouse -- revert the item's parent
 			mTrans.parent = mParent;
 		}
 

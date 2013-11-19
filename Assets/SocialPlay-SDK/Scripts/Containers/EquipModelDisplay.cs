@@ -17,7 +17,7 @@ public class EquipModelDisplay : MonoBehaviour
     void OnEnable()
     {
         equipment.AddedItem += equipment_AddedItem;
-        equipment.removedItem += equipment_removedItem;
+        equipment.RemovedItem += equipment_removedItem;
     }
 
     void equipment_removedItem(ItemData item, bool isMovedToAnotherContainer)
@@ -31,7 +31,7 @@ public class EquipModelDisplay : MonoBehaviour
     void OnDisable()
     {
         equipment.AddedItem -= equipment_AddedItem; 
-        equipment.removedItem -= equipment_removedItem;
+        equipment.RemovedItem -= equipment_removedItem;
     }
 
     void equipment_AddedItem(ItemData item, bool isSave)

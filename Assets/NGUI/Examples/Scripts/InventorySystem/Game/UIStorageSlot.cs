@@ -6,7 +6,7 @@
 using UnityEngine;
 
 /// <summary>
-/// A UI script that keeps an eye on the slot in a storage container.
+/// A UI script that keeps an eye on the slot in a storage containerDisplayDisplay.
 /// </summary>
 
 [AddComponentMenu("NGUI/Examples/UI Storage Slot")]

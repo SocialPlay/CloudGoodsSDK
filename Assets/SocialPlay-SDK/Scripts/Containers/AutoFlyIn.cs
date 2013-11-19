@@ -7,13 +7,11 @@ using SocialPlay.ItemSystems;
 public class AutoFlyIn : MonoBehaviour
 {
     private TweenPosition tween = null;
-    private ItemContainer myItemContainer = null;
+    private ContainerDisplay myContainerDisplay = null;
     bool isCurrentlyActive = false;
-    public bool hasAlternatePos = false;
 
     public int inDirPosition, outDirPosition;
 
-    public Vector3 alternatOffset = Vector3.zero;
     private Vector3 outPos, inPos;
 
     public direction myMoveDirection;
@@ -27,23 +25,23 @@ public class AutoFlyIn : MonoBehaviour
 
     void Awake()
     {
-        if (myItemContainer == null)
+        if (myContainerDisplay == null)
         {
-            myItemContainer = gameObject.GetIComponentInChildren<ItemContainer>();
+            myContainerDisplay = gameObject.GetComponentInChildren<ContainerDisplay>();
         }
 
-        if (myItemContainer == null)
+        if (myContainerDisplay == null)
         {
-            myItemContainer = gameObject.GetIComponent<ItemContainer>();
+            myContainerDisplay = gameObject.GetComponent<ContainerDisplay>();
         }
 
         startPos = this.transform.localPosition;
         UpdatePos();
 
 
-        if (myItemContainer != null)
+        if (myContainerDisplay != null)
         {
-            if (myItemContainer.IsActive)
+            if (myContainerDisplay.IsWindowActive())
                 this.transform.localPosition = inPos;
             else
                 this.transform.localPosition = outPos;
@@ -58,9 +56,9 @@ public class AutoFlyIn : MonoBehaviour
 
     void Update()
     {
-        if (myItemContainer != null)
+        if (myContainerDisplay != null)
         {
-            if (myItemContainer.IsActive && !isCurrentlyActive)
+            if (myContainerDisplay.IsWindowActive() && !isCurrentlyActive)
             {
                 UpdatePos();
                 tween.from = this.transform.localPosition;
@@ -69,7 +67,7 @@ public class AutoFlyIn : MonoBehaviour
                 tween.enabled = true;
                 isCurrentlyActive = true;
             }
-            else if (!myItemContainer.IsActive && isCurrentlyActive)
+            else if (!myContainerDisplay.IsWindowActive() && isCurrentlyActive)
             {
                 UpdatePos();
                 tween.from = this.transform.localPosition;

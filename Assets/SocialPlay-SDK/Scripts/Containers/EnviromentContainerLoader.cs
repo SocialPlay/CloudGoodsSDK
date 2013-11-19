@@ -6,7 +6,7 @@ using System;
 public class EnviromentContainerLoader : MonoBehaviour
 {
 
-    private bool isLoadCalled = false;
+    private static bool isLoadCalled = false;
 
     void OnEnable()
     {
@@ -30,7 +30,7 @@ public class EnviromentContainerLoader : MonoBehaviour
 
     public void Start()
     {
-        if (!isLoadCalled && ItemSystemGameData.SessionID != Guid.Empty)
+        if (ItemSystemGameData.SessionID != Guid.Empty)
         {
             LoadAllContainerItems();
         }
@@ -38,8 +38,9 @@ public class EnviromentContainerLoader : MonoBehaviour
 
     public void LoadAllContainerItems()
     {
+        if (isLoadCalled) return;
         isLoadCalled = true;
-        foreach (LoadItemsForContainer loader in GameObject.FindObjectsOfType(typeof(LoadItemsForContainer)))
+        foreach (ContainerItemLoader loader in GameObject.FindObjectsOfType(typeof(ContainerItemLoader)))
         {
             loader.LoadItems();
         }

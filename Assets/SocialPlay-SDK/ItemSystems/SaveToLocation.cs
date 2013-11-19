@@ -18,7 +18,7 @@ public class SaveToLocation : MonoBehaviour
         {
             container.AddedItem += AddedItem;
             container.ModifiedItem += ModifiedItem;
-            container.removedItem += RemovedItem;
+            container.RemovedItem += RemovedItem;
         }
     }
 
@@ -28,7 +28,7 @@ public class SaveToLocation : MonoBehaviour
         {
             container.ModifiedItem -= ModifiedItem;
             container.AddedItem -= AddedItem;
-            container.removedItem -= RemovedItem;
+            container.RemovedItem -= RemovedItem;
         }
     }
 

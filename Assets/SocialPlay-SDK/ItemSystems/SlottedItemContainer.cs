@@ -7,7 +7,7 @@ using SocialPlay.ItemSystems;
 
 public class SlottedItemContainer : ItemContainer
 {
-    public static ISlotSelector slotSelector;
+    public static ISlotSelector slotSelector = new PrioritySelector();
 
     public Dictionary<int, SlottedContainerSlotData> slots = new Dictionary<int, SlottedContainerSlotData>();
 
@@ -15,7 +15,7 @@ public class SlottedItemContainer : ItemContainer
 
     public bool isSwappable;
 
-    public void AddSlot(int slotID, ItemData slotData, List<ItemFilterSystem> filters, int slotMaxCount = 1, int priority = 0)
+    public void AddSlot(int slotID, ItemData slotData, List<ItemFilterSystem> filters, int persistantID = -1, int slotMaxCount = 1, int priority = 0)
     {
         if (slots.ContainsKey(slotID))
             throw new Exception("Can not add same slot twice");
@@ -27,6 +27,7 @@ public class SlottedItemContainer : ItemContainer
         newSlot.priority = priority;
         newSlot.slotNameID = slotID.ToString();
         newSlot.filters = filters;
+        newSlot.persistantID = persistantID;
         slots.Add(slotID, newSlot);
 
         if (slotData != null)
@@ -46,7 +47,7 @@ public class SlottedItemContainer : ItemContainer
             if (pair.Value.slotData == null)
                 continue;
 
-            if (pair.Value.slotData.stackID.Equals(item.stackID))
+            if (pair.Value.slotData.gameObject == item.gameObject)
             {
                 return pair.Key;
             }
@@ -77,6 +78,14 @@ public class SlottedItemContainer : ItemContainer
             return; // slected slot did not exist.
         }
 
+        AddToSlot(modified, int.Parse(selectedSlot.slotNameID), amount, isSave);
+        return;
+    }
+
+    public void AddToSlot(ItemData modified, int slotID, int amount = -1, bool isSave = true)
+    {
+
+        SlottedContainerSlotData selectedSlot = slots[slotID];
         ItemData NewSlotData = null;
 
         int TargetStackSize = amount;
@@ -96,8 +105,8 @@ public class SlottedItemContainer : ItemContainer
         if (modified.ownerContainer == null)
             Destroy(modified.gameObject);
 
+        Debug.LogWarning("adding  " + NewSlotData.itemName + "(" + NewSlotData.stackSize + ")" + " to Slot " + selectedSlot.slotNameID);
         AddItemEvent(NewSlotData, isSave);
-        return;
     }
 
     protected Dictionary<int, SlottedContainerSlotData> GetAllAvalibleSlots(ItemData modified)
@@ -251,7 +260,7 @@ public class SlottedItemContainer : ItemContainer
 
         //foreach (KeyValuePair<int, SlottedContainerSlotData> sl in slots)
         //{
-        //    if (sl.Value.validTypes.Contains(modified.varianceID))
+        //    if (sl.Value.validTypes.Contains(itemData.varianceID))
         //    {
         //        if (sl.Value.slotData == null)
         //        {

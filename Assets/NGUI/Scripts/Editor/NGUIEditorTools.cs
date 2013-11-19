@@ -1231,7 +1231,7 @@ public class NGUIEditorTools
 	}
 
 	/// <summary>
-	/// Select the next widget or container.
+	/// Select the next widget or containerDisplayDisplay.
 	/// </summary>
 
 	static public bool SelectWidgetOrContainer (GameObject go, Vector2 pos, bool inFront)

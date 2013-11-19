@@ -7,7 +7,7 @@ public class NGUILimitlessGridItemContainerDisplay :  ContainerDisplay
 
     internal UIGrid viewArea;
 
-    public override void SetupWindow()
+    protected override void SetupWindow()
     {
         base.SetupWindow();
         viewArea = containerDisplay.GetComponentInChildren<UIGrid>();  
@@ -25,6 +25,11 @@ public class NGUILimitlessGridItemContainerDisplay :  ContainerDisplay
     {
         Destroy(itemData.gameObject);
         viewArea.repositionNow = true;
+    }
+
+    public void PublicSetupWindow()
+    {
+        SetupWindow();
     }
 
 

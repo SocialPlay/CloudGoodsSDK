@@ -4,128 +4,178 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-    public abstract class ItemContainer : MonoBehaviour
+public abstract class ItemContainer : MonoBehaviour
+{
+    [HideInInspector]
+    public List<ItemData> containerItems;
+
+    /// <summary>
+    /// Called after the contaienr added an item.
+    /// </summary>
+    public event Action<ItemData, bool> AddedItem;
+
+    /// <summary>
+    /// Called after the container modified the item stack size or location in the container
+    /// </summary>
+    public event Action<ItemData, bool> ModifiedItem;
+
+    /// <summary>
+    /// Called after the Container removes an item.
+    /// </summary>
+    public event Action<ItemData, bool> RemovedItem;
+
+    /// <summary>
+    /// Called After the user clicks an item
+    /// </summary>
+    public event Action<ItemData> ItemSingleClicked;
+
+    /// <summary>
+    /// Called after the user double clicks an item
+    /// </summary>
+    public event Action<ItemData> ItemDoubleClicked;
+
+    /// <summary>
+    /// Called after the user right clicks an item
+    /// </summary>
+    public event Action<ItemData> ItemRightClicked;
+
+    /// <summary>
+    /// Called after a user presses a key that is linked to the container(only for slotted containers)
+    /// </summary>
+    public event Action<ItemData> ItemKeyBindingClicked;
+
+    private ItemContainerRestrictor restriction = null;
+
+    private bool isPerformingAction = false;
+
+    protected void ModifiedItemEvent(ItemData item, bool isSave)
     {
-        public List<ItemData> containerItems;
-        public bool IsActive = false;
-
-        public virtual event Action<ItemData, bool> AddedItem;
-        public virtual event Action<ItemData, bool> ModifiedItem;
-        public virtual event Action<ItemData, bool> removedItem;
-
-        public Action<ItemData> ItemSingleClicked;
-        public Action<ItemData> ItemDoubleClicked;
-        public Action<ItemData> ItemRightClicked;
-        public Action<ItemData> ItemKeyBindingClicked;
-
-        private ItemContainerRestrictor restriction = null;
-
-        protected void ModifiedItemEvent(ItemData item, bool isSave)
+        if (ModifiedItem != null)
         {
-            if (ModifiedItem != null)
-            {
-                ModifiedItem(item, isSave);
-            }
-        }
-
-
-        protected void AddItemEvent(ItemData item, bool isSave)
-        {
-            if (AddedItem != null)
-            {
-                AddedItem(item, isSave);
-            }
-        }
-
-        protected void RemoveItemEvent(ItemData item, bool isMovingToAnotherContainer)
-        {
-            if (removedItem != null)
-            {
-                removedItem(item, isMovingToAnotherContainer);
-            }
-        }
-
-        public ContainerAddState GetContainerAddState(ItemData modified){
-               if (restriction == null)
-            {
-                restriction = this.GetComponentInChildren<ItemContainerRestrictor>();
-            }
-
-            if (restriction != null)
-            {
-                if (restriction.IsRestricted(ItemContainerRestrictor.ContainerAction.add))
-                {
-                   return new ContainerAddState(ContainerAddState.ActionState.No);              
-                }
-            }
-            return MyContainerAddState(modified);
-        }
-
-        protected abstract ContainerAddState MyContainerAddState(ItemData modified);
- 
-
-
-
-        public void Add(ItemData modified, int amount = -1, bool isSave = true)
-        {
-            if (restriction == null)
-            {
-                restriction = this.GetComponentInChildren<ItemContainerRestrictor>();
-            }
-
-            if (restriction != null)
-            {
-                if (restriction.IsRestricted(ItemContainerRestrictor.ContainerAction.add))
-                {
-                    return;
-                }
-            }
-       
-            AddItem(modified, amount, isSave);
-
-        }
-
-
-        public void Remove(ItemData modified, bool isMovingToAnotherContainer,int amount = -1)
-        {
-            if (restriction == null)
-            {
-                restriction = this.GetComponentInChildren<ItemContainerRestrictor>();
-            }
-
-            if (restriction != null)
-            {
-                if (restriction.IsRestricted(ItemContainerRestrictor.ContainerAction.remove))
-                { 
-                    return;
-                }
-            }
-            RemoveItem(modified, isMovingToAnotherContainer, amount);
-        }
-
-        protected abstract void AddItem(ItemData modified, int amount = -1, bool isSave = true);
-        protected abstract void RemoveItem(ItemData modified, bool isMovingToAnotherContainer, int amount = -1);
-        public abstract int Contains(ItemData modified);
-        public abstract void Clear();
-
-        public void OnItemSingleClick(ItemData item)
-        {
-            if (ItemSingleClicked != null)
-                ItemSingleClicked(item);
-        }
-
-        public void OnItemDoubleCliked(ItemData item)
-        {
-            if (ItemDoubleClicked != null)
-                ItemDoubleClicked(item);
-        }
-
-        public void OnItemKeybindClick(ItemData item)
-        {
-            if (ItemKeyBindingClicked != null)
-            {
-                ItemKeyBindingClicked(item);
-            }
+            ModifiedItem(item, isSave);
         }
     }
+
+
+    protected void AddItemEvent(ItemData item, bool isSave)
+    {
+        if (AddedItem != null)
+        {
+            AddedItem(item, isSave);
+        }
+    }
+
+    protected void RemoveItemEvent(ItemData item, bool isMovingToAnotherContainer)
+    {
+        if (RemovedItem != null)
+        {
+            RemovedItem(item, isMovingToAnotherContainer);
+        }
+    }
+
+    public ContainerAddState GetContainerAddState(ItemData itemData)
+    {
+        if (restriction == null)
+        {
+            restriction = this.GetComponentInChildren<ItemContainerRestrictor>();
+        }
+
+        if (restriction != null)
+        {
+            if (restriction.IsRestricted(ItemContainerRestrictor.ContainerAction.add))
+            {
+                return new ContainerAddState(ContainerAddState.ActionState.No);
+            }
+        }
+        return MyContainerAddState(itemData);
+    }
+
+    protected abstract ContainerAddState MyContainerAddState(ItemData modified);
+
+
+
+
+    public void Add(ItemData itemData, int amount = -1, bool isSave = true)
+    {
+        if (restriction == null)
+        {
+            restriction = this.GetComponentInChildren<ItemContainerRestrictor>();
+        }
+
+        if (restriction != null)
+        {
+            if (restriction.IsRestricted(ItemContainerRestrictor.ContainerAction.add))
+            {
+                return;
+            }
+        }
+
+        AddItem(itemData, amount, isSave);
+
+    }
+
+
+    public void Remove(ItemData itemData, bool isSaveNotRequired, int amount = -1)
+    {
+        if (restriction == null)
+        {
+            restriction = this.GetComponentInChildren<ItemContainerRestrictor>();
+        }
+
+        if (restriction != null)
+        {
+            if (restriction.IsRestricted(ItemContainerRestrictor.ContainerAction.remove))
+            {
+                return;
+            }
+        }
+        RemoveItem(itemData, isSaveNotRequired, amount);
+    }
+
+    protected abstract void AddItem(ItemData modified, int amount = -1, bool isSave = true);
+    protected abstract void RemoveItem(ItemData modified, bool isMovingToAnotherContainer, int amount = -1);
+    public abstract int Contains(ItemData modified);
+    public abstract void Clear();
+
+    public void OnItemSingleClick(ItemData item)
+    {
+        if (!isPerformingAction && ItemSingleClicked != null)
+        {
+            isPerformingAction = true;
+            ItemSingleClicked(item);
+        }
+    }
+
+    public void OnItemDoubleCliked(ItemData item)
+    {
+        if (!isPerformingAction && ItemDoubleClicked != null)
+        {
+            isPerformingAction = true;
+            ItemDoubleClicked(item);
+        }
+    }
+
+    public void OnItemRightCliked(ItemData item)
+    {
+        if (!isPerformingAction && ItemRightClicked != null)
+        {
+            isPerformingAction = true;
+            ItemRightClicked(item);
+        }
+    }
+
+    public void OnItemKeybindClick(ItemData item)
+    {
+        if (!isPerformingAction && ItemKeyBindingClicked != null)
+        {
+            isPerformingAction = true;
+            ItemKeyBindingClicked(item);
+        }
+    }
+
+    public void FinishActionCycle()
+    {
+        isPerformingAction = false;
+    }
+}
 
