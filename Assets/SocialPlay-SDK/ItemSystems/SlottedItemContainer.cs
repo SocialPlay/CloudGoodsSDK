@@ -103,8 +103,7 @@ public class SlottedItemContainer : ItemContainer
         ModdifyStatsByFactor(NewSlotData, 1);
         containerItems.Add(NewSlotData);
 
-        if (modified.ownerContainer == null)
-            Destroy(modified.gameObject);
+        Destroy(modified.gameObject);
 
         Debug.LogWarning("adding  " + NewSlotData.itemName + "(" + NewSlotData.stackSize + ")" + " to Slot " + selectedSlot.slotNameID);
         AddItemEvent(NewSlotData, isSave);

@@ -4,10 +4,10 @@ using SocialPlay.ItemSystems;
 
 public class ContainerMoveItemAction : ContainerActions {
 
-    public ItemContainer moveToContainer;
+    public ItemContainer MoveToContainer;
 
     public override void DoAction(ItemData item)
     {
-        ItemContainerManager.MoveItem(item, moveToContainer);
+        ItemContainerManager.MoveItem(item, MoveToContainer);
     } 
 }

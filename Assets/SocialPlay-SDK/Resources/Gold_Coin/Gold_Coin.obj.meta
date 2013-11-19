@@ -1,19 +1,19 @@
 fileFormatVersion: 2
-guid: cb252cddee965ec4eaa24ccc056f1a59
+guid: ae58e77ebdfc35e4e90874c8f844de53
 ModelImporter:
   serializedVersion: 15
   fileIDToRecycleName:
-    100000: //RootNode
-    100002: ZBrush_defualt_group
-    400000: //RootNode
-    400002: ZBrush_defualt_group
-    2300000: ZBrush_defualt_group
-    3300000: ZBrush_defualt_group
-    4300000: ZBrush_defualt_group
+    100000: default
+    100002: //RootNode
+    400000: default
+    400002: //RootNode
+    2300000: default
+    3300000: default
+    4300000: default
     11100000: //RootNode
   materials:
     importMaterials: 1
-    materialName: 3
+    materialName: 0
     materialSearch: 1
   animations:
     legacyGenerateAnimations: 4
@@ -27,8 +27,8 @@ ModelImporter:
     isReadable: 1
   meshes:
     lODScreenPercentages: []
-    globalScale: 1
-    meshCompression: 0
+    globalScale: .5
+    meshCompression: 1
     addColliders: 0
     importBlendShapes: 1
     swapUVChannels: 0

@@ -30,6 +30,7 @@ public class DisplayItems : MonoBehaviour
 
     void OnReceivedStoreItems(string storeItemsJson)
     {
+        items = new List<JToken>();
         Debug.Log("store items: " + storeItemsJson);
         JToken token = JToken.Parse(storeItemsJson);
 

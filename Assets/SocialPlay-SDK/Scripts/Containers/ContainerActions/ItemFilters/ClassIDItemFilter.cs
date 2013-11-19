@@ -4,12 +4,12 @@ using System.Collections.Generic;
 
 public class ClassIDItemFilter : ContainerItemFilter 
 {
-    public List<int> classIDs;
+    public List<int> ClassIDs;
 
     override public bool IsItemFilteredIn(ItemData item)
     {
         bool found = false;
-        foreach (int classID in classIDs)
+        foreach (int classID in ClassIDs)
         {
             if (item.classID == classID)
             {

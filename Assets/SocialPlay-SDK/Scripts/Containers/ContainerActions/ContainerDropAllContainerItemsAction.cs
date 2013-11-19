@@ -7,9 +7,9 @@ using Newtonsoft.Json.Linq;
 
 public class ContainerDropAllContainerItemsAction : ContainerActions
 {
-    public ItemContainer dropContainer;
+    public ItemContainer DropContainer;
     public Transform TransformForDropPosition;
-    public GameObject dropObjDefaultModel;
+    public GameObject DropObjDefaultModel;
 
     ItemDrop itemDrop;
 
@@ -46,8 +46,8 @@ public class ContainerDropAllContainerItemsAction : ContainerActions
 
     private ItemData[] CreateDropItemArray()
     {
-        ItemData[] tmpContainerItems = new ItemData[dropContainer.containerItems.Count];
-        dropContainer.containerItems.CopyTo(tmpContainerItems);
+        ItemData[] tmpContainerItems = new ItemData[DropContainer.containerItems.Count];
+        DropContainer.containerItems.CopyTo(tmpContainerItems);
         return tmpContainerItems;
     }
 
@@ -62,7 +62,7 @@ public class ContainerDropAllContainerItemsAction : ContainerActions
 
                 data.stackID = moveInfo.NewStackID;
 
-                itemDrop.DropItemIntoWorld(data, TransformForDropPosition.position, dropObjDefaultModel);
+                itemDrop.DropItemIntoWorld(data, TransformForDropPosition.position, DropObjDefaultModel);
             }
         }
     }
@@ -73,7 +73,7 @@ public class ContainerDropAllContainerItemsAction : ContainerActions
         MoveMultipleStacks stacks = new MoveMultipleStacks();
         stacks.StackInfos = new List<MoveItemStackInfo>();
 
-        foreach (ItemData containerItem in dropContainer.containerItems)
+        foreach (ItemData containerItem in DropContainer.containerItems)
         {
             MoveItemStackInfo info = new MoveItemStackInfo();
             info.MoveAmount = containerItem.stackSize;
