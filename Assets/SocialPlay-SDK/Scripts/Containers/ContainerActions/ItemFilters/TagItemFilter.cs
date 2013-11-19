@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class TagItemFilter : ContianerItemFilter
+public class TagItemFilter : ContainerItemFilter
 {
 
     public List<string> tags = new List<string>();

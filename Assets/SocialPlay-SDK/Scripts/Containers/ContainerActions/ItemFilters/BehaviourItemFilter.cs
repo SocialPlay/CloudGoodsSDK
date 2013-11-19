@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class BehaviourItemFilter : ContianerItemFilter
+public class BehaviourItemFilter : ContainerItemFilter
 {
 
     public List<BehaviourPair> behaviours = new List<BehaviourPair>();

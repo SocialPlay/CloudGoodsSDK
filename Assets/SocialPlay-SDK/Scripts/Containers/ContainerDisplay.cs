@@ -17,7 +17,6 @@ public abstract class ContainerDisplay : MonoBehaviour
 
     protected virtual void OnEnable()
     {
-        Debug.Log("test");
         itemContainer.AddedItem += AddedItem;
         itemContainer.RemovedItem += RemovedItem;
     }

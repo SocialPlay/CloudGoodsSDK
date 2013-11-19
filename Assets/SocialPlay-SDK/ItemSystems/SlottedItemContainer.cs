@@ -7,13 +7,14 @@ using SocialPlay.ItemSystems;
 
 public class SlottedItemContainer : ItemContainer
 {
-    public static ISlotSelector slotSelector = new PrioritySelector();
-
-    public Dictionary<int, SlottedContainerSlotData> slots = new Dictionary<int, SlottedContainerSlotData>();
-
-    public Dictionary<string, float> stats = new Dictionary<string, float>();
-
     public bool isSwappable;
+
+    internal static ISlotSelector slotSelector = new PrioritySelector();
+
+    internal Dictionary<int, SlottedContainerSlotData> slots = new Dictionary<int, SlottedContainerSlotData>();
+
+    internal Dictionary<string, float> stats = new Dictionary<string, float>();
+
 
     public void AddSlot(int slotID, ItemData slotData, List<ItemFilterSystem> filters, int persistantID = -1, int slotMaxCount = 1, int priority = 0)
     {
@@ -189,13 +190,13 @@ public class SlottedItemContainer : ItemContainer
         }
     }
 
-    public override int Contains(ItemData modified)
+    public override int Contains(ItemData itemData)
     {
         if (slots.Count == 0) return 0;
         foreach (KeyValuePair<int, SlottedContainerSlotData> selectedSlot in slots)
         {
             if (selectedSlot.Value.slotData == null) continue;
-            if (selectedSlot.Value.slotData.IsSameItemAs(modified))
+            if (selectedSlot.Value.slotData.IsSameItemAs(itemData))
             {
                 return selectedSlot.Value.slotData.stackSize;
             }
