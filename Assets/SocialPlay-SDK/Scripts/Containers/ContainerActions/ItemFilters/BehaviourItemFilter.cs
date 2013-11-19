@@ -5,12 +5,12 @@ using System.Collections.Generic;
 public class BehaviourItemFilter : ContianerItemFilter
 {
 
-    public List<BehaviourPair> behaviours = new List<BehaviourPair>();
+    public List<BehaviourPair> Behaviours = new List<BehaviourPair>();
 
     override public bool CheckFilter(ItemData item)
     {
         bool found = false;
-        foreach (BehaviourPair behaviour in behaviours)
+        foreach (BehaviourPair behaviour in Behaviours)
         {
             if (item.classID == behaviour.classID)
             {

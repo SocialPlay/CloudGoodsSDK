@@ -8,16 +8,16 @@ using Newtonsoft.Json.Linq;
 
 public class ContainerMoveAllItemsAction : ContainerActions
 {
-    public ItemContainer sourceContainer;
+    public ItemContainer SourceContainer;
     public ItemContainer DestinationContainer;
-    public int destinationLocation;
+    public int DestinationLocation;
 
     public override void DoAction(ItemData itemData)
     {
         ///Tmp moves all to vault on backend
         MoveMultipleStacks stacks = new MoveMultipleStacks();
         stacks.StackInfos = new List<MoveItemStackInfo>();
-        foreach (ItemData item in sourceContainer.containerItems)
+        foreach (ItemData item in SourceContainer.containerItems)
         {
             MoveItemStackInfo info = new MoveItemStackInfo();
             info.MoveAmount = item.stackSize;
@@ -25,12 +25,12 @@ public class ContainerMoveAllItemsAction : ContainerActions
             stacks.StackInfos.Add(info);
         }
         string convert = JsonConvert.SerializeObject(stacks);
-        ItemServiceManager.service.MoveItemStacks(convert, ItemSystemGameData.UserID.ToString(), "User", ItemSystemGameData.AppID, destinationLocation, delegate(string x)
+        ItemServiceManager.service.MoveItemStacks(convert, ItemSystemGameData.UserID.ToString(), "User", ItemSystemGameData.AppID, DestinationLocation, delegate(string x)
         {
             JToken token = JToken.Parse(x);
             MoveMultipleItemsResponse infos = JsonConvert.DeserializeObject<MoveMultipleItemsResponse>(token.ToString());
-            ItemData[] containerItems = new ItemData[sourceContainer.containerItems.Count];
-            sourceContainer.containerItems.CopyTo(containerItems);
+            ItemData[] containerItems = new ItemData[SourceContainer.containerItems.Count];
+            SourceContainer.containerItems.CopyTo(containerItems);
 
             foreach (MovedItemsInfo info in infos.movedItems)
             {
@@ -39,7 +39,7 @@ public class ContainerMoveAllItemsAction : ContainerActions
                     if (data.stackID == info.OriginalStackID)
                     {
                         data.stackID = info.NewStackID;
-                        sourceContainer.Remove(data, true);
+                        SourceContainer.Remove(data, true);
                         DestinationContainer.Add(data, -1, false);
                     }
                 }

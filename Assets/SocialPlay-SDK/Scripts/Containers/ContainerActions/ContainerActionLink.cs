@@ -8,12 +8,12 @@ public class ContainerActionLink : MonoBehaviour
 
     //public List<int> ClassIDList;
     //public List<string> TagList;
-    public List<ContianerItemFilter> filters = new List<ContianerItemFilter>();
+    public List<ContianerItemFilter> Filters = new List<ContianerItemFilter>();
 
 
     public InputTypes ContainerActionInput;
 
-    public ContainerActions containerAction;
+    public ContainerActions ContainerAction;
 
     ItemContainer container;
 
@@ -44,14 +44,14 @@ public class ContainerActionLink : MonoBehaviour
 
     void PerformActionWithItem(ItemData itemData)
     {
-        foreach (ContianerItemFilter filter in filters)
+        foreach (ContianerItemFilter filter in Filters)
         {
             if (!filter.CheckFilter(itemData))
             {
                 return;
             }
         }
-        containerAction.DoAction(itemData);
+        ContainerAction.DoAction(itemData);
     }
 }
 
