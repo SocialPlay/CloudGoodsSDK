@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class ClassIDItemFilter : ContianerItemFilter 
+public class ClassIDItemFilter : ContainerItemFilter 
 {
     public List<int> ClassIDs;
 

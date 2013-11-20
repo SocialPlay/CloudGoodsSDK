@@ -6,50 +6,50 @@ using Newtonsoft.Json.Linq;
 public class SaveSlotsToLocation : MonoBehaviour
 {
 
-    public ItemOwnerTypes destinationOwnerType;
+    public ItemOwnerTypes DestinationOwnerType;
 
-    public SlottedItemContainer slotedContainer = null;
+    public SlottedItemContainer SlotedContainer = null;
 
     void OnEnable()
     {
-        if (slotedContainer != null)
+        if (SlotedContainer != null)
         {
-            slotedContainer.AddedItem += AddedItem;
-            slotedContainer.ModifiedItem += ModifiedItem;
-            slotedContainer.RemovedItem += RemovedItem;
+            SlotedContainer.AddedItem += AddedItem;
+            SlotedContainer.ModifiedItem += ModifiedItem;
+            SlotedContainer.RemovedItem += RemovedItem;
         }
     }
 
     void OnDisable()
     {
-        if (slotedContainer != null)
+        if (SlotedContainer != null)
         {
-            slotedContainer.ModifiedItem -= ModifiedItem;
-            slotedContainer.AddedItem -= AddedItem;
-            slotedContainer.RemovedItem -= RemovedItem;
+            SlotedContainer.ModifiedItem -= ModifiedItem;
+            SlotedContainer.AddedItem -= AddedItem;
+            SlotedContainer.RemovedItem -= RemovedItem;
         }
     }
 
     void ModifiedItem(ItemData data, bool isSave)
     {
-        int slotId = slotedContainer.FindItemInSlot(data);
+        int slotId = SlotedContainer.FindItemInSlot(data);
         if (slotId != -1)
         {
-            if (isSave == true && slotedContainer.slots[slotId].persistantID != -1)
+            if (isSave == true && SlotedContainer.slots[slotId].persistantID != -1)
             {
-                ItemServiceManager.service.MoveItemStack(data.stackID, data.stackSize, GetOwnerID(), destinationOwnerType.ToString(), ItemSystemGameData.AppID, slotedContainer.slots[slotId].persistantID, ReturnedString);
+                ItemServiceManager.service.MoveItemStack(data.stackID, data.stackSize, GetOwnerID(), DestinationOwnerType.ToString(), ItemSystemGameData.AppID, SlotedContainer.slots[slotId].persistantID, ReturnedString);
             }
         }
     }
 
     void AddedItem(ItemData data, bool isSave)
     {
-        int slotId = slotedContainer.FindItemInSlot(data);
+        int slotId = SlotedContainer.FindItemInSlot(data);
         if (slotId != -1)
         {
-            if (isSave == true && slotedContainer.slots[slotId].persistantID != -1)
+            if (isSave == true && SlotedContainer.slots[slotId].persistantID != -1)
             {
-                ItemServiceManager.service.MoveItemStack(data.stackID, data.stackSize, GetOwnerID(), destinationOwnerType.ToString(), ItemSystemGameData.AppID, slotedContainer.slots[slotId].persistantID, delegate(string x)
+                ItemServiceManager.service.MoveItemStack(data.stackID, data.stackSize, GetOwnerID(), DestinationOwnerType.ToString(), ItemSystemGameData.AppID, SlotedContainer.slots[slotId].persistantID, delegate(string x)
                 {
                     JToken token = JToken.Parse(x);
                     data.stackID = new Guid(token.ToString());
@@ -68,7 +68,7 @@ public class SaveSlotsToLocation : MonoBehaviour
 
     string GetOwnerID()
     {
-        switch (destinationOwnerType)
+        switch (DestinationOwnerType)
         {
             case ItemOwnerTypes.Instance:
                 return ItemSystemGameData.InstanceID.ToString();

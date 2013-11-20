@@ -15,7 +15,7 @@ public abstract class ItemContainer : MonoBehaviour
     public event Action<ItemData, bool> AddedItem;
 
     /// <summary>
-    /// Called after the container modified the item stack size or location in the container
+    /// Called after the container itemData the item stack size or location in the container
     /// </summary>
     public event Action<ItemData, bool> ModifiedItem;
 

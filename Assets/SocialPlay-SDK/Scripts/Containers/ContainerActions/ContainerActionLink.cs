@@ -8,7 +8,7 @@ public class ContainerActionLink : MonoBehaviour
 
     //public List<int> ClassIDList;
     //public List<string> TagList;
-    public List<ContianerItemFilter> filters = new List<ContianerItemFilter>();
+    public List<ContainerItemFilter> filters = new List<ContainerItemFilter>();
 
 
     public InputTypes ContainerActionInput;
@@ -45,7 +45,7 @@ public class ContainerActionLink : MonoBehaviour
     void PerformActionWithItem(ItemData itemData)
     {
         bool isfilteredOut = false;
-        foreach (ContianerItemFilter filter in filters)
+        foreach (ContainerItemFilter filter in filters)
         {
             if (!filter.IsItemFilteredIn(itemData))
             {

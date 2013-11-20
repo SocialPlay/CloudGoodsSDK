@@ -54,30 +54,55 @@ public class AutoFlyIn : MonoBehaviour
         }
     }
 
+    void Start()
+    {
+        if (myContainerDisplay.IsWindowActive())
+        {
+            this.transform.position = inPos;
+            MoveIn();
+        }
+        else
+        {
+            this.transform.position = outPos;
+            MoveOut();
+        }
+    }
+
     void Update()
     {
         if (myContainerDisplay != null)
         {
             if (myContainerDisplay.IsWindowActive() && !isCurrentlyActive)
             {
-                UpdatePos();
-                tween.from = this.transform.localPosition;
-                tween.to = inPos;
-                tween.Reset();
-                tween.enabled = true;
-                isCurrentlyActive = true;
+                MoveIn();
             }
             else if (!myContainerDisplay.IsWindowActive() && isCurrentlyActive)
             {
-                UpdatePos();
-                tween.from = this.transform.localPosition;
-                tween.to = outPos;
-                tween.Reset();
-                tween.enabled = true;
-                isCurrentlyActive = false;
+                MoveOut();
             }
         }
     }
+
+    void MoveIn()
+    {
+        UpdatePos();
+        tween.from = this.transform.localPosition;
+        tween.to = inPos;
+        tween.Reset();
+        tween.enabled = true;
+        isCurrentlyActive = true;
+    }
+
+    void MoveOut()
+    {
+        UpdatePos();
+        tween.from = this.transform.localPosition;
+        tween.to = outPos;
+        tween.Reset();
+        tween.enabled = true;
+        isCurrentlyActive = false;
+    }
+
 
     void UpdatePos()
     {

@@ -5,8 +5,6 @@ using System;
 
 public abstract class ContainerItemLoader : MonoBehaviour
 {
-
-
     public Action<List<ItemData>, ItemContainer> LoadedItemsForContainerEvent;
 
     public ItemContainer container;
