@@ -95,6 +95,11 @@ public class LimitlessItemContainer : ItemContainer
 
     public override void Clear()
     {
+        foreach (ItemData item in containerItems)
+        {
+            Destroy(item.gameObject);
+        }
+
         containerItems.Clear();
     }
 
