@@ -49,8 +49,6 @@ public class ItemInfo : MonoBehaviour {
     {
         yield return www;
 
-        Debug.Log(www.texture.ToString());
-
         UITexture uiTexture = gameObject.GetComponentInChildren<UITexture>();
         //uiTexture.material = new Material(uiTexture.material.shader);
         uiTexture.mainTexture = www.texture;
