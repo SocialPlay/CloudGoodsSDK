@@ -61,7 +61,7 @@ public class NGUI_SPLogin : MonoBehaviour
     void Start()
     {
 
-        ContainerKeybinding.DisableKeybinding();
+        ContainerKeybinding.DisableKeybinding("Login");
 
         loginTab.SetActive(true);
         registerErrorLabel.text = "";
@@ -139,7 +139,7 @@ public class NGUI_SPLogin : MonoBehaviour
     void LoginSuccess(Guid userID)
     {
         loginErrorLabel.text = userID.ToString();
-        ContainerKeybinding.EnableKeybinding();
+        ContainerKeybinding.EnableKeybinding("Login");
     }
     #endregion
 

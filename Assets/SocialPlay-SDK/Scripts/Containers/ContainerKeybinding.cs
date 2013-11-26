@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using SocialPlay.ItemSystems;
+using System.Collections.Generic;
 
 public class ContainerKeybinding : MonoBehaviour
 {
@@ -10,6 +11,8 @@ public class ContainerKeybinding : MonoBehaviour
     public KeyCode binding;
     public ActionType actiontype = ActionType.toggle;
     private ContainerDisplay containerDisplay;
+
+    private static List<string> systemsLockingKeys = new List<string>();
 
     public enum ActionType
     {
@@ -45,13 +48,18 @@ public class ContainerKeybinding : MonoBehaviour
         }
     }
 
-    public static void DisableKeybinding()
+    public static void DisableKeybinding(string systemName)
     {
+        if (!systemsLockingKeys.Contains(systemName))
+            systemsLockingKeys.Add(systemName);
+
         isDisabaled = true;
     }
 
-    public static void EnableKeybinding()
+    public static void EnableKeybinding(string systemName)
     {
-        isDisabaled = false;
+        systemsLockingKeys.Remove(systemName);
+        if (systemsLockingKeys.Count == 0)
+            isDisabaled = false;
     }
 }
