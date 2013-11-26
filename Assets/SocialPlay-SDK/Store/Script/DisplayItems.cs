@@ -36,7 +36,7 @@ public class DisplayItems : MonoBehaviour
 
         JArray storeItems = JArray.Parse(token.ToString());
 
-
+        
         for (int i = 0; i < storeItems.Count; i++)
         {
             items.Add(storeItems[i]);

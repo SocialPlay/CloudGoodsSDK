@@ -99,14 +99,14 @@ public class ItemPurchase : MonoBehaviour {
     private void ChangePurchaseButtonDisplay(int itemCreditCost, int itemCoinCost)
     {
         if (itemCoinCost > CurrencyBalance.freeCurrency)
-            coinPurchaseButton.SetActive(false);
+            coinPurchaseButton.GetComponent<UIButton>().isEnabled = false;
         else
-            coinPurchaseButton.SetActive(true);
+            coinPurchaseButton.GetComponent<UIButton>().isEnabled = true;
 
         if (itemCreditCost > CurrencyBalance.paidCurrency)
-            creditPurchaseButton.SetActive(false);
+            creditPurchaseButton.GetComponent<UIButton>().isEnabled = false;
         else
-            creditPurchaseButton.SetActive(true);
+            creditPurchaseButton.GetComponent<UIButton>().isEnabled = true;
     }
 
     public void DisplayItemPurchasePanel(ItemInfo item)
