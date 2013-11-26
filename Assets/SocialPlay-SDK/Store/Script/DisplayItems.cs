@@ -20,6 +20,11 @@ public class DisplayItems : MonoBehaviour
 
     void OnUserAuth(string user)
     {
+        GetItems();
+    }
+
+    public void GetItems()
+    {
         webservicecalls = socialPlayObj.GetComponent<WebserviceCalls>();
 
         if (!storeLoader)
@@ -36,7 +41,7 @@ public class DisplayItems : MonoBehaviour
 
         JArray storeItems = JArray.Parse(token.ToString());
 
-
+        
         for (int i = 0; i < storeItems.Count; i++)
         {
             items.Add(storeItems[i]);

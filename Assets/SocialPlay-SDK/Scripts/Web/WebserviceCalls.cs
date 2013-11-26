@@ -78,7 +78,7 @@ public class WebserviceCalls : MonoBehaviour
 
     public void GetUserFromWorld(Guid appID, int platformID, string platformUserID, string userName, string userEmail, Action<string> callback)
     {
-        string url = cloudGoodsURL + "GetUserFromWorld?appID=" + appID + "&platformID=" + platformID + "&platformUserID=" + platformUserID + "&loginUserEmail=" + WWW.EscapeURL(userName) + "&loginUserEmail=" + userEmail;
+        string url = cloudGoodsURL + "GetUserFromWorld?appID=" + appID + "&platformID=" + platformID + "&platformUserID=" + platformUserID + "&userName=" + WWW.EscapeURL(userName) + "&loginUserEmail=" + userEmail;
 
         WWW www = new WWW(url);
 

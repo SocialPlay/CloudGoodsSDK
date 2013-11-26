@@ -10,12 +10,15 @@ public class StorePanel : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        UIEventListener.Get(homeButton).onClick += OnHomeButtonClick;
+        if(homeButton != null)
+            UIEventListener.Get(homeButton).onClick += OnHomeButtonClick;
 	}
 
     void OnHomeButtonClick(GameObject go)
     {
-        homePanel.SetActive(true);
+        if(homePanel != null)
+            homePanel.SetActive(true);
+
         storePanel.SetActive(false);
     }
 }

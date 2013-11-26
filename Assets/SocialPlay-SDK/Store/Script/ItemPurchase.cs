@@ -41,13 +41,17 @@ public class ItemPurchase : MonoBehaviour {
         UIEventListener.Get(coinPurchaseButton).onClick += PurchaseItemWithCoins;
         UIEventListener.Get(closePanelButton).onClick += ClosePanel;
         UIEventListener.Get(purchaseConfirmationButton).onClick += OnPurchaseConfirmationButtonPressed;
+
     }
 
     void OnDisable()
     {
         UIEventListener.Get(increaseQuantityButton).onClick -= IncreaseQuantityAmount;
         UIEventListener.Get(decreaseQuantityButton).onClick -= DecreaseQuantityAmount;
+        UIEventListener.Get(creditPurchaseButton).onClick -= PurchaseItemWithCredits;
+        UIEventListener.Get(coinPurchaseButton).onClick -= PurchaseItemWithCoins;
         UIEventListener.Get(closePanelButton).onClick -= ClosePanel;
+
     }
 
     void IncreaseQuantityAmount(GameObject increaseButton)
@@ -95,17 +99,21 @@ public class ItemPurchase : MonoBehaviour {
 
     private void ChangePurchaseButtonDisplay(int itemCreditCost, int itemCoinCost)
     {
-        Debug.Log(itemCreditCost + " + " + CurrencyBalance.freeCurrency);
-
         if (itemCoinCost > CurrencyBalance.freeCurrency)
-            coinPurchaseButton.SetActive(false);
+            coinPurchaseButton.GetComponent<UIButton>().isEnabled = false;
         else
-            coinPurchaseButton.SetActive(true);
+            coinPurchaseButton.GetComponent<UIButton>().isEnabled = true;
 
         if (itemCreditCost > CurrencyBalance.paidCurrency)
-            creditPurchaseButton.SetActive(false);
+        {
+            creditPurchaseButton.GetComponent<UIButton>().isEnabled = false;
+            creditPurchaseButton.GetComponent<UIButton>().UpdateColor(false, true);
+        }
         else
-            creditPurchaseButton.SetActive(true);
+        {
+            creditPurchaseButton.GetComponent<UIButton>().isEnabled = true;
+            creditPurchaseButton.GetComponent<UIButton>().UpdateColor(true, true);
+        }
     }
 
     public void DisplayItemPurchasePanel(ItemInfo item)
@@ -137,8 +145,20 @@ public class ItemPurchase : MonoBehaviour {
     {
         purchaseConfirmationPanel.SetActive(true);
         currencyBalance.GetCurrencyBalance("");
+        ReloadContainerItems();
     }
 
+    void ReloadContainerItems()
+    {
+        foreach (LoadItemsForContainer loader in GameObject.FindObjectsOfType(typeof(LoadItemsForContainer)))
+        {
+            if (loader.sourceLocation == 0)
+            {
+                loader.transform.parent.GetComponent<ItemContainer>().Clear();
+                loader.LoadItems();
+            }
+        }
+    }
 
     void OnPurchaseConfirmationButtonPressed(GameObject button)
     {

@@ -99,7 +99,6 @@ public class GameObjectItemDataConverter : ItemDataConverter
         data = JToken.Parse(itemData).ToString();
 
         itemDetails = Newtonsoft.Json.JsonConvert.DeserializeObject<ItemDataList>(data);
-        Debug.Log(data);
         return ConvertItems(itemDetails);
     }
 }
