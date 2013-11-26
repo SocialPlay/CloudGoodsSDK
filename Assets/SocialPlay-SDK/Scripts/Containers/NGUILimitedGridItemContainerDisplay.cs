@@ -11,7 +11,7 @@ public class NGUILimitedGridItemContainerDisplay : ContainerDisplay
     protected override void SetupWindow()
     {
         base.SetupWindow();
-        viewArea = containerDisplay.GetComponentInChildren<UIGrid>();
+        viewArea = ContainerDisplayObject.GetComponentInChildren<UIGrid>();
     }
 
 

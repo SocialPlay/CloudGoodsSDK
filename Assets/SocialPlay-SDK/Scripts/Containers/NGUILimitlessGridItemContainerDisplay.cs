@@ -10,14 +10,22 @@ public class NGUILimitlessGridItemContainerDisplay :  ContainerDisplay
     protected override void SetupWindow()
     {
         base.SetupWindow();
-        viewArea = containerDisplay.GetComponentInChildren<UIGrid>();  
+        viewArea = ContainerDisplayObject.GetComponentInChildren<UIGrid>();  
     }
 
     public override void AddDisplayItem(ItemData itemData, Transform parent)
     {       
         itemData.transform.parent = viewArea.transform;
         itemData.transform.localPosition = new Vector3(0, 0, -1);
-        itemData.transform.localScale = Vector3.one;
+        itemData.transform.localScale = Vector3.one;       
+        foreach (UIWidget item in itemData.GetComponentsInChildren<UIWidget>())
+        {
+            item.enabled = true;
+        }
+        foreach (MonoBehaviour item in itemData.GetComponentsInChildren<MonoBehaviour>())
+        {
+            item.enabled = true;
+        }
         viewArea.repositionNow = true;
     }
 
