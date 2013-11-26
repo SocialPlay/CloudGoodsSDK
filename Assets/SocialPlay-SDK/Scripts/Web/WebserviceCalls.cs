@@ -94,9 +94,9 @@ public class WebserviceCalls : MonoBehaviour
         StartCoroutine(OnWebServiceCallback(www, callback));
     }
 
-    public void GetFreeCurrencyBalance(string userID, string appID, Action<string> callback)
+    public void GetFreeCurrencyBalance(string userID, int accessLocation, string appID, Action<string> callback)
     {
-        string url = cloudGoodsURL + "GetFreeCurrencyBalance?userID=" + userID + "&appID=" + appID;
+        string url = cloudGoodsURL + "GetFreeCurrencyBalance?userID=" + userID + "&accessLocation=" + accessLocation + "&appID=" + appID;
 
         WWW www = new WWW(url);
 
@@ -130,9 +130,9 @@ public class WebserviceCalls : MonoBehaviour
         StartCoroutine(OnWebServiceCallback(www, callback));
     }
 
-    public void StoreItemPurchase(string URL, Guid userID, int itemID, int amount, string paymentType, Guid appID, Action<string> callback)
+    public void StoreItemPurchase(string URL, Guid userID, int itemID, int amount, string paymentType, Guid appID, int saveLocation, Action<string> callback)
     {
-        string url = URL + "StoreItemPurchase?UserID=" + userID + "&ItemID=" + itemID + "&Amount=" + amount + "&PaymentType=" + paymentType + "&AppID=" + appID;
+        string url = URL + "StoreItemPurchase?UserID=" + userID + "&ItemID=" + itemID + "&Amount=" + amount + "&PaymentType=" + paymentType + "&AppID=" + appID + "&saveLocation=" + saveLocation;
 
         WWW www = new WWW(url);
 
