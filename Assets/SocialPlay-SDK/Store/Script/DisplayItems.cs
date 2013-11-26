@@ -20,6 +20,11 @@ public class DisplayItems : MonoBehaviour
 
     void OnUserAuth(string user)
     {
+        GetItems();
+    }
+
+    public void GetItems()
+    {
         webservicecalls = socialPlayObj.GetComponent<WebserviceCalls>();
 
         if (!storeLoader)
