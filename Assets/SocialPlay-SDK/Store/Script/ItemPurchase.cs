@@ -41,6 +41,7 @@ public class ItemPurchase : MonoBehaviour {
         UIEventListener.Get(coinPurchaseButton).onClick += PurchaseItemWithCoins;
         UIEventListener.Get(closePanelButton).onClick += ClosePanel;
         UIEventListener.Get(purchaseConfirmationButton).onClick += OnPurchaseConfirmationButtonPressed;
+
     }
 
     void OnDisable()
@@ -104,9 +105,15 @@ public class ItemPurchase : MonoBehaviour {
             coinPurchaseButton.GetComponent<UIButton>().isEnabled = true;
 
         if (itemCreditCost > CurrencyBalance.paidCurrency)
+        {
             creditPurchaseButton.GetComponent<UIButton>().isEnabled = false;
+            creditPurchaseButton.GetComponent<UIButton>().UpdateColor(false, true);
+        }
         else
+        {
             creditPurchaseButton.GetComponent<UIButton>().isEnabled = true;
+            creditPurchaseButton.GetComponent<UIButton>().UpdateColor(true, true);
+        }
     }
 
     public void DisplayItemPurchasePanel(ItemInfo item)
