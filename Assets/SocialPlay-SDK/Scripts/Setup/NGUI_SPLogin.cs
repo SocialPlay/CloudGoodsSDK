@@ -86,7 +86,7 @@ public class NGUI_SPLogin : MonoBehaviour
         resendVerificationTextObject.SetActive(false);
         loginErrorLabel.text = "User logged in";
         this.gameObject.SetActive(false);
-
+        ContainerKeybinding.EnableKeybinding("Login");
     }
 
     void ResentVerificationResponce(SPLogin.SPLogin_Responce responce)
@@ -138,8 +138,7 @@ public class NGUI_SPLogin : MonoBehaviour
 
     void LoginSuccess(Guid userID)
     {
-        loginErrorLabel.text = userID.ToString();
-        ContainerKeybinding.EnableKeybinding("Login");
+        loginErrorLabel.text = userID.ToString();        
     }
     #endregion
 

@@ -27,6 +27,7 @@ public class ContainerKeybinding : MonoBehaviour
 
     void Update()
     {
+  
         if (!isDisabaled && Input.GetKeyDown(binding))
         {
             switch (actiontype)
