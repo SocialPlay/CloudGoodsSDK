@@ -6,29 +6,29 @@ using Newtonsoft.Json.Linq;
 public class SaveToLocation : MonoBehaviour
 {
 
-    public ItemOwnerTypes destinationOwnerType;
+    public ItemOwnerTypes DestinationOwnerType;
 
-    public ItemContainer container = null;
+    public ItemContainer Container = null;
 
-    public int destinationLocation;
+    public int DestinationLocation;
 
     void OnEnable()
     {
-        if (container != null)
+        if (Container != null)
         {
-            container.AddedItem += AddedItem;
-            container.ModifiedItem += ModifiedItem;
-            container.RemovedItem += RemovedItem;
+            Container.AddedItem += AddedItem;
+            Container.ModifiedItem += ModifiedItem;
+            Container.RemovedItem += RemovedItem;
         }
     }
 
     void OnDisable()
     {
-        if (container != null)
+        if (Container != null)
         {
-            container.ModifiedItem -= ModifiedItem;
-            container.AddedItem -= AddedItem;
-            container.RemovedItem -= RemovedItem;
+            Container.ModifiedItem -= ModifiedItem;
+            Container.AddedItem -= AddedItem;
+            Container.RemovedItem -= RemovedItem;
         }
     }
 
@@ -36,7 +36,7 @@ public class SaveToLocation : MonoBehaviour
     {
         if (isSave == true)
         {
-            ItemServiceManager.service.MoveItemStack(data.stackID, data.stackSize, GetOwnerID(), destinationOwnerType.ToString(), ItemSystemGameData.AppID, destinationLocation, ReturnedString);
+            ItemServiceManager.service.MoveItemStack(data.stackID, data.stackSize, GetOwnerID(), DestinationOwnerType.ToString(), ItemSystemGameData.AppID, DestinationLocation, ReturnedString);
         }
     }
 
@@ -44,7 +44,7 @@ public class SaveToLocation : MonoBehaviour
     {
         if (isSave == true)
         {
-            ItemServiceManager.service.MoveItemStack(data.stackID, data.stackSize, GetOwnerID(), destinationOwnerType.ToString(), ItemSystemGameData.AppID, destinationLocation, delegate(string x) {
+            ItemServiceManager.service.MoveItemStack(data.stackID, data.stackSize, GetOwnerID(), DestinationOwnerType.ToString(), ItemSystemGameData.AppID, DestinationLocation, delegate(string x) {
                         JToken token = JToken.Parse(x);
                 data.stackID = new Guid(token.ToString());
             });
@@ -61,7 +61,7 @@ public class SaveToLocation : MonoBehaviour
 
     string GetOwnerID()
     {
-        switch (destinationOwnerType)
+        switch (DestinationOwnerType)
         {
             case ItemOwnerTypes.Instance:
                 return ItemSystemGameData.InstanceID.ToString();

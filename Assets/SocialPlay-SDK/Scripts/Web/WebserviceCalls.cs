@@ -49,9 +49,9 @@ public class WebserviceCalls : MonoBehaviour
         Debug.Log("JSON: " + generatedItemsJson);
     }
 
-    public void GenerateItemsAtLocation(string OwnerID, string OwnerType, int Location, Guid GameID, int MinimumEnergyOfItem, int TotalEnergyToGenerate, string ANDTags, string ORTags, Action<string> callback)
+    public void GenerateItemsAtLocation(string ownerID, string ownerType, int location, Guid gameID, int minimumEnergyOfItem, int totalEnergyToGenerate, string andTags, string orTags, Action<string> callback)
     {
-        string url = cloudGoodsURL + "GenerateItemsAtLocation?OwnerID=" + OwnerID + "&OnwerType=" + OwnerType + "&Location=" + Location + "&GameID=" + GameID + "&MinimumEnergyOfItems=" + MinimumEnergyOfItem + "&TotalEnergyToGenerateFor=" + TotalEnergyToGenerate + "&ANDTags=" + "" + "&ORTags=" + "";
+        string url = cloudGoodsURL + "GenerateItemsAtLocation?OwnerID=" + ownerID + "&OnwerType=" + ownerType + "&Location=" + location + "&GameID=" + gameID + "&MinimumEnergyOfItems=" + minimumEnergyOfItem + "&TotalEnergyToGenerateFor=" + totalEnergyToGenerate + "&ANDTags=" + "" + "&ORTags=" + "";
         Debug.Log(url);
         WWW www = new WWW(url);
 
@@ -67,9 +67,9 @@ public class WebserviceCalls : MonoBehaviour
         StartCoroutine(OnWebServiceCallback(www, callback));
     }
 
-    public void MoveItemStack(Guid StackToMove, int MoveAmount, string DestinationOwnerID, string DestinationOwnerType, int DestinationGameID, int DestinationLocation, Action<string> callback)
+    public void MoveItemStack(Guid stackToMove, int moveAmount, string destinationOwnerID, string destinationOwnerType, int destinationGameID, int destinationLocation, Action<string> callback)
     {
-        string url = cloudGoodsURL + "MoveItemStack?StackToMove=" + StackToMove + "&MoveAmount=" + MoveAmount + "&DestinationOwnerID=" + DestinationOwnerID + "&DestinationOwnerType=" + DestinationOwnerType + "&DestinationGameID=" + DestinationGameID + "&DestinationLocation=" + DestinationLocation;
+        string url = cloudGoodsURL + "MoveItemStack?StackToMove=" + stackToMove + "&MoveAmount=" + moveAmount + "&DestinationOwnerID=" + destinationOwnerID + "&DestinationOwnerType=" + destinationOwnerType + "&DestinationGameID=" + destinationGameID + "&DestinationLocation=" + destinationLocation;
 
         WWW www = new WWW(url);
 
@@ -94,9 +94,9 @@ public class WebserviceCalls : MonoBehaviour
         StartCoroutine(OnWebServiceCallback(www, callback));
     }
 
-    public void GetFreeCurrencyBalance(string userID, string appID, Action<string> callback)
+    public void GetFreeCurrencyBalance(string userID, int accessLocation, string appID, Action<string> callback)
     {
-        string url = cloudGoodsURL + "GetFreeCurrencyBalance?userID=" + userID + "&appID=" + appID;
+        string url = cloudGoodsURL + "GetFreeCurrencyBalance?userID=" + userID + "&accessLocation=" + accessLocation + "&appID=" + appID;
 
         WWW www = new WWW(url);
 
@@ -121,18 +121,18 @@ public class WebserviceCalls : MonoBehaviour
         StartCoroutine(OnWebServiceCallback(www, callback));
     }
 
-    public void GetGameRecipes(string AppID, Action<string> callback)
+    public void GetGameRecipes(string appID, Action<string> callback)
     {
-        string url = cloudGoodsURL + "GetRecipes?appID=" + AppID;
+        string url = cloudGoodsURL + "GetRecipes?appID=" + appID;
 
         WWW www = new WWW(url);
 
         StartCoroutine(OnWebServiceCallback(www, callback));
     }
 
-    public void StoreItemPurchase(string URL, Guid userID, int itemID, int amount, string paymentType, Guid appID, Action<string> callback)
+    public void StoreItemPurchase(string URL, Guid userID, int itemID, int amount, string paymentType, Guid appID, int saveLocation, Action<string> callback)
     {
-        string url = URL + "StoreItemPurchase?UserID=" + userID + "&ItemID=" + itemID + "&Amount=" + amount + "&PaymentType=" + paymentType + "&AppID=" + appID;
+        string url = URL + "StoreItemPurchase?UserID=" + userID + "&ItemID=" + itemID + "&Amount=" + amount + "&PaymentType=" + paymentType + "&AppID=" + appID + "&saveLocation=" + saveLocation;
 
         WWW www = new WWW(url);
 

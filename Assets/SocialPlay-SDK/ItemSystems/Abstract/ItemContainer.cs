@@ -15,7 +15,7 @@ public abstract class ItemContainer : MonoBehaviour
     public event Action<ItemData, bool> AddedItem;
 
     /// <summary>
-    /// Called after the container itemData the item stack size or location in the container
+    /// Called after the Container itemData the item stack size or location in the Container
     /// </summary>
     public event Action<ItemData, bool> ModifiedItem;
 
@@ -40,7 +40,7 @@ public abstract class ItemContainer : MonoBehaviour
     public event Action<ItemData> ItemRightClicked;
 
     /// <summary>
-    /// Called after a user presses a key that is linked to the container(only for slotted containers)
+    /// Called after a user presses a key that is linked to the Container(only for slotted containers)
     /// </summary>
     public event Action<ItemData> ItemKeyBindingClicked;
 

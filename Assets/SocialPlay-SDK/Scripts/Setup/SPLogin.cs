@@ -57,21 +57,21 @@ public class SPLogin : MonoBehaviour
         if (instance == null)
         {
             instance = this;
-        }
+        }       
     }
 
 
-    public static void RegisterUser(string Email, string pass, string userName)
+    public static void RegisterUser(string email, string pass, string userName)
     {
         ItemSystemGameData.AppID = new Guid(GameAuthentication.GetAppID());
-        ItemServiceManager.service.SPLogin_UserRegister(ItemSystemGameData.AppID, Email, pass, userName, instance.RecivedRegisterUser);
+        ItemServiceManager.service.SPLogin_UserRegister(ItemSystemGameData.AppID, email, pass, userName, instance.RecivedRegisterUser);
     }
 
 
-    public static void Login(string Email, string pass)
+    public static void Login(string email, string pass)
     {
         ItemSystemGameData.AppID = new Guid(GameAuthentication.GetAppID());
-        ItemServiceManager.service.SPLogin_UserLogin(ItemSystemGameData.AppID, Email, pass, instance.RecivedLoginCode);
+        ItemServiceManager.service.SPLogin_UserLogin(ItemSystemGameData.AppID, email, pass, instance.RecivedLoginCode);
     }
 
     public static void ForgotPassword(string Email)
@@ -80,10 +80,10 @@ public class SPLogin : MonoBehaviour
         ItemServiceManager.service.SPLoginForgotPassword(ItemSystemGameData.AppID, Email, instance.RecivedForgotPassword);
     }
 
-    public static void ResendVerificationEmail(string Email)
+    public static void ResendVerificationEmail(string email)
     {
         ItemSystemGameData.AppID = new Guid(GameAuthentication.GetAppID());
-        ItemServiceManager.service.SPLoginResendVerificationEmail(ItemSystemGameData.AppID, Email, instance.RecivedVerificationEmailResponce);
+        ItemServiceManager.service.SPLoginResendVerificationEmail(ItemSystemGameData.AppID, email, instance.RecivedVerificationEmailResponce);
     }
 
     void RecivedRegisterUser(string statusCode)

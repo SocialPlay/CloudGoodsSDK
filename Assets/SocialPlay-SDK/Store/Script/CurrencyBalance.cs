@@ -2,26 +2,27 @@ using UnityEngine;
 using System.Collections;
 using Newtonsoft.Json.Linq;
 
-public class CurrencyBalance : MonoBehaviour {
+public class CurrencyBalance : MonoBehaviour
+{
 
-    public WebserviceCalls webserviceCalls;
+    public int AccessLocation = 0;
     public UILabel paidCurrencyLabel;
     public UILabel freeCurrencyLabel;
 
     public static int freeCurrency = 0;
     public static int paidCurrency = 0;
 
-	// Use this for initialization
-	void Start () {
-        webserviceCalls = GameObject.Find("Socialplay").GetComponent<WebserviceCalls>();
+    // Use this for initialization
+    void Start()
+    {
 
         GameAuthentication.OnUserAuthEvent += GetCurrencyBalance;
-	}
+    }
 
     public void GetCurrencyBalance(string userAuth)
     {
-        webserviceCalls.GetFreeCurrencyBalance(ItemSystemGameData.UserID.ToString(), ItemSystemGameData.AppID.ToString(), OnReceivedFreeCurrency);
-        webserviceCalls.GetPaidCurrencyBalance(ItemSystemGameData.UserID.ToString(), ItemSystemGameData.AppID.ToString(), OnReceievedPaidCurrency);
+        WebserviceCalls.webservice.GetFreeCurrencyBalance(ItemSystemGameData.UserID.ToString(), AccessLocation, ItemSystemGameData.AppID.ToString(), OnReceivedFreeCurrency);
+        WebserviceCalls.webservice.GetPaidCurrencyBalance(ItemSystemGameData.UserID.ToString(), ItemSystemGameData.AppID.ToString(), OnReceievedPaidCurrency);
     }
 
     void OnReceivedFreeCurrency(string freeCurrencyBalance)
@@ -37,5 +38,5 @@ public class CurrencyBalance : MonoBehaviour {
         paidCurrencyLabel.text = paidToken.ToString();
         paidCurrency = int.Parse(paidToken.ToString());
     }
-	
+
 }

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 public abstract class ContainerDisplay : MonoBehaviour
 {
 
-    public GameObject containerDisplay;
+    public GameObject ContainerDisplayObject;
     public ItemContainer itemContainer = null;
     public bool StartWindowActive = true;
 
@@ -58,7 +58,7 @@ public abstract class ContainerDisplay : MonoBehaviour
     protected virtual void SetupWindow()
     {
         isActive = StartWindowActive;
-        containerDisplay.SetActive(true);
+        ContainerDisplayObject.SetActive(true);
     }
 
     private void GetDisplayActions()

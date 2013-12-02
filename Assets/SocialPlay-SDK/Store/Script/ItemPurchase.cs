@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ItemPurchase : MonoBehaviour {
+public class ItemPurchase : MonoBehaviour
+{
 
     ItemInfo itemInfo;
 
@@ -79,7 +80,7 @@ public class ItemPurchase : MonoBehaviour {
         itemCreditCost = itemCreditCost / quantityAmount;
         itemCoinCost = itemCoinCost / quantityAmount;
 
-        if(quantityAmount > 1)
+        if (quantityAmount > 1)
             quantityAmount--;
 
         ChangeAmountDisplay(quantityAmount, ref itemCreditCost, ref itemCoinCost);
@@ -137,13 +138,13 @@ public class ItemPurchase : MonoBehaviour {
 
     void PurchaseItemWithCredits(GameObject button)
     {
-        webserviceCalls.StoreItemPurchase("http://socialplaywebservice.azurewebsites.net/publicservice.svc/", ItemSystemGameData.UserID, itemInfo.itemID, int.Parse(itemQuantityAmount.text), "Credits", ItemSystemGameData.AppID, OnReceivedItemPurchaseConfirmation);
+        webserviceCalls.StoreItemPurchase("http://socialplaywebservice.azurewebsites.net/publicservice.svc/", ItemSystemGameData.UserID, itemInfo.itemID, int.Parse(itemQuantityAmount.text), "Credits", ItemSystemGameData.AppID, currencyBalance.AccessLocation, OnReceivedItemPurchaseConfirmation);
         ClosePanel(null);
     }
 
     void PurchaseItemWithCoins(GameObject button)
     {
-        webserviceCalls.StoreItemPurchase("http://socialplaywebservice.azurewebsites.net/publicservice.svc/", ItemSystemGameData.UserID, itemInfo.itemID, int.Parse(itemQuantityAmount.text), "Coins", ItemSystemGameData.AppID, OnReceivedItemPurchaseConfirmation);
+        webserviceCalls.StoreItemPurchase("http://socialplaywebservice.azurewebsites.net/publicservice.svc/", ItemSystemGameData.UserID, itemInfo.itemID, int.Parse(itemQuantityAmount.text), "Coins", ItemSystemGameData.AppID, currencyBalance.AccessLocation, OnReceivedItemPurchaseConfirmation);
         ClosePanel(null);
     }
 

@@ -16,7 +16,7 @@ public class NGUISlottedItemContainerDisplay : ContainerDisplay
             (itemContainer as SlottedItemContainer).AddSlot(slot.slotID, null, slot.filters, slot.persistantLocationID, slot.slotSizeLimit, slot.priority);
             if (slot.gameObject.GetComponent<SlotKeybinding>())
             {
-                slot.gameObject.GetComponent<SlotKeybinding>().bindingPressed += itemContainer.OnItemKeybindClick;
+                slot.gameObject.GetComponent<SlotKeybinding>().BindingPressed += itemContainer.OnItemKeybindClick;
             }
         }
     }

@@ -5,21 +5,21 @@ using System;
 [RequireComponent(typeof(SlotData))]
 public class SlotKeybinding : MonoBehaviour {
 
-    public KeyCode bindingKey;
+    public KeyCode BindingKey;
 
 
-    public event Action<ItemData> bindingPressed;
+    public event Action<ItemData> BindingPressed;
 
     void Update()
     {
-        if (Input.GetKeyDown(bindingKey))
+        if (Input.GetKeyDown(BindingKey))
         {
             if (this.GetComponentInChildren<ItemData>())
             {
                 ItemData itemEquipt = this.GetComponentInChildren<ItemData>();
-                if (bindingPressed != null)
+                if (BindingPressed != null)
                 {
-                    bindingPressed(itemEquipt);
+                    BindingPressed(itemEquipt);
                 }
             }
         }

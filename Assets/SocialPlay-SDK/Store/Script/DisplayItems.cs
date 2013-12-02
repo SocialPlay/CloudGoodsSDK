@@ -6,8 +6,6 @@ using Newtonsoft.Json.Linq;
 
 public class DisplayItems : MonoBehaviour
 {
-    public GameObject socialPlayObj;
-    WebserviceCalls webservicecalls;
     public NGUIStoreLoader storeLoader;
 
     List<JToken> items = new List<JToken>();
@@ -25,12 +23,11 @@ public class DisplayItems : MonoBehaviour
 
     public void GetItems()
     {
-        webservicecalls = socialPlayObj.GetComponent<WebserviceCalls>();
 
         if (!storeLoader)
             storeLoader = this.gameObject.GetComponent<NGUIStoreLoader>();
 
-        webservicecalls.GetStoreItems(ItemSystemGameData.AppID.ToString(), OnReceivedStoreItems);
+        WebserviceCalls.webservice.GetStoreItems(ItemSystemGameData.AppID.ToString(), OnReceivedStoreItems);
     }
 
     void OnReceivedStoreItems(string storeItemsJson)

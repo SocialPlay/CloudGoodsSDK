@@ -7,23 +7,23 @@ public abstract class ContainerItemLoader : MonoBehaviour
 {
     public Action<List<ItemData>, ItemContainer> LoadedItemsForContainerEvent;
 
-    public ItemContainer container;
-    public ItemOwnerTypes sourceOwnerType;
+    public ItemContainer Container;
+    public ItemOwnerTypes SourceOwnerType;
 
     public abstract void LoadItems();
 
 
     void Awake()
     {
-        if (container == null)
+        if (Container == null)
         {
-            container = this.GetComponent<ItemContainer>();
+            Container = this.GetComponent<ItemContainer>();
         }
     }
 
     protected string GetOwnerID()
     {
-        switch (sourceOwnerType)
+        switch (SourceOwnerType)
         {
             case ItemOwnerTypes.Instance:
                 return ItemSystemGameData.InstanceID.ToString();
@@ -48,7 +48,7 @@ public abstract class ContainerItemLoader : MonoBehaviour
 
         if (LoadedItemsForContainerEvent != null)
         {
-            LoadedItemsForContainerEvent(recivedItems, container);
+            LoadedItemsForContainerEvent(recivedItems, Container);
         }
     }
 
