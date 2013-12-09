@@ -101,9 +101,15 @@ public class ItemPurchase : MonoBehaviour
     private void ChangePurchaseButtonDisplay(int itemCreditCost, int itemCoinCost)
     {
         if (itemCoinCost > CurrencyBalance.freeCurrency)
+        {
             coinPurchaseButton.GetComponent<UIButton>().isEnabled = false;
+            coinPurchaseButton.GetComponent<UIButton>().UpdateColor(false, true);
+        }
         else
+        {
             coinPurchaseButton.GetComponent<UIButton>().isEnabled = true;
+            coinPurchaseButton.GetComponent<UIButton>().UpdateColor(true, true);
+        }
 
         if (itemCreditCost > CurrencyBalance.paidCurrency)
         {

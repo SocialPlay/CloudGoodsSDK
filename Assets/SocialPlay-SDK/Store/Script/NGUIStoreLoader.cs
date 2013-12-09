@@ -68,10 +68,14 @@ public class NGUIStoreLoader : MonoBehaviour
     int GetPageMax(int itemAmount, int pageNum)
     {
         int pageMax = 0;
-        if (pageNum <= GetPageAmount(itemAmount) - 1)
+        if (pageNum <= GetPageAmount(itemAmount) - 1 && pageNum != 0)
+        {
             pageMax = maxGridAmount;
+        }
         else
+        {
             pageMax = itemAmount % maxGridAmount;
+        }
 
         return pageMax;
     }
@@ -97,8 +101,9 @@ public class NGUIStoreLoader : MonoBehaviour
 
         calcPageAmount = itemCount / maxGridAmount;
 
-        if ((currentPageItems.Count % maxGridAmount) > 0)
+        if ((itemCount % maxGridAmount) > 0)
             calcPageAmount++;
+
         return calcPageAmount;
     }
 
