@@ -76,7 +76,10 @@ public class NGUI_SPLogin : MonoBehaviour
         registerUserPasswordValidator = registerUserPassword.GetComponent<UIInputVisualValidation>(); ;
         registerUserPasswordConfirmValidator = registerUserPasswordConfirm.GetComponent<UIInputVisualValidation>();
         resendVerificationTextObject.SetActive(false);
-
+        if (!string.IsNullOrEmpty(PlayerPrefs.GetString("SocialPlay_Login_UserEmail")))
+        {
+            loginUserEmail.value = PlayerPrefs.GetString("SocialPlay_Login_UserEmail");
+        }
     }
 
     #region webservice responce events
@@ -99,7 +102,7 @@ public class NGUI_SPLogin : MonoBehaviour
     {
         //resendVerificationTextObject.SetActive(false);
         //loginErrorLabel.text = responce.message;
-       
+
         confirmationStatus.text = responce.message;
 
     }
@@ -138,7 +141,7 @@ public class NGUI_SPLogin : MonoBehaviour
 
     void LoginSuccess(Guid userID)
     {
-        loginErrorLabel.text = userID.ToString();        
+        loginErrorLabel.text = userID.ToString();
     }
     #endregion
 
@@ -184,6 +187,7 @@ public class NGUI_SPLogin : MonoBehaviour
         loginErrorLabel.text = ErrorMsg;
         if (string.IsNullOrEmpty(ErrorMsg))
         {
+            PlayerPrefs.SetString("SocialPlay_Login_UserEmail", loginUserEmail.value);
             SPLogin.Login(loginUserEmail.value, loginUserPassword.value);
         }
     }

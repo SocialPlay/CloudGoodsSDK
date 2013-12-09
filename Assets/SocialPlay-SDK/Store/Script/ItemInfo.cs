@@ -2,7 +2,8 @@ using UnityEngine;
 using System.Collections;
 using Newtonsoft.Json.Linq;
 
-public class ItemInfo : MonoBehaviour {
+public class ItemInfo : MonoBehaviour
+{
 
     public int ID = 0;
     public string itemName = "";
@@ -20,9 +21,10 @@ public class ItemInfo : MonoBehaviour {
     {
         if (button == null)
         {
-            
+
         }
     }
+
 
     public void SetItemInfo(JToken itemToken)
     {
@@ -40,19 +42,16 @@ public class ItemInfo : MonoBehaviour {
 
     void GetItemTexture(string URL)
     {
+        if (!this.gameObject.activeInHierarchy) return;
         WWW www = new WWW(URL);
-
         StartCoroutine(OnReceivedItemTexture(www));
     }
 
     IEnumerator OnReceivedItemTexture(WWW www)
     {
         yield return www;
-
         UITexture uiTexture = gameObject.GetComponentInChildren<UITexture>();
-        //uiTexture.material = new Material(uiTexture.material.shader);
         uiTexture.mainTexture = www.texture;
-        //uiTexture.transform.localPosition -= Vector3.forward * 2;
     }
 
 
