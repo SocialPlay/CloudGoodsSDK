@@ -47,6 +47,8 @@ public class NGUIStoreLoader : MonoBehaviour
 
         int PageMax = GetPageMax(listItems.Count, pageNum);
 
+        Debug.Log("pageNax: " + PageMax);
+
         for (int i = pageNum * maxGridAmount; i < (pageNum * maxGridAmount + PageMax); i++)
         {
             GameObject newItem = (GameObject)GameObject.Instantiate(itemButtonPrefab);
@@ -68,12 +70,15 @@ public class NGUIStoreLoader : MonoBehaviour
     int GetPageMax(int itemAmount, int pageNum)
     {
         int pageMax = 0;
-        if (pageNum <= GetPageAmount(itemAmount) - 1 && pageNum != 0)
+
+        if (pageNum < GetPageAmount(itemAmount) - 1)
         {
+            Debug.Log("here");
             pageMax = maxGridAmount;
         }
         else
         {
+            Debug.Log("There");
             pageMax = itemAmount % maxGridAmount;
         }
 
@@ -97,7 +102,6 @@ public class NGUIStoreLoader : MonoBehaviour
     int GetPageAmount(int itemCount)
     {
         int calcPageAmount = 0;
-
 
         calcPageAmount = itemCount / maxGridAmount;
 
