@@ -19,8 +19,8 @@ public class ItemPurchase : MonoBehaviour
 
     public GameObject closePanelButton;
 
-    public GameObject creditPurchaseButton;
-    public GameObject coinPurchaseButton;
+    public PurchaseButtonDisaply creditPurchaseButton;
+    public PurchaseButtonDisaply coinPurchaseButton;
 
     public GameObject purchaseConfirmationPanel;
     public GameObject purchaseConfirmationButton;
@@ -38,8 +38,8 @@ public class ItemPurchase : MonoBehaviour
     {
         UIEventListener.Get(increaseQuantityButton).onClick += IncreaseQuantityAmount;
         UIEventListener.Get(decreaseQuantityButton).onClick += DecreaseQuantityAmount;
-        UIEventListener.Get(creditPurchaseButton).onClick += PurchaseItemWithCredits;
-        UIEventListener.Get(coinPurchaseButton).onClick += PurchaseItemWithCoins;
+        UIEventListener.Get(creditPurchaseButton.ActiveButton.gameObject).onClick += PurchaseItemWithCredits;
+        UIEventListener.Get(coinPurchaseButton.ActiveButton.gameObject).onClick += PurchaseItemWithCoins;
         UIEventListener.Get(closePanelButton).onClick += ClosePanel;
         UIEventListener.Get(purchaseConfirmationButton).onClick += OnPurchaseConfirmationButtonPressed;
 
@@ -49,8 +49,8 @@ public class ItemPurchase : MonoBehaviour
     {
         UIEventListener.Get(increaseQuantityButton).onClick -= IncreaseQuantityAmount;
         UIEventListener.Get(decreaseQuantityButton).onClick -= DecreaseQuantityAmount;
-        UIEventListener.Get(creditPurchaseButton).onClick -= PurchaseItemWithCredits;
-        UIEventListener.Get(coinPurchaseButton).onClick -= PurchaseItemWithCoins;
+        UIEventListener.Get(creditPurchaseButton.ActiveButton.gameObject).onClick -= PurchaseItemWithCredits;
+        UIEventListener.Get(coinPurchaseButton.ActiveButton.gameObject).onClick -= PurchaseItemWithCoins;
         UIEventListener.Get(closePanelButton).onClick -= ClosePanel;
 
     }
@@ -100,27 +100,29 @@ public class ItemPurchase : MonoBehaviour
 
     private void ChangePurchaseButtonDisplay(int itemCreditCost, int itemCoinCost)
     {
-        if (itemCoinCost > CurrencyBalance.freeCurrency)
-        {
-            coinPurchaseButton.GetComponent<UIButton>().isEnabled = false;
-            coinPurchaseButton.GetComponent<UIButton>().UpdateColor(false, true);
-        }
-        else
-        {
-            coinPurchaseButton.GetComponent<UIButton>().isEnabled = true;
-            coinPurchaseButton.GetComponent<UIButton>().UpdateColor(true, true);
-        }
+        coinPurchaseButton.SetState(itemCoinCost <= CurrencyBalance.freeCurrency);
+        creditPurchaseButton.SetState(itemCreditCost <= CurrencyBalance.paidCurrency);
+        //if (itemCoinCost > CurrencyBalance.freeCurrency)
+        //{
+        //    coinPurchaseButton.GetComponent<UIButton>().isEnabled = false;
+        //    coinPurchaseButton.GetComponent<UIButton>().UpdateColor(false, true);
+        //}
+        //else
+        //{
+        //    coinPurchaseButton.GetComponent<UIButton>().isEnabled = true;
+        //    coinPurchaseButton.GetComponent<UIButton>().UpdateColor(true, true);
+        //}
 
-        if (itemCreditCost > CurrencyBalance.paidCurrency)
-        {
-            creditPurchaseButton.GetComponent<UIButton>().isEnabled = false;
-            creditPurchaseButton.GetComponent<UIButton>().UpdateColor(false, true);
-        }
-        else
-        {
-            creditPurchaseButton.GetComponent<UIButton>().isEnabled = true;
-            creditPurchaseButton.GetComponent<UIButton>().UpdateColor(true, true);
-        }
+        //if (itemCreditCost > CurrencyBalance.paidCurrency)
+        //{
+        //    creditPurchaseButton.GetComponent<UIButton>().isEnabled = false;
+        //    creditPurchaseButton.GetComponent<UIButton>().UpdateColor(false, true);
+        //}
+        //else
+        //{
+        //    creditPurchaseButton.GetComponent<UIButton>().isEnabled = true;
+        //    creditPurchaseButton.GetComponent<UIButton>().UpdateColor(true, true);
+        //}
     }
 
     public void DisplayItemPurchasePanel(ItemInfo item)
