@@ -4,28 +4,28 @@ using System.Collections;
 public class PurchaseButtonDisaply : MonoBehaviour
 {
     public UIButton ActiveButton;
-    public UILabel InactiveLabel;
-    public string ReplacmentText = "";
+    public UILabel InsufficientFundsLabel;
+    public string InsufficientFundsTextOverride = "";
 
 
     public void SetInactive()
     {
-        if (!string.IsNullOrEmpty(ReplacmentText) && ReplacmentText != InactiveLabel.text)
+        if (!string.IsNullOrEmpty(InsufficientFundsTextOverride) && InsufficientFundsTextOverride != InsufficientFundsLabel.text)
         {
-            InactiveLabel.text = ReplacmentText;
+            InsufficientFundsLabel.text = InsufficientFundsTextOverride;
         }
         ActiveButton.gameObject.SetActive(false);
-        InactiveLabel.gameObject.SetActive(true);
+        InsufficientFundsLabel.gameObject.SetActive(true);
     }
 
     public void SetActive()
     {
-        if (!string.IsNullOrEmpty(ReplacmentText) && ReplacmentText != InactiveLabel.text)
+        if (!string.IsNullOrEmpty(InsufficientFundsTextOverride) && InsufficientFundsTextOverride != InsufficientFundsLabel.text)
         {
-            InactiveLabel.text = ReplacmentText;
+            InsufficientFundsLabel.text = InsufficientFundsTextOverride;
         }
         ActiveButton.gameObject.SetActive(true);
-        InactiveLabel.gameObject.SetActive(false);
+        InsufficientFundsLabel.gameObject.SetActive(false);
     }
 
     public void SetState(bool state)
