@@ -96,7 +96,7 @@ public class NGUI_SPLogin : MonoBehaviour
 
     void RecivedUserGuid(SPLogin.UserInfo obj)
     {
-        if (autoLoginToggle.value == true)
+        if (autoLoginToggle != null && autoLoginToggle.value == true)
         {
             PlayerPrefs.SetString("SocialPlay_UserGuid", obj.ID.ToString());
             PlayerPrefs.SetString("SocialPlay_UserName", obj.name);
