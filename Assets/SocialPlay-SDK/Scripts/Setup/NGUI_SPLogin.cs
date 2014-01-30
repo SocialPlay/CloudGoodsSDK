@@ -12,6 +12,8 @@ public class NGUI_SPLogin : MonoBehaviour
     public UIInput loginUserPassword;
     public UILabel loginErrorLabel;
 
+    public UIToggle autoLoginToggle;
+
     public GameObject resendVerificationTextObject;
 
     private UIInputVisualValidation loginUserEmailValidator;
@@ -71,7 +73,6 @@ public class NGUI_SPLogin : MonoBehaviour
         loginUserEmailValidator = loginUserEmail.GetComponent<UIInputVisualValidation>();
         loginUserPasswordValidator = loginUserPassword.GetComponent<UIInputVisualValidation>();
 
-
         registerUserEmailValidator = registerUserEmail.GetComponent<UIInputVisualValidation>();
         registerUserPasswordValidator = registerUserPassword.GetComponent<UIInputVisualValidation>(); ;
         registerUserPasswordConfirmValidator = registerUserPasswordConfirm.GetComponent<UIInputVisualValidation>();
@@ -80,12 +81,28 @@ public class NGUI_SPLogin : MonoBehaviour
         {
             loginUserEmail.value = PlayerPrefs.GetString("SocialPlay_Login_UserEmail");
         }
+
+        if (!string.IsNullOrEmpty(PlayerPrefs.GetString("SocialPlay_UserGuid")))
+        {
+            SPLogin.UserInfo userInfo = new SPLogin.UserInfo(new Guid(PlayerPrefs.GetString("SocialPlay_UserGuid")), PlayerPrefs.GetString("SocialPlay_UserName"), PlayerPrefs.GetString("SocialPlay_UserEmail"));
+
+            GameAuthentication.OnUserAuthorized(new WebserviceCalls.UserGuid(userInfo.ID.ToString(), userInfo.name, userInfo.email));
+
+            RecivedUserGuid(userInfo);
+        }
     }
 
     #region webservice responce events
 
     void RecivedUserGuid(SPLogin.UserInfo obj)
     {
+        if (autoLoginToggle.value == true)
+        {
+            PlayerPrefs.SetString("SocialPlay_UserGuid", obj.ID.ToString());
+            PlayerPrefs.SetString("SocialPlay_UserName", obj.name);
+            PlayerPrefs.SetString("SocialPlay_UserEmail", obj.email);
+        }
+
         resendVerificationTextObject.SetActive(false);
         loginErrorLabel.text = "User logged in";
         this.gameObject.SetActive(false);
