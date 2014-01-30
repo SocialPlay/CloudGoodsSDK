@@ -16,6 +16,10 @@ public class SPLogout : MonoBehaviour {
 
     void LogoutUser(GameObject logoutButton)
     {
+        PlayerPrefs.DeleteKey("SocialPlay_UserGuid");
+        PlayerPrefs.DeleteKey("SocialPlay_UserName");
+        PlayerPrefs.DeleteKey("SocialPlay_UserEmail");
+
         SPUserLogout(true);
     }
 	
