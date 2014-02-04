@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--This file represents the results of running a test suite-->
+<test-results name="Unity Tests" total="3" errors="0" failures="0" not-run="0" inconclusive="0" ignored="0" skipped="0" invalid="0" date="2014-02-04" time="11:37:50">
+  <environment nunit-version="2.6.2-Unity" clr-version="2.0.50727.1433" os-version="Microsoft Windows NT 6.1.7601.0" platform="Win32NT" cwd="C:\Users\User\Documents\Socialplay\CloudGoodsSDK" machine-name="HOTBUBBA" user="User" user-domain="HOTBUBBA" />
+  <culture-info current-culture="en-US" current-uiculture="en-US" />
+  <test-suite name="TestScene" type="Assembly" executed="True" result="Success" success="True" time="6.579">
+    <results>
+      <test-case name="Test_PlayerRecivesDamageWhenSpiderExplodes" executed="True" result="Success" success="True" time="4.028">
+        <reason>
+          <message>
+<![CDATA[IntegrationTest started (Test_PlayerRecivesDamageWhenSpiderExplodes)
+IntegrationTest Pass (Test_PlayerRecivesDamageWhenSpiderExplodes)
+IntegrationTest finished (Test_PlayerRecivesDamageWhenSpiderExplodes)
+]]>
+          </message>
+        </reason>
+      </test-case>
+      <test-case name="Test_SpiderSleepsWhenPlayerNotInRange" executed="True" result="Success" success="True" time="1.524">
+        <reason>
+          <message>
+<![CDATA[IntegrationTest started (Test_SpiderSleepsWhenPlayerNotInRange)
+IntegrationTest Pass (Test_SpiderSleepsWhenPlayerNotInRange)
+IntegrationTest finished (Test_SpiderSleepsWhenPlayerNotInRange)
+]]>
+          </message>
+        </reason>
+      </test-case>
+      <test-case name="Test_SpiderWakesWhenPlayerInRange" executed="True" result="Success" success="True" time="1.027">
+        <reason>
+          <message>
+<![CDATA[IntegrationTest started (Test_SpiderWakesWhenPlayerInRange)
+IntegrationTest Pass (Test_SpiderWakesWhenPlayerInRange)
+IntegrationTest finished (Test_SpiderWakesWhenPlayerInRange)
+]]>
+          </message>
+        </reason>
+      </test-case>
+    </results>
+  </test-suite>
+</test-results>
+ange)
+IntegrationTest Pass (Test_SpiderSleepsWhenPlayerNotInRange)
+IntegrationTest finished (Test_SpiderSleepsWhenPlayerNotInRange)
+]]>
+          </message>
+        </reason>
+      </test-case>
+      <test-case name="Test_SpiderWakesWhenPlayerInRange" executed="True" result="Success" success="True" time="1.014">
+        <reason>
+          <message>
+<![CDATA[IntegrationTest started (Test_SpiderWakesWhenPlayerInRange)
+IntegrationTest Pass (Test_SpiderWakesWhenPlayerInRange)
+IntegrationTest finished (Test_SpiderWakesWhenPlayerInRange)
+]]>
+          </message>
+        </reason>
+      </test-case>
+    </results>
+  </test-suite>
+</test-results>

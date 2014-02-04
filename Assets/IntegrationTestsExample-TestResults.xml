@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--This file represents the results of running a test suite-->
+<test-results name="Unity Tests" total="6" errors="2" failures="1" not-run="0" inconclusive="0" ignored="0" skipped="0" invalid="0" date="2014-02-04" time="11:49:53">
+  <environment nunit-version="2.6.2-Unity" clr-version="2.0.50727.1433" os-version="Microsoft Windows NT 6.1.7601.0" platform="Win32NT" cwd="C:\Users\User\Documents\Socialplay\CloudGoodsSDK" machine-name="HOTBUBBA" user="User" user-domain="HOTBUBBA" />
+  <culture-info current-culture="en-US" current-uiculture="en-US" />
+  <test-suite name="IntegrationTestsExample" type="Assembly" executed="True" result="Failure" success="False" time="1.481">
+    <results>
+      <test-case name="Test throwing exception" executed="True" result="Success" success="True" time="0.033">
+        <reason>
+          <message>
+<![CDATA[IntegrationTest started (Test throwing exception)
+CustomException: Exception of type 'ThrowCustomException+CustomException' was thrown.
+CustomException was expected
+IntegrationTest finished (Test throwing exception)
+]]>
+          </message>
+        </reason>
+      </test-case>
+      <test-case name="Test with Assertions" executed="True" result="Success" success="True" time="0.017">
+        <reason>
+          <message>
+<![CDATA[IntegrationTest started (Test with Assertions)
+IntegrationTest Pass (Test with Assertions)
+IntegrationTest finished (Test with Assertions)
+]]>
+          </message>
+        </reason>
+      </test-case>
+      <test-case name="Test with Assertions Fails" executed="True" result="Error" success="False" time="0.022">
+        <failure>
+          <message>
+<![CDATA[IntegrationTest started (Test with Assertions Fails)
+NullReferenceException: Object reference not set to an instance of an object
+IntegrationTest failed with exception (Test with Assertions Fails)
+]]>
+          </message>
+          <stack-trace>
+<![CDATA[UnityTest.PropertyResolver.GetPropertyValueFromString (UnityEngine.GameObject gameObj, System.String propertyPath) (at Assets/UnityTestTools/Assertions/PropertyResolver.cs:237)
+UnityTest.ActionBase.GetPropertyValue (UnityEngine.GameObject gameObject, System.String path, System.Type[] acceptableTypes) (at Assets/UnityTestTools/Assertions/Comparers/ActionBase.cs:37)
+UnityTest.ComparerBase.Compare (System.Object objVal) (at Assets/UnityTestTools/Assertions/Comparers/ComparerBase.cs:39)
+UnityTest.ActionBase.Compare () (at Assets/UnityTestTools/Assertions/Comparers/ActionBase.cs:30)
+UnityTest.Assertions.CheckAssertions (UnityTest.AssertionComponent[] assertions) (at Assets/UnityTestTools/Assertions/Assertions.cs:31)
+UnityTest.Assertions.CheckAssertions (UnityTest.AssertionComponent assertion) (at Assets/UnityTestTools/Assertions/Assertions.cs:16)
+UnityTest.AssertionComponent.CheckAssertionFor (CheckMethod checkMethod) (at Assets/UnityTestTools/Assertions/AssertionComponent.cs:263)
+UnityTest.AssertionComponent.Start () (at Assets/UnityTestTools/Assertions/AssertionComponent.cs:104)
+]]>
+          </stack-trace>
+        </failure>
+      </test-case>
+      <test-case name="Test1 - Success" executed="True" result="Success" success="True" time="0.630">
+        <reason>
+          <message>
+<![CDATA[IntegrationTest started (Test1 - Success)
+IntegrationTest Pass (CubeTriggerSuccess)
+IntegrationTest finished (Test1 - Success)
+]]>
+          </message>
+        </reason>
+      </test-case>
+      <test-case name="Test2 - Timeout" executed="True" result="Failure" success="False" time="0.116">
+        <failure>
+          <message>
+<![CDATA[IntegrationTest started (Test2 - Timeout)
+IntegrationTest timeout (Test2 - Timeout)
+]]>
+          </message>
+          <stack-trace>
+          </stack-trace>
+        </failure>
+      </test-case>
+      <test-case name="Test3 - Failure" executed="True" result="Failure" success="False" time="0.663">
+        <failure>
+          <message>
+<![CDATA[IntegrationTest started (Test3 - Failure)
+IntegrationTest Fail (CubeTriggerFailure)
+IntegrationTest failed (Test3 - Failure)
+]]>
+          </message>
+          <stack-trace>
+          </stack-trace>
+        </failure>
+      </test-case>
+    </results>
+  </test-suite>
+</test-results>
+<failure>
+          <message>
+<![CDATA[IntegrationTest started (Test3 - Failure)
+IntegrationTest Fail (CubeTriggerFailure)
+IntegrationTest failed (Test3 - Failure)
+]]>
+          </message>
+          <stack-trace>
+          </stack-trace>
+        </failure>
+      </test-case>
+    </results>
+  </test-suite>
+</test-results>
