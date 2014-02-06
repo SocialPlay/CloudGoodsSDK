@@ -149,6 +149,24 @@ public class WebserviceCalls : MonoBehaviour
         StartCoroutine(OnWebServiceCallback(www, callback));
     }
 
+    public void GetAccessPinFromGuid(string userPin, Action<string> callback)
+    {
+        string url = cloudGoodsURL + "GetUserInfoFromPin?pin=" + userPin;
+
+        WWW www = new WWW(url);
+
+        StartCoroutine(OnWebServiceCallback(www, callback));
+    }
+
+    public void GetAccessPinForUser(string UserId, Action<string> callback)
+    {
+        string url = cloudGoodsURL + "UserId?pin=" + UserId;
+
+        WWW www = new WWW(url);
+
+        StartCoroutine(OnWebServiceCallback(www, callback));
+    }
+
     IEnumerator OnWebServiceCallback(WWW www, Action<string> callback)
     {
         yield return www;
