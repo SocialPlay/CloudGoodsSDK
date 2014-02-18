@@ -101,6 +101,7 @@ public class LimitlessItemContainer : ItemContainer
         }
 
         containerItems.Clear();
+        ClearItemEvent();
     }
 
     protected override ContainerAddState MyContainerAddState(ItemData modified)

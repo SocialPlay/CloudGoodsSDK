@@ -211,6 +211,7 @@ public class SlottedItemContainer : ItemContainer
         }
 
         stats.Clear();
+        ClearItemEvent();
     }
 
     protected override ContainerAddState MyContainerAddState(ItemData modified)

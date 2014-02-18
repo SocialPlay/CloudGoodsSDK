@@ -25,6 +25,11 @@ public abstract class ItemContainer : MonoBehaviour
     public event Action<ItemData, bool> RemovedItem;
 
     /// <summary>
+    /// Called when the Container is cleared.
+    /// </summary>
+    public event Action ClearItems;
+
+    /// <summary>
     /// Called After the user clicks an item
     /// </summary>
     public event Action<ItemData> ItemSingleClicked;
@@ -56,6 +61,13 @@ public abstract class ItemContainer : MonoBehaviour
         }
     }
 
+    protected void ClearItemEvent()
+    {
+        if (ClearItems != null)
+        {
+            ClearItems();
+        }
+    }
 
     protected void AddItemEvent(ItemData item, bool isSave)
     {
