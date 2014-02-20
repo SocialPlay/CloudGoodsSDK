@@ -160,7 +160,7 @@ public class WebserviceCalls : MonoBehaviour
 
     public void GetAccessPinForUser(string UserId, Action<string> callback)
     {
-        string url = cloudGoodsURL + "UserId?pin=" + UserId;
+        string url = cloudGoodsURL + "GetUserPin?UserId=" + UserId;
 
         WWW www = new WWW(url);
 

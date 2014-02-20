@@ -20,6 +20,8 @@ public class SPLogout : MonoBehaviour {
         PlayerPrefs.DeleteKey("SocialPlay_UserName");
         PlayerPrefs.DeleteKey("SocialPlay_UserEmail");
 
+        new ItemSystemGameData(Guid.Empty.ToString(), Guid.Empty.ToString(), 0, Guid.Empty.ToString());
+
         SPUserLogout(true);
     }
 	

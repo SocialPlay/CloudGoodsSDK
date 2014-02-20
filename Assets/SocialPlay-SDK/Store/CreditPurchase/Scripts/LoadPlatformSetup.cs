@@ -21,19 +21,19 @@ public class LoadPlatformSetup : MonoBehaviour {
 
         if (Application.isEditor)
             loadSetupForPlatformFromPlatformID(platformID);
-        else
-            loadSetupForPlatformFromPlatformID(GatherGameInfo.allInfo.platformID);
+        //else
+        //    loadSetupForPlatformFromPlatformID(GatherGameInfo.allInfo.platformID);
 
         CheckForSocialplayPlatform();
 	}
 
     void CheckForSocialplayPlatform()
     {
-        if (GatherGameInfo.allInfo.platformType == "Portal")
-        {
-            purchaseCreditsButton.SetActiveRecursively(false);
-            creditsMessagePanel.SetActiveRecursively(false);
-        }
+        //if (GatherGameInfo.allInfo.platformType == "Portal")
+        //{
+        //    purchaseCreditsButton.SetActiveRecursively(false);
+        //    creditsMessagePanel.SetActiveRecursively(false);
+        //}
     }
 
     void loadSetupForPlatformFromPlatformID(int platformID)

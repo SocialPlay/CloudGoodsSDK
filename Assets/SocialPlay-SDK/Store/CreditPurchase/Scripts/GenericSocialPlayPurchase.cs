@@ -15,11 +15,11 @@ public class GenericSocialPlayPurchase : IPlatformPurchaser
 
     public void Purchase(string id, int amount, string userID)
     {
-        if (GatherGameInfo.allInfo.platformID == 4)
-        {
-                 //MessagePop.Instance.PopMessage("Unable to purchase items with credits during beta");
-            return;
-        }
+        //if (GatherGameInfo.allInfo.platformID == 4)
+        //{
+        //         //MessagePop.Instance.PopMessage("Unable to purchase items with credits during beta");
+        //    return;
+        //}
 
         OKCallBack += new Action<GameObject>(FaceBookPurchaser_OKCallBack);
         CancelCallBack += new Action<GameObject>(FaceBookPurchaser_CancelCallBack);

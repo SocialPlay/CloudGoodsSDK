@@ -7,14 +7,14 @@ public class HasReceivedItemTextureFromCacheTest : MonoBehaviour {
 
     void Start()
     {
-        itemTextureCache.ItemTextures.Clear();
-        itemTextureCache.GetItemTexture("http://www.desicomments.com/dc3/01/209982/209982.gif", OnReceivedItemTexture);
+        ItemTextureCache.instance.ItemTextures.Clear();
+        ItemTextureCache.instance.GetItemTexture("http://www.desicomments.com/dc3/01/209982/209982.gif", OnReceivedItemTexture);
     }
 
     void OnReceivedItemTexture(ItemTextureCache.ImageStatus statusMsg, Texture2D texture)
     {
         if (statusMsg == ItemTextureCache.ImageStatus.Web)
-            itemTextureCache.GetItemTexture("http://www.desicomments.com/dc3/01/209982/209982.gif", OnReceivedImageTextureTwo);
+            ItemTextureCache.instance.GetItemTexture("http://www.desicomments.com/dc3/01/209982/209982.gif", OnReceivedImageTextureTwo);
         else
             IntegrationTest.Fail(gameObject);
     }

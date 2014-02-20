@@ -5,6 +5,15 @@ using System;
 
 public class ItemTextureCache : MonoBehaviour {
 
+    public static ItemTextureCache instance;
+
+    void Start()
+    {
+        instance = this;
+    }
+
+    public Texture2D defaultTexture;
+
     public Dictionary<string, Texture2D> ItemTextures = new Dictionary<string,Texture2D>() ;
 
     public void GetItemTexture(string URL, Action<ImageStatus, Texture2D> callback)
@@ -36,8 +45,25 @@ public class ItemTextureCache : MonoBehaviour {
     {
         yield return www;
 
-        ItemTextures.Add(imageURL, www.texture);
-        callback(ImageStatus.Web, www.texture);
+        if(www.error == null)
+        {
+            if (ItemTextures.ContainsKey(imageURL))
+            {
+                callback(ImageStatus.Cache, ItemTextures[imageURL]);
+            }
+            else
+            {
+                ItemTextures.Add(imageURL, www.texture);
+                callback(ImageStatus.Web, www.texture);
+            }
+        }
+        else 
+        {
+            if (defaultTexture != null)
+                callback(ImageStatus.Cache, defaultTexture);
+            else
+                callback(ImageStatus.Error, null);
+        }
     }
 
     public enum ImageStatus
