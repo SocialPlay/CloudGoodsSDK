@@ -192,6 +192,7 @@ public class LimitedItemContainer : ItemContainer
         }
 
         containerItems.Clear();
+        ClearItemEvent();
     }
 }
 
