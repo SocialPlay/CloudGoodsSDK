@@ -5,6 +5,8 @@ using SocialPlay.ItemSystems;
 public class NGUIContainerGameItem : MonoBehaviour
 {
 
+    GameObject socialplayObj;
+
     public ItemData itemData;
     public UILabel itemAmountLabel;
     public GameObject NGUITexture;
@@ -44,45 +46,22 @@ public class NGUIContainerGameItem : MonoBehaviour
         newNGUITexture.transform.parent = transform;
         newNGUITexture.transform.localPosition = Vector3.zero;
         newNGUITexture.transform.localScale = new Vector3(1, 1, 1);
-
-        GetItemTexture(itemData.imageName);
-    }
-
-    public void GetItemTexture(string URL)
-    {
-        if (ItemTextureCache.ItemTextures != null)
-            GetItemTextureFromCache(URL);
-        else
-            GetItemTextureFromWeb(URL);
-    }
-
-    private void GetItemTextureFromWeb(string URL)
-    {
-        WWW www = new WWW(URL);
-
-        StartCoroutine(OnReceivedItemTexture(www));
-    }
-
-    void GetItemTextureFromCache(string imgURL)
-    {
-        if (ItemTextureCache.ItemTextures.ContainsKey(imgURL))
+        
+        //TODO: create better accessability for ItemTextureCache
+        if (socialplayObj == null)
         {
-            UITexture uiTexture = gameObject.GetComponentInChildren<UITexture>();
-            uiTexture.material = new Material(uiTexture.material.shader);
-            uiTexture.mainTexture = ItemTextureCache.ItemTextures[imgURL];
-            uiTexture.transform.localPosition -= Vector3.forward * 2;
+            socialplayObj = GameObject.Find("Socialplay");
+            socialplayObj.GetComponent<ItemTextureCache>().GetItemTexture(itemData.imageName, OnReceivedTexture);
         }
         else
-            GetItemTextureFromWeb(imgURL);
+            socialplayObj.GetComponent<ItemTextureCache>().GetItemTexture(itemData.imageName, OnReceivedTexture);
     }
 
-    IEnumerator OnReceivedItemTexture(WWW www)
+    void OnReceivedTexture(ItemTextureCache.ImageStatus statusMsg, Texture2D texture)
     {
-        yield return www;
-
         UITexture uiTexture = gameObject.GetComponentInChildren<UITexture>();
         uiTexture.material = new Material(uiTexture.material.shader);
-        uiTexture.mainTexture = www.texture;
+        uiTexture.mainTexture = texture;
         uiTexture.transform.localPosition -= Vector3.forward * 2;
     }
 

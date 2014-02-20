@@ -92,6 +92,7 @@ public class ChestItemContainer : ItemContainer
     public override void Clear()
     {
         chestItems.Clear();
+        ClearItemEvent();
     }
 }
 

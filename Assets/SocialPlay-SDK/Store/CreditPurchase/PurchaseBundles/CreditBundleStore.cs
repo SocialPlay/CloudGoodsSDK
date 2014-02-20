@@ -45,7 +45,7 @@ public class CreditBundleStore : MonoBehaviour
         }
         catch (System.Exception ex )
         {
-            Console.WriteError(ex);
+            Debug.LogError(ex.Message);
         }
     }
 
