@@ -205,7 +205,7 @@ public class NGUI_SPLogin : MonoBehaviour
         if (string.IsNullOrEmpty(ErrorMsg))
         {
             PlayerPrefs.SetString("SocialPlay_Login_UserEmail", loginUserEmail.value);
-            SPLogin.Login(loginUserEmail.value, loginUserPassword.value);
+            SPLogin.Login(loginUserEmail.value.ToLower(), loginUserPassword.value);
         }
     }
 
