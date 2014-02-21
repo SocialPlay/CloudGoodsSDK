@@ -105,8 +105,8 @@ public class SlottedItemContainer : ItemContainer
 
         Destroy(modified.gameObject);
 
-        Debug.LogWarning("adding  " + NewSlotData.itemName + "(" + NewSlotData.stackSize + ")" + " to Slot " + selectedSlot.slotNameID);
         AddItemEvent(NewSlotData, isSave);
+        selectedSlot.OnItemChangedWrapper();
     }
 
     protected Dictionary<int, SlottedContainerSlotData> GetAllAvalibleSlots(ItemData modified)
@@ -188,6 +188,7 @@ public class SlottedItemContainer : ItemContainer
                 }
 
                 RemoveItemEvent(modified, amount, isMovingToAnotherContainer);
+                selectedSlot.Value.OnItemChangedWrapper();
                 return;
             }
         }
