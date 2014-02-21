@@ -57,7 +57,7 @@ public class NGUISlottedItemContainerStatusDisplay : MonoBehaviour
         }
     }
 
-    void RemoveItem(ItemData data, bool isMovedToAnotherContainer)
+    void RemoveItem(ItemData data,int amount, bool isMovedToAnotherContainer)
     {      
         SetStats();
     }      

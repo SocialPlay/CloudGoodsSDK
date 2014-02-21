@@ -58,11 +58,13 @@ public class SaveSlotsToLocation : MonoBehaviour
         }
     }
 
-    void RemovedItem(ItemData data, bool isMovingToAnotherContainer)
+    void RemovedItem(ItemData data, int amount, bool isMovingToAnotherContainer)
     {
         if (isMovingToAnotherContainer == false)
         {
-            ItemServiceManager.service.RemoveItemStack(data.stackID, ReturnedString);
+       
+                ItemServiceManager.service.ChangePlayerItemStackAmount(data.stackID, amount, ReturnedString);
+
         }
     }
 

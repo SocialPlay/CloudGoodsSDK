@@ -66,12 +66,12 @@ public class ChestItemContainer : ItemContainer
             if (item.gameObject == modified.gameObject)
             {
                 if (amount == -1 || item.stackSize <= amount)
-                {
-                    RemoveItemEvent(modified,isMovingToAnotherContainer);
+                {                   
                     chestItems.Remove(item);
                 }
                 else
                     item.stackSize -= amount;
+                RemoveItemEvent(modified,amount, isMovingToAnotherContainer);
                 return;
             }
         }

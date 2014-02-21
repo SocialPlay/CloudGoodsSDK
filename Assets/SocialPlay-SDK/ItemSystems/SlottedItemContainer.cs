@@ -179,11 +179,15 @@ public class SlottedItemContainer : ItemContainer
                 {
                     ModdifyStatsByFactor(selectedSlot.Value.slotData, -1);
                     containerItems.Remove(selectedSlot.Value.slotData);
-                    RemoveItemEvent(modified, isMovingToAnotherContainer);
+
                     selectedSlot.Value.slotData = null;
                 }
                 else
+                {
                     selectedSlot.Value.slotData.stackSize -= amount;
+                }
+
+                RemoveItemEvent(modified, amount, isMovingToAnotherContainer);
                 return;
             }
         }

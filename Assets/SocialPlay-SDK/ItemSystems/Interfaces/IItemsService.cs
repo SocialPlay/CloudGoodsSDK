@@ -19,6 +19,8 @@ public interface IItemService
 
     void RemoveItemStacks(List<Guid> StacksToRemove, Action<string> callback);
 
+    void ChangePlayerItemStackAmount(Guid StackRemove, int amount, Action<string> callback);
+
     void CompleteQueueItem(Guid gameID, int QueueID, int percentScore, int location, Action<string> callback);
 
     void AddInstantCraftToQueue(Guid gameID, Guid UserID, int ItemID, int Amount, List<KeyValuePair<string, int>> ItemIngredients, Action<string> callback);
