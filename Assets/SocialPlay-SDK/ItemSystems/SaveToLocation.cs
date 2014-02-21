@@ -56,7 +56,7 @@ public class SaveToLocation : MonoBehaviour
     {
         if (isMovingToAnotherContainer == false)
         {
-            ItemServiceManager.service.ChangeStackAmount(data.stackID, -amount, ReturnedString);
+            ItemServiceManager.service.DeductStackAmount(data.stackID, -amount, ReturnedString);
         }
     }
 

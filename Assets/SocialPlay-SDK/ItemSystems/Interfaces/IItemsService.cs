@@ -19,7 +19,7 @@ public interface IItemService
 
     void RemoveItemStacks(List<Guid> StacksToRemove, Action<string> callback);
 
-    void ChangeStackAmount(Guid StackRemove, int amount, Action<string> callback);
+    void DeductStackAmount(Guid StackRemove, int amount, Action<string> callback);
 
     void CompleteQueueItem(Guid gameID, int QueueID, int percentScore, int location, Action<string> callback);
 
