@@ -56,7 +56,7 @@ public class SaveToLocation : MonoBehaviour
     {
         if (isMovingToAnotherContainer == false)
         {
-            ItemServiceManager.service.ChangePlayerItemStackAmount(data.stackID, amount, ReturnedString);
+            ItemServiceManager.service.ChangePlayerItemStackAmount(data.stackID, -amount, ReturnedString);
         }
     }
 
