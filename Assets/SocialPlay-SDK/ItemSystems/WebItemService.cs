@@ -46,9 +46,9 @@ public class WebItemService : IItemService
     }
 
 
-    public void ChangePlayerItemStackAmount(Guid StackRemove, int amount, Action<string> callback)
+    public void DeductStackAmount(Guid StackRemove, int amount, Action<string> callback)
     {
-        string url = string.Format("{0}ChangePlayerItemStackAmount?stackID={1}&amount={2}", cloudGoodsURL, StackRemove, amount);
+        string url = string.Format("{0}DeductStackAmount?stackID={1}&amount={2}", cloudGoodsURL, StackRemove, amount);
         WWWPacket.Creat(url, callback);
     }
 
