@@ -77,11 +77,11 @@ public abstract class ItemContainer : MonoBehaviour
         }
     }
 
-    protected void RemoveItemEvent(ItemData item, int amount, bool isMovingToAnotherContainer)
+    protected void RemoveItemEvent(ItemData item, int amount, bool isBeingMoved)
     {
         if (RemovedItem != null)
         {
-            RemovedItem(item, amount, isMovingToAnotherContainer);
+            RemovedItem(item, amount, isBeingMoved);
         }
     }
 

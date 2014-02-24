@@ -175,19 +175,28 @@ public class SlottedItemContainer : ItemContainer
 
             if (selectedSlot.Value.slotData.gameObject == modified.gameObject)
             {
+                int RemovedAmount = amount;
                 if (selectedSlot.Value.slotData.stackSize <= amount || amount == -1)
                 {
+                    amount = selectedSlot.Value.slotData.stackSize;
                     ModdifyStatsByFactor(selectedSlot.Value.slotData, -1);
                     containerItems.Remove(selectedSlot.Value.slotData);
 
+                    RemovedAmount = amount;
+                    if (!isMovingToAnotherContainer)
+                    {
+                        selectedSlot.Value.slotData.stackSize -= amount;
+                        RemovedAmount = amount;
+                    }
                     selectedSlot.Value.slotData = null;
                 }
                 else
                 {
                     selectedSlot.Value.slotData.stackSize -= amount;
+                    RemovedAmount = amount;
                 }
 
-                RemoveItemEvent(modified, amount, isMovingToAnotherContainer);
+                RemoveItemEvent(modified, RemovedAmount, isMovingToAnotherContainer);
                 selectedSlot.Value.OnItemChangedWrapper();
                 return;
             }
