@@ -52,7 +52,7 @@ public abstract class ContainerDisplay : MonoBehaviour
 
     protected virtual void RemovedItem(ItemData data, int amount, bool isSaveNeeded)
     {
-        if (amount == data.stackSize)
+        if (data.stackSize <= 0 || amount == -1 || data.stackSize == amount)
         {
             RemoveDisplayItem(data as ItemData);
         }
