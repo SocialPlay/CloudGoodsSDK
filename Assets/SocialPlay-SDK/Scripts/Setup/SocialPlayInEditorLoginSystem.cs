@@ -20,8 +20,8 @@ public class SocialPlayInEditorLoginSystem : MonoBehaviour
         var socialPlayUserObj = new PlatformUser();
         socialPlayUserObj.appID = new Guid(GameAuthentication.GetAppID());
         socialPlayUserObj.platformID = 1;
-        socialPlayUserObj.platformUserID = "1";
-        socialPlayUserObj.userName = "Test User";
+        socialPlayUserObj.platformUserID = "2";
+        socialPlayUserObj.userName = "abcdefg";
         Systems.UserGetter.GetSocialPlayUser(socialPlayUserObj, GameAuthentication.OnUserAuthorized);
 #elif UNITY_WEBPLAYER
         WebPlatformLink.OnRecievedUser += GameAuthentication.OnUserAuthorized;

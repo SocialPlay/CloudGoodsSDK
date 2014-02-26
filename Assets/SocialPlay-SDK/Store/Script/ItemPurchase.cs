@@ -19,8 +19,8 @@ public class ItemPurchase : MonoBehaviour
 
     public GameObject closePanelButton;
 
-    public PurchaseButtonDisaply creditPurchaseButton;
-    public PurchaseButtonDisaply coinPurchaseButton;
+    public PurchaseButtonDisplay creditPurchaseButton;
+    public PurchaseButtonDisplay coinPurchaseButton;
 
     public GameObject purchaseConfirmationPanel;
     public GameObject purchaseConfirmationButton;

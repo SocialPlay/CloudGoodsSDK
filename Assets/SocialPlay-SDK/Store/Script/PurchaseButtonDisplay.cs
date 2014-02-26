@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PurchaseButtonDisaply : MonoBehaviour
+public class PurchaseButtonDisplay : MonoBehaviour
 {
     public UIButton ActiveButton;
     public UILabel InsufficientFundsLabel;

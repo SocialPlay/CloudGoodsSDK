@@ -73,12 +73,10 @@ public class NGUIStoreLoader : MonoBehaviour
 
         if (pageNum < GetPageAmount(itemAmount) - 1)
         {
-            Debug.Log("here");
             pageMax = maxGridAmount;
         }
         else
         {
-            Debug.Log("There");
             pageMax = itemAmount % maxGridAmount;
         }
 

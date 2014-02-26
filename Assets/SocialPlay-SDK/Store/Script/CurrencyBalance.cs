@@ -21,12 +21,14 @@ public class CurrencyBalance : MonoBehaviour
 
     public void GetCurrencyBalance(string userAuth)
     {
+        Debug.Log(ItemSystemGameData.AppID.ToString() + " / " + ItemSystemGameData.UserID.ToString());
         WebserviceCalls.webservice.GetFreeCurrencyBalance(ItemSystemGameData.UserID.ToString(), AccessLocation, ItemSystemGameData.AppID.ToString(), OnReceivedFreeCurrency);
         WebserviceCalls.webservice.GetPaidCurrencyBalance(ItemSystemGameData.UserID.ToString(), ItemSystemGameData.AppID.ToString(), OnReceievedPaidCurrency);
     }
 
     void OnReceivedFreeCurrency(string freeCurrencyBalance)
     {
+        Debug.Log(freeCurrencyBalance);
         JToken freeToken = JToken.Parse(freeCurrencyBalance);
         freeCurrencyLabel.text = freeToken.ToString();
         freeCurrency = int.Parse(freeToken.ToString());
@@ -34,6 +36,7 @@ public class CurrencyBalance : MonoBehaviour
 
     void OnReceievedPaidCurrency(string paidCurrencyBalance)
     {
+        Debug.Log(paidCurrencyBalance);
         JToken paidToken = JToken.Parse(paidCurrencyBalance);
         paidCurrencyLabel.text = paidToken.ToString();
         paidCurrency = int.Parse(paidToken.ToString());
