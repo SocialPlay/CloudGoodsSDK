@@ -22,7 +22,7 @@ public abstract class ItemContainer : MonoBehaviour
     /// <summary>
     /// Called after the Container removes an item.
     /// </summary>
-    public event Action<ItemData, bool> RemovedItem;
+    public event Action<ItemData, int, bool> RemovedItem;
 
     /// <summary>
     /// Called when the Container is cleared.
@@ -77,11 +77,11 @@ public abstract class ItemContainer : MonoBehaviour
         }
     }
 
-    protected void RemoveItemEvent(ItemData item, bool isMovingToAnotherContainer)
+    protected void RemoveItemEvent(ItemData item, int amount, bool isBeingMoved)
     {
         if (RemovedItem != null)
         {
-            RemovedItem(item, isMovingToAnotherContainer);
+            RemovedItem(item, amount, isBeingMoved);
         }
     }
 

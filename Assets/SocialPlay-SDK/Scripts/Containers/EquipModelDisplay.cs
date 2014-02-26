@@ -10,7 +10,7 @@ public class EquipModelDisplay : MonoBehaviour
 
     static GameObject ActiveModel;
 
-     ItemData currentItem;
+    ItemData currentItem;
 
 
 
@@ -20,9 +20,9 @@ public class EquipModelDisplay : MonoBehaviour
         equipment.RemovedItem += equipment_removedItem;
     }
 
-    void equipment_removedItem(ItemData item, bool isMovedToAnotherContainer)
+    void equipment_removedItem(ItemData item, int amount, bool isMovedToAnotherContainer)
     {
-        if (item.assetURL == currentItem.assetURL)
+        if (item.assetURL == currentItem.assetURL && amount == item.stackSize)
         {
             Destroy(ActiveModel);
         }
@@ -30,7 +30,7 @@ public class EquipModelDisplay : MonoBehaviour
 
     void OnDisable()
     {
-        equipment.AddedItem -= equipment_AddedItem; 
+        equipment.AddedItem -= equipment_AddedItem;
         equipment.RemovedItem -= equipment_removedItem;
     }
 

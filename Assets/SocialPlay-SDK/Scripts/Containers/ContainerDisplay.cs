@@ -50,9 +50,20 @@ public abstract class ContainerDisplay : MonoBehaviour
         AddDisplayItem(data as ItemData, this.transform);
     }
 
-    protected virtual void RemovedItem(ItemData data, bool isSaveNeeded)
+    protected virtual void RemovedItem(ItemData data, int amount, bool isBeingMoved)
     {
-        RemoveDisplayItem(data as ItemData);
+        Debug.Log("Data: " + data.ToString() + "\nAmount: " + amount + "\n Is Move: " + isBeingMoved);
+        if (!isBeingMoved)
+        {
+            if (data.stackSize - amount <= 0)
+            {
+                RemoveDisplayItem(data as ItemData);
+            }
+        }
+        else if (amount == -1 || data.stackSize == amount)
+        {
+            RemoveDisplayItem(data as ItemData);
+        }
     }
 
     protected virtual void SetupWindow()

@@ -6,11 +6,6 @@ public class ContainerRefresh : MonoBehaviour
 {
     public List<GameObject> containerObjects = new List<GameObject>();
 
-    void Start()
-    {
-        RefreshContianer();
-    }
-
     /// <summary>
     /// Updates the listed containers to the latest changes.
     /// </summary>

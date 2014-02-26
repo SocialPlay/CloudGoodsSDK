@@ -28,7 +28,7 @@ public class LimitlessItemContainer : ItemContainer
         else
         {
             modified.CreatNew(out newItem, amount, this);
-            if (!AddToExistingStack(newItem, amount, isSave)) 
+            if (!AddToExistingStack(newItem, amount, isSave))
             {
                 containerItems.Add(newItem);
                 AddItemEvent(newItem, isSave);
@@ -68,13 +68,12 @@ public class LimitlessItemContainer : ItemContainer
                 if (amount == -1 || item.stackSize <= amount)
                 {
                     containerItems.Remove(item);
-                    RemoveItemEvent(item,isMovingToAnotherContainer);
                 }
                 else
                 {
-                    item.stackSize -= amount;                        
+                    item.stackSize -= amount;
                 }
-
+                RemoveItemEvent(item, amount, isMovingToAnotherContainer);
                 return;
             }
         }

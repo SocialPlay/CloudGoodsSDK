@@ -4,7 +4,7 @@ using System;
 
 public class SPLogout : MonoBehaviour {
 
-    public Action<bool> SPUserLogout;
+    public static event Action SPUserLogout;
 
     public GameObject logoutButton;
 
@@ -22,7 +22,7 @@ public class SPLogout : MonoBehaviour {
 
         new ItemSystemGameData(Guid.Empty.ToString(), Guid.Empty.ToString(), 0, Guid.Empty.ToString());
 
-        SPUserLogout(true);
+        if (SPUserLogout != null) SPUserLogout();
     }
 	
 }

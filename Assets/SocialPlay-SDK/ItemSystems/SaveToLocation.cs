@@ -44,18 +44,19 @@ public class SaveToLocation : MonoBehaviour
     {
         if (isSave == true)
         {
-            ItemServiceManager.service.MoveItemStack(data.stackID, data.stackSize, GetOwnerID(), DestinationOwnerType.ToString(), ItemSystemGameData.AppID, DestinationLocation, delegate(string x) {
-                        JToken token = JToken.Parse(x);
+            ItemServiceManager.service.MoveItemStack(data.stackID, data.stackSize, GetOwnerID(), DestinationOwnerType.ToString(), ItemSystemGameData.AppID, DestinationLocation, delegate(string x)
+            {
+                JToken token = JToken.Parse(x);
                 data.stackID = new Guid(token.ToString());
             });
         }
     }
 
-    void RemovedItem(ItemData data, bool isMovingToAnotherContainer)
+    void RemovedItem(ItemData data, int amount, bool isMovingToAnotherContainer)
     {
         if (isMovingToAnotherContainer == false)
         {
-            ItemServiceManager.service.RemoveItemStack(data.stackID, ReturnedString);
+            ItemServiceManager.service.DeductStackAmount(data.stackID, -amount, ReturnedString);
         }
     }
 

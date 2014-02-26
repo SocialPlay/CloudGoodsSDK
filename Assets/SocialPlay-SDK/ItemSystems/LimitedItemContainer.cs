@@ -162,10 +162,13 @@ public class LimitedItemContainer : ItemContainer
                 if (amount == -1 || item.stackSize <= amount)
                 {
                     containerItems.Remove(item);
-                    RemoveItemEvent(item, isMovingToAnotherContainer);
+
                 }
                 else
+                {
                     item.stackSize -= amount;
+                }
+                RemoveItemEvent(item, amount, isMovingToAnotherContainer);
                 return;
             }
         }

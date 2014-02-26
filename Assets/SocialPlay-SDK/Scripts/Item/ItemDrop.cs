@@ -13,9 +13,7 @@ public class ItemDrop : MonoBehaviour
     {
         if (item != null)
         {
-            //todo should not have to make list, ItemConverter should have wrapper taking one item
-
-            // todo should not have boolean as a parameter
+           
             //List<ItemData> items = new List<ItemData>();
             //items.Add(item);
             //List<GameObject> dropItems = ItemConverter.ConvertToItemDropObject(items, true);
