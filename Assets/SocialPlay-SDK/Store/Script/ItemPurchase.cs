@@ -1,8 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 public class ItemPurchase : MonoBehaviour
 {
+
+    public static event Action<string> OnPurchasedItem;
 
     ItemInfo itemInfo;
 
@@ -134,6 +137,7 @@ public class ItemPurchase : MonoBehaviour
         purchaseConfirmationPanel.SetActive(true);
         currencyBalance.GetCurrencyBalance("");
         ReloadContainerItems();
+        OnPurchasedItem(msg);
     }
 
     void ReloadContainerItems()
