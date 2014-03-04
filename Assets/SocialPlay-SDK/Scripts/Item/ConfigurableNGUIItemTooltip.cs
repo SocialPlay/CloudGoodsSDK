@@ -31,7 +31,7 @@ public class ConfigurableNGUIItemTooltip : MonoBehaviour, ITooltipSetup
                 case DisaplyOption.name:
                     if (isQualityColorUsed)
                     {
-                        formated += "[" + NGUITools.EncodeColor(GetColorQuality(item.quality)) + "]";
+                        formated += "[" + NGUITools.EncodeColor(ItemQuailityColorSelector.GetColorQuality(item.quality)) + "]";
                     }
                     else
                     {
@@ -77,26 +77,7 @@ public class ConfigurableNGUIItemTooltip : MonoBehaviour, ITooltipSetup
             }
         }
         return formated;
-    }
-
-    Color GetColorQuality(int colorQuality)
-    {
-        switch (colorQuality)
-        {
-            case 0:
-                return Color.gray;
-            case 1:
-                return Color.white;
-            case 2:
-                return Color.green;
-            case 3:
-                return Color.blue;
-            case 4:
-                return Color.yellow;
-            default:
-                return Color.white;
-        }
-    }
+    }   
 }
 
 
