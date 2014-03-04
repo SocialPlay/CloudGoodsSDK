@@ -89,7 +89,6 @@ public abstract class ContainerDisplay : MonoBehaviour
                 disaplyActions.Add(action);
             }
         }
-
     }
 
     public virtual void ShowWindow()
