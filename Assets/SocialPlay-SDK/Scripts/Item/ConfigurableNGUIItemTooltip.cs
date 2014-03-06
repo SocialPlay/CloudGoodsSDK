@@ -31,7 +31,7 @@ public class ConfigurableNGUIItemTooltip : MonoBehaviour, ITooltipSetup
                 case DisaplyOption.name:
                     if (isQualityColorUsed)
                     {
-                        formated += "[" + NGUITools.EncodeColor(ItemQuailityColorSelector.GetColorQuality(item.quality)) + "]";
+                        formated += "[" + NGUITools.EncodeColor(ItemQuailityColorSelector.GetColorForItem(item)) + "]";
                     }
                     else
                     {
@@ -77,7 +77,7 @@ public class ConfigurableNGUIItemTooltip : MonoBehaviour, ITooltipSetup
             }
         }
         return formated;
-    }   
+    }
 }
 
 
