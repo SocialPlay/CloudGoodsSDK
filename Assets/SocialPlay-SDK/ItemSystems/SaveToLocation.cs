@@ -52,9 +52,9 @@ public class SaveToLocation : MonoBehaviour
         }
     }
 
-    void RemovedItem(ItemData data, int amount, bool isMovingToAnotherContainer)
+    void RemovedItem(ItemData data, int amount, bool isMoving)
     {
-        if (isMovingToAnotherContainer == false)
+        if (!isMoving)
         {
             ItemServiceManager.service.DeductStackAmount(data.stackID, -amount, ReturnedString);
         }
