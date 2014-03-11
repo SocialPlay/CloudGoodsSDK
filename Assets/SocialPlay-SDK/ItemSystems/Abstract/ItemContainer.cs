@@ -77,11 +77,11 @@ public abstract class ItemContainer : MonoBehaviour
         }
     }
 
-    protected void RemoveItemEvent(ItemData item, int amount, bool isBeingMoved)
+    protected void RemoveItemEvent(ItemData item, int amount, bool isMoving)
     {
         if (RemovedItem != null)
         {
-            RemovedItem(item, amount, isBeingMoved);
+            RemovedItem(item, amount, isMoving);
         }
     }
 
@@ -127,7 +127,7 @@ public abstract class ItemContainer : MonoBehaviour
     }
 
 
-    public void Remove(ItemData itemData, bool isSaveNotRequired, int amount = -1)
+    public void Remove(ItemData itemData, bool isMoving, int amount = -1)
     {
         if (restriction == null)
         {
@@ -141,11 +141,11 @@ public abstract class ItemContainer : MonoBehaviour
                 return;
             }
         }
-        RemoveItem(itemData, isSaveNotRequired, amount);
+        RemoveItem(itemData, isMoving, amount);
     }
 
     protected abstract void AddItem(ItemData modified, int amount = -1, bool isSave = true);
-    protected abstract void RemoveItem(ItemData modified, bool isMovingToAnotherContainer, int amount = -1);
+    protected abstract void RemoveItem(ItemData modified, bool isMoving, int amount = -1);
     public abstract int Contains(ItemData modified);
     public abstract void Clear();
 

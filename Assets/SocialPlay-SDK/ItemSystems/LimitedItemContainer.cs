@@ -153,7 +153,7 @@ public class LimitedItemContainer : ItemContainer
         return false;
     }
 
-    protected override void RemoveItem(ItemData modified, bool isMovingToAnotherContainer, int amount = -1)
+    protected override void RemoveItem(ItemData modified, bool isMoving, int amount = -1)
     {
         foreach (ItemData item in containerItems)
         {
@@ -168,7 +168,7 @@ public class LimitedItemContainer : ItemContainer
                 {
                     item.stackSize -= amount;
                 }
-                RemoveItemEvent(item, amount, isMovingToAnotherContainer);
+                RemoveItemEvent(item, amount, isMoving);
                 return;
             }
         }

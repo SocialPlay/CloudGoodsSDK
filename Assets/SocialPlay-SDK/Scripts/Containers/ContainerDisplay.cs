@@ -52,10 +52,9 @@ public abstract class ContainerDisplay : MonoBehaviour
 
     protected virtual void RemovedItem(ItemData data, int amount, bool isBeingMoved)
     {
-        Debug.Log("Data: " + data.ToString() + "\nAmount: " + amount + "\n Is Move: " + isBeingMoved);
         if (!isBeingMoved)
         {
-            if (data.stackSize - amount <= 0)
+            if (data.stackSize - amount < 0)
             {
                 RemoveDisplayItem(data as ItemData);
             }
@@ -89,7 +88,6 @@ public abstract class ContainerDisplay : MonoBehaviour
                 disaplyActions.Add(action);
             }
         }
-
     }
 
     public virtual void ShowWindow()
