@@ -3,13 +3,12 @@ using System.Collections;
 
 public class ItemQualityDisplay : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+    public UISprite frameSprite;
+
+    void Start()
+    {
+        NGUIContainerGameItem containerItem = GetComponent<NGUIContainerGameItem>();
+
+        frameSprite.color = ItemQuailityColorSelector.GetColorForItem(containerItem.itemData);
+    }
 }
