@@ -10,7 +10,7 @@ public class ItemTooltipSetup : MonoBehaviour, ITooltipSetup
     public string Setup()
     {
         item = GetComponent<ItemData>();
-        string formated = "[" + NGUITools.EncodeColor(ItemQuailityColorSelector.GetColorQuality(item.quality)) + "]" + item.name;
+        string formated = "[" + NGUITools.EncodeColor(ItemQuailityColorSelector.GetColorForItem(item)) + "]" + item.name;
         
         foreach (KeyValuePair<string, float> pair in item.stats)
         {

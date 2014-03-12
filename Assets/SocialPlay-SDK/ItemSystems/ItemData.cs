@@ -32,6 +32,8 @@ public class ItemData : MonoBehaviour
     internal string assetURL;
     internal List<string> tags;
 
+    public bool isLocked = false;
+
     public void AssetBundle(Action<UnityEngine.Object> callBack)
     {
         try
@@ -67,6 +69,7 @@ public class ItemData : MonoBehaviour
         newItem.assetURL = assetURL;
         newItem.tags = tags;
         newItem.persistantLocation = persistantLocation;
+        newItem.isLocked = isLocked;
     }
 
     /// <summary>
@@ -140,6 +143,7 @@ public class ItemData : MonoBehaviour
         assetURL = itemData.assetURL;
         tags = itemData.tags;
         persistantLocation = itemData.persistantLocation;
+        isLocked = itemData.isLocked;
     }
 }
 

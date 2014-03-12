@@ -30,7 +30,7 @@ public class GameAuthentication : MonoBehaviour
     public static void OnUserAuthorized(WebserviceCalls.UserGuid socialplayMsg)
     {
 
-        new ItemSystemGameData(GetAppID(), socialplayMsg.userGuid, 1, Guid.NewGuid().ToString());
+        new ItemSystemGameData(GetAppID(), socialplayMsg.userGuid, 1, Guid.NewGuid().ToString(), socialplayMsg.userName);
 
         Debug.Log("Logged in as user " + socialplayMsg.userName + " : " + socialplayMsg.userGuid);
 
