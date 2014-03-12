@@ -20,6 +20,8 @@ public class LimitedItemContainer : ItemContainer
 
     protected override ContainerAddState MyContainerAddState(ItemData modified)
     {
+
+       
         ContainerAddState currentAddableState = new ContainerAddState(ContainerAddState.ActionState.No, 0);
 
         if (containerItems.Count == containerMaxSize && !containerItems.Contains(modified))

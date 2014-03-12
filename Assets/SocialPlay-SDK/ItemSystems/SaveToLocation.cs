@@ -36,7 +36,14 @@ public class SaveToLocation : MonoBehaviour
     {
         if (isSave == true)
         {
-            ItemServiceManager.service.MoveItemStack(data.stackID, data.stackSize, GetOwnerID(), DestinationOwnerType.ToString(), ItemSystemGameData.AppID, DestinationLocation, ReturnedString);
+            data.isLocked = true;
+            ItemServiceManager.service.MoveItemStack(data.stackID, data.stackSize, GetOwnerID(), DestinationOwnerType.ToString(), ItemSystemGameData.AppID, DestinationLocation, delegate(string x)
+            {
+                Debug.Log("Mod: " + x + "\nOriginal: " + data.stackID.ToString());
+                JToken token = JToken.Parse(x);
+                data.stackID = new Guid(token.ToString());
+                data.isLocked = false;
+            });
         }
     }
 
@@ -44,10 +51,13 @@ public class SaveToLocation : MonoBehaviour
     {
         if (isSave == true)
         {
+            data.isLocked = true;
             ItemServiceManager.service.MoveItemStack(data.stackID, data.stackSize, GetOwnerID(), DestinationOwnerType.ToString(), ItemSystemGameData.AppID, DestinationLocation, delegate(string x)
             {
+                Debug.Log("Added: " + x + "\nOriginal: " + data.stackID.ToString());
                 JToken token = JToken.Parse(x);
                 data.stackID = new Guid(token.ToString());
+                data.isLocked = false;
             });
         }
     }
@@ -56,7 +66,10 @@ public class SaveToLocation : MonoBehaviour
     {
         if (!isMoving)
         {
-            ItemServiceManager.service.DeductStackAmount(data.stackID, -amount, ReturnedString);
+            ItemServiceManager.service.DeductStackAmount(data.stackID, -amount, delegate(string x)
+            {
+                Debug.Log("Removed : " + x);
+            });
         }
     }
 
@@ -75,8 +88,6 @@ public class SaveToLocation : MonoBehaviour
     }
 
 
-    void ReturnedString(string msg)
-    {
-    }
+
 }
 

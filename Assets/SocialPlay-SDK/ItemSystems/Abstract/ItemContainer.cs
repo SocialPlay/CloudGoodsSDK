@@ -99,6 +99,11 @@ public abstract class ItemContainer : MonoBehaviour
                 return new ContainerAddState(ContainerAddState.ActionState.No);
             }
         }
+        if (itemData.isLocked)
+        {
+            return new ContainerAddState(ContainerAddState.ActionState.No);
+        }
+
         return MyContainerAddState(itemData);
     }
 

@@ -15,7 +15,6 @@ public class SaveSlotsToLocation : MonoBehaviour
         if (SlotedContainer != null)
         {
             SlotedContainer.AddedItem += AddedItem;
-            SlotedContainer.ModifiedItem += ModifiedItem;
             SlotedContainer.RemovedItem += RemovedItem;
         }
     }
@@ -24,23 +23,11 @@ public class SaveSlotsToLocation : MonoBehaviour
     {
         if (SlotedContainer != null)
         {
-            SlotedContainer.ModifiedItem -= ModifiedItem;
             SlotedContainer.AddedItem -= AddedItem;
             SlotedContainer.RemovedItem -= RemovedItem;
         }
     }
 
-    void ModifiedItem(ItemData data, bool isSave)
-    {
-        int slotId = SlotedContainer.FindItemInSlot(data);
-        if (slotId != -1)
-        {
-            if (isSave == true && SlotedContainer.slots[slotId].persistantID != -1)
-            {
-                ItemServiceManager.service.MoveItemStack(data.stackID, data.stackSize, GetOwnerID(), DestinationOwnerType.ToString(), ItemSystemGameData.AppID, SlotedContainer.slots[slotId].persistantID, ReturnedString);
-            }
-        }
-    }
 
     void AddedItem(ItemData data, bool isSave)
     {
@@ -49,10 +36,19 @@ public class SaveSlotsToLocation : MonoBehaviour
         {
             if (isSave == true && SlotedContainer.slots[slotId].persistantID != -1)
             {
+                data.isLocked = true;
                 ItemServiceManager.service.MoveItemStack(data.stackID, data.stackSize, GetOwnerID(), DestinationOwnerType.ToString(), ItemSystemGameData.AppID, SlotedContainer.slots[slotId].persistantID, delegate(string x)
                 {
-                    JToken token = JToken.Parse(x);
-                    data.stackID = new Guid(token.ToString());
+                    try
+                    {
+                        Debug.Log("Slot Added: " + x + "\nOriginal: " + data.stackID.ToString());
+                        JToken token = JToken.Parse(x);
+                        data.stackID = new Guid(token.ToString());
+                    }
+                    finally
+                    {
+                        data.isLocked = false;
+                    }
                 });
             }
         }
@@ -63,8 +59,18 @@ public class SaveSlotsToLocation : MonoBehaviour
         if (isMovingToAnotherContainer == false)
         {
 
-            ItemServiceManager.service.DeductStackAmount(data.stackID, -amount, ReturnedString);
-
+            ItemServiceManager.service.DeductStackAmount(data.stackID, -amount, delegate(string x)
+            {
+                try
+                {
+                    Debug.Log("Slot Removed: " + x + "\nOriginal: " + data.stackID.ToString());
+           
+                }
+                finally
+                {
+                    data.isLocked = true;
+                }
+            });
         }
     }
 
@@ -80,11 +86,6 @@ public class SaveSlotsToLocation : MonoBehaviour
                 return ItemSystemGameData.UserID.ToString();
         }
         return "";
-    }
-
-
-    void ReturnedString(string msg)
-    {
     }
 }
 
