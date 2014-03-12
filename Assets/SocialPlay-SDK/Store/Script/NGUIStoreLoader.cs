@@ -23,6 +23,8 @@ public class NGUIStoreLoader : MonoBehaviour
 
     List<GameObject> currentPageItems = new List<GameObject>();
 
+    int currentPage = 0;
+
     // Use this for initialization
     void Awake()
     {
@@ -149,7 +151,13 @@ public class NGUIStoreLoader : MonoBehaviour
     void SetPage(GameObject pageButton)
     {
         PageInfo pageInfo = pageButton.GetComponent<PageInfo>();
-        LoadStoreWithPaging(filteredList, pageInfo.pageNumber);
+
+        if (pageInfo.pageNumber != currentPage)
+        {
+            currentPage = pageInfo.pageNumber;
+
+            LoadStoreWithPaging(filteredList, pageInfo.pageNumber);
+        }
     }
 
     public List<JToken> GetStoreItemList()
