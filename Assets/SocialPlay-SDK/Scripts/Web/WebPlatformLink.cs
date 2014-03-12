@@ -24,7 +24,7 @@ public class WebPlatformLink
 
         if (isGuest)
         {
-            if(OnGuestModeActivated != null)
+            if (OnGuestModeActivated != null)
                 OnGuestModeActivated();
 
             return;
@@ -35,7 +35,7 @@ public class WebPlatformLink
         try
         {
             userinfo.platformUserID = jobject["userID"].ToString();
-            userinfo.userName = jobject["loginUserEmail"].ToString();
+            userinfo.userName = jobject["userName"].ToString();
             userinfo.platformID = int.Parse(jobject["platformID"].ToString());
             userinfo.appID = Systems.AppId;
         }
