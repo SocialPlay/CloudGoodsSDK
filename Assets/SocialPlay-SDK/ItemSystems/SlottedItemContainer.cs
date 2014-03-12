@@ -250,7 +250,6 @@ public class SlottedItemContainer : ItemContainer
                 }
                 else if (SelectedSlots.slotData.IsSameItemAs(modified) && SelectedSlots.slotData.stackSize < SelectedSlots.slotMaxCountLimit)
                 {
-                    Debug.Log("Adding " + (SelectedSlots.slotMaxCountLimit - SelectedSlots.slotData.stackSize).ToString());
                     state = new ContainerAddState(ContainerAddState.ActionState.Add, SelectedSlots.slotMaxCountLimit - SelectedSlots.slotData.stackSize, null);
                     return state;
                 }
