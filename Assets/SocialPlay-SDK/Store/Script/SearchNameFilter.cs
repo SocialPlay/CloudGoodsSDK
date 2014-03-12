@@ -13,6 +13,7 @@ public class SearchNameFilter : MonoBehaviour
     string lastText = "";
 
     public static event Action<string> searchUpdate;
+    public static bool inputSelected = false;
 
     void Awake()
     {
@@ -21,14 +22,16 @@ public class SearchNameFilter : MonoBehaviour
 
     void Update()
     {
-        if (input != null && lastText != input.text)
+        if (input != null && lastText != input.value)
         {
-            lastText = input.text;
+            lastText = input.value;
             if (searchUpdate != null)
             {         
-                searchUpdate(input.text);
+                searchUpdate(input.value);
             }
         }
+
+        inputSelected = input.selected;
     }
 
     void OnSubmit(string currentString)
