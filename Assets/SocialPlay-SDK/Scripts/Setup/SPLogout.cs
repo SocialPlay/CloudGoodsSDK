@@ -11,10 +11,13 @@ public class SPLogout : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
-        UIEventListener.Get(logoutButton).onClick += LogoutUser;
+        if (logoutButton != null)
+        {
+            UIEventListener.Get(logoutButton).onClick += LogoutUser;
+        }
     }
 
-    void LogoutUser(GameObject logoutButton)
+    public void LogoutUser(GameObject logoutButton)
     {
         PlayerPrefs.DeleteKey("SocialPlay_UserGuid");
         PlayerPrefs.DeleteKey("SocialPlay_UserName");

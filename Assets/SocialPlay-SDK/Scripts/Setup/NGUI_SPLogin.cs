@@ -29,7 +29,7 @@ public class NGUI_SPLogin : MonoBehaviour
     public UIInput registerUserName;
     public UILabel registerErrorLabel;
 
-
+    private UIInputLengthValidation registerUserNameValidator;
     private UIInputVisualValidation registerUserEmailValidator;
     private UIInputVisualValidation registerUserPasswordValidator;
     private UIInputVisualValidation registerUserPasswordConfirmValidator;
@@ -73,6 +73,7 @@ public class NGUI_SPLogin : MonoBehaviour
         loginUserEmailValidator = loginUserEmail.GetComponent<UIInputVisualValidation>();
         loginUserPasswordValidator = loginUserPassword.GetComponent<UIInputVisualValidation>();
 
+        registerUserNameValidator = registerUserName.GetComponent<UIInputLengthValidation>();
         registerUserEmailValidator = registerUserEmail.GetComponent<UIInputVisualValidation>();
         registerUserPasswordValidator = registerUserPassword.GetComponent<UIInputVisualValidation>(); ;
         registerUserPasswordConfirmValidator = registerUserPasswordConfirm.GetComponent<UIInputVisualValidation>();
@@ -213,10 +214,16 @@ public class NGUI_SPLogin : MonoBehaviour
     {
 
         string ErrorMsg = "";
+        if (!registerUserNameValidator.IsValidCheck())
+        {
+            if (!string.IsNullOrEmpty(ErrorMsg)) ErrorMsg += "\n";
+            ErrorMsg += "-Invalid User Name";
+        }
         if (!registerUserEmailValidator.IsValidCheck())
         {
-            ErrorMsg = "-Invalid Email";
-        }
+            if (!string.IsNullOrEmpty(ErrorMsg)) ErrorMsg += "\n";
+            ErrorMsg += "-Invalid Email";
+        }     
 
         if (!registerUserPasswordValidator.IsValidCheck() || !registerUserPasswordConfirmValidator.IsValidCheck())
         {

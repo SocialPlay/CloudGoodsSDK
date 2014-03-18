@@ -20,6 +20,8 @@ public abstract class UIInputVisualValidation : MonoBehaviour
         IsValidCheck();
     }
 
+   
+
 
     public bool IsValidCheck(bool isSecondcheck = false)
     {
