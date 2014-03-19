@@ -28,7 +28,10 @@ public class NGUILimitedGridItemContainerDisplay : ContainerDisplay
         }
         foreach (MonoBehaviour item in itemData.GetComponentsInChildren<MonoBehaviour>())
         {
-            item.enabled = true;
+            if (item != null)
+            {
+                item.enabled = true;
+            }
         }
     }
 

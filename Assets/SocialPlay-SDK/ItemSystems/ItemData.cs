@@ -80,7 +80,7 @@ public class ItemData : MonoBehaviour
     {
 
         GameObject tmp = Instantiate(this.gameObject) as GameObject;
-        tmp.name = itemName;
+        tmp.name = "(" + itemID + "," + quality + ")" + itemName;
         return tmp.GetComponent<ItemData>();
     }
 

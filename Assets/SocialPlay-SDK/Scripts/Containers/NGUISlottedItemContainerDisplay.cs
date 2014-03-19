@@ -33,7 +33,10 @@ public class NGUISlottedItemContainerDisplay : ContainerDisplay
         }
         foreach (MonoBehaviour item in data.GetComponentsInChildren<MonoBehaviour>())
         {
-            item.enabled = true;
+            if (item != null)
+            {
+                item.enabled = true;
+            }
         }
     }
 
