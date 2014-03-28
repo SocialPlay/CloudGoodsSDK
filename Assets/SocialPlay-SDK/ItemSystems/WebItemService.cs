@@ -71,7 +71,7 @@ public class WebItemService : IItemService
 
     public void AddInstantCraftToQueue(Guid gameID, Guid UserID, int ItemID, int Amount, List<KeyValuePair<string, int>> ItemIngredients, Action<string> callback)
     {
-        string url = string.Format("{0}AddInstantCraftToQueue?gameID={1}&UserID={2}&ItemID={3}&Amount={4}&ItemIngredients={5}", cloudGoodsURL, gameID, UserID, ItemID, Amount, JsonConvert.SerializeObject(ItemIngredients));
+        string url = string.Format("{0}AddInstantCraftToQueue?gameID={1}&UserID={2}&ItemID={3}&Amount={4}&ItemIngredients={5}", cloudGoodsURL, gameID, UserID, ItemID, Amount, WWW.EscapeURL(JsonConvert.SerializeObject(ItemIngredients)));
 
         WWWPacket.Creat(url, callback);
     }
