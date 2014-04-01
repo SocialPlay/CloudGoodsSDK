@@ -29,20 +29,19 @@ public class GameAuthentication : MonoBehaviour
 
     public static void OnUserAuthorized(WebserviceCalls.UserGuid socialplayMsg)
     {
-
-        new ItemSystemGameData(GetAppID(), socialplayMsg.userGuid, 1, Guid.NewGuid().ToString(), socialplayMsg.userName);
+        new ItemSystemGameData(GetAppID(), socialplayMsg.userGuid, -1, Guid.NewGuid().ToString(), socialplayMsg.userName);
 
         Debug.Log("Logged in as user " + socialplayMsg.userName + " : " + socialplayMsg.userGuid);
 
-        GetGameSession(ItemSystemGameData.UserID, 1, OnRegisteredSession);
+        GetGameSession(ItemSystemGameData.UserID, GetAppID(), -1, OnRegisteredSession);
 
     }
 
-    private static void GetGameSession(Guid UserID, int instanceID, Action<Guid> callback)
+    private static void GetGameSession(Guid UserID, string AppID, int instanceID, Action<Guid> callback)
     {
         WebserviceCalls webserviceCalls = GameObject.FindObjectOfType(typeof(WebserviceCalls)) as WebserviceCalls;
         //todo remove email
-        webserviceCalls.RegisterGameSession(UserID, 1, (x) =>
+        webserviceCalls.RegisterGameSession(UserID, AppID, instanceID, (x) =>
         {
             JToken token = JToken.Parse(x);
             Guid sessionGuid = new Guid(token.ToString());

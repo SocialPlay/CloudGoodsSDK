@@ -112,9 +112,9 @@ public class WebserviceCalls : MonoBehaviour
         StartCoroutine(OnWebServiceCallback(www, callback));
     }
 
-    public void RegisterGameSession(Guid userID, int instanceID, Action<string> callback)
+    public void RegisterGameSession(Guid userID, string AppID, int instanceID, Action<string> callback)
     {
-        string url = cloudGoodsURL + "RegisterSession?UserId=" + userID + "&InstanceId=" + instanceID;
+        string url = cloudGoodsURL + "RegisterSession?UserId=" + userID + "&AppID=" + AppID + "&InstanceId=" + instanceID;
 
         WWW www = new WWW(url);
 
