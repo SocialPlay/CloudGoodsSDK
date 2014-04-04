@@ -6,7 +6,7 @@ using System;
 
 public class ItemDrop : MonoBehaviour
 {
-
+    public Transform dropParentObject;
     public IGameObjectAction postDropObjectAction;
 
     public void DropItemIntoWorld(ItemData item, Vector3 dropPosition, GameObject dropModelDefault)
@@ -40,6 +40,7 @@ public class ItemDrop : MonoBehaviour
                     ItemComponentInitalizer.InitializeItemWithComponents(dropObject.GetComponent<ItemData>(), AddComponetTo.prefab);
 
                     dropObject.transform.position = dropPosition;
+                    dropObject.transform.parent = dropParentObject.transform;
 
                     if (postDropObjectAction != null)
                         postDropObjectAction.DoGameObjectAction(dropObject);

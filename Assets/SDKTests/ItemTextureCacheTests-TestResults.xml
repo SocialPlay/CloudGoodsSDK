@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!--This file represents the results of running a test suite-->
-<test-results name="Unity Tests" total="4" errors="0" failures="0" not-run="0" inconclusive="0" ignored="0" skipped="0" invalid="0" date="2014-02-20" time="10:32:43">
+<test-results name="Unity Tests" total="4" errors="0" failures="0" not-run="0" inconclusive="0" ignored="0" skipped="0" invalid="0" date="2014-04-04" time="11:14:43">
   <environment nunit-version="2.6.2-Unity" clr-version="2.0.50727.1433" os-version="Microsoft Windows NT 6.1.7601.0" platform="Win32NT" cwd="C:\Users\User\Documents\Socialplay\CloudGoodsSDK" machine-name="HOTBUBBA" user="User" user-domain="HOTBUBBA" />
   <culture-info current-culture="en-US" current-uiculture="en-US" />
-  <test-suite name="ItemTextureCacheTests" type="Assembly" executed="True" result="Success" success="True" time="1.752">
+  <test-suite name="ItemTextureCacheTests" type="Assembly" executed="True" result="Success" success="True" time="1.683">
     <results>
-      <test-case name="Test 1- ReceivedTextureFromWebTest" executed="True" result="Success" success="True" time="0.642">
+      <test-case name="Test 1- ReceivedTextureFromWebTest" executed="True" result="Success" success="True" time="0.539">
         <reason>
           <message>
 <![CDATA[IntegrationTest started (Test 1- ReceivedTextureFromWebTest)
@@ -15,7 +15,7 @@ IntegrationTest finished (Test 1- ReceivedTextureFromWebTest)
           </message>
         </reason>
       </test-case>
-      <test-case name="Test 2 -ReceivedTextureFromCache" executed="True" result="Success" success="True" time="0.514">
+      <test-case name="Test 2 -ReceivedTextureFromCache" executed="True" result="Success" success="True" time="0.614">
         <reason>
           <message>
 <![CDATA[IntegrationTest started (Test 2 -ReceivedTextureFromCache)
@@ -25,7 +25,7 @@ IntegrationTest finished (Test 2 -ReceivedTextureFromCache)
           </message>
         </reason>
       </test-case>
-      <test-case name="Test 3 - CallWithGetItemTextureInSameFrame" executed="True" result="Success" success="True" time="0.563">
+      <test-case name="Test 3 - CallWithGetItemTextureInSameFrame" executed="True" result="Success" success="True" time="0.497">
         <reason>
           <message>
 <![CDATA[IntegrationTest started (Test 3 - CallWithGetItemTextureInSameFrame)
@@ -48,6 +48,7 @@ IntegrationTest finished (Test 4 - ErrorWithInvalidURL)
     </results>
   </test-suite>
 </test-results>
+t-results>
 >
     </results>
   </test-suite>

@@ -8,10 +8,10 @@ using SocialPlay.Data;
 using SocialPlay.Generic;
 using System.Collections.Generic;
 
-public class WebserviceCalls : MonoBehaviour
+public class WebserviceCalls : MonoBehaviour, IServiceCalls
 {
 
-    public static WebserviceCalls webservice = null;
+    public static IServiceCalls webservice = null;
 
     string cloudGoodsURL = "https://SocialPlayWebService.azurewebsites.net/cloudgoods/cloudgoodsservice.svc/";
 

@@ -17,6 +17,7 @@ public class ItemPutterDropper : MonoBehaviour, IItemPutter
     void Start()
     {
         gameItemDrop = gameObject.AddComponent<ItemDrop>();
+        gameItemDrop.dropParentObject = transform;
     }
 
     public void PutGameItem(List<ItemData> items)
