@@ -12,7 +12,7 @@ public class TrashCanContainer : ItemContainer
     protected override void AddItem(ItemData modified, int amount = -1, bool isSave = true)
     {
         modified.ownerContainer.Remove(modified, false, modified.stackSize);
-        ItemServiceManager.service.DeductStackAmount(modified.stackID, modified.stackSize, ReturnedString);
+        WebserviceCalls.webservice.DeductStackAmount(modified.stackID, modified.stackSize, ReturnedString);
         Destroy(modified.gameObject);
 
     }

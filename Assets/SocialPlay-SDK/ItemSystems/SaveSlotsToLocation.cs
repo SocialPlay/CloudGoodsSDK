@@ -37,7 +37,7 @@ public class SaveSlotsToLocation : MonoBehaviour
             if (isSave == true && SlotedContainer.slots[slotId].persistantID != -1)
             {
                 data.isLocked = true;
-                ItemServiceManager.service.MoveItemStack(data.stackID, data.stackSize, GetOwnerID(), DestinationOwnerType.ToString(), ItemSystemGameData.AppID, SlotedContainer.slots[slotId].persistantID, delegate(string x)
+                WebserviceCalls.webservice.MoveItemStack(data.stackID, data.stackSize, GetOwnerID(), DestinationOwnerType.ToString(), ItemSystemGameData.AppID, SlotedContainer.slots[slotId].persistantID, delegate(string x)
                 {
                     try
                     {
@@ -59,7 +59,7 @@ public class SaveSlotsToLocation : MonoBehaviour
         if (isMovingToAnotherContainer == false)
         {
 
-            ItemServiceManager.service.DeductStackAmount(data.stackID, -amount, delegate(string x)
+            WebserviceCalls.webservice.DeductStackAmount(data.stackID, -amount, delegate(string x)
             {
                 try
                 {

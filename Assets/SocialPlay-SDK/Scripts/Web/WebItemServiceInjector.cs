@@ -17,7 +17,7 @@ public class WebItemServiceInjector : MonoBehaviour
             }
         }
 
-        ItemServiceManager.service = new WebItemService(remoteURL);
+        //WebItemService. = new WebItemService(remoteURL);
         SocialPlay.ServiceClient.Open.Url = remoteURL;
     }
 }
