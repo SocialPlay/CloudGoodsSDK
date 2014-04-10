@@ -3,10 +3,15 @@ using System.Collections;
 using System;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
-public class WebserviceCalls : MonoBehaviour
+using LitJson;
+using SocialPlay.Data;
+using SocialPlay.Generic;
+using System.Collections.Generic;
+
+public class WebserviceCalls : MonoBehaviour, IServiceCalls
 {
 
-    public static WebserviceCalls webservice = null;
+    public static IServiceCalls webservice = null;
 
     string cloudGoodsURL = "https://SocialPlayWebService.azurewebsites.net/cloudgoods/cloudgoodsservice.svc/";
 
@@ -49,28 +54,27 @@ public class WebserviceCalls : MonoBehaviour
         Debug.Log("JSON: " + generatedItemsJson);
     }
 
-    public void GenerateItemsAtLocation(string ownerID, string ownerType, int location, Guid gameID, int minimumEnergyOfItem, int totalEnergyToGenerate, string andTags, string orTags, Action<string> callback)
+
+    //Working On
+    public void GenerateItemsAtLocation(string OwnerID, string OwnerType, int Location, Guid AppID, int MinimumEnergyOfItem, int TotalEnergyToGenerate, Action<string> callback, string ANDTags = "", string ORTags = "")
     {
-        string url = cloudGoodsURL + "GenerateItemsAtLocation?OwnerID=" + ownerID + "&OnwerType=" + ownerType + "&Location=" + location + "&GameID=" + gameID + "&MinimumEnergyOfItems=" + minimumEnergyOfItem + "&TotalEnergyToGenerateFor=" + totalEnergyToGenerate + "&ANDTags=" + "" + "&ORTags=" + "";
-        Debug.Log(url);
+        string url = string.Format("{0}GenerateItemsAtLocation?OwnerID={1}&OwnerType={2}&Location={3}&AppID={4}&MinimumEnergyOfItem={5}&TotalEnergyToGenerate={6}&ANDTags={7}&ORTags={8}", cloudGoodsURL, OwnerID, OwnerType, Location, AppID, MinimumEnergyOfItem, TotalEnergyToGenerate, ANDTags, ORTags);
         WWW www = new WWW(url);
 
         StartCoroutine(OnWebServiceCallback(www, callback));
     }
 
-    public void GetOwnerItems(string ownerID, string ownerType, int location, string gameGuid, Action<string> callback)
+    public void GetOwnerItems(string ownerID, string ownerType, int location, Guid AppID, Action<string> callback)
     {
-        string url = cloudGoodsURL + "GetOwnerItems?ownerID=" + ownerID + "&ownerType=" + ownerType + "&location=" + location + "&gameGuid=" + gameGuid;
-
+        string url = string.Format("{0}GetOwnerItems?ownerID={1}&ownerType={2}&location={3}&AppID={4}", cloudGoodsURL, ownerID, ownerType, location, AppID.ToString());
         WWW www = new WWW(url);
 
         StartCoroutine(OnWebServiceCallback(www, callback));
     }
 
-    public void MoveItemStack(Guid stackToMove, int moveAmount, string destinationOwnerID, string destinationOwnerType, int destinationGameID, int destinationLocation, Action<string> callback)
+    public void MoveItemStack(Guid StackToMove, int MoveAmount, string DestinationOwnerID, string DestinationOwnerType, Guid AppID, int DestinationLocation, Action<string> callback)
     {
-        string url = cloudGoodsURL + "MoveItemStack?StackToMove=" + stackToMove + "&MoveAmount=" + moveAmount + "&DestinationOwnerID=" + destinationOwnerID + "&DestinationOwnerType=" + destinationOwnerType + "&DestinationGameID=" + destinationGameID + "&DestinationLocation=" + destinationLocation;
-
+        string url = string.Format("{0}MoveItemStack?StackToMove={1}&MoveAmount={2}&DestinationOwnerID={3}&DestinationOwnerType={4}&AppID={5}&DestinationLocation={6}", cloudGoodsURL, StackToMove, MoveAmount, DestinationOwnerID, DestinationOwnerType, AppID.ToString(), DestinationLocation);
         WWW www = new WWW(url);
 
         StartCoroutine(OnWebServiceCallback(www, callback));
@@ -167,6 +171,101 @@ public class WebserviceCalls : MonoBehaviour
         StartCoroutine(OnWebServiceCallback(www, callback));
     }
 
+
+    public void MoveItemStacks(string stacks, string DestinationOwnerID, string DestinationOwnerType, Guid AppID, int DestinationLocation, Action<string> callback)
+    {
+        string url = string.Format("{0}MoveItemStacks?stacks={1}&DestinationOwnerID={2}&DestinationOwnerType={3}&AppID={4}&DestinationLocation={5}", cloudGoodsURL, stacks, DestinationOwnerID, DestinationOwnerType, AppID.ToString(), DestinationLocation);
+
+        WWW www = new WWW(url);
+
+        StartCoroutine(OnWebServiceCallback(www, callback));
+    }
+
+
+    public void RemoveItemStack(Guid StackRemove, Action<string> callback)
+    {
+        string url = string.Format("{0}RemoveStackItem?stackID={1}", cloudGoodsURL, StackRemove);
+        
+         WWW www = new WWW(url);
+
+        StartCoroutine(OnWebServiceCallback(www, callback));
+    }
+
+
+    public void DeductStackAmount(Guid StackRemove, int amount, Action<string> callback)
+    {
+        string url = string.Format("{0}DeductStackAmount?stackID={1}&amount={2}", cloudGoodsURL, StackRemove, amount);
+        WWW www = new WWW(url);
+
+        StartCoroutine(OnWebServiceCallback(www, callback));
+    }
+
+
+    public void RemoveItemStacks(List<Guid> StacksToRemove, Action<string> callback)
+    {
+        RemoveMultipleItems infos = new RemoveMultipleItems();
+        infos.stacks = StacksToRemove;
+        string stacksInfo = JsonConvert.SerializeObject(infos);
+        string url = string.Format("{0}RemoveStackItems?stacks={1}", cloudGoodsURL, stacksInfo);
+        WWW www = new WWW(url);
+
+        StartCoroutine(OnWebServiceCallback(www, callback));
+    }
+
+    public void CompleteQueueItem(Guid gameID, int QueueID, int percentScore, int location, Action<string> callback)
+    {
+        string url = string.Format("{0}CompleteQueueItem?gameID={1}&QueueID={2}&percentScore={3}&location={4}", cloudGoodsURL, gameID, QueueID, percentScore, location);
+        WWW www = new WWW(url);
+
+        StartCoroutine(OnWebServiceCallback(www, callback));
+    }
+
+    public void AddInstantCraftToQueue(Guid gameID, Guid UserID, int ItemID, int Amount, List<KeyValuePair<string, int>> ItemIngredients, Action<string> callback)
+    {
+        string url = string.Format("{0}AddInstantCraftToQueue?gameID={1}&UserID={2}&ItemID={3}&Amount={4}&ItemIngredients={5}", cloudGoodsURL, gameID, UserID, ItemID, Amount, WWW.EscapeURL(JsonConvert.SerializeObject(ItemIngredients)));
+
+        WWW www = new WWW(url);
+
+        StartCoroutine(OnWebServiceCallback(www, callback));
+    }
+
+    public void SPLogin_UserLogin(Guid gameID, string userEmail, string password, Action<string> callback)
+    {
+        string url = string.Format("{0}SPLoginUserLogin?gameID={1}&userEMail={2}&userPassword={3}", cloudGoodsURL, gameID, WWW.EscapeURL(userEmail), WWW.EscapeURL(password));
+
+        WWW www = new WWW(url);
+
+        StartCoroutine(OnWebServiceCallback(www, callback));
+    }
+
+
+    public void SPLogin_UserRegister(Guid gameID, string userEmail, string password, string userName, Action<string> callback)
+    {
+        string url = string.Format("{0}SPLoginUserRegister?gameID={1}&userEMail={2}&userPassword={3}&userName={4}", cloudGoodsURL, gameID, WWW.EscapeURL(userEmail), WWW.EscapeURL(password), WWW.EscapeURL(userName));
+
+        WWW www = new WWW(url);
+
+        StartCoroutine(OnWebServiceCallback(www, callback));
+    }
+
+
+    public void SPLoginForgotPassword(Guid gameID, string userEmail, Action<string> callback)
+    {
+        string url = string.Format("{0}SPLoginForgotPassword?gameID={1}&userEMail={2}", cloudGoodsURL, gameID, WWW.EscapeURL(userEmail));
+        WWW www = new WWW(url);
+
+        StartCoroutine(OnWebServiceCallback(www, callback));
+    }
+
+
+    public void SPLoginResendVerificationEmail(Guid gameID, string userEmail, Action<string> callback)
+    {
+        string url = string.Format("{0}SPLoginResendVerificationEmail?gameID={1}&userEMail={2}", cloudGoodsURL, gameID, WWW.EscapeURL(userEmail));
+        WWW www = new WWW(url);
+
+        StartCoroutine(OnWebServiceCallback(www, callback));
+    }
+
     IEnumerator OnWebServiceCallback(WWW www, Action<string> callback)
     {
         yield return www;
@@ -174,6 +273,7 @@ public class WebserviceCalls : MonoBehaviour
         // check for errors
         if (www.error == null)
         {
+            Debug.Log("HERE");
             callback(www.text);
         }
         else
@@ -182,4 +282,37 @@ public class WebserviceCalls : MonoBehaviour
             //callback("Error has occured");
         }
     }
+
+    IEnumerator OnWebServiceCallback(WWW www, Action<JsonData> callback)
+    {
+        yield return www;
+
+        // check for errors
+        if (www.error == null)
+        {
+            Debug.Log(www.text);
+            ConvertJsonStringIntoData(www.text, callback);
+        }
+        else
+        {
+            callback("WWW Error: " + www.error);
+            //callback("Error has occured");
+        }
+    }
+
+    void ConvertJsonStringIntoData(string JsonString, Action<JsonData> callBack)
+    {
+        //JsonString = JsonString.Remove(0, 1);
+        //JsonString = JsonString.Remove(JsonString.Length - 1, 1);
+        //JsonString = JsonString.Replace("\\\\", "");
+
+        WWW.UnEscapeURL(JsonString);
+
+        LitJson.JsonReader reader = new LitJson.JsonReader(JsonString);
+
+        JsonData data = JsonMapper.ToObject(reader);
+
+        callBack(data);
+    }
+
 }

@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-
+using LitJson;
 
 public abstract class ItemDataConverter
 {   

@@ -22,7 +22,7 @@ public class ContainerDropItemAction : ContainerActions
     {
         string itemStacks = ConvertContainerItemToSerializedJsonObject(item);
 
-        ItemServiceManager.service.MoveItemStacks(itemStacks, ItemSystemGameData.UserID.ToString(), "Session", ItemSystemGameData.AppID, 0, OnItemMoved(item));
+        WebserviceCalls.webservice.MoveItemStacks(itemStacks, ItemSystemGameData.UserID.ToString(), "Session", ItemSystemGameData.AppID, 0, OnItemMoved(item));
     }
 
     private System.Action<string> OnItemMoved(ItemData item)

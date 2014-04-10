@@ -8,7 +8,7 @@ public class LoadItemsForContainer : ContainerItemLoader
 
     public override void LoadItems()
     {
-        ItemServiceManager.service.GetOwnerItems(GetOwnerID(), SourceOwnerType.ToString(), sourceLocation, ItemSystemGameData.AppID, RecivedItems);
+        WebserviceCalls.webservice.GetOwnerItems(GetOwnerID(), SourceOwnerType.ToString(), sourceLocation, ItemSystemGameData.AppID, RecivedItems);
     }
 }
 

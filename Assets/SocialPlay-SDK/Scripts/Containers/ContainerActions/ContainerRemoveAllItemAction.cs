@@ -19,7 +19,7 @@ public class ContainerRemoveAllItemAction : ContainerActions
             Debug.Log(data.stackID);
             stackIDs.Add(data.stackID);
         }
-        ItemServiceManager.service.RemoveItemStacks(stackIDs, delegate(string x) { });
+        WebserviceCalls.webservice.RemoveItemStacks(stackIDs, delegate(string x) { });
 
         foreach (ItemData data in itemsFromContainer)
         {

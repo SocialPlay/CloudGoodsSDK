@@ -37,7 +37,7 @@ public class SaveToLocation : MonoBehaviour
         if (isSave == true)
         {
             data.isLocked = true;
-            ItemServiceManager.service.MoveItemStack(data.stackID, data.stackSize, GetOwnerID(), DestinationOwnerType.ToString(), ItemSystemGameData.AppID, DestinationLocation, delegate(string x)
+            WebserviceCalls.webservice.MoveItemStack(data.stackID, data.stackSize, GetOwnerID(), DestinationOwnerType.ToString(), ItemSystemGameData.AppID, DestinationLocation, delegate(string x)
             {
                 Debug.Log("Mod: " + x + "\nOriginal: " + data.stackID.ToString());
                 JToken token = JToken.Parse(x);
@@ -52,7 +52,7 @@ public class SaveToLocation : MonoBehaviour
         if (isSave == true)
         {
             data.isLocked = true;
-            ItemServiceManager.service.MoveItemStack(data.stackID, data.stackSize, GetOwnerID(), DestinationOwnerType.ToString(), ItemSystemGameData.AppID, DestinationLocation, delegate(string x)
+            WebserviceCalls.webservice.MoveItemStack(data.stackID, data.stackSize, GetOwnerID(), DestinationOwnerType.ToString(), ItemSystemGameData.AppID, DestinationLocation, delegate(string x)
             {
                 Debug.Log("Added: " + x + "\nOriginal: " + data.stackID.ToString());
                 JToken token = JToken.Parse(x);
@@ -66,7 +66,7 @@ public class SaveToLocation : MonoBehaviour
     {
         if (!isMoving)
         {
-            ItemServiceManager.service.DeductStackAmount(data.stackID, -amount, delegate(string x)
+            WebserviceCalls.webservice.DeductStackAmount(data.stackID, -amount, delegate(string x)
             {
                 Debug.Log("Removed : " + x);
             });

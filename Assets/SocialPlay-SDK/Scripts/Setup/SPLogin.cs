@@ -64,26 +64,26 @@ public class SPLogin : MonoBehaviour
     public static void RegisterUser(string email, string pass, string userName)
     {
         ItemSystemGameData.AppID = new Guid(GameAuthentication.GetAppID());
-        ItemServiceManager.service.SPLogin_UserRegister(ItemSystemGameData.AppID, email, pass, userName, instance.RecivedRegisterUser);
+        WebserviceCalls.webservice.SPLogin_UserRegister(ItemSystemGameData.AppID, email, pass, userName, instance.RecivedRegisterUser);
     }
 
 
     public static void Login(string email, string pass)
     {
         ItemSystemGameData.AppID = new Guid(GameAuthentication.GetAppID());
-        ItemServiceManager.service.SPLogin_UserLogin(ItemSystemGameData.AppID, email, pass, instance.RecivedLoginCode);
+        WebserviceCalls.webservice.SPLogin_UserLogin(ItemSystemGameData.AppID, email, pass, instance.RecivedLoginCode);
     }
 
     public static void ForgotPassword(string Email)
     {
         ItemSystemGameData.AppID = new Guid(GameAuthentication.GetAppID());
-        ItemServiceManager.service.SPLoginForgotPassword(ItemSystemGameData.AppID, Email, instance.RecivedForgotPassword);
+        WebserviceCalls.webservice.SPLoginForgotPassword(ItemSystemGameData.AppID, Email, instance.RecivedForgotPassword);
     }
 
     public static void ResendVerificationEmail(string email)
     {
         ItemSystemGameData.AppID = new Guid(GameAuthentication.GetAppID());
-        ItemServiceManager.service.SPLoginResendVerificationEmail(ItemSystemGameData.AppID, email, instance.RecivedVerificationEmailResponce);
+        WebserviceCalls.webservice.SPLoginResendVerificationEmail(ItemSystemGameData.AppID, email, instance.RecivedVerificationEmailResponce);
     }
 
     void RecivedRegisterUser(string statusCode)

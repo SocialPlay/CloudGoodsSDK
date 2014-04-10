@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System;
 using Newtonsoft.Json.Linq;
 using SocialPlay.Data;
+using LitJson;
 
 public class ItemGetter : MonoBehaviour
 {
@@ -56,7 +57,7 @@ public class ItemGetter : MonoBehaviour
 
         Debug.Log("andtags: " + andTagsString);
 
-        ItemServiceManager.service.GenerateItemsAtLocation(ItemSystemGameData.SessionID.ToString(), "Session", 0, ItemSystemGameData.AppID, minEnergy, MaxEnergy, OnReceivedGeneratedItems, andTagsString);
+        WebserviceCalls.webservice.GenerateItemsAtLocation(ItemSystemGameData.SessionID.ToString(), "Session", 0, ItemSystemGameData.AppID, minEnergy, MaxEnergy, OnReceivedGeneratedItems, andTagsString);
     }
 
     void OnReceivedGeneratedItems(string generatedItemsJson)
