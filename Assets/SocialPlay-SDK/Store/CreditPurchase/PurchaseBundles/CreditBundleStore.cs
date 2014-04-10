@@ -36,7 +36,8 @@ public class CreditBundleStore : MonoBehaviour
     {
         try
         {
-            platformPurchasor = new KongregatePurchase();
+            //platformPurchasor = new KongregatePurchase();
+            platformPurchasor = new FaceBookPurchaser();
             platformPurchasor.RecievedPurchaseResponse += OnRecievedPurchaseResponse;
 
             GetBundle();
@@ -71,9 +72,6 @@ public class CreditBundleStore : MonoBehaviour
 
     void OnItemInGrid(JObject item, GameObject obj)
     {
-        Debug.Log("Item Cost: " + item["Cost"]);
-        //Debug.Log("Currency Multiplier: " + GUIStorePlatform.Instance.currencyMultiplier);
-
         NGUIBundleItem nguiItem = obj.GetComponent<NGUIBundleItem>();
         nguiItem.Amount = item["Amount"].ToString();
         nguiItem.Cost = item["Cost"].ToString();
@@ -89,7 +87,6 @@ public class CreditBundleStore : MonoBehaviour
 
     void OnPurchaseRequest(GameObject obj)
     {
-        Debug.Log("Purchase request");
         string id = obj.transform.parent.GetComponent<NGUIBundleItem>().Id;
         platformPurchasor.Purchase(id, 1, "CAD63AD6-4D75-48D9-86AB-99A28E2BA004");
     }

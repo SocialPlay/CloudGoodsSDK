@@ -11,5 +11,6 @@ public class TrashCanDisplay : ContainerDisplay
     public override void RemoveDisplayItem(ItemData itemData)
     {
         ///NO
+        
     }
 }

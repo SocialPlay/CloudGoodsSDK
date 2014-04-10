@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,6 +10,10 @@ namespace Facebook
 
         private const string AndroidJavaFacebookClass = "com.facebook.unity.FB";
         private const string CallbackIdKey = "callback_id";
+
+        // key Hash used for Android SDK
+        private string keyHash;
+        public string KeyHash { get { return keyHash; } }
 
         #region IFacebook
         public override int DialogMode { get { return BrowserDialogMode; } set { } }
@@ -66,7 +69,8 @@ namespace Facebook
 
         protected override void OnAwake()
         {
-#if DEBUG
+            keyHash = "";
+#if UNITY_ANDROID && DEBUG
             AndroidJNIHelper.debug = true;
 #endif
         }
@@ -94,7 +98,7 @@ namespace Facebook
             {
                 throw new ArgumentException("appId cannot be null or empty!");
             }
-            
+
             var parameters = new Dictionary<string, object>();
 
             parameters.Add("appId", appId);
@@ -161,9 +165,26 @@ namespace Facebook
                 isLoggedIn = true;
                 userId = (string)parameters["user_id"];
                 accessToken = (string)parameters["access_token"];
+                accessTokenExpiresAt = FromTimestamp(int.Parse((string)parameters["expiration_timestamp"]));
+            }
+
+            if (parameters.ContainsKey("key_hash"))
+            {
+                keyHash = (string)parameters["key_hash"];
             }
 
             OnAuthResponse(new FBResult(message));
+        }
+
+        //TODO: move into AbstractFacebook
+        public void OnAccessTokenRefresh(string message)
+        {
+            var parameters = (Dictionary<string, object>)MiniJSON.Json.Deserialize(message);
+            if (parameters.ContainsKey("access_token"))
+            {
+                accessToken = (string)parameters["access_token"];
+                accessTokenExpiresAt = FromTimestamp(int.Parse((string)parameters["expiration_timestamp"]));
+            }
         }
 
         public override void Logout()
@@ -180,6 +201,8 @@ namespace Facebook
 
         public override void AppRequest(
             string message,
+            OGActionType actionType,
+            string objectId,
             string[] to = null,
             string filters = "",
             string[] excludeIds = null,
@@ -188,7 +211,23 @@ namespace Facebook
             string title = "",
             FacebookDelegate callback = null)
         {
-            Dictionary<string, object> paramsDict = new Dictionary<string, object>();
+
+            if (string.IsNullOrEmpty(message))
+            {
+                throw new ArgumentNullException("message", "message cannot be null or empty!");
+            }
+
+            if (actionType != null && string.IsNullOrEmpty(objectId))
+            {
+                throw new ArgumentNullException("objectId", "You cannot provide an actionType without an objectId");
+            }
+
+            if (actionType == null && !string.IsNullOrEmpty(objectId))
+            {
+                throw new ArgumentNullException("actionType", "You cannot provide an objectId without an actionType");
+            }
+
+            var paramsDict = new Dictionary<string, object>();
             // Marshal all the above into the thing
 
             paramsDict["message"] = message;
@@ -196,6 +235,12 @@ namespace Facebook
             if (callback != null)
             {
                 paramsDict["callback_id"] = AddFacebookDelegate(callback);
+            }
+
+            if (actionType != null && !string.IsNullOrEmpty(objectId))
+            {
+                paramsDict["action_type"] = actionType.ToString();
+                paramsDict["object_id"] = objectId;
             }
 
             if (to != null)
@@ -276,6 +321,11 @@ namespace Facebook
             Dictionary<string, object> paramsDict = new Dictionary<string, object>();
             // Marshal all the above into the thing
 
+            if (callback != null)
+            {
+                paramsDict["callback_id"] = AddFacebookDelegate(callback);
+            }
+
             if (!string.IsNullOrEmpty(toId))
             {
                 paramsDict.Add("to", toId);
@@ -288,7 +338,7 @@ namespace Facebook
 
             if (!string.IsNullOrEmpty(linkName))
             {
-                paramsDict.Add("Email", linkName);
+                paramsDict.Add("name", linkName);
             }
 
             if (!string.IsNullOrEmpty(linkCaption))
@@ -314,7 +364,7 @@ namespace Facebook
             if (!string.IsNullOrEmpty(actionName) && !string.IsNullOrEmpty(actionLink))
             {
                 Dictionary<string, object> dict = new Dictionary<string, object>();
-                dict.Add("Email", actionName);
+                dict.Add("name", actionName);
                 dict.Add("link", actionLink);
 
                 paramsDict.Add("actions", new[] { dict });
@@ -358,6 +408,28 @@ namespace Facebook
 
         public void OnFeedRequestComplete(string message)
         {
+            var rawResult = (Dictionary<string, object>)MiniJSON.Json.Deserialize(message);
+            if (rawResult.ContainsKey(CallbackIdKey))
+            {
+                var result = new Dictionary<string, object>();
+                var callbackId = (string)rawResult[CallbackIdKey];
+                rawResult.Remove(CallbackIdKey);
+                if (rawResult.Count > 0)
+                {
+                    foreach (string key in rawResult.Keys)
+                    {
+                        result[key] = rawResult[key];
+                    }
+                    rawResult.Clear();
+                    OnFacebookResponse(callbackId, new FBResult(MiniJSON.Json.Serialize(result)));
+                }
+                else
+                {
+                    //if we make it here java returned a callback message with only a callback id
+                    //this isnt supposed to happen
+                    OnFacebookResponse(callbackId, new FBResult(MiniJSON.Json.Serialize(result), "Malformed request response.  Please file a bug with facebook here: https://developers.facebook.com/bugs/create"));
+                }
+            }
         }
 
         public override void Pay(
@@ -463,6 +535,12 @@ namespace Facebook
                 newDict[kvp.Key] = kvp.Value.ToString();
             }
             return newDict;
+        }
+
+        //TODO: move into AbstractFacebook
+        private DateTime FromTimestamp(int timestamp)
+        {
+            return new DateTime(1970, 1, 1, 0, 0, 0, 0).AddSeconds(timestamp);
         }
 
         #endregion

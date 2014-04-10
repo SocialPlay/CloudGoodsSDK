@@ -6,7 +6,7 @@ namespace UnityEditor.XCodeEditor
 {
 	public class PBXGroup : PBXObject
 	{
-		protected const string NAME_KEY = "Email";
+		protected const string NAME_KEY = "name";
 		protected const string CHILDREN_KEY = "children";
 		protected const string PATH_KEY = "path";
 		protected const string SOURCETREE_KEY = "sourceTree";

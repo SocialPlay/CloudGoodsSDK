@@ -7,7 +7,7 @@ namespace UnityEditor.XCodeEditor
 	public class PBXFileReference : PBXObject
 	{
 		protected const string PATH_KEY = "path";
-		protected const string NAME_KEY = "Email";
+		protected const string NAME_KEY = "name";
 		protected const string SOURCETREE_KEY = "sourceTree";
 		protected const string EXPLICIT_FILE_TYPE_KEY = "explicitFileType";
 		protected const string LASTKNOWN_FILE_TYPE_KEY = "lastKnownFileType";
@@ -159,7 +159,7 @@ namespace UnityEditor.XCodeEditor
 //	  def guess_file_type(self):
 //		  self.remove('explicitFileType')
 //		  self.remove('lastKnownFileType')
-//		  ext = os.path.splitext(self.get('Email', ''))[1]
+//		  ext = os.path.splitext(self.get('name', ''))[1]
 //
 //		  f_type, build_phase = PBXFileReference.types.get(ext, ('?', None))
 //
@@ -187,7 +187,7 @@ namespace UnityEditor.XCodeEditor
 //		  fr = cls()
 //		  fr.id = cls.GenerateId()
 //		  fr['path'] = os_path
-//		  fr['Email'] = os.path.split(os_path)[1]
+//		  fr['name'] = os.path.split(os_path)[1]
 //		  fr['sourceTree'] = '<absolute>' if os.path.isabs(os_path) else tree
 //		  fr.guess_file_type()
 //

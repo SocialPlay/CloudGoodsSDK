@@ -11,9 +11,12 @@ public class FacebookSettingsEditor : Editor
 {
     bool showFacebookInitSettings = false;
     bool showAndroidUtils = (EditorUserBuildSettings.activeBuildTarget == BuildTarget.Android);
+    bool showIOSSettings = (EditorUserBuildSettings.activeBuildTarget == BuildTarget.iPhone);
 
     GUIContent appNameLabel = new GUIContent("App Name [?]:", "For your own use and organization.\n(ex. 'dev', 'qa', 'prod')");
     GUIContent appIdLabel = new GUIContent("App Id [?]:", "Facebook App Ids can be found at https://developers.facebook.com/apps");
+
+    GUIContent urlSuffixLabel = new GUIContent ("URL Scheme Suffix [?]", "Use this to share Facebook APP ID's across multiple iOS apps.  https://developers.facebook.com/docs/ios/share-appid-across-multiple-apps-ios-sdk/");
     
     GUIContent cookieLabel = new GUIContent("Cookie [?]", "Sets a cookie which your server-side code can use to validate a user's Facebook session");
     GUIContent loggingLabel = new GUIContent("Logging [?]", "(Web Player only) If true, outputs a verbose log to the Javascript console to facilitate debugging.");
@@ -22,7 +25,7 @@ public class FacebookSettingsEditor : Editor
     GUIContent frictionlessLabel = new GUIContent("Frictionless Requests [?]", "Use frictionless app requests, as described in their own documentation.");
 
     GUIContent packageNameLabel = new GUIContent("Package Name [?]", "aka: the bundle identifier");
-    GUIContent classNameLabel = new GUIContent("Class Name [?]", "aka: the activity Email");
+    GUIContent classNameLabel = new GUIContent("Class Name [?]", "aka: the activity name");
     GUIContent debugAndroidKeyLabel = new GUIContent("Debug Android Key Hash [?]", "Copy this key to the Facebook Settings in order to test a Facebook Android app");
 
     GUIContent sdkVersion = new GUIContent("SDK Version [?]", "This Unity Facebook SDK version.  If you have problems or compliments please include this so we know exactly what version to look out for.");
@@ -37,6 +40,7 @@ public class FacebookSettingsEditor : Editor
         AppIdGUI();
         FBParamsInitGUI();
         AndroidUtilGUI();
+        IOSUtilGUI();
         AboutGUI();
     }
 
@@ -117,31 +121,72 @@ public class FacebookSettingsEditor : Editor
         EditorGUILayout.Space();
     }
 
+    private void IOSUtilGUI()
+    {
+        showIOSSettings = EditorGUILayout.Foldout(showIOSSettings, "iOS Build Settings");
+        if (showIOSSettings)
+        {
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField(urlSuffixLabel, GUILayout.Width(135), GUILayout.Height(16));
+            FBSettings.IosURLSuffix = EditorGUILayout.TextField(FBSettings.IosURLSuffix);
+            EditorGUILayout.EndHorizontal();
+        }
+        EditorGUILayout.Space();
+    }
+
     private void AndroidUtilGUI()
     {
         showAndroidUtils = EditorGUILayout.Foldout(showAndroidUtils, "Android Build Facebook Settings");
         if (showAndroidUtils)
         {
-            if (!FacebookAndroidUtil.HasAndroidSDK())
+            if (!FacebookAndroidUtil.IsSetupProperly())
             {
-                var msg = "You don't have the Android SDK setup!  Go to "+(Application.platform == RuntimePlatform.OSXEditor?"Unity":"Edit")+"->Preferences... and set your Android SDK Location under External Tools";
+                var msg = "Your Android setup is not right. Check the documentation.";
+                switch (FacebookAndroidUtil.SetupError)
+                {
+                    case FacebookAndroidUtil.ERROR_NO_SDK:
+                        msg = "You don't have the Android SDK setup!  Go to " + (Application.platform == RuntimePlatform.OSXEditor ? "Unity" : "Edit") + "->Preferences... and set your Android SDK Location under External Tools";
+                        break;
+                    case FacebookAndroidUtil.ERROR_NO_KEYSTORE:
+                        msg = "Your android debug keystore file is missing! You can create new one by creating and building empty Android project in Ecplise.";
+                        break;
+                    case FacebookAndroidUtil.ERROR_NO_KEYTOOL:
+                        msg = "Keytool not found. Make sure that Java is installed, and that Java tools are in your path.";
+                        break;
+                    case FacebookAndroidUtil.ERROR_NO_OPENSSL:
+                        msg = "OpenSSL not found. Make sure that OpenSSL is installed, and that it is in your path.";
+                        break;
+                    case FacebookAndroidUtil.ERROR_KEYTOOL_ERROR:
+                        msg = "Unkown error while getting Debug Android Key Hash.";
+                        break;
+                }
                 EditorGUILayout.HelpBox(msg, MessageType.Warning);
             }
             EditorGUILayout.HelpBox("Copy and Paste these into your \"Native Android App\" Settings on developers.facebook.com/apps", MessageType.None);
             SelectableLabelField(packageNameLabel, PlayerSettings.bundleIdentifier);
-            SelectableLabelField(classNameLabel, ManifestMod.ActivityName);
+            SelectableLabelField(classNameLabel, ManifestMod.DeepLinkingActivityName);
             SelectableLabelField(debugAndroidKeyLabel, FacebookAndroidUtil.DebugKeyHash);
-
+            if (GUILayout.Button("Regenerate Android Manifest"))
+            {
+                ManifestMod.GenerateManifest();
+            }
         }
         EditorGUILayout.Space();
     }
 
     private void AboutGUI()
     {
-        var versionAttribute = FBBuildVersionAttribute.GetVersionAttributeOfType(typeof(IFacebook));
-        EditorGUILayout.HelpBox("About the Facebook SDK", MessageType.None);
-        SelectableLabelField(sdkVersion, versionAttribute.Version);
-        SelectableLabelField(buildVersion, versionAttribute.ToString());
+        var versionInfo = FBBuildVersionAttribute.GetVersionAttributeOfType(typeof(IFacebook));
+        if (versionInfo == null)
+        {
+            EditorGUILayout.HelpBox("Cannot find version info on the Facebook SDK!", MessageType.Warning);
+        }
+        else
+        {
+            EditorGUILayout.HelpBox("About the Facebook SDK", MessageType.None);
+            SelectableLabelField(sdkVersion, versionInfo.SdkVersion);
+            SelectableLabelField(buildVersion, versionInfo.BuildVersion);
+        }
         EditorGUILayout.Space();
     }
 

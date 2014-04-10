@@ -5,6 +5,7 @@ using CloudGoodsSDK.Models;
 using System;
 using CloudGoods;
 using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 
 public class FaceBookMobileAuthentication : MonoBehaviour
 {
@@ -34,25 +35,29 @@ public class FaceBookMobileAuthentication : MonoBehaviour
         Debug.Log(FB.UserId);
 
 
-        FB.API("/me?fields=Email", HttpMethod.GET, UserNameCallBack);
+        FB.API("/me", HttpMethod.GET, UserNameCallBack);
     }
 
     void UserNameCallBack(FBResult response)
     {
+        Dictionary<string, object> FBInfo = Facebook.MiniJSON.Json.Deserialize(response.Text) as Dictionary<string, object>;
+        //foreach (KeyValuePair<string, object> obj in respon)
+        //{
+        //    Debug.Log(obj.Key + ":" + obj.Value);
+        //}
         if (string.IsNullOrEmpty(response.Error))
         {
-            FBUserName = JToken.Parse(response.Text)["Email"].ToString();
             var socialPlayUserObj = new PlatformUser();
             socialPlayUserObj.appID = new Guid(GameAuthentication.GetAppID());
             socialPlayUserObj.platformID = 1;
             socialPlayUserObj.platformUserID = FB.UserId;
-            socialPlayUserObj.userName = FBUserName;
+            socialPlayUserObj.userName = FBInfo["email"].ToString();
             Systems.UserGetter.GetSocialPlayUser(socialPlayUserObj, GameAuthentication.OnUserAuthorized);
-        }
 
-        if (OnRecivedUserInfo != null)
-        {
-            OnRecivedUserInfo();
+            if (OnRecivedUserInfo != null)
+            {
+                OnRecivedUserInfo();
+            }
         }
     }
 
@@ -78,6 +83,7 @@ public class FaceBookMobileAuthentication : MonoBehaviour
 
     private void SetInit()
     {
+        Console.WriteLine("Init facebook");
 
         enabled = true; // "enabled" is a magic global
 

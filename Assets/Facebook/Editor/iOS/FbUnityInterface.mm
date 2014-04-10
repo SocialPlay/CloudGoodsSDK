@@ -10,10 +10,14 @@
 #import <FacebookSDK/FacebookSDK.h>
 #import <Foundation/NSJSONSerialization.h>
 #include <string>
-#include "RegisterMonoModules.h"
+
+
+
 
 static FbUnityInterface *_instance = [FbUnityInterface sharedInstance];
 const char *g_fbObjName = "UnityFacebookSDKPlugin";
+
+extern "C" void iosGetDeepLink();
 
 @implementation FbUnityInterface
 
@@ -26,7 +30,6 @@ const char *g_fbObjName = "UnityFacebookSDKPlugin";
     _instance = [[FbUnityInterface alloc] init];
   }
 }
-
 
 - (id)init {
   if(_instance != nil) {
@@ -59,24 +62,32 @@ const char *g_fbObjName = "UnityFacebookSDKPlugin";
    selector:@selector(didFinishLaunching:)
    name:UIApplicationDidFinishLaunchingNotification
    object:nil];
-
+  
+#if UNITY_VERSION >= 430
+  UnityRegisterAppDelegateListener(self);
+#endif
   return self;
 }
 
 - (id)initWithCookie:(bool)cookie
              logging:(bool)_logging
               status:(bool)_status
-frictionlessRequests:(bool)_frictionlessRequests {
+frictionlessRequests:(bool)_frictionlessRequests
+           urlSuffix:(const char *)urlSuffix {
   self = [self init];
   
   self.useFrictionlessRequests = _frictionlessRequests;
+  
+  if(urlSuffix && strlen(urlSuffix) > 0) {
+    [FBSettings setDefaultUrlSchemeSuffix:[NSString stringWithUTF8String:urlSuffix]];
+  }
   
   //since this class is a singleton, I don't know how we would ever have an open session here, but handle anyway
   if (self.session.isOpen) {
     [self handleSessionChange:self.session state:self.session.state error:nil];
     return self;
   }
-  
+
   // create a fresh session object
   _session = [[FBSession alloc] init];
   
@@ -96,13 +107,31 @@ frictionlessRequests:(bool)_frictionlessRequests {
   return self;
 }
 
++ (void)sendMessageToUnity:(const char *)unityMessage userData:(NSDictionary *)userData
+{
+  NSError *serializationError = nil;
+  NSData *jsonData = nil;
+  if(userData != nil) {
+    jsonData = [NSJSONSerialization dataWithJSONObject:userData options:0 error:&serializationError];
+  }
 
+  const char *userDataString = nil;
+  NSString *jsonString = nil;
+  if (jsonData) {
+    jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    userDataString = [jsonString cStringUsingEncoding:NSUTF8StringEncoding];
+  }
+  
+  UnitySendMessage(g_fbObjName, unityMessage, userDataString==nil?"":userDataString);
+
+}
 
 
 - (void)handleSessionChange:(FBSession *)session
                       state:(FBSessionState) state
                       error:(NSError *)error
 {
+  NSMutableDictionary *msgData = [NSMutableDictionary dictionary];
   switch (state) {
     case FBSessionStateOpen: {
       [FBSession setActiveSession:session];
@@ -119,21 +148,30 @@ frictionlessRequests:(bool)_frictionlessRequests {
       //what can possibly go wrong?
       [FBRequestConnection startForMeWithCompletionHandler:
        ^(FBRequestConnection *connection, id result, NSError *error) {
-        std::string strRes = "";
-        id<FBGraphUser> user = result;
-        if(user && session != nil && session.accessTokenData != nil && session.accessTokenData.accessToken != nil) {
-          strRes += [[user objectForKey:@"id"] cStringUsingEncoding:NSUTF8StringEncoding];
-          strRes += ":";
-          strRes += [session.accessTokenData.accessToken cStringUsingEncoding:NSUTF8StringEncoding];
-        }
-
-        if(self.isInitializing) {
-          UnitySendMessage(g_fbObjName, "OnInitComplete", strRes.c_str());
-          self.isInitializing = NO;
-        } else {
-          UnitySendMessage(g_fbObjName, "OnLogin", strRes.c_str());
-        }
+         
+         id<FBGraphUser> user = result;
+         if(user && session != nil && session.accessTokenData != nil && session.accessTokenData.accessToken != nil) {
+           [msgData setObject:[user objectForKey:@"id"] forKey:@"user_id"];
+           [msgData setObject:session.accessTokenData.accessToken forKey:@"access_token"];
+           [msgData setObject:[NSString stringWithFormat:@"%ld", (long)session.accessTokenData.expirationDate.timeIntervalSince1970] forKey:@"expiration_timestamp"];
+         }
+         
+         const char *msgType = nil;
+         if(self.isInitializing) {
+           msgType = "OnInitComplete";
+           self.isInitializing = NO;
+         } else {
+           msgType = "OnLogin";
+         }
+         [FbUnityInterface sendMessageToUnity:msgType userData:msgData];
       }];
+    }
+      break;
+      
+    case FBSessionStateOpenTokenExtended: {
+      [msgData setObject:session.accessTokenData.accessToken forKey:@"access_token"];
+      [msgData setObject:[NSString stringWithFormat:@"%ld", (long)session.accessTokenData.expirationDate.timeIntervalSince1970] forKey:@"expiration_timestamp"];
+      [FbUnityInterface sendMessageToUnity:"OnAccessTokenRefresh" userData:msgData];
     }
       break;
 
@@ -191,10 +229,30 @@ frictionlessRequests:(bool)_frictionlessRequests {
 
 
 - (BOOL)openURL:(NSURL*)url sourceApplication:(NSString*)sourceApplication {
-  bool res = [FBAppCall handleOpenURL:url sourceApplication:sourceApplication withSession:self.session];
+  __block bool hasDeepLink = false;
+  bool fbhandled = [FBAppCall handleOpenURL:url
+                        sourceApplication:sourceApplication
+                        withSession:self.session
+                        fallbackHandler:^(FBAppCall *call) {
+    // Handler is called when FB SDK does consume a url, but only partially
+    hasDeepLink = true;
+  }];
+
   [FBSession setActiveSession:self.session];
-  return res;
+  if (hasDeepLink || !fbhandled) {
+    self.launchURL = [url absoluteString];
+    iosGetDeepLink();
+  }
+  
+  return fbhandled;
 }
+
+
+#if UNITY_VERSION >= 430
+- (void)onOpenURL:(NSNotification*)notification {
+  [self openURL:[notification.userInfo objectForKey:@"url"] sourceApplication:[notification.userInfo objectForKey:@"sourceApplication"]];
+}
+#endif
 
 @end
 
@@ -264,7 +322,11 @@ void HandleDictionaryResponse(int requestId, bool isError, NSDictionary *srcDict
   
   
   NSError *serError = nil;
-  NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dict options:0 error:&serError];
+  NSData *jsonData = nil;
+  if(dict) {
+    jsonData = [NSJSONSerialization dataWithJSONObject:dict options:0 error:&serError];
+  }
+  
   NSString *jsonString = nil;
   if (jsonData) {
     jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
@@ -327,9 +389,8 @@ NSDictionary *UnpackDict(int numVals, const char **keys, const char **vals)
 //everything in the extern "C" section is callable from C# unity
 extern "C" {
 
-void iosInit(bool _cookie, bool _logging, bool _status, bool _frictionlessRequests) {
-  //[FbUnityInterface sharedInstance];
-  [[FbUnityInterface alloc] initWithCookie:_cookie logging:_logging status:_status frictionlessRequests:_frictionlessRequests];
+void iosInit(bool _cookie, bool _logging, bool _status, bool _frictionlessRequests, const char *_urlSuffix) {
+  [[FbUnityInterface alloc] initWithCookie:_cookie logging:_logging status:_status frictionlessRequests:_frictionlessRequests urlSuffix:_urlSuffix];
 }
 
 void iosLogin(const char *scope) {
@@ -346,6 +407,8 @@ void iosSetShareDialogMode(NativeDialogModes::eModes mode) {
 
 void iosAppRequest(int requestId,
                    const char *message,
+                   const char *actionType,
+                   const char *objectId,
                    const char **to,
                    int toLength,
                    const char *filters,
@@ -357,6 +420,10 @@ void iosAppRequest(int requestId,
                    const char *title) {
   NSMutableDictionary *params = [NSMutableDictionary dictionary];
   addCStrToNsDict(params, "message", message);
+  if (actionType != nil && objectId != nil) {
+    addCStrToNsDict(params, "action_type", actionType);
+    addCStrToNsDict(params, "object_id", objectId);
+  }
   addCStrToNsDict(params, "filters", filters);
   addCStrToNsDict(params, "data", data);
   addCStrToNsDict(params, "title", title);
@@ -447,8 +514,10 @@ void iosFeedRequest(int requestId,
     }
   }
 
-  bool userWantsNative = [FbUnityInterface sharedInstance].dialogMode == NativeDialogModes::FAST_APP_SWITCH_SHARE_DIALOG;
-  if(userWantsNative) {
+  bool shouldDisplayNative = [FbUnityInterface sharedInstance].dialogMode == NativeDialogModes::FAST_APP_SWITCH_SHARE_DIALOG;
+  // Native dialogs do not yet support To: fields, so fall back if we have one.
+  shouldDisplayNative = shouldDisplayNative && !(toId && toId[0] != 0);
+  if(shouldDisplayNative) {
     FBShareDialogParams *dialogParams = [[[FBShareDialogParams alloc] init] autorelease];
     
     NSString *strLink = [NSString stringWithUTF8String:link];
@@ -582,35 +651,26 @@ void iosFBAppEventsSetLimitEventUsage(BOOL limitEventUsage) {
 }
 
 
-#if USE_NEW_APP_CLASS_NAME
-#import "UnityAppController.h"
-@implementation UnityAppController(FacebookURLHandler)
-#else
-#import "AppController.h"
-@implementation AppController(FacebookURLHandler)
+#if UNITY_VERSION < 430
+
+  #if UNITY_VERSION >= 420
+    #import "UnityAppController.h"
+    @implementation UnityAppController(FacebookURLHandler)
+  #else
+    #import "AppController.h"
+    @implementation AppController(FacebookURLHandler)
+  #endif
+
+  //older ios versions send this
+  - (BOOL)application:(UIApplication*)application handleOpenURL:(NSURL*)url {
+    return [[FbUnityInterface sharedInstance] openURL:url sourceApplication:nil];
+  }
+
+  - (BOOL)application:(UIApplication*)application openURL:(NSURL*)url sourceApplication:(NSString*)sourceApplication annotation:(id)annotation {
+    return [[FbUnityInterface sharedInstance] openURL:url sourceApplication:sourceApplication];
+  }
+
+  @end
+
 #endif
-
-
-//older ios versions send this
-- (BOOL)application:(UIApplication*)application handleOpenURL:(NSURL*)url {
-	BOOL res = [[FbUnityInterface sharedInstance] openURL:url sourceApplication:nil];
-  
-  [FbUnityInterface sharedInstance].launchURL = [url absoluteString];
-  iosGetDeepLink();
-  
-	return res;
-}
-
-
-- (BOOL)application:(UIApplication*)application openURL:(NSURL*)url sourceApplication:(NSString*)sourceApplication annotation:(id)annotation {
-  BOOL res = [[FbUnityInterface sharedInstance] openURL:url sourceApplication:sourceApplication];
-  
-  [FbUnityInterface sharedInstance].launchURL = [url absoluteString];
-  iosGetDeepLink();
-  
-  return res;
-}
-
-@end
-
 
