@@ -8,7 +8,7 @@ public abstract class ItemDataConverter
 {   
     public GameObject ItemDataPrefab;
 
-    public abstract List<ItemData> convertToItemDataFromString(string itemData);
+    public abstract List<ItemData> convertToItemDataFromString(ItemDataList itemData);
 
     protected abstract List<ItemData> ConvertItems(ItemDataList serverDetails);
 

@@ -85,21 +85,29 @@ public class GameObjectItemDataConverter : ItemDataConverter
         return itemDetails;
     }
 
-    public override List<ItemData> convertToItemDataFromString(string itemData)
+    public override List<ItemData> convertToItemDataFromString(ItemDataList itemData)
     {
-        string data = "";
-        ItemDataList itemDetails = null;
+        //string data = "";
+        //ItemDataList itemDetails = null;
 
-        if (itemData == "\"[]\"")
+        //if (itemData == "\"[]\"")
+        //{
+        //    List<ItemData> convertedItems = new List<ItemData>();
+        //    return convertedItems;
+        //}
+
+        //data = JToken.Parse(itemData).ToString();
+
+        //itemDetails = Newtonsoft.Json.JsonConvert.DeserializeObject<ItemDataList>(data);
+
+        if (itemData.Count == 0)
         {
             List<ItemData> convertedItems = new List<ItemData>();
             return convertedItems;
         }
 
-        data = JToken.Parse(itemData).ToString();
 
-        itemDetails = Newtonsoft.Json.JsonConvert.DeserializeObject<ItemDataList>(data);
-        return ConvertItems(itemDetails);
+        return ConvertItems(itemData);
     }
 }
 

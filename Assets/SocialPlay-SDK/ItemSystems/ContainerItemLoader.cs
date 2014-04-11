@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using LitJson;
+using SocialPlay.Data;
 
 public abstract class ContainerItemLoader : MonoBehaviour
 {
@@ -36,20 +37,22 @@ public abstract class ContainerItemLoader : MonoBehaviour
         return "";
     }
 
-    protected void RecivedItems(string Data)
+    protected void RecivedItems(object Data)
     {
         if (ItemConversion.converter == null)
         {
             throw new Exception("Item conversion is not setup correctly!");
         }
 
-        List<ItemData> recivedItems = ItemConversion.converter.convertToItemDataFromString(Data);
+        ItemDataList itemData = LitJson.JsonMapper.ToObject<ItemDataList>(Data.ToString());
 
-        AddItemComponentToNewlyConvertedItem(recivedItems);
+        List<ItemData> receivedItems = ItemConversion.converter.convertToItemDataFromString(itemData);
+
+        AddItemComponentToNewlyConvertedItem(receivedItems);
 
         if (LoadedItemsForContainerEvent != null)
         {
-            LoadedItemsForContainerEvent(recivedItems, Container);
+            LoadedItemsForContainerEvent(receivedItems, Container);
         }
     }
 

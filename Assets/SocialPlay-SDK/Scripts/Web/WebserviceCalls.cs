@@ -273,7 +273,6 @@ public class WebserviceCalls : MonoBehaviour, IServiceCalls
         // check for errors
         if (www.error == null)
         {
-            Debug.Log("HERE");
             callback(www.text);
         }
         else
@@ -283,7 +282,7 @@ public class WebserviceCalls : MonoBehaviour, IServiceCalls
         }
     }
 
-    IEnumerator OnWebServiceCallback(WWW www, Action<JsonData> callback)
+    IEnumerator OnWebServiceCallback(WWW www, Action<object> callback)
     {
         yield return www;
 
@@ -300,19 +299,11 @@ public class WebserviceCalls : MonoBehaviour, IServiceCalls
         }
     }
 
-    void ConvertJsonStringIntoData(string JsonString, Action<JsonData> callBack)
+    void ConvertJsonStringIntoData(string JsonString, Action<object> callBack)
     {
-        //JsonString = JsonString.Remove(0, 1);
-        //JsonString = JsonString.Remove(JsonString.Length - 1, 1);
-        //JsonString = JsonString.Replace("\\\\", "");
+        object jsonObj = JsonFx.Json.JsonReader.Deserialize(JsonString);
 
-        WWW.UnEscapeURL(JsonString);
-
-        LitJson.JsonReader reader = new LitJson.JsonReader(JsonString);
-
-        JsonData data = JsonMapper.ToObject(reader);
-
-        callBack(data);
+        callBack(jsonObj);
     }
 
 }
