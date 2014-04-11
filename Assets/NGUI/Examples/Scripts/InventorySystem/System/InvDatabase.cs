@@ -96,7 +96,7 @@ public class InvDatabase : MonoBehaviour
 	}
 
 	/// <summary>
-	/// Find the item with the specified Email.
+	/// Find the item with the specified name.
 	/// </summary>
 
 	static public InvBaseItem FindByName (string exact)

@@ -88,7 +88,7 @@ public class AutoFlyIn : MonoBehaviour
         UpdatePos();
         tween.from = this.transform.localPosition;
         tween.to = inPos;
-        tween.Reset();
+        tween.PlayForward();
         tween.enabled = true;
         isCurrentlyActive = true;
     }
@@ -98,7 +98,7 @@ public class AutoFlyIn : MonoBehaviour
         UpdatePos();
         tween.from = this.transform.localPosition;
         tween.to = outPos;
-        tween.Reset();
+        tween.PlayForward();
         tween.enabled = true;
         isCurrentlyActive = false;
     }

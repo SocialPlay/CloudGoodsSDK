@@ -216,7 +216,7 @@ public class InvDatabaseInspector : Editor
 
 				NGUIEditorTools.DrawSeparator();
 
-				// Item Email and delete item button
+				// Item name and delete item button
 				GUILayout.BeginHorizontal();
 				{
 					string itemName = EditorGUILayout.TextField("Item Name", item.name);

@@ -1,24 +1,18 @@
 //----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2013 Tasharen Entertainment
+// Copyright © 2011-2014 Tasharen Entertainment
 //----------------------------------------------
 
 using UnityEngine;
 using UnityEditor;
 using System.Reflection;
 using System.Collections.Generic;
+using Entry = PropertyReferenceDrawer.Entry;
 
 public static class EventDelegateEditor
 {
-	class Entry
-	{
-		public MonoBehaviour target;
-		public MethodInfo method;
-	}
-
 	/// <summary>
 	/// Collect a list of usable delegates from the specified target game object.
-	/// The delegates must be of type "void Delegate()".
 	/// </summary>
 
 	static List<Entry> GetMethods (GameObject target)
@@ -38,45 +32,26 @@ public static class EventDelegateEditor
 			{
 				MethodInfo mi = methods[b];
 
-				if (mi.GetParameters().Length == 0 && mi.ReturnType == typeof(void))
+				if (mi.ReturnType == typeof(void))
 				{
-					if (mi.Name != "StopAllCoroutines" && mi.Name != "CancelInvoke")
-					{
-						Entry ent = new Entry();
-						ent.target = mb;
-						ent.method = mi;
-						list.Add(ent);
-					}
+					string name = mi.Name;
+					if (name == "Invoke") continue;
+					if (name == "InvokeRepeating") continue;
+					if (name == "CancelInvoke") continue;
+					if (name == "StopCoroutine") continue;
+					if (name == "StopAllCoroutines") continue;
+					if (name == "BroadcastMessage") continue;
+					if (name.StartsWith("SendMessage")) continue;
+					if (name.StartsWith("set_")) continue;
+
+					Entry ent = new Entry();
+					ent.target = mb;
+					ent.name = mi.Name;
+					list.Add(ent);
 				}
 			}
 		}
 		return list;
-	}
-
-	/// <summary>
-	/// Convert the specified list of delegate entries into a string array.
-	/// </summary>
-
-	static string[] GetMethodNames (List<Entry> list, string choice, out int index)
-	{
-		index = 0;
-		string[] names = new string[list.Count + 1];
-		names[0] = string.IsNullOrEmpty(choice) ? "<Choose>" : choice;
-
-		for (int i = 0; i < list.Count; )
-		{
-			Entry ent = list[i];
-			string type = ent.target.GetType().ToString();
-			int period = type.LastIndexOf('.');
-			if (period > 0) type = type.Substring(period + 1);
-
-			string del = type + "." + ent.method.Name;
-			names[++i] = del;
-			
-			if (index == 0 && string.Equals(del, choice))
-				index = i;
-		}
-		return names;
 	}
 
 	/// <summary>
@@ -98,11 +73,19 @@ public static class EventDelegateEditor
 		bool prev = GUI.changed;
 		GUI.changed = false;
 		bool retVal = false;
-		MonoBehaviour target = null;
+		MonoBehaviour target = del.target;
+		bool remove = false;
 
-		if (removeButton && del.target != null)
+		if (removeButton && (del.target != null || del.isValid))
 		{
-			target = EditorGUILayout.ObjectField("Notify", del.target, typeof(MonoBehaviour), true) as MonoBehaviour;
+			if (del.target == null && del.isValid)
+			{
+				EditorGUILayout.LabelField("Notify", del.ToString());
+			}
+			else
+			{
+				target = EditorGUILayout.ObjectField("Notify", del.target, typeof(MonoBehaviour), true) as MonoBehaviour;
+			}
 
 			GUILayout.Space(-20f);
 			GUILayout.BeginHorizontal();
@@ -115,6 +98,7 @@ public static class EventDelegateEditor
 #endif
 			{
 				target = null;
+				remove = true;
 			}
 			GUILayout.EndHorizontal();
 		}
@@ -123,7 +107,13 @@ public static class EventDelegateEditor
 			target = EditorGUILayout.ObjectField("Notify", del.target, typeof(MonoBehaviour), true) as MonoBehaviour;
 		}
 
-		if (del.target != target)
+		if (remove)
+		{
+			NGUIEditorTools.RegisterUndo("Delegate Selection", undoObject);
+			del.Clear();
+			EditorUtility.SetDirty(undoObject);
+		}
+		else if (del.target != target)
 		{
 			NGUIEditorTools.RegisterUndo("Delegate Selection", undoObject);
 			del.target = target;
@@ -136,7 +126,7 @@ public static class EventDelegateEditor
 			List<Entry> list = GetMethods(go);
 
 			int index = 0;
-			string[] names = GetMethodNames(list, del.ToString(), out index);
+			string[] names = PropertyReferenceDrawer.GetNames(list, del.ToString(), out index);
 			int choice = 0;
 
 			GUILayout.BeginHorizontal();
@@ -144,24 +134,109 @@ public static class EventDelegateEditor
 			GUILayout.Space(18f);
 			GUILayout.EndHorizontal();
 
-			if (choice > 0)
+			if (choice > 0 && choice != index)
 			{
-				if (choice != index)
+				Entry entry = list[choice - 1];
+				NGUIEditorTools.RegisterUndo("Delegate Selection", undoObject);
+				del.target = entry.target as MonoBehaviour;
+				del.methodName = entry.name;
+				EditorUtility.SetDirty(undoObject);
+				retVal = true;
+			}
+
+			GUI.changed = false;
+			EventDelegate.Parameter[] ps = del.parameters;
+
+			if (ps != null)
+			{
+				for (int i = 0; i < ps.Length; ++i)
 				{
-					Entry entry = list[choice - 1];
-					NGUIEditorTools.RegisterUndo("Delegate Selection", undoObject);
-					del.target = entry.target;
-					del.methodName = entry.method.Name;
-					EditorUtility.SetDirty(undoObject);
-					GUI.changed = prev;
-					return true;
+					EventDelegate.Parameter param = ps[i];
+
+					Object obj = EditorGUILayout.ObjectField("   Arg " + i, param.obj, typeof(Object), true);
+
+					if (GUI.changed)
+					{
+						GUI.changed = false;
+						param.obj = obj;
+						EditorUtility.SetDirty(undoObject);
+					}
+
+					if (obj == null) continue;
+
+					System.Type type = obj.GetType();
+
+					GameObject selGO = null;
+					if (type == typeof(GameObject)) selGO = obj as GameObject;
+					else if (type.IsSubclassOf(typeof(Component))) selGO = (obj as Component).gameObject;
+
+					if (selGO != null)
+					{
+						// Parameters must be exact -- they can't be converted like property bindings
+						PropertyReferenceDrawer.filter = param.expectedType;
+						PropertyReferenceDrawer.canConvert = false;
+						List<PropertyReferenceDrawer.Entry> ents = PropertyReferenceDrawer.GetProperties(selGO, true, false);
+
+						int selection;
+						string[] props = GetNames(ents, NGUITools.GetFuncName(param.obj, param.field), out selection);
+
+						GUILayout.BeginHorizontal();
+						int newSel = EditorGUILayout.Popup(" ", selection, props);
+						GUILayout.Space(18f);
+						GUILayout.EndHorizontal();
+
+						if (GUI.changed)
+						{
+							GUI.changed = false;
+
+							if (newSel == 0)
+							{
+								param.obj = selGO;
+								param.field = null;
+							}
+							else
+							{
+								param.obj = ents[newSel - 1].target;
+								param.field = ents[newSel - 1].name;
+							}
+							EditorUtility.SetDirty(undoObject);
+						}
+					}
+					else if (!string.IsNullOrEmpty(param.field))
+					{
+						param.field = null;
+						EditorUtility.SetDirty(undoObject);
+					}
+
+					PropertyReferenceDrawer.filter = typeof(void);
+					PropertyReferenceDrawer.canConvert = true;
 				}
 			}
 		}
-
-		retVal = GUI.changed;
+		else retVal = GUI.changed;
 		GUI.changed = prev;
 		return retVal;
+	}
+
+	/// <summary>
+	/// Convert the specified list of delegate entries into a string array.
+	/// </summary>
+
+	static string[] GetNames (List<Entry> list, string choice, out int index)
+	{
+		index = 0;
+		string[] names = new string[list.Count + 1];
+		names[0] = "<GameObject>";
+
+		for (int i = 0; i < list.Count; )
+		{
+			Entry ent = list[i];
+			string del = NGUITools.GetFuncName(ent.target, ent.name);
+			names[++i] = del;
+			if (index == 0 && string.Equals(del, choice))
+				index = i;
+		}
+		return names;
 	}
 
 	/// <summary>
@@ -187,7 +262,7 @@ public static class EventDelegateEditor
 		{
 			EventDelegate del = list[i];
 
-			if (del == null || del.target == null)
+			if (del == null || (del.target == null && !del.isValid))
 			{
 				list.RemoveAt(i);
 				continue;
@@ -196,15 +271,15 @@ public static class EventDelegateEditor
 			Field(undoObject, del);
 			EditorGUILayout.Space();
 
-			if (del.target == null)
+			if (del.target == null && !del.isValid)
 			{
 				list.RemoveAt(i);
 				continue;
 			}
 			else
 			{
-				targetPresent = true;
-				if (del.isValid) isValid = true;
+				if (del.target != null) targetPresent = true;
+				isValid = true;
 			}
 			++i;
 		}
@@ -212,7 +287,7 @@ public static class EventDelegateEditor
 		// Draw a new delegate
 		EventDelegate newDel = new EventDelegate();
 		Field(undoObject, newDel);
-		
+
 		if (newDel.target != null)
 		{
 			targetPresent = true;

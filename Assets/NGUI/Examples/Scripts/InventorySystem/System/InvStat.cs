@@ -41,7 +41,7 @@ public class InvStat
 	public int amount;
 
 	/// <summary>
-	/// Get the localized Email of the stat.
+	/// Get the localized name of the stat.
 	/// </summary>
 
 	static public string GetName (Identifier i)

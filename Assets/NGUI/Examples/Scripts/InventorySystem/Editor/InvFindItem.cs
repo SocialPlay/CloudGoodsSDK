@@ -108,7 +108,7 @@ public class InvFindItem : ScriptableWizard
 	}
 
 	/// <summary>
-	/// Find items by Email.
+	/// Find items by name.
 	/// </summary>
 
 	void FindAllByName (string partial)

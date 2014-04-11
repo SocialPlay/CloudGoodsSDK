@@ -70,7 +70,7 @@ public class InvGameItem
 	}
 
 	/// <summary>
-	/// Game item's Email should prefix the quality
+	/// Game item's name should prefix the quality
 	/// </summary>
 
 	public string name

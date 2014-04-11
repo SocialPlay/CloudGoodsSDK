@@ -1,6 +1,6 @@
 //----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2013 Tasharen Entertainment
+// Copyright © 2011-2014 Tasharen Entertainment
 //----------------------------------------------
 
 using UnityEngine;
@@ -38,7 +38,7 @@ public class UISpriteAnimation : MonoBehaviour
 	public int framesPerSecond { get { return mFPS; } set { mFPS = value; } }
 
 	/// <summary>
-	/// Set the Email prefix used to filter sprites from the atlas.
+	/// Set the name prefix used to filter sprites from the atlas.
 	/// </summary>
 
 	public string namePrefix { get { return mPrefix; } set { if (mPrefix != value) { mPrefix = value; RebuildSpriteList(); } } }
@@ -69,7 +69,7 @@ public class UISpriteAnimation : MonoBehaviour
 	{
 		if (mActive && mSpriteNames.Count > 1 && Application.isPlaying && mFPS > 0f)
 		{
-			mDelta += Time.deltaTime;
+			mDelta += RealTime.deltaTime;
 			float rate = 1f / mFPS;
 
 			if (rate < mDelta)
@@ -92,7 +92,7 @@ public class UISpriteAnimation : MonoBehaviour
 	}
 
 	/// <summary>
-	/// Rebuild the sprite list after changing the sprite Email.
+	/// Rebuild the sprite list after changing the sprite name.
 	/// </summary>
 
 	void RebuildSpriteList ()

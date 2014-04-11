@@ -1,3 +1,8 @@
+//----------------------------------------------
+//            NGUI: Next-Gen UI kit
+// Copyright © 2011-2014 Tasharen Entertainment
+//----------------------------------------------
+
 using UnityEngine;
 
 /// <summary>
@@ -20,14 +25,12 @@ public class TypewriterEffect : MonoBehaviour
 		if (mLabel == null)
 		{
 			mLabel = GetComponent<UILabel>();
-			mLabel.supportEncoding = false;
-			mLabel.symbolStyle = UIFont.SymbolStyle.None;
-			mLabel.font.WrapText(mLabel.text, out mText, mLabel.width, mLabel.height, mLabel.maxLineCount, false, UIFont.SymbolStyle.None);
+			mText = mLabel.processedText;
 		}
 
 		if (mOffset < mText.Length)
 		{
-			if (mNextChar <= Time.time)
+			if (mNextChar <= RealTime.time)
 			{
 				charsPerSecond = Mathf.Max(1, charsPerSecond);
 
@@ -36,7 +39,10 @@ public class TypewriterEffect : MonoBehaviour
 				char c = mText[mOffset];
 				if (c == '.' || c == '\n' || c == '!' || c == '?') delay *= 4f;
 
-				mNextChar = Time.time + delay;
+				// Automatically skip all symbols
+				NGUIText.ParseSymbol(mText, ref mOffset);
+
+				mNextChar = RealTime.time + delay;
 				mLabel.text = mText.Substring(0, ++mOffset);
 			}
 		}

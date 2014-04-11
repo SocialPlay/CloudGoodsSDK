@@ -1,6 +1,6 @@
 //----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2013 Tasharen Entertainment
+// Copyright © 2011-2014 Tasharen Entertainment
 //----------------------------------------------
 
 using UnityEngine;
@@ -73,12 +73,11 @@ public class UIToggle : UIWidgetContainer
 	/// Deprecated functionality. Use the 'group' option instead.
 	/// </summary>
 
-	[HideInInspector][SerializeField] Transform radioButtonRoot;
-	[HideInInspector][SerializeField] bool startsChecked;
-	[HideInInspector][SerializeField] UISprite checkSprite;
+	[HideInInspector][SerializeField] UISprite checkSprite = null;
 	[HideInInspector][SerializeField] Animation checkAnimation;
 	[HideInInspector][SerializeField] GameObject eventReceiver;
 	[HideInInspector][SerializeField] string functionName = "OnActivate";
+	[HideInInspector][SerializeField] bool startsChecked = false; // Use 'startsActive' instead
 
 	bool mIsActive = true;
 	bool mStarted = false;
@@ -96,7 +95,22 @@ public class UIToggle : UIWidgetContainer
 	[System.Obsolete("Use 'value' instead")]
 	public bool isChecked { get { return value; } set { this.value = value; } }
 
-	void OnEnable ()  { list.Add(this); }
+	/// <summary>
+	/// Return the first active toggle within the specified group.
+	/// </summary>
+
+	static public UIToggle GetActiveToggle (int group)
+	{
+		for (int i = 0; i < list.size; ++i)
+		{
+			UIToggle toggle = list[i];
+			if (toggle != null && toggle.group == group && toggle.mIsActive)
+				return toggle;
+		}
+		return null;
+	}
+
+	void OnEnable () { list.Add(this); }
 	void OnDisable () { list.Remove(this); }
 
 	/// <summary>
@@ -105,16 +119,18 @@ public class UIToggle : UIWidgetContainer
 
 	void Start ()
 	{
+		if (startsChecked)
+		{
+			startsChecked = false;
+			startsActive = true;
 #if UNITY_EDITOR
+			NGUITools.SetDirty(this);
+#endif
+		}
+
 		// Auto-upgrade
 		if (!Application.isPlaying)
 		{
-			if (startsChecked)
-			{
-				startsChecked = false;
-				startsActive = true;
-			}
-
 			if (checkSprite != null && activeSprite == null)
 			{
 				activeSprite = checkSprite;
@@ -130,12 +146,6 @@ public class UIToggle : UIWidgetContainer
 			if (Application.isPlaying && activeSprite != null)
 				activeSprite.alpha = startsActive ? 1f : 0f;
 
-			if (radioButtonRoot != null && group == 0)
-			{
-				Debug.LogWarning(NGUITools.GetHierarchy(gameObject) +
-					" uses a 'Radio Button Root'. You need to change it to use a 'group' instead.", this);
-			}
-
 			if (EventDelegate.IsValid(onChange))
 			{
 				eventReceiver = null;
@@ -143,11 +153,13 @@ public class UIToggle : UIWidgetContainer
 			}
 		}
 		else
-#endif
 		{
 			mIsActive = !startsActive;
 			mStarted = true;
+			bool instant = instantTween;
+			instantTween = true;
 			Set(startsActive);
+			instantTween = instant;
 		}
 	}
 
@@ -174,10 +186,17 @@ public class UIToggle : UIWidgetContainer
 			// Uncheck all other toggles
 			if (group != 0 && state)
 			{
-				for (int i = 0, imax = list.size; i < imax; ++i)
+				for (int i = 0, imax = list.size; i < imax; )
 				{
 					UIToggle cb = list[i];
 					if (cb != this && cb.group == group) cb.Set(false);
+					
+					if (list.size != imax)
+					{
+						imax = list.size;
+						i = 0;
+					}
+					else ++i;
 				}
 			}
 
@@ -213,7 +232,8 @@ public class UIToggle : UIWidgetContainer
 			// Play the checkmark animation
 			if (activeAnimation != null)
 			{
-				ActiveAnimation.Play(activeAnimation, state ? Direction.Forward : Direction.Reverse);
+				ActiveAnimation aa = ActiveAnimation.Play(activeAnimation, state ? Direction.Forward : Direction.Reverse);
+				if (instantTween) aa.Finish();
 			}
 		}
 	}

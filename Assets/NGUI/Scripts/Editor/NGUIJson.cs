@@ -34,7 +34,7 @@ public class NGUIJson
 	private const int BUILDER_CAPACITY = 2000;
 
 	/// <summary>
-	/// On decoding, this value holds the position at which the parse failed (-1 = no responce).
+	/// On decoding, this value holds the position at which the parse failed (-1 = no error).
 	/// </summary>
 	protected static int lastErrorIndex = -1;
 	protected static string lastDecode = "";
@@ -43,19 +43,48 @@ public class NGUIJson
 	/// Parse the specified JSon file, loading sprite information for the specified atlas.
 	/// </summary>
 
-	public static void LoadSpriteData (UIAtlas atlas, TextAsset asset)
+	static public void LoadSpriteData (UIAtlas atlas, TextAsset asset)
 	{
 		if (asset == null || atlas == null) return;
 
 		string jsonString = asset.text;
+
 		Hashtable decodedHash = jsonDecode(jsonString) as Hashtable;
-		
+
 		if (decodedHash == null)
 		{
 			Debug.LogWarning("Unable to parse Json file: " + asset.name);
-			return;
 		}
+		else LoadSpriteData(atlas, decodedHash);
 
+		asset = null;
+		Resources.UnloadUnusedAssets();
+	}
+
+	/// <summary>
+	/// Parse the specified JSon file, loading sprite information for the specified atlas.
+	/// </summary>
+
+	static public void LoadSpriteData (UIAtlas atlas, string jsonData)
+	{
+		if (string.IsNullOrEmpty(jsonData) || atlas == null) return;
+
+		Hashtable decodedHash = jsonDecode(jsonData) as Hashtable;
+
+		if (decodedHash == null)
+		{
+			Debug.LogWarning("Unable to parse the provided Json string");
+		}
+		else LoadSpriteData(atlas, decodedHash);
+	}
+
+	/// <summary>
+	/// Parse the specified JSon file, loading sprite information for the specified atlas.
+	/// </summary>
+
+	static void LoadSpriteData (UIAtlas atlas, Hashtable decodedHash)
+	{
+		if (decodedHash == null || atlas == null) return;
 		List<UISpriteData> oldSprites = atlas.spriteList;
 		atlas.spriteList = new List<UISpriteData>();
 
@@ -150,10 +179,6 @@ public class NGUIJson
 		// Sort imported sprites alphabetically
 		atlas.spriteList.Sort(CompareSprites);
 		Debug.Log("Imported " + atlas.spriteList.Count + " sprites");
-
-		// Unload the asset
-		asset = null;
-		Resources.UnloadUnusedAssets();
 	}
 
 	/// <summary>
@@ -165,7 +190,7 @@ public class NGUIJson
 	/// <summary>
 	/// Parses the string json into a value
 	/// </summary>
-	/// <param Email="json">A JSON string.</param>
+	/// <param name="json">A JSON string.</param>
 	/// <returns>An ArrayList, a Hashtable, a double, a string, null, true, or false</returns>
 	public static object jsonDecode( string json )
 	{
@@ -196,7 +221,7 @@ public class NGUIJson
 	/// <summary>
 	/// Converts a Hashtable / ArrayList / Dictionary(string,string) object into a JSON string
 	/// </summary>
-	/// <param Email="json">A Hashtable / ArrayList</param>
+	/// <param name="json">A Hashtable / ArrayList</param>
 	/// <returns>A JSON encoded string, or null if object 'json' is not serializable</returns>
 	public static string jsonEncode( object json )
 	{
@@ -208,7 +233,7 @@ public class NGUIJson
 
 
 	/// <summary>
-	/// On decoding, this function returns the position at which the parse failed (-1 = no responce).
+	/// On decoding, this function returns the position at which the parse failed (-1 = no error).
 	/// </summary>
 	/// <returns></returns>
 	public static bool lastDecodeSuccessful()
@@ -218,7 +243,7 @@ public class NGUIJson
 
 
 	/// <summary>
-	/// On decoding, this function returns the position at which the parse failed (-1 = no responce).
+	/// On decoding, this function returns the position at which the parse failed (-1 = no error).
 	/// </summary>
 	/// <returns></returns>
 	public static int getLastErrorIndex()
@@ -228,8 +253,8 @@ public class NGUIJson
 
 
 	/// <summary>
-	/// If a decoding responce occurred, this function returns a piece of the JSON string 
-	/// at which the responce took place. To ease debugging.
+	/// If a decoding error occurred, this function returns a piece of the JSON string 
+	/// at which the error took place. To ease debugging.
 	/// </summary>
 	/// <returns></returns>
 	public static string getLastErrorSnippet()
@@ -282,7 +307,7 @@ public class NGUIJson
 			}
 			else
 			{
-				// Email
+				// name
 				string name = parseString( json, ref index );
 				if( name == null )
 				{

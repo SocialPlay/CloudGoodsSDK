@@ -30,6 +30,7 @@ public class NGUIDragDropItem : MonoBehaviour
     void Drop()
     {
         Collider col = UICamera.lastHit.collider;
+        Debug.Log(col);
         ItemContainer container = (col != null) ? col.gameObject.GetComponent<ItemContainer>() : null;
         ReturnToPreviousPossition();
         if (container != null)
@@ -76,7 +77,7 @@ public class NGUIDragDropItem : MonoBehaviour
             {
                 mIsDragging = true;
                 mParent = mTrans.parent;
-                mTrans.parent = DragDropRoot.root;
+                mTrans.parent = UIDragDropRoot.root;
 
                 Vector3 pos = mTrans.localPosition;
                 pos.z = 0f;
@@ -91,39 +92,54 @@ public class NGUIDragDropItem : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Start or stop the drag operation.
-    /// </summary>
 
-    void OnPress(bool isPressed)
+    void OnDragStart()
     {
-        if (isPressed)
-        {
-            lastPosition = this.transform.position;
-        }
-
-        if (enabled)
-        {
-            if (isPressed)
-            {
-                if (!UICamera.current.stickyPress)
-                {
-                    mSticky = true;
-                    UICamera.current.stickyPress = true;
-                }
-            }
-            else if (mSticky)
-            {
-                mSticky = false;
-                UICamera.current.stickyPress = false;
-            }
-
-
-            Collider col = collider;
-            if (col != null) col.enabled = !isPressed;
-            if (!isPressed && mIsDragging) Drop();
-
-            mIsDragging = false;
-        }
+        Debug.Log("Test");
+        collider.enabled = false;
+        lastPosition = this.transform.position;
     }
+
+    void OnDragEnd()
+    {
+        Collider col = collider;
+        if (col != null) col.enabled = true;
+        if ( mIsDragging) Drop();
+    }
+
+    ///// <summary>
+    ///// Start or stop the drag operation.
+    ///// </summary>
+
+    //void OnPress(bool isPressed)
+    //{
+    //    if (isPressed)
+    //    {
+    //        lastPosition = this.transform.position;
+    //    }
+
+    //    if (enabled)
+    //    {
+    //        if (isPressed)
+    //        {
+    //            if (!UICamera.current.stickyPress)
+    //            {
+    //                mSticky = true;
+    //                UICamera.current.stickyPress = true;
+    //            }
+    //        }
+    //        else if (mSticky)
+    //        {
+    //            mSticky = false;
+    //            UICamera.current.stickyPress = false;
+    //        }
+
+
+    //        Collider col = collider;
+    //        if (col != null) col.enabled = !isPressed;
+    //        if (!isPressed && mIsDragging) Drop();
+
+    //        mIsDragging = false;
+    //    }
+    //}
 }
