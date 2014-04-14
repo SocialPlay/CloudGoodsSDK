@@ -9,7 +9,7 @@ using CloudGoods;
 public class WebPlatformLink
 {
     public static Action OnGuestModeActivated;
-    public static Action<WebserviceCalls.UserGuid> OnRecievedUser;
+    public static Action<WebserviceCalls.UserInfo> OnRecievedUser;
 
     public void Initiate()
     {

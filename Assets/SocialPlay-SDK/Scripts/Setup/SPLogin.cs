@@ -111,7 +111,7 @@ public class SPLogin : MonoBehaviour
             if (recivedUserInfo != null)
             {
                 UserInfo userInfo = Newtonsoft.Json.JsonConvert.DeserializeObject<UserInfo>(responce.message);
-                GameAuthentication.OnUserAuthorized(new WebserviceCalls.UserGuid(userInfo.ID.ToString(), userInfo.name, userInfo.email));
+                GameAuthentication.OnUserAuthorized(new WebserviceCalls.UserInfo(userInfo.ID.ToString(), userInfo.name, userInfo.email));
                 recivedUserInfo(userInfo);
             }
         }

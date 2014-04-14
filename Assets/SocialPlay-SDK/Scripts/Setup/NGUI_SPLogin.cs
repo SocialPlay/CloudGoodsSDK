@@ -87,7 +87,7 @@ public class NGUI_SPLogin : MonoBehaviour
         {
             SPLogin.UserInfo userInfo = new SPLogin.UserInfo(new Guid(PlayerPrefs.GetString("SocialPlay_UserGuid")), PlayerPrefs.GetString("SocialPlay_UserName"), PlayerPrefs.GetString("SocialPlay_UserEmail"));
 
-            GameAuthentication.OnUserAuthorized(new WebserviceCalls.UserGuid(userInfo.ID.ToString(), userInfo.name, userInfo.email));
+            GameAuthentication.OnUserAuthorized(new WebserviceCalls.UserInfo(userInfo.ID.ToString(), userInfo.name, userInfo.email));
 
             RecivedUserGuid(userInfo);
         }

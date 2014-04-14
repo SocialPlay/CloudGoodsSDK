@@ -8,12 +8,12 @@ using System.Collections.Generic;
 
 public interface ISocialPlayerUserGetter
 {
-    void GetSocialPlayUser(PlatformUser socialPlayUser, Action<WebserviceCalls.UserGuid> callback);
+    void GetSocialPlayUser(PlatformUser socialPlayUser, Action<WebserviceCalls.UserInfo> callback);
 }
 
 public class SocialPlayUserWebServiceGetter : ISocialPlayerUserGetter
 {
-    public void GetSocialPlayUser(PlatformUser socialPlayUser, Action<WebserviceCalls.UserGuid> callback)
+    public void GetSocialPlayUser(PlatformUser socialPlayUser, Action<WebserviceCalls.UserInfo> callback)
     {
         WebserviceCalls webserviceCalls = GameObject.FindObjectOfType(typeof(WebserviceCalls)) as WebserviceCalls;
         //todo remove email
@@ -21,7 +21,7 @@ public class SocialPlayUserWebServiceGetter : ISocialPlayerUserGetter
         {
             Debug.Log(x);
             JToken token = JToken.Parse(x);
-            WebserviceCalls.UserGuid userGuid = JsonConvert.DeserializeObject<WebserviceCalls.UserGuid>(token.ToString());
+            WebserviceCalls.UserInfo userGuid = JsonConvert.DeserializeObject<WebserviceCalls.UserInfo>(token.ToString());
 
             callback(userGuid);
         });

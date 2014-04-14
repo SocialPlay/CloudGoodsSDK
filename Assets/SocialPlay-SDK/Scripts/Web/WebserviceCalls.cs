@@ -34,14 +34,14 @@ public class WebserviceCalls : MonoBehaviour, IServiceCalls
         }
     }
 
-    public class UserGuid
+    public class UserInfo
     {
         public string userGuid = "";
         public bool isNewUserToWorld = false;
         public string userName = "";
         public string userEmail = "";
 
-        public UserGuid(string newUserGuid, string newUserName, string newUserEmail)
+        public UserInfo(string newUserGuid, string newUserName, string newUserEmail)
         {
             userGuid = newUserGuid;
             userName = newUserName;
@@ -273,7 +273,6 @@ public class WebserviceCalls : MonoBehaviour, IServiceCalls
         // check for errors
         if (www.error == null)
         {
-            Debug.Log("HERE");
             callback(www.text);
         }
         else
@@ -282,37 +281,4 @@ public class WebserviceCalls : MonoBehaviour, IServiceCalls
             //callback("Error has occured");
         }
     }
-
-    IEnumerator OnWebServiceCallback(WWW www, Action<JsonData> callback)
-    {
-        yield return www;
-
-        // check for errors
-        if (www.error == null)
-        {
-            Debug.Log(www.text);
-            ConvertJsonStringIntoData(www.text, callback);
-        }
-        else
-        {
-            callback("WWW Error: " + www.error);
-            //callback("Error has occured");
-        }
-    }
-
-    void ConvertJsonStringIntoData(string JsonString, Action<JsonData> callBack)
-    {
-        //JsonString = JsonString.Remove(0, 1);
-        //JsonString = JsonString.Remove(JsonString.Length - 1, 1);
-        //JsonString = JsonString.Replace("\\\\", "");
-
-        WWW.UnEscapeURL(JsonString);
-
-        LitJson.JsonReader reader = new LitJson.JsonReader(JsonString);
-
-        JsonData data = JsonMapper.ToObject(reader);
-
-        callBack(data);
-    }
-
 }
