@@ -37,16 +37,12 @@ public abstract class ContainerItemLoader : MonoBehaviour
         return "";
     }
 
-    protected void RecivedItems(object Data)
+    protected void RecivedItems(List<ItemData> receivedItems)
     {
         if (ItemConversion.converter == null)
         {
             throw new Exception("Item conversion is not setup correctly!");
         }
-
-        ItemDataList itemData = LitJson.JsonMapper.ToObject<ItemDataList>(Data.ToString());
-
-        List<ItemData> receivedItems = ItemConversion.converter.convertToItemDataFromString(itemData);
 
         AddItemComponentToNewlyConvertedItem(receivedItems);
 

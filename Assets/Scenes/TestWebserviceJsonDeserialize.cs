@@ -12,7 +12,7 @@ public class TestWebserviceJsonDeserialize : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        WebserviceCalls.webservice.GetOwnerItems("1645c50a-538c-45b5-97f7-492b448f3c20", "User", 0, new Guid("2882f02f-4e91-4329-a051-0de9301b3e79"), ConvertJsonStringIntoData);
+        //WebserviceCalls.webservice.GetOwnerItems("1645c50a-538c-45b5-97f7-492b448f3c20", "User", 0, new Guid("2882f02f-4e91-4329-a051-0de9301b3e79"), ConvertJsonStringIntoData);
 
         //WebserviceCalls.webservice.GetStoreItems("2882f02f-4e91-4329-a051-0de9301b3e79", ConvertJsonStringIntoData);
 

@@ -64,12 +64,30 @@ public class WebserviceCalls : MonoBehaviour, IServiceCalls
         StartCoroutine(OnWebServiceCallback(www, callback));
     }
 
-    public void GetOwnerItems(string ownerID, string ownerType, int location, Guid AppID, Action<string> callback)
+    public void GetOwnerItems(string ownerID, string ownerType, int location, Guid AppID, Action<List<ItemData>> callback)
     {
         string url = string.Format("{0}GetOwnerItems?ownerID={1}&ownerType={2}&location={3}&AppID={4}", cloudGoodsURL, ownerID, ownerType, location, AppID.ToString());
         WWW www = new WWW(url);
 
-        StartCoroutine(OnWebServiceCallback(www, callback));
+        StartCoroutine(OnReceivedOwnerItems(www, callback));
+    }
+
+    IEnumerator OnReceivedOwnerItems(WWW www, Action<List<ItemData>> callback)
+    {
+        yield return www;
+
+        // check for errors
+        if (www.error == null)
+        {
+            object jsonObj = JsonFx.Json.JsonReader.Deserialize(www.text);
+
+            JsonData data = LitJson.JsonMapper.ToObject(jsonObj.ToString());
+        }
+        else
+        {
+            Debug.LogError(www.error);
+            //callback("Error has occured");
+        }
     }
 
     public void MoveItemStack(Guid StackToMove, int MoveAmount, string DestinationOwnerID, string DestinationOwnerType, Guid AppID, int DestinationLocation, Action<string> callback)
