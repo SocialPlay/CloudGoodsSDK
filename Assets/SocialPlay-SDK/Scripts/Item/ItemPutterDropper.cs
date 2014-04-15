@@ -22,18 +22,12 @@ public class ItemPutterDropper : MonoBehaviour, IItemPutter
 
     public void PutGameItem(List<ItemData> items)
     {
-        foreach (ItemData item in items)
-        {
-            List<ItemData> itemsList = new List<ItemData>();
-            itemsList.Add(item);
-            DropItems(ItemConverter.ConvertToItemDropObject(itemsList, false));
-            Destroy(item.gameObject);
-        }
+        DropItems(items);
     }
 
-    void DropItems(List<GameObject> dropItems)
+    void DropItems(List<ItemData> dropItems)
     {
-        foreach (GameObject dropItem in dropItems)
+        foreach (ItemData dropItem in dropItems)
         {
             ItemData data = dropItem.GetComponent<ItemData>();
             GameObject model;
@@ -51,7 +45,7 @@ public class ItemPutterDropper : MonoBehaviour, IItemPutter
             }
 
             gameItemDrop.DropItemIntoWorld(data, dropTransform.position, model);
-            Destroy(dropItem);
+            Destroy(dropItem.gameObject);
         }
     }
 
