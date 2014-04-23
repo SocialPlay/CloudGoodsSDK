@@ -33,6 +33,7 @@ public class CreditBundleIcon
             {
                 if (sprite.name.Contains(bundleAmount))
                 {
+                    Debug.Log(sprite.name);
                     icon.spriteName = sprite.name;
 
                     return icon;

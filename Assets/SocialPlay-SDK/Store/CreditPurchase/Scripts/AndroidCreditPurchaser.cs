@@ -3,13 +3,18 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using SocialPlay;
+using Newtonsoft.Json;
 
 public class AndroidCreditPurchaser : MonoBehaviour, IPlatformPurchaser {
+
+    public List<string> androidProductNames;
 
     public AndroidJavaObject cls_StorePurchaser;
     public event Action<string> RecievedPurchaseResponse;
 
     public string publicAndroidKey;
+
+    public int currentBundleID = 0;
 
 	// Use this for initialization
 	void Start () {
@@ -29,13 +34,15 @@ public class AndroidCreditPurchaser : MonoBehaviour, IPlatformPurchaser {
         }
     }
 
-    public void Purchase(string purchaseID, int amount, string userID)
+    public void Purchase(string bundleID, int amount, string userID)
     {
+        currentBundleID = int.Parse(bundleID);
+
         using (AndroidJavaClass cls = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
         {
             using (AndroidJavaObject obj_Activity = cls.GetStatic<AndroidJavaObject>("currentActivity"))
             {
-                cls_StorePurchaser.CallStatic("makePurchase", obj_Activity, purchaseID);
+                cls_StorePurchaser.CallStatic("makePurchase", obj_Activity, GetProductIDFromBundleID(currentBundleID));
             }
         }
     }
@@ -55,19 +62,42 @@ public class AndroidCreditPurchaser : MonoBehaviour, IPlatformPurchaser {
 
     void RecieveFromJava(string message)
     {
-        OnReceivedPurchaseResponse(message);
+        //OnReceivedPurchaseResponse(message);
+        BundlePurchaseRequest bundlePurchaseRequest = new BundlePurchaseRequest();
+        bundlePurchaseRequest.BundleID = currentBundleID;
+        bundlePurchaseRequest.UserID = ItemSystemGameData.UserID;
+        bundlePurchaseRequest.ReceiptToken = message;
 
-        WWW www = new WWW("http://192.168.0.197/webservice/cloudgoods/cloudgoodsservice.svc/insertLog?message=" +message);
+        string bundleJsonString = JsonConvert.SerializeObject(bundlePurchaseRequest);
 
-        StartCoroutine(OnWebServiceCallback(www));
+        WebserviceCalls.webservice.PurchaseCreditBundles(new Guid(GameAuthentication.GetAppID()), bundleJsonString, OnReceivedCreditPurchase);
     }
 
-    IEnumerator OnWebServiceCallback(WWW www)
+    void OnReceivedCreditPurchase(string data)
     {
-        yield return www;
+        Debug.Log("data: " + data);
     }
 
-
+    string GetProductIDFromBundleID(int ID)
+    {
+        switch (ID)
+        {
+            case 1:
+                return androidProductNames[ID -1];
+            case 2:
+                return androidProductNames[ID - 1];
+            case 3:
+                return androidProductNames[ID - 1];
+            case 4:
+                return androidProductNames[ID - 1];
+            case 5:
+                return androidProductNames[ID - 1];
+            case 6:
+                return androidProductNames[ID - 1];
+            default:
+                return null;
+        }
+    }
 
     public void OnReceivedPurchaseResponse(string data)
     {
@@ -75,4 +105,11 @@ public class AndroidCreditPurchaser : MonoBehaviour, IPlatformPurchaser {
             RecievedPurchaseResponse(data);
     }
 
+}
+
+public class BundlePurchaseRequest
+{
+    public int BundleID;
+    public Guid UserID;
+    public string ReceiptToken;
 }

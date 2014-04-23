@@ -24,7 +24,7 @@ public class CreditBundleStore : MonoBehaviour
 
     public bool isInitialized = false;
 
-    void Awake()
+    void Start()
     {
         Initialize();
     }
@@ -48,12 +48,13 @@ public class CreditBundleStore : MonoBehaviour
 
     public void GetBundle()
     {
-        WebserviceCalls webserviceCalls = GameObject.Find("Socialplay").GetComponent<WebserviceCalls>();
-        webserviceCalls.GetCreditBundles("http://socialplaywebservice.azurewebsites.net/publicservice.svc/", OnPurchaseBundlesRecieved);
+        //TODO change hard coded platformID
+        WebserviceCalls.webservice.GetCreditBundles(GameAuthentication.GetAppID(), 3, OnPurchaseBundlesRecieved);
     }
 
     void OnPurchaseBundlesRecieved(string data)
     {
+        Debug.Log(data);
         InitializeGridWithBundles(data);
     }
 
@@ -68,34 +69,13 @@ public class CreditBundleStore : MonoBehaviour
     void OnItemInGrid(JObject item, GameObject obj)
     {
         NGUIBundleItem nguiItem = obj.GetComponent<NGUIBundleItem>();
-        nguiItem.Amount = item["Amount"].ToString();
+        nguiItem.Amount = item["CreditAmount"].ToString();
         nguiItem.Cost = item["Cost"].ToString();
-        nguiItem.Id = GetProductIDFromBundleID(int.Parse(item["Id"].ToString()));
+        nguiItem.Id = item["ID"].ToString();
         nguiItem.CurrencyName = "$:";
         nguiItem.CurrencyIcon = creditBundleIcon.Get(nguiItem.Amount, nguiItem.CurrencyIcon);
 
         nguiItem.PurhcaseButtonClicked = OnPurchaseRequest;
-    }
-
-    string GetProductIDFromBundleID(int ID)
-    {
-        switch (ID)
-        {
-            case 1:
-                return "socialplay_item.1";
-            case 2:
-                return "socialplay_item.2";
-            case 3:
-                return "socialplay_item.3";
-            case 4:
-                return "socialplay_item.4";
-            case 5:
-                return "socialplay_item.5";
-            case 6:
-                return "socialplay_item.6";
-            default:
-                return null;
-        }
     }
 
     void OnPurchaseRequest(GameObject obj)
