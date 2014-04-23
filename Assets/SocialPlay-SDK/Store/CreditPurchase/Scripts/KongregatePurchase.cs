@@ -15,13 +15,13 @@ public class KongregatePurchase : IPlatformPurchaser
 
     public void Purchase(string id, int amount, string appID)
     {
-        CallBackBrowserHook.CreateExternalCall(OnRecievedPurchaseResponse, "KongregatePurchaseBrowserHook", "KongregatePurchase", id, amount, appID);
+        CallBackBrowserHook.CreateExternalCall(OnReceivedPurchaseResponse, "KongregatePurchaseBrowserHook", "KongregatePurchase", id, amount, appID);
 
         //Application.ExternalCall("KongregatePurchase", id, amount, "Credits");
         //purchaserBrowserHook = CallBackBrowserHook.RegisterCallBack(OnRecievedPurchaseResponse, "KongregatePurchaseBrowserHook");
     }
 
-    public void OnRecievedPurchaseResponse(string data)
+    public void OnReceivedPurchaseResponse(string data)
     {
         Console.WriteLine("OnRecievedPurchaseResponse");
 

@@ -15,20 +15,17 @@ public class CreditBundleStore : MonoBehaviour
     public GameObject Grid;
     public UILabel CreditBalance;
 
-    public PurchaseResponseHandler purchaseResponseHandler;
-
-    public string UserID { get; set; }
+    public PurchaseResponsePopupHandler purchaseResponseHandler;
 
     IGridLoader gridLoader;
+    public GameObject platformPurchaserObj;
     IPlatformPurchaser platformPurchasor;
     CreditBundleIcon creditBundleIcon = new CreditBundleIcon();
 
     public bool isInitialized = false;
 
-    void Start()
+    void Awake()
     {
-        UserID = "69EE1B4D-2002-43FC-B2AE-59A4C17D7E50";
-
         Initialize();
     }
 
@@ -36,8 +33,7 @@ public class CreditBundleStore : MonoBehaviour
     {
         try
         {
-            //platformPurchasor = new KongregatePurchase();
-            platformPurchasor = new FaceBookPurchaser();
+            platformPurchasor = (IPlatformPurchaser)platformPurchaserObj.GetComponent(typeof(IPlatformPurchaser));
             platformPurchasor.RecievedPurchaseResponse += OnRecievedPurchaseResponse;
 
             GetBundle();
@@ -54,7 +50,6 @@ public class CreditBundleStore : MonoBehaviour
     {
         WebserviceCalls webserviceCalls = GameObject.Find("Socialplay").GetComponent<WebserviceCalls>();
         webserviceCalls.GetCreditBundles("http://socialplaywebservice.azurewebsites.net/publicservice.svc/", OnPurchaseBundlesRecieved);
-        //SocialPlay.ServiceClient.Open.GetPurchaseBundles(OnPurchaseBundlesRecieved);
     }
 
     void OnPurchaseBundlesRecieved(string data)
@@ -75,29 +70,52 @@ public class CreditBundleStore : MonoBehaviour
         NGUIBundleItem nguiItem = obj.GetComponent<NGUIBundleItem>();
         nguiItem.Amount = item["Amount"].ToString();
         nguiItem.Cost = item["Cost"].ToString();
-        nguiItem.Id = item["Id"].ToString();
+        nguiItem.Id = GetProductIDFromBundleID(int.Parse(item["Id"].ToString()));
         nguiItem.CurrencyName = "$:";
         nguiItem.CurrencyIcon = creditBundleIcon.Get(nguiItem.Amount, nguiItem.CurrencyIcon);
 
-        //GameObject currencyIcon = NGUITools.AddChild(obj, GUIStorePlatform.Instance.currencyIcon);
-        //currencyIcon.transform.localScale = new Vector3(17, 17, 1);
-        //currencyIcon.transform.localPosition = new Vector3(9, 38, 0);
         nguiItem.PurhcaseButtonClicked = OnPurchaseRequest;
+    }
+
+    string GetProductIDFromBundleID(int ID)
+    {
+        switch (ID)
+        {
+            case 1:
+                return "socialplay_item.1";
+            case 2:
+                return "socialplay_item.2";
+            case 3:
+                return "socialplay_item.3";
+            case 4:
+                return "socialplay_item.4";
+            case 5:
+                return "socialplay_item.5";
+            case 6:
+                return "socialplay_item.6";
+            default:
+                return null;
+        }
     }
 
     void OnPurchaseRequest(GameObject obj)
     {
         string id = obj.transform.parent.GetComponent<NGUIBundleItem>().Id;
-        platformPurchasor.Purchase(id, 1, "CAD63AD6-4D75-48D9-86AB-99A28E2BA004");
+        Debug.Log(id);
+        platformPurchasor.Purchase(id, 1, ItemSystemGameData.UserID.ToString());
     }
 
     void OnRecievedPurchaseResponse(string data)
     {
+        Debug.Log("received purchase");
 
-        if (data == "true")
-            purchaseResponseHandler.HandlePurchaseSuccess();
-        else if (data == "false")
-            purchaseResponseHandler.HandleGeneralPurchaseFail();
+        if (purchaseResponseHandler)
+        {
+            if (data != null)
+                purchaseResponseHandler.HandlePurchaseSuccess();
+            else if (data == "false")
+                purchaseResponseHandler.HandleGeneralPurchaseFail();
+        }
 
     }
 

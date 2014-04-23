@@ -17,7 +17,6 @@ public class DisplayCreditsPurchase : MonoBehaviour {
 
         if (CreditsPurchasePanel.GetComponent<CreditBundleStore>().isInitialized == false)
         {
-            CreditsPurchasePanel.GetComponent<CreditBundleStore>().UserID = "342B3080-9077-472A-B2F0-F913BE69F135";
             CreditsPurchasePanel.GetComponent<CreditBundleStore>().Initialize();
         }
     }

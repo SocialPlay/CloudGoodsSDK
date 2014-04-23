@@ -41,11 +41,11 @@ public class GenericSocialPlayPurchase : IPlatformPurchaser
     {
         OKCallBack -= new Action<GameObject>(FaceBookPurchaser_OKCallBack);
         CancelCallBack -= new Action<GameObject>(FaceBookPurchaser_CancelCallBack);
-        SocialPlay.ServiceClient.Open.StoreItemPurchase(OnRecievedPurchaseResponse, currentUserID, currentitemID, currentAmount, "Credits", ItemSystemGameData.AppID.ToString());
+        SocialPlay.ServiceClient.Open.StoreItemPurchase(OnReceivedPurchaseResponse, currentUserID, currentitemID, currentAmount, "Credits", ItemSystemGameData.AppID.ToString());
     }
 
 
-    public void OnRecievedPurchaseResponse(string data)
+    public void OnReceivedPurchaseResponse(string data)
     {
         // RESET CONTAINER ITEMS HERE
 

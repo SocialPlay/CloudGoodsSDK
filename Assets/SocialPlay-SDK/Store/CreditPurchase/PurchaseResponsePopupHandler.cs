@@ -1,8 +1,10 @@
 using UnityEngine;
 using System.Collections;
 
-public class PurchaseResponseHandler : MonoBehaviour
+public class PurchaseResponsePopupHandler : MonoBehaviour
 {
+    public StatusWindow statusWindow; 
+
     public string failedPurchaseTitle = "Could Not Purchase";
     public string insufficientFundMessage = "You have insufficient funds, go farm!";
     public string amountErrorMessage = "Somthing went wrong with the amount, try again";
@@ -12,21 +14,23 @@ public class PurchaseResponseHandler : MonoBehaviour
 
     public void HandlePurchaseSuccess()
     {
-        //MessagePop.Instance.PopMessage(purchaseSuccessTitle, purchaseSuccessMessage);
+        //Logic For on purchase Success
+        statusWindow.SetStatusMessage(purchaseSuccessTitle, purchaseSuccessMessage);
     }
 
     public void HandlePurchaseAmountError()
     {
-        ///MessagePop.Instance.PopMessage(failedPurchaseTitle, amountErrorMessage);
+       //Logic For on purchase Error
+        statusWindow.SetStatusMessage("Error", "There was an error with your purchase");
     }
 
     public void HandleGeneralPurchaseFail()
     {
-        //MessagePop.Instance.PopMessage(failedPurchaseTitle, failedPurchaseMessage);
+        //logic for CallWithGetTextureOnSameFrame purchase fail
     }
 
     public void HandleNSF()
     {
-        //MessagePop.Instance.PopMessage(failedPurchaseTitle, insufficientFundMessage);
+        //logic for not enough resources
     }
 }
