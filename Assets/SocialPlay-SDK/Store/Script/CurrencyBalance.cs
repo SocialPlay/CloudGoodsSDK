@@ -37,10 +37,15 @@ public class CurrencyBalance : MonoBehaviour
 
     void OnReceievedPaidCurrency(string paidCurrencyBalance)
     {
-        Debug.Log(paidCurrencyBalance);
         JToken paidToken = JToken.Parse(paidCurrencyBalance);
-        paidCurrencyLabel.text = paidToken.ToString();
-        paidCurrency = int.Parse(paidToken.ToString());
+        SetItemPaidCurrency(paidToken.ToString());
+    }
+
+    public void SetItemPaidCurrency(string currency)
+    {
+        paidCurrencyLabel.text = currency;
+        paidCurrencyLabel.UpdateNGUIText();
+        paidCurrency = int.Parse(currency);
     }
 
 }

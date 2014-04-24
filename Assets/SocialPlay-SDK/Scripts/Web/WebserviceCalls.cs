@@ -160,7 +160,7 @@ public class WebserviceCalls : MonoBehaviour, IServiceCalls
 
     public void PurchaseCreditBundles(Guid appId, string payload, Action<string>callback)
     {
-        string url = cloudGoodsURL + "PurchaseCreditBundle?AppID =" + appId + "&payload=" + EncryptStringUnity(payload);
+        string url = cloudGoodsURL + "PurchaseCreditBundle?AppID=" + appId + "&payload=" + WWW.EscapeURL(EncryptStringUnity(payload));
 
         WWW www = new WWW(url);
 
@@ -298,7 +298,7 @@ public class WebserviceCalls : MonoBehaviour, IServiceCalls
         }
     }
 
-    public static string EncryptStringUnity(string Message)
+    public string EncryptStringUnity(string Message)
     {
         byte[] Results;
 
@@ -308,7 +308,7 @@ public class WebserviceCalls : MonoBehaviour, IServiceCalls
         MD5CryptoServiceProvider HashProvider = new MD5CryptoServiceProvider();
 
         //TODO put in pass phrase
-        byte[] TDESKey = HashProvider.ComputeHash(UTF8.GetBytes(""));
+        byte[] TDESKey = HashProvider.ComputeHash(UTF8.GetBytes(AppSecret));
 
         TripleDESCryptoServiceProvider TDESAlgorithm = new TripleDESCryptoServiceProvider();
 

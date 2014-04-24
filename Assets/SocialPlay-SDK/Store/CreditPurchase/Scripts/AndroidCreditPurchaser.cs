@@ -16,7 +16,7 @@ public class AndroidCreditPurchaser : MonoBehaviour, IPlatformPurchaser {
 
     public int currentBundleID = 0;
 
-	// Use this for initialization
+
 	void Start () {
         gameObject.name = "AndroidCreditPurchaser";
         initStore();
@@ -62,20 +62,17 @@ public class AndroidCreditPurchaser : MonoBehaviour, IPlatformPurchaser {
 
     void RecieveFromJava(string message)
     {
-        //OnReceivedPurchaseResponse(message);
-        BundlePurchaseRequest bundlePurchaseRequest = new BundlePurchaseRequest();
-        bundlePurchaseRequest.BundleID = currentBundleID;
-        bundlePurchaseRequest.UserID = ItemSystemGameData.UserID;
-        bundlePurchaseRequest.ReceiptToken = message;
+        if (message != "Fail")
+        {
+            BundlePurchaseRequest bundlePurchaseRequest = new BundlePurchaseRequest();
+            bundlePurchaseRequest.BundleID = currentBundleID;
+            bundlePurchaseRequest.UserID = ItemSystemGameData.UserID;
+            bundlePurchaseRequest.ReceiptToken = message;
 
-        string bundleJsonString = JsonConvert.SerializeObject(bundlePurchaseRequest);
+            string bundleJsonString = JsonConvert.SerializeObject(bundlePurchaseRequest);
 
-        WebserviceCalls.webservice.PurchaseCreditBundles(new Guid(GameAuthentication.GetAppID()), bundleJsonString, OnReceivedCreditPurchase);
-    }
-
-    void OnReceivedCreditPurchase(string data)
-    {
-        Debug.Log("data: " + data);
+            WebserviceCalls.webservice.PurchaseCreditBundles(new Guid(GameAuthentication.GetAppID()), bundleJsonString, OnReceivedPurchaseResponse);
+        }
     }
 
     string GetProductIDFromBundleID(int ID)
@@ -83,7 +80,7 @@ public class AndroidCreditPurchaser : MonoBehaviour, IPlatformPurchaser {
         switch (ID)
         {
             case 1:
-                return androidProductNames[ID -1];
+                return androidProductNames[ID - 1];
             case 2:
                 return androidProductNames[ID - 1];
             case 3:

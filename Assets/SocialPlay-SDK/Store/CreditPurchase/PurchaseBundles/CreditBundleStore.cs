@@ -9,12 +9,13 @@
 using UnityEngine;
 using SocialPlay.Generic;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
+using System;
 
 public class CreditBundleStore : MonoBehaviour
 {
     public GameObject Grid;
-    public UILabel CreditBalance;
-
+    public CurrencyBalance currencyBalance;
     public PurchaseResponsePopupHandler purchaseResponseHandler;
 
     IGridLoader gridLoader;
@@ -44,6 +45,11 @@ public class CreditBundleStore : MonoBehaviour
         {
             Debug.LogError(ex.Message);
         }
+    }
+
+    void OnDisable()
+    {
+        platformPurchasor.RecievedPurchaseResponse -= OnRecievedPurchaseResponse;
     }
 
     public void GetBundle()
@@ -81,20 +87,24 @@ public class CreditBundleStore : MonoBehaviour
     void OnPurchaseRequest(GameObject obj)
     {
         string id = obj.transform.parent.GetComponent<NGUIBundleItem>().Id;
-        Debug.Log(id);
         platformPurchasor.Purchase(id, 1, ItemSystemGameData.UserID.ToString());
     }
 
     void OnRecievedPurchaseResponse(string data)
     {
-        Debug.Log("received purchase");
 
-        if (purchaseResponseHandler)
+        JToken dataToken = JToken.Parse(data);
+        JToken dataObj = JToken.Parse(dataToken.ToString());
+
+
+        if (dataObj["StatusCode"].ToString() == "1")
         {
-            if (data != null)
-                purchaseResponseHandler.HandlePurchaseSuccess();
-            else if (data == "false")
-                purchaseResponseHandler.HandleGeneralPurchaseFail();
+            currencyBalance.SetItemPaidCurrency(dataObj["Balance"].ToString());
+            purchaseResponseHandler.HandlePurchaseSuccess();
+        }
+        else
+        {
+            purchaseResponseHandler.HandleGeneralPurchaseFail();
         }
 
     }

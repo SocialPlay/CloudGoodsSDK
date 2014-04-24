@@ -42,6 +42,5 @@ public class CreditBundleIcon
         }
 
         throw new Exception("Sprite atlas does not contain required sprite!");
-        return null;
     }
 }

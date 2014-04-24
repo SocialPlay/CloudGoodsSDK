@@ -33,7 +33,7 @@ public class GameAuthentication : MonoBehaviour
 
         Debug.Log("Logged in as user " + socialplayMsg.userName + " : " + socialplayMsg.userGuid);
 
-        GetGameSession(ItemSystemGameData.UserID, GetAppID(), -1, OnRegisteredSession);
+        GetGameSession(ItemSystemGameData.UserID, GetAppID(), 1, OnRegisteredSession);
 
     }
 
