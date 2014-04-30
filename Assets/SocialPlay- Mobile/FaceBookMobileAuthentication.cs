@@ -41,17 +41,14 @@ public class FaceBookMobileAuthentication : MonoBehaviour
     void UserNameCallBack(FBResult response)
     {
         Dictionary<string, object> FBInfo = Facebook.MiniJSON.Json.Deserialize(response.Text) as Dictionary<string, object>;
-        //foreach (KeyValuePair<string, object> obj in respon)
-        //{
-        //    Debug.Log(obj.Key + ":" + obj.Value);
-        //}
+   
         if (string.IsNullOrEmpty(response.Error))
         {
             var socialPlayUserObj = new PlatformUser();
             socialPlayUserObj.appID = new Guid(GameAuthentication.GetAppID());
             socialPlayUserObj.platformID = 1;
             socialPlayUserObj.platformUserID = FB.UserId;
-            socialPlayUserObj.userName = FBInfo["email"].ToString();
+            socialPlayUserObj.userName = FBInfo["first_name"].ToString();
             Systems.UserGetter.GetSocialPlayUser(socialPlayUserObj, GameAuthentication.OnUserAuthorized);
 
             if (OnRecivedUserInfo != null)
