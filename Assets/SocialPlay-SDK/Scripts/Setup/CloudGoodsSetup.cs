@@ -23,7 +23,7 @@ public class CloudGoodsSetup : MonoBehaviour
         webplatformLink.Initiate();
     }
 
-    void OnReceivedSocialPlayUser(WebserviceCalls.UserGuid socialplayMsg)
+    void OnReceivedSocialPlayUser(WebserviceCalls.UserInfo socialplayMsg)
     {
         new ItemSystemGameData(AccessToken, socialplayMsg.userGuid, 1, Guid.NewGuid().ToString(), socialplayMsg.userName);
 

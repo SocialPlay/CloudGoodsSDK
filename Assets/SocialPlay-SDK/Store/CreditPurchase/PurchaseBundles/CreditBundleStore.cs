@@ -9,17 +9,17 @@
 using UnityEngine;
 using SocialPlay.Generic;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
+using System;
 
 public class CreditBundleStore : MonoBehaviour
 {
     public GameObject Grid;
-    public UILabel CreditBalance;
-
-    public PurchaseResponseHandler purchaseResponseHandler;
-
-    public string UserID { get; set; }
+    public CurrencyBalance currencyBalance;
+    public PurchaseResponsePopupHandler purchaseResponseHandler;
 
     IGridLoader gridLoader;
+    public GameObject platformPurchaserObj;
     IPlatformPurchaser platformPurchasor;
     CreditBundleIcon creditBundleIcon = new CreditBundleIcon();
 
@@ -27,8 +27,6 @@ public class CreditBundleStore : MonoBehaviour
 
     void Start()
     {
-        UserID = "69EE1B4D-2002-43FC-B2AE-59A4C17D7E50";
-
         Initialize();
     }
 
@@ -36,8 +34,7 @@ public class CreditBundleStore : MonoBehaviour
     {
         try
         {
-            //platformPurchasor = new KongregatePurchase();
-            platformPurchasor = new FaceBookPurchaser();
+            platformPurchasor = (IPlatformPurchaser)platformPurchaserObj.GetComponent(typeof(IPlatformPurchaser));
             platformPurchasor.RecievedPurchaseResponse += OnRecievedPurchaseResponse;
 
             GetBundle();
@@ -50,15 +47,20 @@ public class CreditBundleStore : MonoBehaviour
         }
     }
 
+    void OnDisable()
+    {
+        platformPurchasor.RecievedPurchaseResponse -= OnRecievedPurchaseResponse;
+    }
+
     public void GetBundle()
     {
-        WebserviceCalls webserviceCalls = GameObject.Find("Socialplay").GetComponent<WebserviceCalls>();
-        webserviceCalls.GetCreditBundles("http://socialplaywebservice.azurewebsites.net/publicservice.svc/", OnPurchaseBundlesRecieved);
-        //SocialPlay.ServiceClient.Open.GetPurchaseBundles(OnPurchaseBundlesRecieved);
+        //TODO change hard coded platformID
+        WebserviceCalls.webservice.GetCreditBundles(GameAuthentication.GetAppID(), 3, OnPurchaseBundlesRecieved);
     }
 
     void OnPurchaseBundlesRecieved(string data)
     {
+        Debug.Log(data);
         InitializeGridWithBundles(data);
     }
 
@@ -73,31 +75,37 @@ public class CreditBundleStore : MonoBehaviour
     void OnItemInGrid(JObject item, GameObject obj)
     {
         NGUIBundleItem nguiItem = obj.GetComponent<NGUIBundleItem>();
-        nguiItem.Amount = item["Amount"].ToString();
+        nguiItem.Amount = item["CreditAmount"].ToString();
         nguiItem.Cost = item["Cost"].ToString();
-        nguiItem.Id = item["Id"].ToString();
+        nguiItem.Id = item["ID"].ToString();
         nguiItem.CurrencyName = "$:";
         nguiItem.CurrencyIcon = creditBundleIcon.Get(nguiItem.Amount, nguiItem.CurrencyIcon);
 
-        //GameObject currencyIcon = NGUITools.AddChild(obj, GUIStorePlatform.Instance.currencyIcon);
-        //currencyIcon.transform.localScale = new Vector3(17, 17, 1);
-        //currencyIcon.transform.localPosition = new Vector3(9, 38, 0);
         nguiItem.PurhcaseButtonClicked = OnPurchaseRequest;
     }
 
     void OnPurchaseRequest(GameObject obj)
     {
         string id = obj.transform.parent.GetComponent<NGUIBundleItem>().Id;
-        platformPurchasor.Purchase(id, 1, "CAD63AD6-4D75-48D9-86AB-99A28E2BA004");
+        platformPurchasor.Purchase(id, 1, ItemSystemGameData.UserID.ToString());
     }
 
     void OnRecievedPurchaseResponse(string data)
     {
 
-        if (data == "true")
+        JToken dataToken = JToken.Parse(data);
+        JToken dataObj = JToken.Parse(dataToken.ToString());
+
+
+        if (dataObj["StatusCode"].ToString() == "1")
+        {
+            currencyBalance.SetItemPaidCurrency(dataObj["Balance"].ToString());
             purchaseResponseHandler.HandlePurchaseSuccess();
-        else if (data == "false")
+        }
+        else
+        {
             purchaseResponseHandler.HandleGeneralPurchaseFail();
+        }
 
     }
 

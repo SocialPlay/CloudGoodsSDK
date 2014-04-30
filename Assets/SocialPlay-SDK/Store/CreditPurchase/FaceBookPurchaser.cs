@@ -13,7 +13,7 @@ class FaceBookPurchaser : IPlatformPurchaser
         FB.Canvas.Pay(product: "https://socialplaywebservice.azurewebsites.net/FBCreditBundleObject.aspx?BundleID=" + id,
                         callback: delegate(FBResult response)
                         {
-                            OnRecievedPurchaseResponse(response.Text);
+                            OnReceivedPurchaseResponse(response.Text);
                             Console.WriteLine("Purchase Response: " + response.Text);
                         }
                         );
@@ -25,7 +25,7 @@ class FaceBookPurchaser : IPlatformPurchaser
 
 
 
-    public void OnRecievedPurchaseResponse(string data)
+    public void OnReceivedPurchaseResponse(string data)
     {
         string parsedData = Newtonsoft.Json.Linq.JToken.Parse(data).ToString();
 

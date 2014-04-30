@@ -33,6 +33,7 @@ public class CreditBundleIcon
             {
                 if (sprite.name.Contains(bundleAmount))
                 {
+                    Debug.Log(sprite.name);
                     icon.spriteName = sprite.name;
 
                     return icon;
@@ -41,6 +42,5 @@ public class CreditBundleIcon
         }
 
         throw new Exception("Sprite atlas does not contain required sprite!");
-        return null;
     }
 }

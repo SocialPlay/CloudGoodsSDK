@@ -15,15 +15,16 @@ public class CurrencyBalance : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-
         GameAuthentication.OnUserAuthEvent += GetCurrencyBalance;
     }
 
     public void GetCurrencyBalance(string userAuth)
     {
-        Debug.Log(ItemSystemGameData.AppID.ToString() + " / " + ItemSystemGameData.UserID.ToString());
-        WebserviceCalls.webservice.GetFreeCurrencyBalance(ItemSystemGameData.UserID.ToString(), AccessLocation, ItemSystemGameData.AppID.ToString(), OnReceivedFreeCurrency);
-        WebserviceCalls.webservice.GetPaidCurrencyBalance(ItemSystemGameData.UserID.ToString(), ItemSystemGameData.AppID.ToString(), OnReceievedPaidCurrency);
+        if(freeCurrencyLabel != null)
+            WebserviceCalls.webservice.GetFreeCurrencyBalance(ItemSystemGameData.UserID.ToString(), AccessLocation, ItemSystemGameData.AppID.ToString(), OnReceivedFreeCurrency);
+
+        if(paidCurrencyLabel != null)
+            WebserviceCalls.webservice.GetPaidCurrencyBalance(ItemSystemGameData.UserID.ToString(), ItemSystemGameData.AppID.ToString(), OnReceievedPaidCurrency);
     }
 
     void OnReceivedFreeCurrency(string freeCurrencyBalance)
@@ -36,10 +37,15 @@ public class CurrencyBalance : MonoBehaviour
 
     void OnReceievedPaidCurrency(string paidCurrencyBalance)
     {
-        Debug.Log(paidCurrencyBalance);
         JToken paidToken = JToken.Parse(paidCurrencyBalance);
-        paidCurrencyLabel.text = paidToken.ToString();
-        paidCurrency = int.Parse(paidToken.ToString());
+        SetItemPaidCurrency(paidToken.ToString());
+    }
+
+    public void SetItemPaidCurrency(string currency)
+    {
+        paidCurrencyLabel.text = currency;
+        paidCurrencyLabel.UpdateNGUIText();
+        paidCurrency = int.Parse(currency);
     }
 
 }

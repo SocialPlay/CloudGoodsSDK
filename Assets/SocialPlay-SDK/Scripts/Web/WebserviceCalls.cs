@@ -7,9 +7,13 @@ using LitJson;
 using SocialPlay.Data;
 using SocialPlay.Generic;
 using System.Collections.Generic;
+using System.Text;
+using System.Security.Cryptography;
 
 public class WebserviceCalls : MonoBehaviour, IServiceCalls
 {
+
+    public string AppSecret;
 
     public static IServiceCalls webservice = null;
 
@@ -34,14 +38,14 @@ public class WebserviceCalls : MonoBehaviour, IServiceCalls
         }
     }
 
-    public class UserGuid
+    public class UserInfo
     {
         public string userGuid = "";
         public bool isNewUserToWorld = false;
         public string userName = "";
         public string userEmail = "";
 
-        public UserGuid(string newUserGuid, string newUserName, string newUserEmail)
+        public UserInfo(string newUserGuid, string newUserName, string newUserEmail)
         {
             userGuid = newUserGuid;
             userName = newUserName;
@@ -144,9 +148,19 @@ public class WebserviceCalls : MonoBehaviour, IServiceCalls
 
     }
 
-    public void GetCreditBundles(string URL, Action<string> callback)
+    public void GetCreditBundles(string appID, int platformID, Action<string> callback)
     {
-        string url = URL + "GetPurchaseBundles";
+        Debug.Log("get credit webservice");
+        string url = cloudGoodsURL + "GetCreditBundles?Appid=" + appID + "&Platform=" + platformID;
+
+        WWW www = new WWW(url);
+
+        StartCoroutine(OnWebServiceCallback(www, callback));
+    }
+
+    public void PurchaseCreditBundles(Guid appId, string payload, Action<string>callback)
+    {
+        string url = cloudGoodsURL + "PurchaseCreditBundle?AppID=" + appId + "&payload=" + WWW.EscapeURL(EncryptStringUnity(payload));
 
         WWW www = new WWW(url);
 
@@ -273,46 +287,47 @@ public class WebserviceCalls : MonoBehaviour, IServiceCalls
         // check for errors
         if (www.error == null)
         {
-            Debug.Log("HERE");
+            Debug.Log(www.text);
             callback(www.text);
         }
         else
         {
+            Debug.Log(www.error);
             callback("WWW Error: " + www.error);
             //callback("Error has occured");
         }
     }
 
-    IEnumerator OnWebServiceCallback(WWW www, Action<JsonData> callback)
+    public string EncryptStringUnity(string Message)
     {
-        yield return www;
+        byte[] Results;
 
-        // check for errors
-        if (www.error == null)
+        UTF8Encoding UTF8 = new UTF8Encoding();
+
+
+        MD5CryptoServiceProvider HashProvider = new MD5CryptoServiceProvider();
+
+        //TODO put in pass phrase
+        byte[] TDESKey = HashProvider.ComputeHash(UTF8.GetBytes(AppSecret));
+
+        TripleDESCryptoServiceProvider TDESAlgorithm = new TripleDESCryptoServiceProvider();
+
+        TDESAlgorithm.Key = TDESKey;
+        TDESAlgorithm.Mode = CipherMode.ECB;
+        TDESAlgorithm.Padding = PaddingMode.PKCS7;
+
+        byte[] DataToEncrypt = UTF8.GetBytes(Message);
+
+        try
         {
-            Debug.Log(www.text);
-            ConvertJsonStringIntoData(www.text, callback);
+            ICryptoTransform Encryptor = TDESAlgorithm.CreateEncryptor();
+            Results = Encryptor.TransformFinalBlock(DataToEncrypt, 0, DataToEncrypt.Length);
         }
-        else
+        finally
         {
-            callback("WWW Error: " + www.error);
-            //callback("Error has occured");
+            TDESAlgorithm.Clear();
+            HashProvider.Clear();
         }
+        return Convert.ToBase64String(Results);
     }
-
-    void ConvertJsonStringIntoData(string JsonString, Action<JsonData> callBack)
-    {
-        //JsonString = JsonString.Remove(0, 1);
-        //JsonString = JsonString.Remove(JsonString.Length - 1, 1);
-        //JsonString = JsonString.Replace("\\\\", "");
-
-        WWW.UnEscapeURL(JsonString);
-
-        LitJson.JsonReader reader = new LitJson.JsonReader(JsonString);
-
-        JsonData data = JsonMapper.ToObject(reader);
-
-        callBack(data);
-    }
-
 }
