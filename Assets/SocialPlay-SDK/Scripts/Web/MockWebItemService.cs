@@ -4,7 +4,8 @@ using System.Collections;
 using System;
 using Newtonsoft.Json;
 
-public class MockWebItemService : MonoBehaviour, IServiceCalls {
+public class MockWebItemService : MonoBehaviour, IServiceCalls
+{
 
     void Awake()
     {
@@ -17,7 +18,7 @@ public class MockWebItemService : MonoBehaviour, IServiceCalls {
     }
 
     public void GetOwnerItems(string ownerID, string ownerType, int location, Guid AppID, Action<string> callback)
-    { 
+    {
 
     }
 
@@ -129,5 +130,10 @@ public class MockWebItemService : MonoBehaviour, IServiceCalls {
     public void SPLoginResendVerificationEmail(Guid gameID, string userEmail, Action<string> callback)
     {
 
+    }
+
+
+    public void GiveOwnerItems(WebModels.OwnerTypes OwnerType, List<WebModels.ItemsInfo> listOfItems, Action<string> callback)
+    {
     }
 }

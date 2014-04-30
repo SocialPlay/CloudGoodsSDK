@@ -158,7 +158,7 @@ public class WebserviceCalls : MonoBehaviour, IServiceCalls
         StartCoroutine(OnWebServiceCallback(www, callback));
     }
 
-    public void PurchaseCreditBundles(Guid appId, string payload, Action<string>callback)
+    public void PurchaseCreditBundles(Guid appId, string payload, Action<string> callback)
     {
         string url = cloudGoodsURL + "PurchaseCreditBundle?AppID=" + appId + "&payload=" + WWW.EscapeURL(EncryptStringUnity(payload));
 
@@ -199,8 +199,8 @@ public class WebserviceCalls : MonoBehaviour, IServiceCalls
     public void RemoveItemStack(Guid StackRemove, Action<string> callback)
     {
         string url = string.Format("{0}RemoveStackItem?stackID={1}", cloudGoodsURL, StackRemove);
-        
-         WWW www = new WWW(url);
+
+        WWW www = new WWW(url);
 
         StartCoroutine(OnWebServiceCallback(www, callback));
     }
@@ -275,6 +275,16 @@ public class WebserviceCalls : MonoBehaviour, IServiceCalls
     public void SPLoginResendVerificationEmail(Guid gameID, string userEmail, Action<string> callback)
     {
         string url = string.Format("{0}SPLoginResendVerificationEmail?gameID={1}&userEMail={2}", cloudGoodsURL, gameID, WWW.EscapeURL(userEmail));
+        WWW www = new WWW(url);
+
+        StartCoroutine(OnWebServiceCallback(www, callback));
+    }
+
+    public void GiveOwnerItems(WebModels.OwnerTypes OwnerType, List<WebModels.ItemsInfo> listOfItems, Action<string> callback)
+    {
+        string jsonList = JsonConvert.SerializeObject(listOfItems);
+
+        string url = string.Format("{0}GiveOwnerItems?AppID={1}&OwnerID={2}&OwnerType={3}&listOfItems={4}", cloudGoodsURL, ItemSystemGameData.AppID, ItemSystemGameData.UserID.ToString(), OwnerType.ToString(), jsonList);
         WWW www = new WWW(url);
 
         StartCoroutine(OnWebServiceCallback(www, callback));

@@ -3,7 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-public interface IServiceCalls {
+public interface IServiceCalls
+{
 
     void GenerateItemsAtLocation(string OwnerID, string OwnerType, int Location, Guid AppID, int MinimumEnergyOfItem, int TotalEnergyToGenerate, Action<string> callback, string ANDTags = "", string ORTags = "");
 
@@ -52,4 +53,9 @@ public interface IServiceCalls {
     void SPLoginForgotPassword(Guid gameID, string userEmail, Action<string> callback);
 
     void SPLoginResendVerificationEmail(Guid gameID, string userEmail, Action<string> callback);
+
+
+
+    void GiveOwnerItems(WebModels.OwnerTypes OwnerType, List<WebModels.ItemsInfo> listOfItems, Action<string> callback);
 }
+
