@@ -13,8 +13,6 @@ public class StoreItemTooltipSetup : MonoBehaviour, ITooltipSetup
 
         JArray statsArray = JArray.Parse(item.itemDetail);
 
-        Debug.Log(item.itemDetail);
-
 
         for (int i = 0; i < statsArray.Count; i++)
         {

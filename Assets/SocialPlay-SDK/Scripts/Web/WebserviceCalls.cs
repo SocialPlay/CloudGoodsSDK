@@ -12,7 +12,6 @@ using System.Security.Cryptography;
 
 public class WebserviceCalls : MonoBehaviour, IServiceCalls
 {
-
     public string AppSecret;
 
     public static IServiceCalls webservice = null;
@@ -148,9 +147,17 @@ public class WebserviceCalls : MonoBehaviour, IServiceCalls
 
     }
 
+    public void GetItemBundles(string appID, Action<string> callback)
+    {
+        string url = cloudGoodsURL + "GetItemBundles?Appid=" + appID;
+
+        WWW www = new WWW(url);
+
+        StartCoroutine(OnWebServiceCallback(www, callback));
+    }
+
     public void GetCreditBundles(string appID, int platformID, Action<string> callback)
     {
-        Debug.Log("get credit webservice");
         string url = cloudGoodsURL + "GetCreditBundles?Appid=" + appID + "&Platform=" + platformID;
 
         WWW www = new WWW(url);
@@ -280,6 +287,14 @@ public class WebserviceCalls : MonoBehaviour, IServiceCalls
         StartCoroutine(OnWebServiceCallback(www, callback));
     }
 
+    public void SendUserEmailMessage(string userEmail, string message, Action<string> callback)
+    {
+        string url = string.Format("{0}SendEmailMessageToUser?userEmail={1}&message={2}", cloudGoodsURL, WWW.EscapeURL(userEmail), WWW.EscapeURL(message));
+        WWW www = new WWW(url);
+
+        StartCoroutine(OnWebServiceCallback(www, callback));
+    }
+
     IEnumerator OnWebServiceCallback(WWW www, Action<string> callback)
     {
         yield return www;
@@ -287,12 +302,10 @@ public class WebserviceCalls : MonoBehaviour, IServiceCalls
         // check for errors
         if (www.error == null)
         {
-            Debug.Log(www.text);
             callback(www.text);
         }
         else
         {
-            Debug.Log(www.error);
             callback("WWW Error: " + www.error);
             //callback("Error has occured");
         }

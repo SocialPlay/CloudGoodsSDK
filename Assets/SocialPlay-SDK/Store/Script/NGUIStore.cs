@@ -3,12 +3,12 @@ using System.Collections;
 
 public class NGUIStore : MonoBehaviour
 {
-
     private static NGUIStore store;
 
     public GameObject StoreRootObject;
 
     bool isStoreCurrentActive = false;
+
 
    public  DisplayItems storeDisplay = null;
    public  CurrencyBalance userCurrencyBalance = null;

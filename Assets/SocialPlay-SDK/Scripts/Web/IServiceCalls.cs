@@ -52,4 +52,8 @@ public interface IServiceCalls {
     void SPLoginForgotPassword(Guid gameID, string userEmail, Action<string> callback);
 
     void SPLoginResendVerificationEmail(Guid gameID, string userEmail, Action<string> callback);
+
+    void SendUserEmailMessage(string userEmail, string message, Action<string> callback);
+
+    void GetItemBundles(string appID, Action<string> callback);
 }

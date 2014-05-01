@@ -31,8 +31,6 @@ public class GameAuthentication : MonoBehaviour
     {
         new ItemSystemGameData(GetAppID(), socialplayMsg.userGuid, -1, Guid.NewGuid().ToString(), socialplayMsg.userName);
 
-        Debug.Log("Logged in as user " + socialplayMsg.userName + " : " + socialplayMsg.userGuid);
-
         GetGameSession(ItemSystemGameData.UserID, GetAppID(), 1, OnRegisteredSession);
 
     }
@@ -51,8 +49,6 @@ public class GameAuthentication : MonoBehaviour
 
     static void OnRegisteredSession(Guid sessionID)
     {
-        Debug.Log("registered user to new session:" + sessionID);
-
         ItemSystemGameData.SessionID = sessionID;
 
         if (OnUserAuthEvent != null)

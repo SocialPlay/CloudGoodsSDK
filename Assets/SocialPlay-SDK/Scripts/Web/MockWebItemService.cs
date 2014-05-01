@@ -130,4 +130,14 @@ public class MockWebItemService : MonoBehaviour, IServiceCalls {
     {
 
     }
+
+    public void SendUserEmailMessage(string userEmail, string message, Action<string> callback)
+    {
+
+    }
+
+    public void GetItemBundles(string appID, Action<string> callback)
+    {
+
+    }
 }
