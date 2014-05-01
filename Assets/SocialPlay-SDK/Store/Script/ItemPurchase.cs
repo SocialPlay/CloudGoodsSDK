@@ -20,8 +20,6 @@ public class ItemPurchase : MonoBehaviour
     public GameObject increaseQuantityButton;
     public GameObject decreaseQuantityButton;
 
-    public GameObject closePanelButton;
-
     public PurchaseButtonDisplay creditPurchaseButton;
     public PurchaseButtonDisplay coinPurchaseButton;
 
@@ -43,7 +41,6 @@ public class ItemPurchase : MonoBehaviour
         UIEventListener.Get(decreaseQuantityButton).onClick += DecreaseQuantityAmount;
         UIEventListener.Get(creditPurchaseButton.ActiveButton.gameObject).onClick += PurchaseItemWithCredits;
         UIEventListener.Get(coinPurchaseButton.ActiveButton.gameObject).onClick += PurchaseItemWithCoins;
-        UIEventListener.Get(closePanelButton).onClick += ClosePanel;
         UIEventListener.Get(purchaseConfirmationButton).onClick += OnPurchaseConfirmationButtonPressed;
 
     }
@@ -54,7 +51,6 @@ public class ItemPurchase : MonoBehaviour
         UIEventListener.Get(decreaseQuantityButton).onClick -= DecreaseQuantityAmount;
         UIEventListener.Get(creditPurchaseButton.ActiveButton.gameObject).onClick -= PurchaseItemWithCredits;
         UIEventListener.Get(coinPurchaseButton.ActiveButton.gameObject).onClick -= PurchaseItemWithCoins;
-        UIEventListener.Get(closePanelButton).onClick -= ClosePanel;
 
     }
 
@@ -123,13 +119,13 @@ public class ItemPurchase : MonoBehaviour
     void PurchaseItemWithCredits(GameObject button)
     {
         webserviceCalls.StoreItemPurchase("http://socialplaywebservice.azurewebsites.net/publicservice.svc/", ItemSystemGameData.UserID, itemInfo.itemID, int.Parse(itemQuantityAmount.text), "Credits", ItemSystemGameData.AppID, currencyBalance.AccessLocation, OnReceivedItemPurchaseConfirmation);
-        ClosePanel(null);
+        ClosePanel();
     }
 
     void PurchaseItemWithCoins(GameObject button)
     {
         webserviceCalls.StoreItemPurchase("http://socialplaywebservice.azurewebsites.net/publicservice.svc/", ItemSystemGameData.UserID, itemInfo.itemID, int.Parse(itemQuantityAmount.text), "Coins", ItemSystemGameData.AppID, currencyBalance.AccessLocation, OnReceivedItemPurchaseConfirmation);
-        ClosePanel(null);
+        ClosePanel();
     }
 
     void OnReceivedItemPurchaseConfirmation(string msg)
@@ -137,7 +133,9 @@ public class ItemPurchase : MonoBehaviour
         purchaseConfirmationPanel.SetActive(true);
         currencyBalance.GetCurrencyBalance("");
         ReloadContainerItems();
-        OnPurchasedItem(msg);
+
+        if(OnPurchasedItem != null)
+            OnPurchasedItem(msg);
     }
 
     void ReloadContainerItems()
@@ -157,7 +155,7 @@ public class ItemPurchase : MonoBehaviour
         purchaseConfirmationPanel.SetActive(false);
     }
 
-    void ClosePanel(GameObject button)
+    public void ClosePanel()
     {
         gameObject.SetActive(false);
     }

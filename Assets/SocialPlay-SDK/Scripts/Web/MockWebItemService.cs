@@ -67,6 +67,11 @@ public class MockWebItemService : MonoBehaviour, IServiceCalls
 
     }
 
+    public void PurchaseItemBundles(Guid appID, Guid UserID, int bundleID, string paymentType, int location, Action<string> callback)
+    {
+
+    }
+
     public void GetCreditBundles(string appID, int platform, Action<string> callback)
     {
 

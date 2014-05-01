@@ -6,6 +6,8 @@ using Newtonsoft.Json;
 
 public class DisplayItemBundles : MonoBehaviour {
 
+    public NGUIItemBundleLoader bundleLoader;
+
     public List<ItemBundle> ItemBundles = new List<ItemBundle>();
 
 	void Start () {
@@ -57,9 +59,9 @@ public class DisplayItemBundles : MonoBehaviour {
             ItemBundles.Add(itemBundle);
         }
 
-        Debug.Log(ItemBundles[0].bundleItems[0].bundleItemDetails.Count);
-
+        bundleLoader.LoadBundleItems(ItemBundles);
     }
+    
 }
 
 public class ItemBundle
@@ -67,6 +69,11 @@ public class ItemBundle
     public int ID;
     public int CreditPrice;
     public int CoinPrice;
+
+    //State 1 = Credit and Coin Purchaseable
+    //State 2 = Credit purchase only
+    //State 3 = Coin Purchase only
+    //State 4 = Free
     public int State;
 
     public string Name;

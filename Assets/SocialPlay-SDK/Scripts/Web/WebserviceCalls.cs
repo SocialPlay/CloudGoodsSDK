@@ -157,6 +157,15 @@ public class WebserviceCalls : MonoBehaviour, IServiceCalls
         StartCoroutine(OnWebServiceCallback(www, callback));
     }
 
+    public void PurchaseItemBundles(Guid appID, Guid UserID, int bundleID, string paymentType, int location, Action<string> callback)
+    {
+        string url = cloudGoodsURL + "PurchaseItemBundle?AppID=" + appID + "&UserID=" + UserID + "&BundleID=" + bundleID + "&PaymentType=" + paymentType + "&Location=" + location;
+
+        WWW www = new WWW(url);
+
+        StartCoroutine(OnWebServiceCallback(www, callback));
+    }
+
     public void GetCreditBundles(string appID, int platformID, Action<string> callback)
     {
         string url = cloudGoodsURL + "GetCreditBundles?Appid=" + appID + "&Platform=" + platformID;
@@ -305,12 +314,10 @@ public class WebserviceCalls : MonoBehaviour, IServiceCalls
         // check for errors
         if (www.error == null)
         {
-            Debug.Log(www.text);
             callback(www.text);
         }
         else
         {
-            Debug.Log(www.error);
             callback("WWW Error: " + www.error);
             //callback("Error has occured");
         }

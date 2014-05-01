@@ -28,6 +28,8 @@ public interface IServiceCalls
 
     void GetItemBundles(string appID, Action<string> callback);
 
+    void PurchaseItemBundles(Guid appID, Guid UserID, int bundleID, string paymentType, int location, Action<string> callback);
+
     void GetCreditBundles(string appID, int platform, Action<string> callback);
 
     void PurchaseCreditBundles(Guid appId, string payload, Action<string> callback);
