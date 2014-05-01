@@ -48,11 +48,7 @@ public class DisplayItemBundles : MonoBehaviour {
                 {
                     BundleItemDetails bundleDetails = JsonConvert.DeserializeObject<BundleItemDetails>(bundleDetailsArray[k].ToString());
 
-                    Debug.Log(bundleDetails.Name);
-
                     bundleItem.bundleItemDetails.Add(bundleDetails);
-
-                    Debug.Log(bundleItem.bundleItemDetails.Count);
                 }
 
                 itemBundle.bundleItems.Add(bundleItem);

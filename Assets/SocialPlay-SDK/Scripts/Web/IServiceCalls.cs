@@ -26,6 +26,8 @@ public interface IServiceCalls
 
     void StoreItemPurchase(string URL, Guid userID, int itemID, int amount, string paymentType, Guid appID, int saveLocation, Action<string> callback);
 
+    void GetItemBundles(string appID, Action<string> callback);
+
     void GetCreditBundles(string appID, int platform, Action<string> callback);
 
     void PurchaseCreditBundles(Guid appId, string payload, Action<string> callback);

@@ -148,9 +148,17 @@ public class WebserviceCalls : MonoBehaviour, IServiceCalls
 
     }
 
+    public void GetItemBundles(string appID, Action<string> callback)
+    {
+        string url = cloudGoodsURL + "GetItemBundles?Appid=" + appID;
+
+        WWW www = new WWW(url);
+
+        StartCoroutine(OnWebServiceCallback(www, callback));
+    }
+
     public void GetCreditBundles(string appID, int platformID, Action<string> callback)
     {
-        Debug.Log("get credit webservice");
         string url = cloudGoodsURL + "GetCreditBundles?Appid=" + appID + "&Platform=" + platformID;
 
         WWW www = new WWW(url);
