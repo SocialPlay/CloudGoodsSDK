@@ -7,6 +7,8 @@ public class NGUITooltip : MonoBehaviour {
 
     void OnTooltip(bool show)
     {
+        Debug.Log("Tooltip: " + show);
+
         if (show)
         {
             Display();

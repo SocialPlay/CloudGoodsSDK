@@ -52,7 +52,7 @@ public class ItemQuailityColorSelector : MonoBehaviour
     }
 
 
-    protected virtual Color GetColor(int colorQuality)
+    public virtual Color GetColor(int colorQuality)
     {
         try
         {

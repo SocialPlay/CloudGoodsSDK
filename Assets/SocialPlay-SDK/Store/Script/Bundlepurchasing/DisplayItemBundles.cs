@@ -48,7 +48,9 @@ public class DisplayItemBundles : MonoBehaviour {
 
                 for (int k = 0; k < bundleDetailsArray.Count; k++)
                 {
-                    BundleItemDetails bundleDetails = JsonConvert.DeserializeObject<BundleItemDetails>(bundleDetailsArray[k].ToString());
+                    BundleItemDetails bundleDetails = new BundleItemDetails();
+                    bundleDetails.BundleDetailName = bundleDetailsArray[k]["Name"].ToString();
+                    bundleDetails.Value = int.Parse(bundleDetailsArray[k]["Value"].ToString());
 
                     bundleItem.bundleItemDetails.Add(bundleDetails);
                 }
@@ -100,5 +102,5 @@ public class BundleItemDetails
 {
     public int Value;
 
-    public string Name;
+    public string BundleDetailName;
 }

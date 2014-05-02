@@ -16,6 +16,8 @@ public class BundlePurchasing : MonoBehaviour {
     public UILabel CoinAmount;
 
     public UIGrid BundleDisplayGrid;
+    public Transform targetScroll;
+    public UIPanel clippedPanel;
 
     public int purchaseContainerLocation = 0;
 
@@ -49,9 +51,14 @@ public class BundlePurchasing : MonoBehaviour {
 
             bundleItemObj.transform.parent = BundleDisplayGrid.transform;
             bundleItemObj.transform.localScale = new Vector3(1, 1, 1);
+            bundleItemObj.transform.localPosition = new Vector3(0, 0, 0);
 
             BundleItemInfo bundleInfo = bundleItemObj.GetComponent<BundleItemInfo>();
             bundleInfo.SetupBundleItemDisplay(bundleItem);
+
+            UIDragObject dragobject = bundleItemObj.GetComponent<UIDragObject>();
+            dragobject.target = targetScroll;
+            dragobject.contentRect = clippedPanel;
 
             bundleObjects.Add(bundleItemObj);
         }
@@ -82,6 +89,8 @@ public class BundlePurchasing : MonoBehaviour {
                 CoinAmount.text = itemCoinCost.ToString();
                 break;
             case 4:
+                CreditAmount.text = "Free";
+                CoinAmount.text = "Free";
                 coinPurchaseButton.SetState(true);
                 creditPurchaseButton.SetState(true);
                 break;
@@ -90,6 +99,8 @@ public class BundlePurchasing : MonoBehaviour {
                 creditPurchaseButton.InsufficientFundsLabel.text = "Insufficent Funds";
                 coinPurchaseButton.SetState(itemCoinCost <= CurrencyBalance.freeCurrency);
                 creditPurchaseButton.SetState(itemCreditCost <= CurrencyBalance.paidCurrency);
+                CreditAmount.text = itemCreditCost.ToString();
+                CoinAmount.text = itemCoinCost.ToString();
                 break;
         }
     }
@@ -121,6 +132,13 @@ public class BundlePurchasing : MonoBehaviour {
 
     void OnReceivedPurchaseCallback(string data)
     {
-        Debug.Log(data);
+        //TODO handle callback for success and error
+        PurchaseConfirmationWindow.SetActive(true);
+        ClosePurchaseWindow();
+    }
+
+    public void ClosePurchaseStatusWindow()
+    {
+        PurchaseConfirmationWindow.SetActive(false);
     }
 }

@@ -8,8 +8,13 @@ public class BundleItemInfo : MonoBehaviour {
 
     public UITexture itemImage;
 
-    public void SetupBundleItemDisplay(BundleItem bundleItem)
+    public BundleItem bundleItem;
+
+    public void SetupBundleItemDisplay(BundleItem newBundleItem)
     {
+
+        bundleItem = newBundleItem;
+
         ItemName.text = bundleItem.Name;
         itemAmount.text = "Amount: " + bundleItem.Quantity;
 
