@@ -25,7 +25,7 @@ public class CloudGoodsSetup : MonoBehaviour
 
     void OnReceivedSocialPlayUser(WebserviceCalls.UserInfo socialplayMsg)
     {
-        new ItemSystemGameData(AccessToken, socialplayMsg.userGuid, 1, Guid.NewGuid().ToString(), socialplayMsg.userName);
+        new ItemSystemGameData(AccessToken, socialplayMsg.userGuid, 1, Guid.NewGuid().ToString(), socialplayMsg.userName, socialplayMsg.userEmail);
 
         if(CloudGoodsInitialized != null)
             CloudGoodsInitialized(true);

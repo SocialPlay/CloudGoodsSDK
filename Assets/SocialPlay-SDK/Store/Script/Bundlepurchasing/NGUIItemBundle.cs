@@ -19,7 +19,6 @@ public class NGUIItemBundle : MonoBehaviour {
     {
         bundlePurchasing.gameObject.SetActive(true);
         bundlePurchasing.SetupBundlePurchaseDetails(itemBundle);
-        Debug.Log("ItemBundle: " + itemBundle.Name + " clicked");
     }
 
 }

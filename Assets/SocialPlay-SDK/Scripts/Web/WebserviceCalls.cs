@@ -307,6 +307,14 @@ public class WebserviceCalls : MonoBehaviour, IServiceCalls
         StartCoroutine(OnWebServiceCallback(www, callback));
     }
 
+    public void SendEmailMessage(Guid appID, string userEmail, Action<string> callback)
+    {
+        string url = string.Format("{0}SendUserEmailMessage?appID={1}&userEmail={2}", cloudGoodsURL, ItemSystemGameData.AppID, "");
+        WWW www = new WWW(url);
+
+        StartCoroutine(OnWebServiceCallback(www, callback));
+    }
+
     IEnumerator OnWebServiceCallback(WWW www, Action<string> callback)
     {
         yield return www;

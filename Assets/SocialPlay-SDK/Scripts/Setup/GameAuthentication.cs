@@ -29,7 +29,7 @@ public class GameAuthentication : MonoBehaviour
 
     public static void OnUserAuthorized(WebserviceCalls.UserInfo socialplayMsg)
     {
-        new ItemSystemGameData(GetAppID(), socialplayMsg.userGuid, -1, Guid.NewGuid().ToString(), socialplayMsg.userName);
+        new ItemSystemGameData(GetAppID(), socialplayMsg.userGuid, -1, Guid.NewGuid().ToString(), socialplayMsg.userName, socialplayMsg.userEmail);
 
         GetGameSession(ItemSystemGameData.UserID, GetAppID(), 1, OnRegisteredSession);
 

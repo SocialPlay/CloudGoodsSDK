@@ -121,7 +121,6 @@ public class BundlePurchasing : MonoBehaviour {
 
     public void PurchaseBundleWithCoin()
     {
-        //TODO expose location for developer
         WebserviceCalls.webservice.PurchaseItemBundles(ItemSystemGameData.AppID, ItemSystemGameData.UserID, currentItemBundle.ID, "Coins", purchaseContainerLocation, OnReceivedPurchaseCallback);
     }
 
