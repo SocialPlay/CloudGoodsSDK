@@ -15,7 +15,7 @@ public class CurrencyBalance : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        GameAuthentication.OnUserAuthEvent += GetCurrencyBalance;
+        GameAuthentication.OnRegisteredUserToSession += GetCurrencyBalance;
     }
 
     public void GetCurrencyBalance(string userAuth)

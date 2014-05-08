@@ -13,7 +13,7 @@ public class DisplayItems : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        GameAuthentication.OnUserAuthEvent += OnUserAuth;
+        GameAuthentication.OnRegisteredUserToSession += OnUserAuth;
     }
 
     void OnUserAuth(string user)

@@ -9,7 +9,9 @@ public class GameAuthentication : MonoBehaviour
 
     private static GameAuthentication instance = null;
 
-    public static event Action<string> OnUserAuthEvent;
+    public static event Action<string> OnRegisteredUserToSession;
+
+    public static event Action<WebserviceCalls.UserInfo> OnUserAuthorizedEvent;
 
     public string AppID;
 
@@ -31,6 +33,8 @@ public class GameAuthentication : MonoBehaviour
     {
         new ItemSystemGameData(GetAppID(), socialplayMsg.userGuid, -1, Guid.NewGuid().ToString(), socialplayMsg.userName, socialplayMsg.userEmail);
 
+        OnUserAuthorizedEvent(socialplayMsg);
+
         GetGameSession(ItemSystemGameData.UserID, GetAppID(), 1, OnRegisteredSession);
 
     }
@@ -51,7 +55,7 @@ public class GameAuthentication : MonoBehaviour
     {
         ItemSystemGameData.SessionID = sessionID;
 
-        if (OnUserAuthEvent != null)
-            OnUserAuthEvent(ItemSystemGameData.UserID.ToString());
+        if (OnRegisteredUserToSession != null)
+            OnRegisteredUserToSession(ItemSystemGameData.UserID.ToString());
     }
 }

@@ -11,7 +11,7 @@ public class DisplayItemBundles : MonoBehaviour {
     public List<ItemBundle> ItemBundles = new List<ItemBundle>();
 
 	void Start () {
-	    GameAuthentication.OnUserAuthEvent += OnReceivedUserAuth;
+	    GameAuthentication.OnRegisteredUserToSession += OnReceivedUserAuth;
 	}
 
     void OnReceivedUserAuth(string data)

@@ -10,12 +10,12 @@ public class EnviromentContainerLoader : MonoBehaviour
 
     void OnEnable()
     {
-        GameAuthentication.OnUserAuthEvent += GameAuthentication_OnUserAuthEvent;
+        GameAuthentication.OnRegisteredUserToSession += GameAuthentication_OnUserAuthEvent;
     }
 
     void OnDisable()
     {
-        GameAuthentication.OnUserAuthEvent -= GameAuthentication_OnUserAuthEvent;
+        GameAuthentication.OnRegisteredUserToSession -= GameAuthentication_OnUserAuthEvent;
     }
 
     void GameAuthentication_OnUserAuthEvent(string obj)
