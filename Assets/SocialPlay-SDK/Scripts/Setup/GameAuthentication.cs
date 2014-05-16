@@ -33,7 +33,8 @@ public class GameAuthentication : MonoBehaviour
     {
         new ItemSystemGameData(GetAppID(), socialplayMsg.userGuid, -1, Guid.NewGuid().ToString(), socialplayMsg.userName, socialplayMsg.userEmail);
 
-        OnUserAuthorizedEvent(socialplayMsg);
+        if(OnUserAuthorizedEvent != null)
+            OnUserAuthorizedEvent(socialplayMsg);
 
         GetGameSession(ItemSystemGameData.UserID, GetAppID(), 1, OnRegisteredSession);
 
@@ -45,8 +46,7 @@ public class GameAuthentication : MonoBehaviour
         //todo remove email
         webserviceCalls.RegisterGameSession(UserID, AppID, instanceID, (x) =>
         {
-            JToken token = JToken.Parse(x);
-            Guid sessionGuid = new Guid(token.ToString());
+            Guid sessionGuid = x;
             callback(sessionGuid);
         });
     }

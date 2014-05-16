@@ -29,7 +29,6 @@ public class CurrencyBalance : MonoBehaviour
 
     void OnReceivedFreeCurrency(string freeCurrencyBalance)
     {
-        Debug.Log(freeCurrencyBalance);
         JToken freeToken = JToken.Parse(freeCurrencyBalance);
         freeCurrencyLabel.text = freeToken.ToString();
         freeCurrency = int.Parse(freeToken.ToString());

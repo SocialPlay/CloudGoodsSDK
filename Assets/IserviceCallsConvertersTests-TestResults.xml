@@ -1,0 +1,164 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--This file represents the results of running a test suite-->
+<test-results name="Unity Tests" total="8" errors="0" failures="0" not-run="0" inconclusive="0" ignored="0" skipped="0" invalid="0" date="2014-05-16" time="16:12:31">
+  <environment nunit-version="2.6.2-Unity" clr-version="2.0.50727.1433" os-version="Microsoft Windows NT 6.1.7601.0" platform="Win32NT" cwd="C:\Users\User\Documents\CloudGoodsSDK" machine-name="HOTBUBBA" user="User" user-domain="HOTBUBBA" />
+  <culture-info current-culture="en-US" current-uiculture="en-US" />
+  <test-suite name="IserviceCallsConvertersTests" type="Assembly" executed="True" result="Success" success="True" time="0.241">
+    <results>
+      <test-case name="1. TestConvertToItemDataList" executed="True" result="Success" success="True" time="0.098">
+        <reason>
+          <message>
+<![CDATA[IntegrationTest started (1. TestConvertToItemDataList)
+IntegrationTest Pass (1. TestConvertToItemDataList)
+IntegrationTest finished (1. TestConvertToItemDataList)
+]]>
+          </message>
+        </reason>
+      </test-case>
+      <test-case name="2. TestConvertToGuid" executed="True" result="Success" success="True" time="0.017">
+        <reason>
+          <message>
+<![CDATA[IntegrationTest started (2. TestConvertToGuid)
+"73bcdbe5-48b8-4e8e-97bb-7fbb5b4b6155"
+test guid: 73bcdbe5-48b8-4e8e-97bb-7fbb5b4b6155
+IntegrationTest Pass (2. TestConvertToGuid)
+IntegrationTest finished (2. TestConvertToGuid)
+]]>
+          </message>
+        </reason>
+      </test-case>
+      <test-case name="3. TestConvertToString" executed="True" result="Success" success="True" time="0.025">
+        <reason>
+          <message>
+<![CDATA[IntegrationTest started (3. TestConvertToString)
+IntegrationTest Pass (3. TestConvertToString)
+IntegrationTest finished (3. TestConvertToString)
+]]>
+          </message>
+        </reason>
+      </test-case>
+      <test-case name="4. TestConvertToStoreItems" executed="True" result="Success" success="True" time="0.025">
+        <reason>
+          <message>
+<![CDATA[IntegrationTest started (4. TestConvertToStoreItems)
+IntegrationTest Pass (4. TestConvertToStoreItems)
+IntegrationTest finished (4. TestConvertToStoreItems)
+]]>
+          </message>
+        </reason>
+      </test-case>
+      <test-case name="5. TestConvertToUserInfo" executed="True" result="Success" success="True" time="0.019">
+        <reason>
+          <message>
+<![CDATA[IntegrationTest started (5. TestConvertToUserInfo)
+IntegrationTest Pass (5. TestConvertToUserInfo)
+IntegrationTest finished (5. TestConvertToUserInfo)
+]]>
+          </message>
+        </reason>
+      </test-case>
+      <test-case name="6. TestConvertToListRecipeInfo" executed="True" result="Success" success="True" time="0.023">
+        <reason>
+          <message>
+<![CDATA[IntegrationTest started (6. TestConvertToListRecipeInfo)
+[
+  {
+    "ID": 280,
+    "Name": "Pistol",
+    "Energy": 1073,
+    "Detail": "[{\"Name\":\"Damage\",\"Value\":30,\"InvertEnergy\":false},{\"Name\":\"Fire Rate\",\"Value\":0.3}]",
+    "Description": "Standard issue firearm.",
+    "Image": "https://socialplay.blob.core.windows.net/itemimages/2b828b8e-8c1e-4090-a0bc-c1677e258eba.png",
+    "Recipe": [
+      {
+        "ID": 333,
+        "Amount": 59,
+        "Energy": 120,
+        "Image": "https://socialplay.blob.core.windows.net/itemimages/2b828b8e-8c1e-4090-a0bc-c1677e258eba.png",
+        "Name": "Nuts"
+      },
+      {
+        "ID": 311,
+        "Amount": 41,
+        "Energy": 40,
+        "Image": "https://socialplay.blob.core.windows.net/itemimages/2b828b8e-8c1e-4090-a0bc-c1677e258eba.png",
+        "Name": "Wood"
+      }
+    ]
+  },
+  {
+    "ID": 282,
+    "Name": "Shotgun",
+    "Energy": 1600,
+    "Detail": "[{\"Name\":\"Damage\",\"Value\":80,\"InvertEnergy\":false},{\"Name\":\"Fire Rate\",\"Value\":1}]",
+    "Description": "Standard issue shotgun with a 4 bullet spread.",
+    "Image": "https://socialplay.blob.core.windows.net/itemimages/2b828b8e-8c1e-4090-a0bc-c1677e258eba.png",
+    "Recipe": [
+      {
+        "ID": 334,
+        "Amount": 50,
+        "Energy": 210,
+        "Image": "https://socialplay.blob.core.windows.net/itemimages/2b828b8e-8c1e-4090-a0bc-c1677e258eba.png",
+        "Name": "Steel Plate"
+      },
+      {
+        "ID": 333,
+        "Amount": 25,
+        "Energy": 120,
+        "Image": "https://socialplay.blob.core.windows.net/itemimages/2b828b8e-8c1e-4090-a0bc-c1677e258eba.png",
+        "Name": "Nuts"
+      },
+      {
+        "ID": 311,
+        "Amount": 25,
+        "Energy": 40,
+        "Image": "https://socialplay.blob.core.windows.net/itemimages/2b828b8e-8c1e-4090-a0bc-c1677e258eba.png",
+        "Name": "Wood"
+      }
+    ]
+  }
+]
+Recipes count:2
+IntegrationTest Pass (6. TestConvertToListRecipeInfo)
+IntegrationTest finished (6. TestConvertToListRecipeInfo)
+]]>
+          </message>
+        </reason>
+      </test-case>
+      <test-case name="7. TestConvertToListItemBundle" executed="True" result="Success" success="True" time="0.017">
+        <reason>
+          <message>
+<![CDATA[IntegrationTest started (7. TestConvertToListItemBundle)
+IntegrationTest Pass (7. TestConvertToListItemBundle)
+IntegrationTest finished (7. TestConvertToListItemBundle)
+]]>
+          </message>
+        </reason>
+      </test-case>
+      <test-case name="8. TestConvertToSPLoginResponse" executed="True" result="Success" success="True" time="0.017">
+        <reason>
+          <message>
+<![CDATA[IntegrationTest started (8. TestConvertToSPLoginResponse)
+IntegrationTest Pass (8. TestConvertToSPLoginResponse)
+IntegrationTest finished (8. TestConvertToSPLoginResponse)
+]]>
+          </message>
+        </reason>
+      </test-case>
+    </results>
+  </test-suite>
+</test-results>
+="9. TestConvertToSPloginResponse" executed="True" result="Failure" success="False" time="5.003">
+        <failure>
+          <message>
+<![CDATA[IntegrationTest started (9. TestConvertToSPloginResponse)
+IntegrationTest timeout (9. TestConvertToSPloginResponse)
+]]>
+          </message>
+          <stack-trace>
+          </stack-trace>
+        </failure>
+      </test-case>
+    </results>
+  </test-suite>
+</test-results>

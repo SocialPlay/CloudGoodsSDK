@@ -4,19 +4,17 @@ using Newtonsoft.Json.Linq;
 
 public class StoreItemTooltipSetup : MonoBehaviour, ITooltipSetup
 {
-    ItemInfo item;
+    StoreItem item;
 
     public string Setup()
     {
-        item = GetComponent<ItemInfo>();
-        string formated = "[" + NGUITools.EncodeColor(GetColorQuality(1)) + "]" + item.itemName;
+        item = GetComponent<StoreItem>();
+        string formated = "[" + NGUITools.EncodeColor(GetColorQuality(1)) + "]" + item.storeItemInfo.itemName;
 
-        JArray statsArray = JArray.Parse(item.itemDetail);
-
-
-        for (int i = 0; i < statsArray.Count; i++)
+        foreach(StoreItemDetail detail in item.storeItemInfo.itemDetail)
         {
-            formated = string.Format("{0}\n [" + NGUITools.EncodeColor(Color.white) + "]{1}: {2}", formated, statsArray[i]["Name"], statsArray[i]["Value"]);
+            Debug.Log(detail.propertyName);
+            formated = string.Format("{0}\n [" + NGUITools.EncodeColor(Color.white) + "]{1}: {2}", formated, detail.propertyName, detail.propertyValue.ToString());
         }
 
         return formated;

@@ -7,7 +7,7 @@ using UnityEngine;
 public class GameObjectItemDataConverter : ItemDataConverter
 {
 
-    protected override List<ItemData> ConvertItems(ItemDataList generatedItems)
+    public override List<ItemData> ConvertItems(ItemDataList generatedItems)
     {
         List<ItemData> convertedItems = new List<ItemData>();
 
@@ -62,7 +62,7 @@ public class GameObjectItemDataConverter : ItemDataConverter
         return tags;
     }
 
-    protected override Dictionary<string, float> ConvertItemDetail(SocialPlay.Data.ItemData item)
+    public override Dictionary<string, float> ConvertItemDetail(SocialPlay.Data.ItemData item)
     {
         Dictionary<string, float> statPair = new Dictionary<string, float>();
 

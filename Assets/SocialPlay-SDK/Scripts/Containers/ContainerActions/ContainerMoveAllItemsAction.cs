@@ -25,14 +25,12 @@ public class ContainerMoveAllItemsAction : ContainerActions
             stacks.StackInfos.Add(info);
         }
         string convert = JsonConvert.SerializeObject(stacks);
-        WebserviceCalls.webservice.MoveItemStacks(convert, ItemSystemGameData.UserID.ToString(), "User", ItemSystemGameData.AppID, DestinationLocation, delegate(string x)
+        WebserviceCalls.webservice.MoveItemStacks(convert, ItemSystemGameData.UserID.ToString(), "User", ItemSystemGameData.AppID, DestinationLocation, delegate(MoveMultipleItemsResponse x)
         {
-            JToken token = JToken.Parse(x);
-            MoveMultipleItemsResponse infos = JsonConvert.DeserializeObject<MoveMultipleItemsResponse>(token.ToString());
             ItemData[] containerItems = new ItemData[SourceContainer.containerItems.Count];
             SourceContainer.containerItems.CopyTo(containerItems);
 
-            foreach (MovedItemsInfo info in infos.movedItems)
+            foreach (MovedItemsInfo info in x.movedItems)
             {
                 foreach (ItemData data in containerItems)
                 {

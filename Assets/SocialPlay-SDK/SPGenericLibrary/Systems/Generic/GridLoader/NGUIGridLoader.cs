@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System;
 using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 
 
 
@@ -9,17 +10,15 @@ class NGUIGridLoader : MonoBehaviour, SocialPlay.Generic.IGridLoader
     public GameObject grid = null;
     public GameObject itemPrefab = null;
 
-    public event Action<JObject, GameObject> ItemAdded;
+    public event Action<CreditBundleItem, GameObject> ItemAdded;
 
-    public void LoadGrid(string data)
+    public void LoadGrid(List<CreditBundleItem> creditBundles)
     {
-        JArray array = JArray.Parse(JToken.Parse(data).ToString());
-
-        foreach (JObject item in array)
+        foreach (CreditBundleItem creditBundle in creditBundles)
         {
             GameObject gItem = NGUITools.AddChild(grid, itemPrefab);
             if (ItemAdded != null)
-                ItemAdded(item, gItem);
+                ItemAdded(creditBundle, gItem);
         }
         grid.GetComponent<UIGrid>().Reposition();
     }

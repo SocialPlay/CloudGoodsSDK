@@ -8,10 +8,10 @@ public abstract class ISortItem : MonoBehaviour
     public string displayName;
 
     protected int direction = 1;
-    public abstract List<JToken> Sort(List<JToken> StoreItems, int direction);
+    public abstract List<StoreItemInfo> Sort(List<StoreItemInfo> StoreItems, int direction);
 
 
-    public int CheckIfNull(JToken x, JToken y)
+    public int CheckIfNull(StoreItemInfo x, StoreItemInfo y)
     {
         if (x == null)
         {

@@ -60,11 +60,11 @@ public class ItemGetter : MonoBehaviour
         WebserviceCalls.webservice.GenerateItemsAtLocation(ItemSystemGameData.SessionID.ToString(), "Session", 0, ItemSystemGameData.AppID, minEnergy, MaxEnergy, OnReceivedGeneratedItems, andTagsString);
     }
 
-    void OnReceivedGeneratedItems(string generatedItemsJson)
+    void OnReceivedGeneratedItems(List<ItemData> generatedItems)
     {
         ReattachToGameObject();
-        List<ItemData> items = ItemConversion.converter.convertToItemDataFromString(generatedItemsJson);
-        itemPutter.PutGameItem(items);
+        //List<ItemData> items = ItemConversion.converter.convertToItemDataFromString(generatedItemsJson);
+        itemPutter.PutGameItem(generatedItems);
     }
 
     void ReattachToGameObject()

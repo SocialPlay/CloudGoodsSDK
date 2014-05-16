@@ -10,8 +10,8 @@ public abstract class ItemDataConverter
 
     public abstract List<ItemData> convertToItemDataFromString(string itemData);
 
-    protected abstract List<ItemData> ConvertItems(ItemDataList serverDetails);
+    public abstract List<ItemData> ConvertItems(ItemDataList serverDetails);
 
-    protected abstract Dictionary<string, float> ConvertItemDetail(SocialPlay.Data.ItemData detail);
+    public abstract Dictionary<string, float> ConvertItemDetail(SocialPlay.Data.ItemData detail);
 }
 

@@ -2,35 +2,35 @@
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using SocialPlay.Data;
 
 public interface IServiceCalls
 {
+    void GenerateItemsAtLocation(string OwnerID, string OwnerType, int Location, Guid AppID, int MinimumEnergyOfItem, int TotalEnergyToGenerate, Action<List<ItemData>> callback, string ANDTags = "", string ORTags = "");
 
-    void GenerateItemsAtLocation(string OwnerID, string OwnerType, int Location, Guid AppID, int MinimumEnergyOfItem, int TotalEnergyToGenerate, Action<string> callback, string ANDTags = "", string ORTags = "");
+    void GetOwnerItems(string ownerID, string ownerType, int location, Guid AppID, Action<List<ItemData>> callback);
 
-    void GetOwnerItems(string ownerID, string ownerType, int location, Guid AppID, Action<string> callback);
+    void MoveItemStack(Guid StackToMove, int MoveAmount, string DestinationOwnerID, string DestinationOwnerType, Guid AppID, int DestinationLocation, Action<Guid> callback);
 
-    void MoveItemStack(Guid StackToMove, int MoveAmount, string DestinationOwnerID, string DestinationOwnerType, Guid AppID, int DestinationLocation, Action<string> callback);
+    void GetUserFromWorld(Guid appID, int platformID, string platformUserID, string userName, string userEmail, Action<WebserviceCalls.UserInfo> callback);
 
-    void GetUserFromWorld(Guid appID, int platformID, string platformUserID, string userName, string userEmail, Action<string> callback);
-
-    void GetStoreItems(string appID, Action<string> callback);
+    void GetStoreItems(string appID, Action<List<StoreItemInfo>> callback);
 
     void GetFreeCurrencyBalance(string userID, int accessLocation, string appID, Action<string> callback);
 
     void GetPaidCurrencyBalance(string userID, string appID, Action<string> callback);
 
-    void RegisterGameSession(Guid userID, string AppID, int instanceID, Action<string> callback);
+    void RegisterGameSession(Guid userID, string AppID, int instanceID, Action<Guid> callback);
 
-    void GetGameRecipes(string appID, Action<string> callback);
+    void GetGameRecipes(string appID, Action<List<RecipeInfo>> callback);
 
     void StoreItemPurchase(string URL, Guid userID, int itemID, int amount, string paymentType, Guid appID, int saveLocation, Action<string> callback);
 
-    void GetItemBundles(string appID, Action<string> callback);
+    void GetItemBundles(string appID, Action<List<ItemBundle>> callback);
 
     void PurchaseItemBundles(Guid appID, Guid UserID, int bundleID, string paymentType, int location, Action<string> callback);
 
-    void GetCreditBundles(string appID, int platform, Action<string> callback);
+    void GetCreditBundles(string appID, int platform, Action<List<CreditBundleItem>> callback);
 
     void PurchaseCreditBundles(Guid appId, string payload, Action<string> callback);
 
@@ -38,7 +38,7 @@ public interface IServiceCalls
 
     void GetAccessPinForUser(string UserId, Action<string> callback);
 
-    void MoveItemStacks(string stacks, string DestinationOwnerID, string DestinationOwnerType, Guid AppID, int DestinationLocation, Action<string> callback);
+    void MoveItemStacks(string stacks, string DestinationOwnerID, string DestinationOwnerType, Guid AppID, int DestinationLocation, Action<MoveMultipleItemsResponse> callback);
 
     void RemoveItemStack(Guid StackRemove, Action<string> callback);
 
@@ -50,13 +50,13 @@ public interface IServiceCalls
 
     void AddInstantCraftToQueue(Guid gameID, Guid UserID, int ItemID, int Amount, List<KeyValuePair<string, int>> ItemIngredients, Action<string> callback);
 
-    void SPLogin_UserLogin(Guid gameID, string userEmail, string password, Action<string> callback);
+    void SPLogin_UserLogin(Guid gameID, string userEmail, string password, Action<SPLogin.SPLogin_Responce> callback);
 
-    void SPLogin_UserRegister(Guid gameID, string userEmail, string password, string userName, Action<string> callback);
+    void SPLogin_UserRegister(Guid gameID, string userEmail, string password, string userName, Action<SPLogin.SPLogin_Responce> callback);
 
-    void SPLoginForgotPassword(Guid gameID, string userEmail, Action<string> callback);
+    void SPLoginForgotPassword(Guid gameID, string userEmail, Action<SPLogin.SPLogin_Responce> callback);
 
-    void SPLoginResendVerificationEmail(Guid gameID, string userEmail, Action<string> callback);
+    void SPLoginResendVerificationEmail(Guid gameID, string userEmail, Action<SPLogin.SPLogin_Responce> callback);
 
 
 

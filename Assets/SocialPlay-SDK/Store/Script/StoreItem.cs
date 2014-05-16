@@ -1,18 +1,12 @@
 using UnityEngine;
 using System.Collections;
 using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
+using System;
 
-public class ItemInfo : MonoBehaviour
+public class StoreItem : MonoBehaviour
 {
-
-    public int ID = 0;
-    public string itemName = "";
-    public string itemDetail = "";
-    public string itemTags = "";
-    public int itemID = 0;
-    public int creditValue = 0;
-    public int coinValue = 0;
-    public string imageURL = "";
+    public StoreItemInfo storeItemInfo;
 
     public UISprite itemImageSprite;
     UIButton button = null;
@@ -26,18 +20,11 @@ public class ItemInfo : MonoBehaviour
     }
 
 
-    public void SetItemInfo(JToken itemToken)
+    public void SetItemInfo(StoreItemInfo newStoreItemInfo)
     {
-        ID = int.Parse(itemToken["ID"].ToString());
-        itemName = itemToken["Name"].ToString();
-        itemID = int.Parse(itemToken["ItemID"].ToString());
-        creditValue = int.Parse(itemToken["CreditValue"].ToString());
-        coinValue = int.Parse(itemToken["CoinValue"].ToString());
-        itemDetail = itemToken["Detail"].ToString();
-        itemTags = itemToken["tags"].ToString();
-        imageURL = itemToken["Image"].ToString();
+        storeItemInfo = newStoreItemInfo;
 
-        GetItemTexture(imageURL);
+        GetItemTexture(storeItemInfo.imageURL);
     }
 
     void GetItemTexture(string URL)
@@ -72,4 +59,25 @@ public class ItemInfo : MonoBehaviour
         }
     }
 
+}
+
+public class StoreItemInfo
+{
+    public int ID = 0;
+    public string itemName = "";
+    public List<StoreItemDetail> itemDetail = new List<StoreItemDetail>();
+    public DateTime addedDate;
+    public string behaviours;
+    public List<string> tags;
+    public int itemID = 0;
+    public int creditValue = 0;
+    public int coinValue = 0;
+    public string imageURL = "";
+}
+
+public class StoreItemDetail
+{
+    public string propertyName;
+    public int propertyValue;
+    public bool invertEnergy;
 }

@@ -25,17 +25,14 @@ public class ContainerDropItemAction : ContainerActions
         WebserviceCalls.webservice.MoveItemStacks(itemStacks, ItemSystemGameData.UserID.ToString(), "Session", ItemSystemGameData.AppID, 0, OnItemMoved(item));
     }
 
-    private System.Action<string> OnItemMoved(ItemData item)
+    private System.Action<MoveMultipleItemsResponse> OnItemMoved(ItemData item)
     {
         return data => ItemMoved(data, item);
     }
 
-    void ItemMoved(string returnData, ItemData item)
+    void ItemMoved(MoveMultipleItemsResponse moves, ItemData item)
     {
-        JToken token = JToken.Parse(returnData);
-        MoveMultipleItemsResponse infos = JsonConvert.DeserializeObject<MoveMultipleItemsResponse>(token.ToString());
-
-        foreach (MovedItemsInfo moveInfo in infos.movedItems)
+        foreach (MovedItemsInfo moveInfo in moves.movedItems)
         {
             DropMovedItem(item, moveInfo);
         }

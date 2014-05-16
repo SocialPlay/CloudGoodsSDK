@@ -122,18 +122,19 @@ public class BundlePurchasing : MonoBehaviour {
     public void PurchaseBundleWithCoin()
     {
         WebserviceCalls.webservice.PurchaseItemBundles(ItemSystemGameData.AppID, ItemSystemGameData.UserID, currentItemBundle.ID, "Coins", purchaseContainerLocation, OnReceivedPurchaseCallback);
+        ClosePurchaseWindow();
     }
 
     public void PurchaseBundleWithCredit()
     {
         WebserviceCalls.webservice.PurchaseItemBundles(ItemSystemGameData.AppID, ItemSystemGameData.UserID, currentItemBundle.ID, "Credits", purchaseContainerLocation, OnReceivedPurchaseCallback);
+        ClosePurchaseWindow();
     }
 
     void OnReceivedPurchaseCallback(string data)
     {
         //TODO handle callback for success and error
         PurchaseConfirmationWindow.SetActive(true);
-        ClosePurchaseWindow();
     }
 
     public void ClosePurchaseStatusWindow()

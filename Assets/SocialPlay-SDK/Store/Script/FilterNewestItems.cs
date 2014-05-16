@@ -22,18 +22,18 @@ public class FilterNewestItems
             throw new Exception("The display count should only be positive numbers.");
     }
 
-    public List<JToken> FilterItems(List<JToken> items, SortTimeType timeType, int displayCount, int allowedDifference)
+    public List<StoreItemInfo> FilterItems(List<StoreItemInfo> items, SortTimeType timeType, int displayCount, int allowedDifference)
     {
         int displayItemCounter = 0;
-        List<JToken> filteredItems = new List<JToken>();
+        List<StoreItemInfo> filteredItems = new List<StoreItemInfo>();
         itemDisplayCount = displayCount;
 
-        foreach (JToken item in items)
+        foreach (StoreItemInfo item in items)
         {
             displayItemCounter++;
             if (displayCount != 0 && displayItemCounter > displayCount) break;
 
-            string jtokenAddDateToString = item["AddDate"].ToString();
+            string jtokenAddDateToString = DateTime.Now.ToString();
             DateTime itemDate = Convert.ToDateTime(jtokenAddDateToString);
             TimeSpan difference = DateTime.Now - itemDate;
             //Debug.Log(item["Name"] + ": " + difference.TotalDays);

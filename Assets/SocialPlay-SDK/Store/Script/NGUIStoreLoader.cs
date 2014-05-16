@@ -18,8 +18,8 @@ public class NGUIStoreLoader : MonoBehaviour
     UIGrid itemGrid;
     UIGrid pageGrid;
 
-    List<JToken> items = new List<JToken>();
-    List<JToken> filteredList = new List<JToken>();
+    List<StoreItemInfo> items = new List<StoreItemInfo>();
+    List<StoreItemInfo> filteredList = new List<StoreItemInfo>();
 
     List<GameObject> currentPageItems = new List<GameObject>();
 
@@ -32,13 +32,13 @@ public class NGUIStoreLoader : MonoBehaviour
         itemGrid = itemGridObject.GetComponent<UIGrid>();
     }
 
-    public void SetMasterList(List<JToken> listItems)
+    public void SetMasterList(List<StoreItemInfo> listItems)
     {
         items = listItems;
         LoadStoreWithPaging(items, 0);
     }
 
-    public void LoadStoreWithPaging(List<JToken> listItems, int pageNum)
+    public void LoadStoreWithPaging(List<StoreItemInfo> listItems, int pageNum)
     {
         filteredList = listItems;
 
@@ -58,7 +58,7 @@ public class NGUIStoreLoader : MonoBehaviour
             newItem.transform.localScale = new Vector3(1, 1, 1);
             currentPageItems.Add(newItem);
 
-            ItemInfo itemInfo = newItem.GetComponent<ItemInfo>();
+            StoreItem itemInfo = newItem.GetComponent<StoreItem>();
             itemInfo.SetItemInfo(listItems[i]);
 
             UIEventListener.Get(itemInfo.gameObject).onClick += DisplayItemPurchasePanel;
@@ -160,7 +160,7 @@ public class NGUIStoreLoader : MonoBehaviour
         }
     }
 
-    public List<JToken> GetStoreItemList()
+    public List<StoreItemInfo> GetStoreItemList()
     {
         return items;
     }
@@ -169,6 +169,6 @@ public class NGUIStoreLoader : MonoBehaviour
     {
         itemPurchasePanel.SetActive(true);
 
-        itemPurchasePanel.GetComponent<ItemPurchase>().DisplayItemPurchasePanel(itemButton.GetComponent<ItemInfo>());
+        itemPurchasePanel.GetComponent<ItemPurchase>().DisplayItemPurchasePanel(itemButton.GetComponent<StoreItem>());
     }
 }

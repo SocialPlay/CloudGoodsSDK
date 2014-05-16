@@ -25,10 +25,8 @@ public class ContainerDropAllContainerItemsAction : ContainerActions
         WebserviceCalls.webservice.MoveItemStacks(convertedDropItems, ItemSystemGameData.UserID.ToString(), "Session", ItemSystemGameData.AppID, 0, MovedItems);
     }
 
-    void MovedItems(string returnData)
+    void MovedItems(MoveMultipleItemsResponse moveItemResponses)
     {
-        MoveMultipleItemsResponse moveItemResponses = JsonToMoveMultipleItemsResponse(returnData);
-
         var itemsToDrop = CreateDropItemArray();
 
         foreach (MovedItemsInfo moveInfo in moveItemResponses.movedItems)

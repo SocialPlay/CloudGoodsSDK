@@ -24,46 +24,10 @@ public class DisplayItemBundles : MonoBehaviour {
         WebserviceCalls.webservice.GetItemBundles(ItemSystemGameData.AppID.ToString(), OnReceivedItemBundles);
     }
 
-    void OnReceivedItemBundles(string data)
+    void OnReceivedItemBundles(List<ItemBundle> newItemBundles)
     {
-
-        Debug.Log(data);
-
-        ItemBundles = new List<ItemBundle>();
-
-        JToken itemBundleParse = JToken.Parse(data);
-        JArray itemBundleObj = JArray.Parse(itemBundleParse.ToString());
-
-        for (int i = 0; i < itemBundleObj.Count; i++)
-        {
-            ItemBundle itemBundle = JsonConvert.DeserializeObject<ItemBundle>(itemBundleObj[i].ToString());
-
-            JArray BundleItemArray = JArray.Parse(itemBundleObj[i]["items"].ToString());
-
-            for (int j = 0; j < BundleItemArray.Count; j++)
-            {
-                BundleItem bundleItem = JsonConvert.DeserializeObject<BundleItem>(BundleItemArray[j].ToString());
-
-                JArray bundleDetailsArray = JArray.Parse(BundleItemArray[j]["Detail"].ToString());
-
-                for (int k = 0; k < bundleDetailsArray.Count; k++)
-                {
-                    BundleItemDetails bundleDetails = new BundleItemDetails();
-                    bundleDetails.BundleDetailName = bundleDetailsArray[k]["Name"].ToString();
-                    bundleDetails.Value = int.Parse(bundleDetailsArray[k]["Value"].ToString());
-
-                    bundleItem.bundleItemDetails.Add(bundleDetails);
-                }
-
-                itemBundle.bundleItems.Add(bundleItem);
-            }
-
-            ItemBundles.Add(itemBundle);
-        }
-
-        bundleLoader.LoadBundleItems(ItemBundles);
+        bundleLoader.LoadBundleItems(newItemBundles);
     }
-    
 }
 
 public class ItemBundle
@@ -83,7 +47,6 @@ public class ItemBundle
     public string Image;
 
     public List<BundleItem> bundleItems = new List<BundleItem>();
-    
 }
 
 public class BundleItem

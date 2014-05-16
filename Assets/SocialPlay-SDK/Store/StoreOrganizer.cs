@@ -55,13 +55,13 @@ public class StoreOrganizer : MonoBehaviour
     void OrganizeStore()
     {
       
-        List<JToken> AllItems = storeLoader.GetStoreItemList();
+        List<StoreItemInfo> AllItems = storeLoader.GetStoreItemList();
         if (AllItems.Count == 0)
         {
             Debug.Log("No items to sort at this point");
             return;
         }
-        List<JToken> storeList = AllItems.GetRange(0, AllItems.Count);
+        List<StoreItemInfo> storeList = AllItems.GetRange(0, AllItems.Count);
 
         foreach (FilterItem filter in activeFilters)
         {

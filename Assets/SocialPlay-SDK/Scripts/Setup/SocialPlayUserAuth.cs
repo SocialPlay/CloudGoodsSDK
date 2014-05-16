@@ -17,12 +17,9 @@ public class SocialPlayUserWebServiceGetter : ISocialPlayerUserGetter
     {
         WebserviceCalls webserviceCalls = GameObject.FindObjectOfType(typeof(WebserviceCalls)) as WebserviceCalls;
         //todo remove email
-        webserviceCalls.GetUserFromWorld(socialPlayUser.appID, socialPlayUser.platformID, socialPlayUser.platformUserID, socialPlayUser.userName, null, (x) =>
+        webserviceCalls.GetUserFromWorld(socialPlayUser.appID, socialPlayUser.platformID, socialPlayUser.platformUserID, socialPlayUser.userName, null, (WebserviceCalls.UserInfo x) =>
         {
-            Debug.Log(x);
-            JToken token = JToken.Parse(x);
-            WebserviceCalls.UserInfo userGuid = JsonConvert.DeserializeObject<WebserviceCalls.UserInfo>(token.ToString());
-
+            WebserviceCalls.UserInfo userGuid = x;
             callback(userGuid);
         });
     }

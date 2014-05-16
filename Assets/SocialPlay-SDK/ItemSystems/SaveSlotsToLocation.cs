@@ -37,13 +37,12 @@ public class SaveSlotsToLocation : MonoBehaviour
             if (isSave == true && SlotedContainer.slots[slotId].persistantID != -1)
             {
                 data.isLocked = true;
-                WebserviceCalls.webservice.MoveItemStack(data.stackID, data.stackSize, GetOwnerID(), DestinationOwnerType.ToString(), ItemSystemGameData.AppID, SlotedContainer.slots[slotId].persistantID, delegate(string x)
+                WebserviceCalls.webservice.MoveItemStack(data.stackID, data.stackSize, GetOwnerID(), DestinationOwnerType.ToString(), ItemSystemGameData.AppID, SlotedContainer.slots[slotId].persistantID, delegate(Guid x)
                 {
                     try
                     {
                         Debug.Log("Slot Added: " + x + "\nOriginal: " + data.stackID.ToString());
-                        JToken token = JToken.Parse(x);
-                        data.stackID = new Guid(token.ToString());
+                        data.stackID = x;
                     }
                     finally
                     {

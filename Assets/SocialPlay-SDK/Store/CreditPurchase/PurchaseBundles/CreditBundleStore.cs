@@ -11,6 +11,7 @@ using SocialPlay.Generic;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 
 public class CreditBundleStore : MonoBehaviour
 {
@@ -58,27 +59,25 @@ public class CreditBundleStore : MonoBehaviour
         WebserviceCalls.webservice.GetCreditBundles(GameAuthentication.GetAppID(), 3, OnPurchaseBundlesRecieved);
     }
 
-    void OnPurchaseBundlesRecieved(string data)
+    void OnPurchaseBundlesRecieved(List<CreditBundleItem> data)
     {
-        Debug.Log(data);
         InitializeGridWithBundles(data);
     }
 
-    public void InitializeGridWithBundles(string data)
+    public void InitializeGridWithBundles(List<CreditBundleItem> data)
     {
-        Debug.Log(data);
         gridLoader = (IGridLoader)Grid.GetComponent(typeof(IGridLoader));
         gridLoader.ItemAdded += OnItemInGrid;
         gridLoader.LoadGrid(data);
     }
 
-    void OnItemInGrid(JObject item, GameObject obj)
+    void OnItemInGrid(CreditBundleItem item, GameObject obj)
     {
         NGUIBundleItem nguiItem = obj.GetComponent<NGUIBundleItem>();
-        nguiItem.Amount = item["CreditAmount"].ToString();
-        nguiItem.Cost = item["Cost"].ToString();
-        nguiItem.Id = item["ID"].ToString();
-        nguiItem.CurrencyName = "$:";
+        nguiItem.Amount = item.Amount.ToString();
+        nguiItem.Cost = item.Cost.ToString();
+        nguiItem.Id = item.ID.ToString();
+        nguiItem.CurrencyName = item.CurrencyName;
         nguiItem.CurrencyIcon = creditBundleIcon.Get(nguiItem.Amount, nguiItem.CurrencyIcon);
 
         nguiItem.PurhcaseButtonClicked = OnPurchaseRequest;
@@ -109,4 +108,13 @@ public class CreditBundleStore : MonoBehaviour
 
     }
 
+}
+
+public class CreditBundleItem
+{
+    public int Amount = 0;
+    public string Cost = "";
+    public int ID = 0;
+    public string CurrencyName = "";
+    public string CurrencyIcon = "";
 }

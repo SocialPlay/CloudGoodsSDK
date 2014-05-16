@@ -36,20 +36,20 @@ public abstract class ContainerItemLoader : MonoBehaviour
         return "";
     }
 
-    protected void RecivedItems(string Data)
+    protected void RecivedItems(List<ItemData> receivedItems)
     {
         if (ItemConversion.converter == null)
         {
             throw new Exception("Item conversion is not setup correctly!");
         }
 
-        List<ItemData> recivedItems = ItemConversion.converter.convertToItemDataFromString(Data);
+        //List<ItemData> recivedItems = ItemConversion.converter.convertToItemDataFromString(Data);
 
-        AddItemComponentToNewlyConvertedItem(recivedItems);
+        AddItemComponentToNewlyConvertedItem(receivedItems);
 
         if (LoadedItemsForContainerEvent != null)
         {
-            LoadedItemsForContainerEvent(recivedItems, Container);
+            LoadedItemsForContainerEvent(receivedItems, Container);
         }
     }
 

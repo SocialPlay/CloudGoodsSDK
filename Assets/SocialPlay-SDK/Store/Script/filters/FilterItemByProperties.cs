@@ -5,17 +5,16 @@ using Newtonsoft.Json.Linq;
 
 public class FilterItemByProperties : FilterItem
 {
-    public override List<JToken> FilterStoreList(List<JToken> storeList)
+    public override List<StoreItemInfo> FilterStoreList(List<StoreItemInfo> storeList)
     {
-        List<JToken> newStoreList = new List<JToken>();
-        foreach (JToken item in storeList)
+        List<StoreItemInfo> newStoreList = new List<StoreItemInfo>();
+        foreach (StoreItemInfo item in storeList)
         {   
-            if (!string.IsNullOrEmpty(item["Detail"].ToString()))
+            if (item.itemDetail.Count > 0)
             {
-                JObject det = JObject.Parse(item["Detail"].ToString());
-                foreach (var detail in det)
+                foreach (StoreItemDetail detail in item.itemDetail)
                 {
-                    if (detail.Key == filterBy)
+                    if (detail.propertyName == filterBy)
                     {
                         newStoreList.Add(item);
                         break;

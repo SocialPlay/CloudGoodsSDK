@@ -14,7 +14,7 @@ public class DisplayNewestItems : MonoBehaviour
     public int timeDifference = 5;
 
     FilterNewestItems newestItemFilter = new FilterNewestItems();
-    List<JToken> items = new List<JToken>();
+    List<StoreItemInfo> items = new List<StoreItemInfo>();
 
     void Start()
     {
@@ -26,19 +26,11 @@ public class DisplayNewestItems : MonoBehaviour
         webservicecalls.GetStoreItems(appID, OnReceivedStoreItems);
     }
 
-    void OnReceivedStoreItems(string storeItemsJson)
+    void OnReceivedStoreItems(List<StoreItemInfo> storeItems)
     {
-        //Debug.Log(storeItemsJson);
-
-        JToken token = JToken.Parse(storeItemsJson);
-
-        JArray storeItems = JArray.Parse(token.ToString());
-
-
             for (int i = 0; i < storeItems.Count; i++)
             {
                 items.Add(storeItems[i]);
-                //Debug.Log(items[i]);
             }
       
 
@@ -47,7 +39,7 @@ public class DisplayNewestItems : MonoBehaviour
 
     void FilterItemsByDateTime()
     {
-        List<JToken> newestItems = newestItemFilter.FilterItems(items, timeFilterType, itemDisplayCount, timeDifference);
+        List<StoreItemInfo> newestItems = newestItemFilter.FilterItems(items, timeFilterType, itemDisplayCount, timeDifference);
 
         storeLoader.LoadStoreWithPaging(newestItems, 0);
     }

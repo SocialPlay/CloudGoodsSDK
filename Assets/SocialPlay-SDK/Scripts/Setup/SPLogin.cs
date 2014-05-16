@@ -86,31 +86,29 @@ public class SPLogin : MonoBehaviour
         WebserviceCalls.webservice.SPLoginResendVerificationEmail(ItemSystemGameData.AppID, email, instance.RecivedVerificationEmailResponce);
     }
 
-    void RecivedRegisterUser(string statusCode)
+    void RecivedRegisterUser(SPLogin_Responce registerResponse)
     {
-        SPLogin_Responce responce = Newtonsoft.Json.JsonConvert.DeserializeObject<SPLogin_Responce>(JToken.Parse(statusCode).ToString());
-        if (responce.code == 7)
+        if (registerResponse.code == 7)
         {
-            responce.message = "Server Related Error";
+            registerResponse.message = "Server Related Error";
         }
         if ( RegisterMessageResponce != null)
         {
-            RegisterMessageResponce(responce);
+            RegisterMessageResponce(registerResponse);
         }
     }
 
-    void RecivedLoginCode(string statusCode)
+    void RecivedLoginCode(SPLogin_Responce loginResponse)
     {
-        SPLogin_Responce responce = Newtonsoft.Json.JsonConvert.DeserializeObject<SPLogin_Responce>(JToken.Parse(statusCode).ToString());
-        if (responce.code == 7)
+        if (loginResponse.code == 7)
         {
-            responce.message = "Server Related Error";
+            loginResponse.message = "Server Related Error";
         }
-        if (responce.code == 0)
+        if (loginResponse.code == 0)
         {
             if (recivedUserInfo != null)
             {
-                UserInfo userInfo = Newtonsoft.Json.JsonConvert.DeserializeObject<UserInfo>(responce.message);
+                UserInfo userInfo = Newtonsoft.Json.JsonConvert.DeserializeObject<UserInfo>(loginResponse.message);
                 GameAuthentication.OnUserAuthorized(new WebserviceCalls.UserInfo(userInfo.ID.ToString(), userInfo.name, userInfo.email));
                 recivedUserInfo(userInfo);
             }
@@ -119,34 +117,32 @@ public class SPLogin : MonoBehaviour
         {
             if (loginMessageResponce != null)
             {
-                loginMessageResponce(responce);
+                loginMessageResponce(loginResponse);
             }
         }
     }
 
-    void RecivedForgotPassword(string statusCode)
+    void RecivedForgotPassword(SPLogin_Responce forgotPasswordResponse)
     {
-        SPLogin_Responce responce = Newtonsoft.Json.JsonConvert.DeserializeObject<SPLogin_Responce>(JToken.Parse(statusCode).ToString());
-        if (responce.code == 7)
+        if (forgotPasswordResponse.code == 7)
         {
-            responce.message = "Server Related Error";
+            forgotPasswordResponse.message = "Server Related Error";
         }
         if (ForgotPasswordResponce != null)
         {
-            ForgotPasswordResponce(responce);
+            ForgotPasswordResponce(forgotPasswordResponse);
         }
     }
 
-    void RecivedVerificationEmailResponce(string statusCode)
+    void RecivedVerificationEmailResponce(SPLogin_Responce verificationResponse)
     {
-        SPLogin_Responce responce = Newtonsoft.Json.JsonConvert.DeserializeObject<SPLogin_Responce>(JToken.Parse(statusCode).ToString());
-        if (responce.code == 7)
+        if (verificationResponse.code == 7)
         {
-            responce.message = "Server Related Error";
+            verificationResponse.message = "Server Related Error";
         }
         if (ResentVerificationResponce != null)
         {
-            ResentVerificationResponce(responce);
+            ResentVerificationResponce(verificationResponse);
         }
 
     }

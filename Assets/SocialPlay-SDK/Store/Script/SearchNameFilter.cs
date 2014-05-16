@@ -42,18 +42,18 @@ public class SearchNameFilter : MonoBehaviour
         }
     }
 
-   public static  List<JToken> FilterStoreItemsFromSearch(List<JToken> storeItems, string searchFilter)
+    public static List<StoreItemInfo> FilterStoreItemsFromSearch(List<StoreItemInfo> storeItems, string searchFilter)
     {
         if (searchFilter.Length == 0)
         {
             return storeItems;
         }
 
-        List<JToken> filteredStoreItems = new List<JToken>();
-        for (int i = 0; i < storeItems.Count; i++)
+        List<StoreItemInfo> filteredStoreItems = new List<StoreItemInfo>();
+        foreach(StoreItemInfo storeItemInfo in storeItems)
         {
-            if (storeItems[i]["Name"].ToString().ToLower().Contains(searchFilter.ToLower()))
-                filteredStoreItems.Add(storeItems[i]);
+            if (storeItemInfo.itemName.ToLower().Contains(searchFilter.ToLower()))
+                filteredStoreItems.Add(storeItemInfo);
         }
         return filteredStoreItems;
     }

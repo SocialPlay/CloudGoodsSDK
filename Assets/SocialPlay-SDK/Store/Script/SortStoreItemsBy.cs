@@ -90,15 +90,15 @@ public class SortStoreItemsBy : MonoBehaviour
         popUpList.items = sortOptions;
     }
 
-    public static List<JToken> DefaultSort(List<JToken> StoreItems)
+    public static List<StoreItemInfo> DefaultSort(List<StoreItemInfo> StoreItems)
     {
         StoreItems.Sort(SortByName);
         return StoreItems;
     }
 
-    static int SortByName(JToken x, JToken y)
+    static int SortByName(StoreItemInfo x, StoreItemInfo y)
     {
-        return x["Name"].ToString().ToLower().CompareTo(y["Name"].ToString().ToLower());
+        return x.itemName.ToLower().CompareTo(y.itemName.ToLower());
     }
 
 }

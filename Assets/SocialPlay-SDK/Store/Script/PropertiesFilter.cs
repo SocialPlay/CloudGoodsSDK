@@ -20,15 +20,15 @@ public class PropertiesFilter : MonoBehaviour {
         }
     }
 
-    List<JToken> FilterProperties(List<JToken> storeList, string filterType, int filterMin, int filterMax)
+    List<JToken> FilterProperties(List<StoreItemInfo> storeList, string filterType, int filterMin, int filterMax)
     {
         List<JToken> newStoreList = new List<JToken>();
 
-        for (int i = 0; i < storeList.Count; i++)
+        foreach(StoreItemInfo storeInfo in storeList)
         {
-            if (storeList[i]["Detail"] != null)
+            if (storeInfo.itemDetail.Count > 0)
             {
-                Debug.Log("Found Property : " + filterType + " In Object: " + storeList[i]["Name"]);
+                Debug.Log("Found Property : " + filterType + " In Object: " + storeInfo.itemName);
             }
         }
 

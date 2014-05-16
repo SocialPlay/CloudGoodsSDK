@@ -8,7 +8,7 @@ public class SortByProperty : ISortItem
 
     public string propertyToSort;
 
-    public override List<JToken> Sort(List<JToken> StoreItems,int direction)
+    public override List<StoreItemInfo> Sort(List<StoreItemInfo> StoreItems, int direction)
     {
         this.direction = direction;
         if (string.IsNullOrEmpty(propertyToSort))
@@ -17,14 +17,14 @@ public class SortByProperty : ISortItem
         }
         else
         {
-            List<JToken> sorted = new List<JToken>(StoreItems);
+            List<StoreItemInfo> sorted = new List<StoreItemInfo>(StoreItems);
             sorted.Sort(CompareItemsByPropertys);
             return sorted;
         }
     }
 
 
-    public int CompareItemsByPropertys(JToken x, JToken y)
+    public int CompareItemsByPropertys(StoreItemInfo x, StoreItemInfo y)
     {
         int nullcheck = CheckIfNull(x, y);
         if (nullcheck != -10)
@@ -37,21 +37,21 @@ public class SortByProperty : ISortItem
             return checkDetails * direction;
         }
 
-        JObject xDetails = JObject.Parse(x["Detail"].ToString());
-        JObject YDetails = JObject.Parse(y["Detail"].ToString());
+        List<StoreItemDetail> xDetails = x.itemDetail;
+        List<StoreItemDetail> YDetails = y.itemDetail;
         bool xIsPropFound = false;
         bool yIsPropFound = false;
         int xValue = 0;
         int yValue = 0;
 
-        foreach (var detail in xDetails)
+        foreach (StoreItemDetail detail in xDetails)
         {
-            if (detail.Key == propertyToSort)
+            if (detail.propertyName == propertyToSort)
             {
                 xIsPropFound = true;
                 try
                 {
-                    xValue = int.Parse(detail.Value.ToString());
+                    xValue = int.Parse(detail.propertyValue.ToString());
                 }
                 catch
                 {
@@ -63,12 +63,12 @@ public class SortByProperty : ISortItem
 
         foreach (var detail in YDetails)
         {
-            if (detail.Key == propertyToSort)
+            if (detail.propertyName == propertyToSort)
             {
                 yIsPropFound = true;
                 try
                 {
-                    yValue = int.Parse(detail.Value.ToString());
+                    yValue = int.Parse(detail.propertyValue.ToString());
                 }
                 catch
                 {
@@ -128,32 +128,32 @@ public class SortByProperty : ISortItem
     }
 
 
-    int CheckDetailIsValid(JToken x, JToken y)
+    int CheckDetailIsValid(StoreItemInfo x, StoreItemInfo y)
     {
-
+        //TODO Check for validation
         int returened = -10;
-        if (string.IsNullOrEmpty(x["Detail"].ToString()))
-        {
-            if (string.IsNullOrEmpty(y["Detail"].ToString()))
-            {
-                returened = 0;
-            }
-            else
-            {
-                returened = 1;
-            }
-        }
-        else
-        {
-            if (string.IsNullOrEmpty(y["Detail"].ToString()))
-            {
-                returened = -1;
-            }
-            else
-            {
-                returened = -10; // Not null;
-            }
-        }
+        //if (string.IsNullOrEmpty(x["Detail"].ToString()))
+        //{
+        //    if (string.IsNullOrEmpty(y["Detail"].ToString()))
+        //    {
+        //        returened = 0;
+        //    }
+        //    else
+        //    {
+        //        returened = 1;
+        //    }
+        //}
+        //else
+        //{
+        //    if (string.IsNullOrEmpty(y["Detail"].ToString()))
+        //    {
+        //        returened = -1;
+        //    }
+        //    else
+        //    {
+        //        returened = -10; // Not null;
+        //    }
+        //}
         return returened;
     }
 

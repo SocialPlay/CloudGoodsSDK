@@ -16,6 +16,6 @@ public abstract class FilterItem : MonoBehaviour
         filterLabel.text = filterDisplayName;
     }
 
-    public abstract List<JToken> FilterStoreList(List<JToken> storeList);
+    public abstract List<StoreItemInfo> FilterStoreList(List<StoreItemInfo> storeList);
 
 }

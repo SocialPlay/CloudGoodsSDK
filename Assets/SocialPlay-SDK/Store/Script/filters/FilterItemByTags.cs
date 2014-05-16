@@ -16,24 +16,21 @@ public class FilterItemByTags : FilterItem
         filterBy = name;
     }
 
-    public override List<JToken> FilterStoreList(List<JToken> storeList)
-    { 
+    public override List<StoreItemInfo> FilterStoreList(List<StoreItemInfo> storeList)
+    {
+        List<StoreItemInfo> newStoreList = new List<StoreItemInfo>();
 
-        List<JToken> newStoreList = new List<JToken>();
-
-        for (int i = 0; i < storeList.Count; i++)
+        foreach (StoreItemInfo storeitemInfo in storeList)
         {
-            JArray tags = (JArray)storeList[i]["tags"];    
-
-            for (int j = 0; j < tags.Count; j++)
+            foreach(string tag in storeitemInfo.tags)
             {
-                if (string.IsNullOrEmpty( tags[j].ToString()))
+                if (string.IsNullOrEmpty(tag))
                 {
                     continue;
                 }
-                if (tags[j]["Name"].ToString() == filterBy)
+                if (tag == filterBy)
                 {
-                    newStoreList.Add(storeList[i]);
+                    newStoreList.Add(storeitemInfo);
                     continue;
                 }
 

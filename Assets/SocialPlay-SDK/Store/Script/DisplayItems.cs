@@ -8,7 +8,7 @@ public class DisplayItems : MonoBehaviour
 {
     public NGUIStoreLoader storeLoader;
 
-    List<JToken> items = new List<JToken>();
+    List<StoreItemInfo> items = new List<StoreItemInfo>();
 
     // Use this for initialization
     void Start()
@@ -30,15 +30,8 @@ public class DisplayItems : MonoBehaviour
         WebserviceCalls.webservice.GetStoreItems(ItemSystemGameData.AppID.ToString(), OnReceivedStoreItems);
     }
 
-    void OnReceivedStoreItems(string storeItemsJson)
-    {
-        items = new List<JToken>();
-        Debug.Log("store items: " + storeItemsJson);
-        JToken token = JToken.Parse(storeItemsJson);
-
-        JArray storeItems = JArray.Parse(token.ToString());
-
-        
+    void OnReceivedStoreItems(List<StoreItemInfo> storeItems)
+    {   
         for (int i = 0; i < storeItems.Count; i++)
         {
             items.Add(storeItems[i]);

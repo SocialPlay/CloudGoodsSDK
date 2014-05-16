@@ -12,6 +12,8 @@ using System.Security.Cryptography;
 
 public class WebserviceCalls : MonoBehaviour, IServiceCalls
 {
+    public IServiceObjectConverter ServiceConverter;
+    public Action<string> OnErrorEvent;
 
     public string AppSecret;
 
@@ -26,6 +28,8 @@ public class WebserviceCalls : MonoBehaviour, IServiceCalls
         {
             webservice = this;
         }
+
+        ServiceConverter = new NewtonsoftJsonObjectConverter();
 
         if (this.GetComponent<WebServiceUrlSwitcher>())
         {
@@ -53,165 +57,40 @@ public class WebserviceCalls : MonoBehaviour, IServiceCalls
         }
     }
 
-    public void OnReceivedGeneratedItems(string generatedItemsJson)
-    {
-        Debug.Log("JSON: " + generatedItemsJson);
-    }
+    #region ItemContainerManagementCalls
 
-
-    //Working On
-    public void GenerateItemsAtLocation(string OwnerID, string OwnerType, int Location, Guid AppID, int MinimumEnergyOfItem, int TotalEnergyToGenerate, Action<string> callback, string ANDTags = "", string ORTags = "")
+    public void GenerateItemsAtLocation(string OwnerID, string OwnerType, int Location, Guid AppID, int MinimumEnergyOfItem, int TotalEnergyToGenerate, Action<List<ItemData>> callback, string ANDTags = "", string ORTags = "")
     {
         string url = string.Format("{0}GenerateItemsAtLocation?OwnerID={1}&OwnerType={2}&Location={3}&AppID={4}&MinimumEnergyOfItem={5}&TotalEnergyToGenerate={6}&ANDTags={7}&ORTags={8}", cloudGoodsURL, OwnerID, OwnerType, Location, AppID, MinimumEnergyOfItem, TotalEnergyToGenerate, ANDTags, ORTags);
         WWW www = new WWW(url);
 
-        StartCoroutine(OnWebServiceCallback(www, callback));
+        StartCoroutine(ServiceCallGetListItemDatas(www, callback));
     }
 
-    public void GetOwnerItems(string ownerID, string ownerType, int location, Guid AppID, Action<string> callback)
+    public void GetOwnerItems(string ownerID, string ownerType, int location, Guid AppID, Action<List<ItemData>> callback)
     {
         string url = string.Format("{0}GetOwnerItems?ownerID={1}&ownerType={2}&location={3}&AppID={4}", cloudGoodsURL, ownerID, ownerType, location, AppID.ToString());
         WWW www = new WWW(url);
 
-        StartCoroutine(OnWebServiceCallback(www, callback));
+        StartCoroutine(ServiceCallGetListItemDatas(www, callback));
     }
 
-    public void MoveItemStack(Guid StackToMove, int MoveAmount, string DestinationOwnerID, string DestinationOwnerType, Guid AppID, int DestinationLocation, Action<string> callback)
+    public void MoveItemStack(Guid StackToMove, int MoveAmount, string DestinationOwnerID, string DestinationOwnerType, Guid AppID, int DestinationLocation, Action<Guid> callback)
     {
         string url = string.Format("{0}MoveItemStack?StackToMove={1}&MoveAmount={2}&DestinationOwnerID={3}&DestinationOwnerType={4}&AppID={5}&DestinationLocation={6}", cloudGoodsURL, StackToMove, MoveAmount, DestinationOwnerID, DestinationOwnerType, AppID.ToString(), DestinationLocation);
         WWW www = new WWW(url);
 
-        StartCoroutine(OnWebServiceCallback(www, callback));
+        StartCoroutine(ServiceGetGuid(www, callback));
     }
 
-    public void GetUserFromWorld(Guid appID, int platformID, string platformUserID, string userName, string userEmail, Action<string> callback)
-    {
-        string url = cloudGoodsURL + "GetUserFromWorld?appID=" + appID + "&platformID=" + platformID + "&platformUserID=" + platformUserID + "&userName=" + WWW.EscapeURL(userName) + "&loginUserEmail=" + userEmail;
-
-        WWW www = new WWW(url);
-
-        StartCoroutine(OnWebServiceCallback(www, callback));
-    }
-
-    public void GetStoreItems(string appID, Action<string> callback)
-    {
-        string url = cloudGoodsURL + "LoadStoreItems?appID=" + appID;
-
-        WWW www = new WWW(url);
-
-        StartCoroutine(OnWebServiceCallback(www, callback));
-    }
-
-    public void GetFreeCurrencyBalance(string userID, int accessLocation, string appID, Action<string> callback)
-    {
-        string url = cloudGoodsURL + "GetFreeCurrencyBalance?userID=" + userID + "&accessLocation=" + accessLocation + "&appID=" + appID;
-
-        WWW www = new WWW(url);
-
-        StartCoroutine(OnWebServiceCallback(www, callback));
-    }
-
-    public void GetPaidCurrencyBalance(string userID, string appID, Action<string> callback)
-    {
-        string url = cloudGoodsURL + "GetPaidCurrencyBalance?userID=" + userID + "&appID=" + appID;
-
-        WWW www = new WWW(url);
-
-        StartCoroutine(OnWebServiceCallback(www, callback));
-    }
-
-    public void RegisterGameSession(Guid userID, string AppID, int instanceID, Action<string> callback)
-    {
-        string url = cloudGoodsURL + "RegisterSession?UserId=" + userID + "&AppID=" + AppID + "&InstanceId=" + instanceID;
-
-        WWW www = new WWW(url);
-
-        StartCoroutine(OnWebServiceCallback(www, callback));
-    }
-
-    public void GetGameRecipes(string appID, Action<string> callback)
-    {
-        string url = cloudGoodsURL + "GetRecipes?appID=" + appID;
-
-        WWW www = new WWW(url);
-
-        StartCoroutine(OnWebServiceCallback(www, callback));
-    }
-
-    public void StoreItemPurchase(string URL, Guid userID, int itemID, int amount, string paymentType, Guid appID, int saveLocation, Action<string> callback)
-    {
-        string url = URL + "StoreItemPurchase?UserID=" + userID + "&ItemID=" + itemID + "&Amount=" + amount + "&PaymentType=" + paymentType + "&AppID=" + appID + "&saveLocation=" + saveLocation;
-
-        WWW www = new WWW(url);
-
-        StartCoroutine(OnWebServiceCallback(www, callback));
-
-    }
-
-    public void GetItemBundles(string appID, Action<string> callback)
-    {
-        string url = cloudGoodsURL + "GetItemBundles?Appid=" + appID;
-
-        WWW www = new WWW(url);
-
-        StartCoroutine(OnWebServiceCallback(www, callback));
-    }
-
-    public void PurchaseItemBundles(Guid appID, Guid UserID, int bundleID, string paymentType, int location, Action<string> callback)
-    {
-        string url = cloudGoodsURL + "PurchaseItemBundle?AppID=" + appID + "&UserID=" + UserID + "&BundleID=" + bundleID + "&PaymentType=" + paymentType + "&Location=" + location;
-
-        WWW www = new WWW(url);
-
-        StartCoroutine(OnWebServiceCallback(www, callback));
-    }
-
-    public void GetCreditBundles(string appID, int platformID, Action<string> callback)
-    {
-        string url = cloudGoodsURL + "GetCreditBundles?Appid=" + appID + "&Platform=" + platformID;
-
-        WWW www = new WWW(url);
-
-        StartCoroutine(OnWebServiceCallback(www, callback));
-    }
-
-    public void PurchaseCreditBundles(Guid appId, string payload, Action<string> callback)
-    {
-        string url = cloudGoodsURL + "PurchaseCreditBundle?AppID=" + appId + "&payload=" + WWW.EscapeURL(EncryptStringUnity(payload));
-
-        WWW www = new WWW(url);
-
-        StartCoroutine(OnWebServiceCallback(www, callback));
-    }
-
-    public void GetAccessPinFromGuid(string userPin, Action<string> callback)
-    {
-        string url = cloudGoodsURL + "GetUserInfoFromPin?pin=" + userPin;
-
-        WWW www = new WWW(url);
-
-        StartCoroutine(OnWebServiceCallback(www, callback));
-    }
-
-    public void GetAccessPinForUser(string UserId, Action<string> callback)
-    {
-        string url = cloudGoodsURL + "GetUserPin?UserId=" + UserId;
-
-        WWW www = new WWW(url);
-
-        StartCoroutine(OnWebServiceCallback(www, callback));
-    }
-
-
-    public void MoveItemStacks(string stacks, string DestinationOwnerID, string DestinationOwnerType, Guid AppID, int DestinationLocation, Action<string> callback)
+    public void MoveItemStacks(string stacks, string DestinationOwnerID, string DestinationOwnerType, Guid AppID, int DestinationLocation, Action<MoveMultipleItemsResponse> callback)
     {
         string url = string.Format("{0}MoveItemStacks?stacks={1}&DestinationOwnerID={2}&DestinationOwnerType={3}&AppID={4}&DestinationLocation={5}", cloudGoodsURL, stacks, DestinationOwnerID, DestinationOwnerType, AppID.ToString(), DestinationLocation);
 
         WWW www = new WWW(url);
 
-        StartCoroutine(OnWebServiceCallback(www, callback));
+        StartCoroutine(ServiceMoveItemsResponse(www, callback));
     }
-
 
     public void RemoveItemStack(Guid StackRemove, Action<string> callback)
     {
@@ -219,18 +98,16 @@ public class WebserviceCalls : MonoBehaviour, IServiceCalls
 
         WWW www = new WWW(url);
 
-        StartCoroutine(OnWebServiceCallback(www, callback));
+        StartCoroutine(ServiceGetString(www, callback));
     }
-
 
     public void DeductStackAmount(Guid StackRemove, int amount, Action<string> callback)
     {
         string url = string.Format("{0}DeductStackAmount?stackID={1}&amount={2}", cloudGoodsURL, StackRemove, amount);
         WWW www = new WWW(url);
 
-        StartCoroutine(OnWebServiceCallback(www, callback));
+        StartCoroutine(ServiceGetString(www, callback));
     }
-
 
     public void RemoveItemStacks(List<Guid> StacksToRemove, Action<string> callback)
     {
@@ -240,61 +117,7 @@ public class WebserviceCalls : MonoBehaviour, IServiceCalls
         string url = string.Format("{0}RemoveStackItems?stacks={1}", cloudGoodsURL, stacksInfo);
         WWW www = new WWW(url);
 
-        StartCoroutine(OnWebServiceCallback(www, callback));
-    }
-
-    public void CompleteQueueItem(Guid gameID, int QueueID, int percentScore, int location, Action<string> callback)
-    {
-        string url = string.Format("{0}CompleteQueueItem?gameID={1}&QueueID={2}&percentScore={3}&location={4}", cloudGoodsURL, gameID, QueueID, percentScore, location);
-        WWW www = new WWW(url);
-
-        StartCoroutine(OnWebServiceCallback(www, callback));
-    }
-
-    public void AddInstantCraftToQueue(Guid gameID, Guid UserID, int ItemID, int Amount, List<KeyValuePair<string, int>> ItemIngredients, Action<string> callback)
-    {
-        string url = string.Format("{0}AddInstantCraftToQueue?gameID={1}&UserID={2}&ItemID={3}&Amount={4}&ItemIngredients={5}", cloudGoodsURL, gameID, UserID, ItemID, Amount, WWW.EscapeURL(JsonConvert.SerializeObject(ItemIngredients)));
-
-        WWW www = new WWW(url);
-
-        StartCoroutine(OnWebServiceCallback(www, callback));
-    }
-
-    public void SPLogin_UserLogin(Guid gameID, string userEmail, string password, Action<string> callback)
-    {
-        string url = string.Format("{0}SPLoginUserLogin?gameID={1}&userEMail={2}&userPassword={3}", cloudGoodsURL, gameID, WWW.EscapeURL(userEmail), WWW.EscapeURL(password));
-
-        WWW www = new WWW(url);
-
-        StartCoroutine(OnWebServiceCallback(www, callback));
-    }
-
-
-    public void SPLogin_UserRegister(Guid gameID, string userEmail, string password, string userName, Action<string> callback)
-    {
-        string url = string.Format("{0}SPLoginUserRegister?gameID={1}&userEMail={2}&userPassword={3}&userName={4}", cloudGoodsURL, gameID, WWW.EscapeURL(userEmail), WWW.EscapeURL(password), WWW.EscapeURL(userName));
-
-        WWW www = new WWW(url);
-
-        StartCoroutine(OnWebServiceCallback(www, callback));
-    }
-
-
-    public void SPLoginForgotPassword(Guid gameID, string userEmail, Action<string> callback)
-    {
-        string url = string.Format("{0}SPLoginForgotPassword?gameID={1}&userEMail={2}", cloudGoodsURL, gameID, WWW.EscapeURL(userEmail));
-        WWW www = new WWW(url);
-
-        StartCoroutine(OnWebServiceCallback(www, callback));
-    }
-
-
-    public void SPLoginResendVerificationEmail(Guid gameID, string userEmail, Action<string> callback)
-    {
-        string url = string.Format("{0}SPLoginResendVerificationEmail?gameID={1}&userEMail={2}", cloudGoodsURL, gameID, WWW.EscapeURL(userEmail));
-        WWW www = new WWW(url);
-
-        StartCoroutine(OnWebServiceCallback(www, callback));
+        StartCoroutine(ServiceGetString(www, callback));
     }
 
     public void GiveOwnerItems(WebModels.OwnerTypes OwnerType, List<WebModels.ItemsInfo> listOfItems, Action<string> callback)
@@ -304,32 +127,320 @@ public class WebserviceCalls : MonoBehaviour, IServiceCalls
         string url = string.Format("{0}GiveOwnerItems?AppID={1}&OwnerID={2}&OwnerType={3}&listOfItems={4}", cloudGoodsURL, ItemSystemGameData.AppID, ItemSystemGameData.UserID.ToString(), OwnerType.ToString(), jsonList);
         WWW www = new WWW(url);
 
-        StartCoroutine(OnWebServiceCallback(www, callback));
+        StartCoroutine(ServiceGetString(www, callback));
     }
 
-    public void SendEmailMessage(Guid appID, string userEmail, Action<string> callback)
+    #endregion
+
+    #region UserManagement
+
+    public void GetUserFromWorld(Guid appID, int platformID, string platformUserID, string userName, string userEmail, Action<WebserviceCalls.UserInfo> callback)
     {
-        string url = string.Format("{0}SendUserEmailMessage?appID={1}&userEmail={2}", cloudGoodsURL, ItemSystemGameData.AppID, "");
+        string url = cloudGoodsURL + "GetUserFromWorld?appID=" + appID + "&platformID=" + platformID + "&platformUserID=" + platformUserID + "&userName=" + WWW.EscapeURL(userName) + "&loginUserEmail=" + userEmail;
+
         WWW www = new WWW(url);
 
-        StartCoroutine(OnWebServiceCallback(www, callback));
+        StartCoroutine(ServiceGetUserInfo(www, callback));
     }
 
-    IEnumerator OnWebServiceCallback(WWW www, Action<string> callback)
+    public void RegisterGameSession(Guid userID, string AppID, int instanceID, Action<Guid> callback)
+    {
+        string url = cloudGoodsURL + "RegisterSession?UserId=" + userID + "&AppID=" + AppID + "&InstanceId=" + instanceID;
+
+        WWW www = new WWW(url);
+
+        StartCoroutine(ServiceGetGuid(www, callback));
+    }
+
+    public void GetAccessPinFromGuid(string userPin, Action<string> callback)
+    {
+        string url = cloudGoodsURL + "GetUserInfoFromPin?pin=" + userPin;
+
+        WWW www = new WWW(url);
+
+        StartCoroutine(ServiceGetString(www, callback));
+    }
+
+    public void GetAccessPinForUser(string UserId, Action<string> callback)
+    {
+        string url = cloudGoodsURL + "GetUserPin?UserId=" + UserId;
+
+        WWW www = new WWW(url);
+
+        StartCoroutine(ServiceGetString(www, callback));
+    }
+
+    public void SPLogin_UserLogin(Guid gameID, string userEmail, string password, Action<SPLogin.SPLogin_Responce> callback)
+    {
+        string url = string.Format("{0}SPLoginUserLogin?gameID={1}&userEMail={2}&userPassword={3}", cloudGoodsURL, gameID, WWW.EscapeURL(userEmail), WWW.EscapeURL(password));
+
+        WWW www = new WWW(url);
+
+        StartCoroutine(ServiceSpLoginResponse(www, callback));
+    }
+
+    public void SPLogin_UserRegister(Guid gameID, string userEmail, string password, string userName, Action<SPLogin.SPLogin_Responce> callback)
+    {
+        string url = string.Format("{0}SPLoginUserRegister?gameID={1}&userEMail={2}&userPassword={3}&userName={4}", cloudGoodsURL, gameID, WWW.EscapeURL(userEmail), WWW.EscapeURL(password), WWW.EscapeURL(userName));
+
+        WWW www = new WWW(url);
+
+        StartCoroutine(ServiceSpLoginResponse(www, callback));
+    }
+
+    public void SPLoginForgotPassword(Guid gameID, string userEmail, Action<SPLogin.SPLogin_Responce> callback)
+    {
+        string url = string.Format("{0}SPLoginForgotPassword?gameID={1}&userEMail={2}", cloudGoodsURL, gameID, WWW.EscapeURL(userEmail));
+        WWW www = new WWW(url);
+
+        StartCoroutine(ServiceSpLoginResponse(www, callback));
+    }
+
+
+    public void SPLoginResendVerificationEmail(Guid gameID, string userEmail, Action<SPLogin.SPLogin_Responce> callback)
+    {
+        string url = string.Format("{0}SPLoginResendVerificationEmail?gameID={1}&userEMail={2}", cloudGoodsURL, gameID, WWW.EscapeURL(userEmail));
+        WWW www = new WWW(url);
+
+        StartCoroutine(ServiceSpLoginResponse(www, callback));
+    }
+
+    #endregion
+
+    #region StoreCalls
+
+    public void GetFreeCurrencyBalance(string userID, int accessLocation, string appID, Action<string> callback)
+    {
+        string url = cloudGoodsURL + "GetFreeCurrencyBalance?userID=" + userID + "&accessLocation=" + accessLocation + "&appID=" + appID;
+
+        WWW www = new WWW(url);
+
+        StartCoroutine(ServiceGetString(www, callback));
+    }
+
+    public void GetPaidCurrencyBalance(string userID, string appID, Action<string> callback)
+    {
+        string url = cloudGoodsURL + "GetPaidCurrencyBalance?userID=" + userID + "&appID=" + appID;
+
+        WWW www = new WWW(url);
+
+        StartCoroutine(ServiceGetString(www, callback));
+    }
+
+    public void GetStoreItems(string appID, Action<List<StoreItemInfo>> callback)
+    {
+        string url = cloudGoodsURL + "LoadStoreItems?appID=" + appID;
+
+        WWW www = new WWW(url);
+
+        StartCoroutine(ServiceGetStoreItems(www, callback));
+    }
+
+    public void StoreItemPurchase(string URL, Guid userID, int itemID, int amount, string paymentType, Guid appID, int saveLocation, Action<string> callback)
+    {
+        string url = URL + "StoreItemPurchase?UserID=" + userID + "&ItemID=" + itemID + "&Amount=" + amount + "&PaymentType=" + paymentType + "&AppID=" + appID + "&saveLocation=" + saveLocation;
+
+        WWW www = new WWW(url);
+
+        StartCoroutine(ServiceGetString(www, callback));
+
+    }
+
+    public void GetItemBundles(string appID, Action<List<ItemBundle>> callback)
+    {
+        string url = cloudGoodsURL + "GetItemBundles?Appid=" + appID;
+
+        WWW www = new WWW(url);
+
+        StartCoroutine(ServiceGetItemBundles(www, callback));
+    }
+
+    public void PurchaseItemBundles(Guid appID, Guid UserID, int bundleID, string paymentType, int location, Action<string> callback)
+    {
+        string url = cloudGoodsURL + "PurchaseItemBundle?AppID=" + appID + "&UserID=" + UserID + "&BundleID=" + bundleID + "&PaymentType=" + paymentType + "&Location=" + location;
+
+        WWW www = new WWW(url);
+
+        StartCoroutine(ServiceGetString(www, callback));
+    }
+
+    public void GetCreditBundles(string appID, int platformID, Action<List<CreditBundleItem>> callback)
+    {
+        string url = cloudGoodsURL + "GetCreditBundles?Appid=" + appID + "&Platform=" + platformID;
+
+        WWW www = new WWW(url);
+
+        StartCoroutine(ServiceGetCreditBundles(www, callback));
+    }
+
+    public void PurchaseCreditBundles(Guid appId, string payload, Action<string> callback)
+    {
+        string url = cloudGoodsURL + "PurchaseCreditBundle?AppID=" + appId + "&payload=" + WWW.EscapeURL(EncryptStringUnity(payload));
+
+        WWW www = new WWW(url);
+
+        StartCoroutine(ServiceGetString(www, callback));
+    }
+
+    #endregion
+
+    #region RecipeCalls
+    public void GetGameRecipes(string appID, Action<List<RecipeInfo>> callback)
+    {
+        string url = cloudGoodsURL + "GetRecipes?appID=" + appID;
+
+        WWW www = new WWW(url);
+
+        StartCoroutine(ServiceGetRecipeInfos(www, callback));
+    }
+
+    public void CompleteQueueItem(Guid gameID, int QueueID, int percentScore, int location, Action<string> callback)
+    {
+        string url = string.Format("{0}CompleteQueueItem?gameID={1}&QueueID={2}&percentScore={3}&location={4}", cloudGoodsURL, gameID, QueueID, percentScore, location);
+        WWW www = new WWW(url);
+
+        StartCoroutine(ServiceGetString(www, callback));
+    }
+
+    public void AddInstantCraftToQueue(Guid gameID, Guid UserID, int ItemID, int Amount, List<KeyValuePair<string, int>> ItemIngredients, Action<string> callback)
+    {
+        string url = string.Format("{0}AddInstantCraftToQueue?gameID={1}&UserID={2}&ItemID={3}&Amount={4}&ItemIngredients={5}", cloudGoodsURL, gameID, UserID, ItemID, Amount, WWW.EscapeURL(JsonConvert.SerializeObject(ItemIngredients)));
+
+        WWW www = new WWW(url);
+
+        StartCoroutine(ServiceGetString(www, callback));
+    }
+
+    #endregion
+
+    #region IEnumeratorCalls
+
+    IEnumerator ServiceGetString(WWW www, Action<string> callback)
     {
         yield return www;
 
         // check for errors
         if (www.error == null)
         {
-            callback(www.text);
+            callback(ServiceConverter.ConvertToString(www.text));
         }
         else
         {
             callback("WWW Error: " + www.error);
-            //callback("Error has occured");
         }
     }
+
+    IEnumerator ServiceGetUserInfo(WWW www, Action<UserInfo> callback)
+    {
+        yield return www;
+
+        // check for errors
+        if (www.error == null)
+        {
+            Debug.Log(www.text);
+            callback(ServiceConverter.ConvertToUserInfo(www.text));
+        }
+        else
+        {
+            OnErrorEvent("Error:" + www.error);
+        }
+    }
+
+
+    IEnumerator ServiceCallGetListItemDatas(WWW www, Action<List<ItemData>> callback)
+    {
+        yield return www;
+
+        if (www.error == null)
+            callback(ServiceConverter.ConvertToItemDataList(www.text));
+        else
+            OnErrorEvent(www.error);
+    }
+
+    IEnumerator ServiceGetStoreItems(WWW www, Action<List<StoreItemInfo>> callback)
+    {
+        yield return www;
+
+        if (www.error == null)
+            callback(ServiceConverter.ConvertToStoreItems(www.text));
+        else
+            OnErrorEvent(www.error);
+    }
+
+    IEnumerator ServiceGetGuid(WWW www, Action<Guid> callback)
+    {
+        yield return www;
+
+        if (www.error == null)
+            callback(ServiceConverter.ConvertToGuid(www.text));
+        else
+            OnErrorEvent(www.error);
+    }
+
+    IEnumerator ServiceGetRecipeInfos(WWW www, Action<List<RecipeInfo>> callback)
+    {
+        yield return www;
+
+        if (www.error == null)
+            callback(ServiceConverter.ConvertToListRecipeInfo(www.text));
+        else
+            OnErrorEvent(www.error);
+    }
+
+    IEnumerator ServiceGetItemBundles(WWW www, Action<List<ItemBundle>> callback)
+    {
+        yield return www;
+
+        Debug.Log(www.text);
+
+        if (www.error == null)
+            callback(ServiceConverter.ConvertToListItemBundle(www.text));
+        else
+            OnErrorEvent(www.error);
+    }
+
+    IEnumerator ServiceGetCreditBundles(WWW www, Action<List<CreditBundleItem>> callback)
+    {
+        yield return www;
+        Debug.Log(www.text);
+        if (www.error == null)
+            callback(ServiceConverter.ConvertToListCreditBundleItem(www.text));
+        else
+            OnErrorEvent(www.error);
+    }
+
+    IEnumerator ServiceMoveItemsResponse(WWW www, Action<MoveMultipleItemsResponse> callback)
+    {
+        yield return www;
+
+        // check for errors
+        if (www.error == null)
+        {
+            callback(ServiceConverter.ConvertToMoveMultipleItemsResponse(www.text));
+        }
+        else
+        {
+            OnErrorEvent("Error: " + www.error);
+        }
+    }
+
+    IEnumerator ServiceSpLoginResponse(WWW www, Action<SPLogin.SPLogin_Responce> callback)
+    {
+        yield return www;
+
+        // check for errors
+        if (www.error == null)
+        {
+            Debug.Log(www.text);
+            callback(ServiceConverter.ConvertToSPLoginResponse(www.text));
+        }
+        else
+        {
+            OnErrorEvent("Error: " + www.error);
+        }
+    }
+
+    #endregion
 
     public string EncryptStringUnity(string Message)
     {

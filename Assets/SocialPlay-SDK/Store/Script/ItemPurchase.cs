@@ -7,7 +7,7 @@ public class ItemPurchase : MonoBehaviour
 
     public static event Action<string> OnPurchasedItem;
 
-    ItemInfo itemInfo;
+    StoreItem itemInfo;
 
     public CurrencyBalance currencyBalance;
 
@@ -103,28 +103,28 @@ public class ItemPurchase : MonoBehaviour
         creditPurchaseButton.SetState(itemCreditCost <= CurrencyBalance.paidCurrency);
     }
 
-    public void DisplayItemPurchasePanel(ItemInfo item)
+    public void DisplayItemPurchasePanel(StoreItem item)
     {
         itemInfo = item;
-        itemNameDisplay.text = item.itemName;
-        itemCreditCostDisplay.text = item.creditValue.ToString();
-        itemCoinCostDisplay.text = item.coinValue.ToString();
+        itemNameDisplay.text = item.storeItemInfo.itemName;
+        itemCreditCostDisplay.text = item.storeItemInfo.creditValue.ToString();
+        itemCoinCostDisplay.text = item.storeItemInfo.coinValue.ToString();
         itemQuantityAmount.text = "1";
 
         itemTexture.mainTexture = item.gameObject.GetComponentInChildren<UITexture>().mainTexture;
 
-        ChangePurchaseButtonDisplay(item.creditValue, item.coinValue);
+        ChangePurchaseButtonDisplay(item.storeItemInfo.creditValue, item.storeItemInfo.coinValue);
     }
 
     void PurchaseItemWithCredits(GameObject button)
     {
-        webserviceCalls.StoreItemPurchase("http://socialplaywebservice.azurewebsites.net/publicservice.svc/", ItemSystemGameData.UserID, itemInfo.itemID, int.Parse(itemQuantityAmount.text), "Credits", ItemSystemGameData.AppID, currencyBalance.AccessLocation, OnReceivedItemPurchaseConfirmation);
+        webserviceCalls.StoreItemPurchase("http://socialplaywebservice.azurewebsites.net/publicservice.svc/", ItemSystemGameData.UserID, itemInfo.storeItemInfo.itemID, int.Parse(itemQuantityAmount.text), "Credits", ItemSystemGameData.AppID, currencyBalance.AccessLocation, OnReceivedItemPurchaseConfirmation);
         ClosePanel();
     }
 
     void PurchaseItemWithCoins(GameObject button)
     {
-        webserviceCalls.StoreItemPurchase("http://socialplaywebservice.azurewebsites.net/publicservice.svc/", ItemSystemGameData.UserID, itemInfo.itemID, int.Parse(itemQuantityAmount.text), "Coins", ItemSystemGameData.AppID, currencyBalance.AccessLocation, OnReceivedItemPurchaseConfirmation);
+        webserviceCalls.StoreItemPurchase("http://socialplaywebservice.azurewebsites.net/publicservice.svc/", ItemSystemGameData.UserID, itemInfo.storeItemInfo.itemID, int.Parse(itemQuantityAmount.text), "Coins", ItemSystemGameData.AppID, currencyBalance.AccessLocation, OnReceivedItemPurchaseConfirmation);
         ClosePanel();
     }
 
