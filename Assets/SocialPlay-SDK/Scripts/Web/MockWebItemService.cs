@@ -10,7 +10,6 @@ public class MockWebItemService : MonoBehaviour, IServiceCalls
     public Action<string> OnErrorEvent { get; set; }
     public IServiceObjectConverter ServiceConverter { get; set; }
 
-
     void Awake()
     {
         WebserviceCalls.webservice = this;
