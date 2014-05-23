@@ -68,6 +68,9 @@ public class AndroidCreditPurchaser : MonoBehaviour, IPlatformPurchaser {
             bundlePurchaseRequest.BundleID = currentBundleID;
             bundlePurchaseRequest.UserID = ItemSystemGameData.UserID;
             bundlePurchaseRequest.ReceiptToken = message;
+            
+            //TODO implement platform check for platform credit bundle purchase
+            bundlePurchaseRequest.PaymentPlatform = 3;
 
             string bundleJsonString = JsonConvert.SerializeObject(bundlePurchaseRequest);
 
@@ -109,4 +112,5 @@ public class BundlePurchaseRequest
     public int BundleID;
     public Guid UserID;
     public string ReceiptToken;
+    public int PaymentPlatform;
 }

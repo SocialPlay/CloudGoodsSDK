@@ -2,7 +2,6 @@
 using System.Collections;
 using System;
 using System.Security.Cryptography;
-using Newtonsoft.Json.Linq;
 
 public class SPLogin : MonoBehaviour
 {
@@ -12,11 +11,13 @@ public class SPLogin : MonoBehaviour
     {
         public int code;
         public string message;
+        public UserInfo userInfo;
 
-        public SPLogin_Responce(int caseCode, string msg)
+        public SPLogin_Responce(int caseCode, string msg, UserInfo newUserInfo)
         {
             code = caseCode;
             message = msg;
+            userInfo = newUserInfo;
         }
 
         public override string ToString()
@@ -108,7 +109,7 @@ public class SPLogin : MonoBehaviour
         {
             if (recivedUserInfo != null)
             {
-                UserInfo userInfo = Newtonsoft.Json.JsonConvert.DeserializeObject<UserInfo>(loginResponse.message);
+                UserInfo userInfo = loginResponse.userInfo;
                 GameAuthentication.OnUserAuthorized(new WebserviceCalls.UserInfo(userInfo.ID.ToString(), userInfo.name, userInfo.email));
                 recivedUserInfo(userInfo);
             }

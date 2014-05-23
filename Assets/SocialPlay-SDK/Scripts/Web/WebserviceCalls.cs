@@ -29,7 +29,7 @@ public class WebserviceCalls : MonoBehaviour, IServiceCalls
             webservice = this;
         }
 
-        ServiceConverter = new NewtonsoftJsonObjectConverter();
+        ServiceConverter = new LitJsonFxJsonObjectConverter();
 
         if (this.GetComponent<WebServiceUrlSwitcher>())
         {
@@ -431,7 +431,6 @@ public class WebserviceCalls : MonoBehaviour, IServiceCalls
         // check for errors
         if (www.error == null)
         {
-            Debug.Log(www.text);
             callback(ServiceConverter.ConvertToSPLoginResponse(www.text));
         }
         else

@@ -107,8 +107,6 @@ public class NewtonsoftJsonObjectConverter : IServiceObjectConverter {
 
         JToken token = JToken.Parse(dataString);
 
-        Debug.Log(token.ToString());
-
         JArray recipesArray = JArray.Parse(token.ToString());
 
         Debug.Log("Recipes count:" + recipesArray.Count);
@@ -233,7 +231,13 @@ public class NewtonsoftJsonObjectConverter : IServiceObjectConverter {
 
     public SPLogin.SPLogin_Responce ConvertToSPLoginResponse(string dataString)
     {
-        SPLogin.SPLogin_Responce responce = Newtonsoft.Json.JsonConvert.DeserializeObject<SPLogin.SPLogin_Responce>(JToken.Parse(dataString).ToString());
+        JToken token = JToken.Parse(dataString);
+
+        SPLogin.SPLogin_Responce responce = Newtonsoft.Json.JsonConvert.DeserializeObject<SPLogin.SPLogin_Responce>(token.ToString());
+
+        SPLogin.UserInfo userinfo = Newtonsoft.Json.JsonConvert.DeserializeObject<SPLogin.UserInfo>(responce.message);
+
+        responce.userInfo = userinfo;
 
         return responce;
     }

@@ -18,7 +18,8 @@ public class GameObjectItemDataConverter : ItemDataConverter
             go.name = item.Name;
             itemData.baseEnergy = item.BaseItemEnergy;
 
-            itemData.behaviours = Newtonsoft.Json.JsonConvert.DeserializeObject<List<BehaviourDefinition>>(item.Behaviours);
+            //TODO fix behaviour conversion
+            //itemData.behaviours = item.Behaviours;
             itemData.description = item.Description;
             itemData.itemName = item.Name;
             itemData.imageName = item.Image;
