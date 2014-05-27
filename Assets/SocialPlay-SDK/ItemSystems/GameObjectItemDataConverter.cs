@@ -20,6 +20,7 @@ public class GameObjectItemDataConverter : ItemDataConverter
 
             //TODO fix behaviour conversion
             //itemData.behaviours = item.Behaviours;
+
             itemData.description = item.Description;
             itemData.itemName = item.Name;
             itemData.imageName = item.Image;
