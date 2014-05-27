@@ -16,7 +16,12 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter {
 
         Debug.Log(parsedString);
 
-        ItemDataList itemsData = LitJson.JsonMapper.ToObject<ItemDataList>(ObjectData);
+        if (parsedString == "[]")
+            return new List<ItemData>();
+
+        //SocialPlay.Data.ItemDataList itemsData = LitJson.JsonMapper.ToObject<ItemDataList>(ObjectData);
+
+        LitJson.JsonData jsonData = LitJson.JsonMapper.ToObject<LitJson.JsonData>(ObjectData);
 
         //for (int i = 0; i < itemsData.Count; i++)
         //{
@@ -268,6 +273,8 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter {
     public SPLogin.SPLogin_Responce ConvertToSPLoginResponse(string dataString)
     {
         string parsedString = ParseString(dataString);
+
+        Debug.Log(parsedString);
 
         JsonData data = LitJson.JsonMapper.ToObject(parsedString);
 

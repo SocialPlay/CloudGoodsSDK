@@ -8,15 +8,14 @@ public class TestLitJsonConverter : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        //WebserviceCalls.webservice.GetOwnerItems("", "", 0, Guid.Empty, OnReceivedItemDataList);
+        WebserviceCalls.webservice.GetOwnerItems("", "", 0, Guid.Empty, OnReceivedItemDataList);
         //WebserviceCalls.webservice.MoveItemStack(Guid.Empty, 0, "", "", Guid.Empty, 0, OnReceivedGuid);
         //WebserviceCalls.webservice.GetStoreItems("", OnReceivedStoreItems);
         //WebserviceCalls.webservice.GetGameRecipes("", OnReceivedListRecipes);
         //WebserviceCalls.webservice.GetCreditBundles("", 0, OnReceivedCreditBundles);
-        WebserviceCalls.webservice.SPLogin_UserLogin(Guid.Empty, "", "", OnReceivedLoginResponse);
+        //WebserviceCalls.webservice.SPLogin_UserLogin(Guid.Empty, "", "", OnReceivedLoginResponse);
         //WebserviceCalls.webservice.GetUserFromWorld(Guid.Empty, 0, "", "", "", OnReceivedUserInfo);
         //WebserviceCalls.webservice.GetItemBundles("", OnReceivedItemBundles);
-
 	}
 
     void OnReceivedItemBundles(List<ItemBundle> itemBundles)

@@ -1,33 +1,45 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!--This file represents the results of running a test suite-->
-<test-results name="Unity Tests" total="8" errors="0" failures="0" not-run="0" inconclusive="0" ignored="0" skipped="0" invalid="0" date="2014-05-16" time="16:12:31">
+<test-results name="Unity Tests" total="8" errors="1" failures="0" not-run="0" inconclusive="0" ignored="0" skipped="0" invalid="0" date="2014-05-26" time="14:51:19">
   <environment nunit-version="2.6.2-Unity" clr-version="2.0.50727.1433" os-version="Microsoft Windows NT 6.1.7601.0" platform="Win32NT" cwd="C:\Users\User\Documents\CloudGoodsSDK" machine-name="HOTBUBBA" user="User" user-domain="HOTBUBBA" />
   <culture-info current-culture="en-US" current-uiculture="en-US" />
-  <test-suite name="IserviceCallsConvertersTests" type="Assembly" executed="True" result="Success" success="True" time="0.241">
+  <test-suite name="IserviceCallsConvertersTests" type="Assembly" executed="True" result="Success" success="True" time="0.191">
     <results>
-      <test-case name="1. TestConvertToItemDataList" executed="True" result="Success" success="True" time="0.098">
-        <reason>
+      <test-case name="1. TestConvertToItemDataList" executed="True" result="Error" success="False" time="0.070">
+        <failure>
           <message>
 <![CDATA[IntegrationTest started (1. TestConvertToItemDataList)
-IntegrationTest Pass (1. TestConvertToItemDataList)
-IntegrationTest finished (1. TestConvertToItemDataList)
+[{
+KeyNotFoundException: The given key was not present in the dictionary.
+IntegrationTest failed with exception (1. TestConvertToItemDataList)
 ]]>
           </message>
-        </reason>
+          <stack-trace>
+<![CDATA[System.Collections.Generic.Dictionary`2[System.Int32,System.Int32[]].get_Item (Int32 key) (at /Users/builduser/buildslave/monoAndRuntimeClassLibs/build/mcs/class/corlib/System.Collections.Generic/Dictionary.cs:150)
+LitJson.JsonReader.Read ()
+Rethrow as JsonException: Invalid token '34' in input string
+LitJson.JsonReader.Read ()
+LitJson.JsonMapper.ReadValue (LitJson.WrapperFactory factory, LitJson.JsonReader reader)
+LitJson.JsonMapper.ToWrapper (LitJson.WrapperFactory factory, System.String json)
+LitJson.JsonMapper.ToObject (System.String json)
+LitJsonFxJsonObjectConverter.ConvertToItemDataList (System.String ObjectData) (at Assets/SocialPlay-SDK/Scripts/Web/LitJsonFxJsonObjectConverter.cs:31)
+MockWebItemService.GenerateItemsAtLocation (System.String OwnerID, System.String OwnerType, Int32 Location, Guid AppID, Int32 MinimumEnergyOfItem, Int32 TotalEnergyToGenerate, System.Action`1 callback, System.String ANDTags, System.String ORTags) (at Assets/SocialPlay-SDK/Scripts/Web/MockWebItemService.cs:20)
+TestConvertToItemDataList.Start () (at Assets/SDKTests/SocialplaySDKUnitTests/IServiceObjectConverterTests/TestConvertToItemDataList.cs:11)
+]]>
+          </stack-trace>
+        </failure>
       </test-case>
       <test-case name="2. TestConvertToGuid" executed="True" result="Success" success="True" time="0.017">
         <reason>
           <message>
 <![CDATA[IntegrationTest started (2. TestConvertToGuid)
-"73bcdbe5-48b8-4e8e-97bb-7fbb5b4b6155"
-test guid: 73bcdbe5-48b8-4e8e-97bb-7fbb5b4b6155
 IntegrationTest Pass (2. TestConvertToGuid)
 IntegrationTest finished (2. TestConvertToGuid)
 ]]>
           </message>
         </reason>
       </test-case>
-      <test-case name="3. TestConvertToString" executed="True" result="Success" success="True" time="0.025">
+      <test-case name="3. TestConvertToString" executed="True" result="Success" success="True" time="0.017">
         <reason>
           <message>
 <![CDATA[IntegrationTest started (3. TestConvertToString)
@@ -37,7 +49,7 @@ IntegrationTest finished (3. TestConvertToString)
           </message>
         </reason>
       </test-case>
-      <test-case name="4. TestConvertToStoreItems" executed="True" result="Success" success="True" time="0.025">
+      <test-case name="4. TestConvertToStoreItems" executed="True" result="Success" success="True" time="0.019">
         <reason>
           <message>
 <![CDATA[IntegrationTest started (4. TestConvertToStoreItems)
@@ -47,78 +59,21 @@ IntegrationTest finished (4. TestConvertToStoreItems)
           </message>
         </reason>
       </test-case>
-      <test-case name="5. TestConvertToUserInfo" executed="True" result="Success" success="True" time="0.019">
+      <test-case name="5. TestConvertToUserInfo" executed="True" result="Success" success="True" time="0.017">
         <reason>
           <message>
 <![CDATA[IntegrationTest started (5. TestConvertToUserInfo)
+c6afc667-bf54-4948-ad00-530b539f4122
 IntegrationTest Pass (5. TestConvertToUserInfo)
 IntegrationTest finished (5. TestConvertToUserInfo)
 ]]>
           </message>
         </reason>
       </test-case>
-      <test-case name="6. TestConvertToListRecipeInfo" executed="True" result="Success" success="True" time="0.023">
+      <test-case name="6. TestConvertToListRecipeInfo" executed="True" result="Success" success="True" time="0.017">
         <reason>
           <message>
 <![CDATA[IntegrationTest started (6. TestConvertToListRecipeInfo)
-[
-  {
-    "ID": 280,
-    "Name": "Pistol",
-    "Energy": 1073,
-    "Detail": "[{\"Name\":\"Damage\",\"Value\":30,\"InvertEnergy\":false},{\"Name\":\"Fire Rate\",\"Value\":0.3}]",
-    "Description": "Standard issue firearm.",
-    "Image": "https://socialplay.blob.core.windows.net/itemimages/2b828b8e-8c1e-4090-a0bc-c1677e258eba.png",
-    "Recipe": [
-      {
-        "ID": 333,
-        "Amount": 59,
-        "Energy": 120,
-        "Image": "https://socialplay.blob.core.windows.net/itemimages/2b828b8e-8c1e-4090-a0bc-c1677e258eba.png",
-        "Name": "Nuts"
-      },
-      {
-        "ID": 311,
-        "Amount": 41,
-        "Energy": 40,
-        "Image": "https://socialplay.blob.core.windows.net/itemimages/2b828b8e-8c1e-4090-a0bc-c1677e258eba.png",
-        "Name": "Wood"
-      }
-    ]
-  },
-  {
-    "ID": 282,
-    "Name": "Shotgun",
-    "Energy": 1600,
-    "Detail": "[{\"Name\":\"Damage\",\"Value\":80,\"InvertEnergy\":false},{\"Name\":\"Fire Rate\",\"Value\":1}]",
-    "Description": "Standard issue shotgun with a 4 bullet spread.",
-    "Image": "https://socialplay.blob.core.windows.net/itemimages/2b828b8e-8c1e-4090-a0bc-c1677e258eba.png",
-    "Recipe": [
-      {
-        "ID": 334,
-        "Amount": 50,
-        "Energy": 210,
-        "Image": "https://socialplay.blob.core.windows.net/itemimages/2b828b8e-8c1e-4090-a0bc-c1677e258eba.png",
-        "Name": "Steel Plate"
-      },
-      {
-        "ID": 333,
-        "Amount": 25,
-        "Energy": 120,
-        "Image": "https://socialplay.blob.core.windows.net/itemimages/2b828b8e-8c1e-4090-a0bc-c1677e258eba.png",
-        "Name": "Nuts"
-      },
-      {
-        "ID": 311,
-        "Amount": 25,
-        "Energy": 40,
-        "Image": "https://socialplay.blob.core.windows.net/itemimages/2b828b8e-8c1e-4090-a0bc-c1677e258eba.png",
-        "Name": "Wood"
-      }
-    ]
-  }
-]
-Recipes count:2
 IntegrationTest Pass (6. TestConvertToListRecipeInfo)
 IntegrationTest finished (6. TestConvertToListRecipeInfo)
 ]]>
@@ -148,14 +103,161 @@ IntegrationTest finished (8. TestConvertToSPLoginResponse)
     </results>
   </test-suite>
 </test-results>
-="9. TestConvertToSPloginResponse" executed="True" result="Failure" success="False" time="5.003">
-        <failure>
+tionTest Pass (4. TestConvertToStoreItems)
+IntegrationTest finished (4. TestConvertToStoreItems)
+]]>
+          </message>
+        </reason>
+      </test-case>
+      <test-case name="5. TestConvertToUserInfo" executed="True" result="Success" success="True" time="0.017">
+        <reason>
           <message>
-<![CDATA[IntegrationTest started (9. TestConvertToSPloginResponse)
-IntegrationTest timeout (9. TestConvertToSPloginResponse)
+<![CDATA[IntegrationTest started (5. TestConvertToUserInfo)
+c6afc667-bf54-4948-ad00-530b539f4122
+IntegrationTest Pass (5. TestConvertToUserInfo)
+IntegrationTest finished (5. TestConvertToUserInfo)
+]]>
+          </message>
+        </reason>
+      </test-case>
+      <test-case name="6. TestConvertToListRecipeInfo" executed="True" result="Success" success="True" time="0.017">
+        <reason>
+          <message>
+<![CDATA[IntegrationTest started (6. TestConvertToListRecipeInfo)
+IntegrationTest Pass (6. TestConvertToListRecipeInfo)
+IntegrationTest finished (6. TestConvertToListRecipeInfo)
+]]>
+          </message>
+        </reason>
+      </test-case>
+      <test-case name="7. TestConvertToListItemBundle" executed="True" result="Success" success="True" time="0.017">
+        <reason>
+          <message>
+<![CDATA[IntegrationTest started (7. TestConvertToListItemBundle)
+IntegrationTest Pass (7. TestConvertToListItemBundle)
+IntegrationTest finished (7. TestConvertToListItemBundle)
+]]>
+          </message>
+        </reason>
+      </test-case>
+      <test-case name="8. TestConvertToSPLoginResponse" executed="True" result="Success" success="True" time="0.017">
+        <reason>
+          <message>
+<![CDATA[IntegrationTest started (8. TestConvertToSPLoginResponse)
+IntegrationTest Pass (8. TestConvertToSPLoginResponse)
+IntegrationTest finished (8. TestConvertToSPLoginResponse)
+]]>
+          </message>
+        </reason>
+      </test-case>
+    </results>
+  </test-suite>
+</test-results>
+t failed with exception (6. TestConvertToListRecipeInfo)
 ]]>
           </message>
           <stack-trace>
+<![CDATA[LitJson.Lexer.NextToken ()
+LitJson.JsonReader.ReadToken ()
+LitJson.JsonReader.Read ()
+LitJson.JsonMapper.ReadValue (LitJson.WrapperFactory factory, LitJson.JsonReader reader)
+LitJson.JsonMapper.ReadValue (LitJson.WrapperFactory factory, LitJson.JsonReader reader)
+LitJson.JsonMapper.ReadValue (LitJson.WrapperFactory factory, LitJson.JsonReader reader)
+LitJson.JsonMapper.ToWrapper (LitJson.WrapperFactory factory, System.String json)
+LitJson.JsonMapper.ToObject (System.String json)
+LitJsonFxJsonObjectConverter.ConvertToListRecipeInfo (System.String dataString) (at Assets/SocialPlay-SDK/Scripts/Web/LitJsonFxJsonObjectConverter.cs:138)
+MockWebItemService.GetGameRecipes (System.String appID, System.Action`1 callback) (at Assets/SocialPlay-SDK/Scripts/Web/MockWebItemService.cs:60)
+TestConvertToListRecipeInfo.Start () (at Assets/SDKTests/SocialplaySDKUnitTests/IServiceObjectConverterTests/TestConvertToListRecipeInfo.cs:9)
+]]>
+          </stack-trace>
+        </failure>
+      </test-case>
+      <test-case name="7. TestConvertToListItemBundle" executed="True" result="Error" success="False" time="0.018">
+        <failure>
+          <message>
+<![CDATA[IntegrationTest started (7. TestConvertToListItemBundle)
+JsonException: Invalid character 'N' in input string
+IntegrationTest failed with exception (7. TestConvertToListItemBundle)
+]]>
+          </message>
+          <stack-trace>
+<![CDATA[LitJson.Lexer.NextToken ()
+LitJson.JsonReader.ReadToken ()
+LitJson.JsonReader.Read ()
+LitJson.JsonMapper.ReadValue (LitJson.WrapperFactory factory, LitJson.JsonReader reader)
+LitJson.JsonMapper.ReadValue (LitJson.WrapperFactory factory, LitJson.JsonReader reader)
+LitJson.JsonMapper.ReadValue (LitJson.WrapperFactory factory, LitJson.JsonReader reader)
+LitJson.JsonMapper.ReadValue (LitJson.WrapperFactory factory, LitJson.JsonReader reader)
+LitJson.JsonMapper.ReadValue (LitJson.WrapperFactory factory, LitJson.JsonReader reader)
+LitJson.JsonMapper.ToWrapper (LitJson.WrapperFactory factory, System.String json)
+LitJson.JsonMapper.ToObject (System.String json)
+LitJsonFxJsonObjectConverter.ConvertToListItemBundle (System.String dataString) (at Assets/SocialPlay-SDK/Scripts/Web/LitJsonFxJsonObjectConverter.cs:198)
+MockWebItemService.GetItemBundles (System.String appID, System.Action`1 callback) (at Assets/SocialPlay-SDK/Scripts/Web/MockWebItemService.cs:70)
+TestConvertToListItemBundle.Start () (at Assets/SDKTests/SocialplaySDKUnitTests/IServiceObjectConverterTests/TestConvertToListItemBundle.cs:9)
+]]>
+          </stack-trace>
+        </failure>
+      </test-case>
+      <test-case name="8. TestConvertToSPLoginResponse" executed="True" result="Error" success="False" time="0.017">
+        <failure>
+          <message>
+<![CDATA[IntegrationTest started (8. TestConvertToSPLoginResponse)
+JsonException: Invalid character 'I' in input string
+IntegrationTest failed with exception (8. TestConvertToSPLoginResponse)
+]]>
+          </message>
+          <stack-trace>
+<![CDATA[LitJson.Lexer.NextToken ()
+LitJson.JsonReader.ReadToken ()
+LitJson.JsonReader.Read ()
+LitJson.JsonMapper.ReadValue (LitJson.WrapperFactory factory, LitJson.JsonReader reader)
+LitJson.JsonMapper.ReadValue (LitJson.WrapperFactory factory, LitJson.JsonReader reader)
+LitJson.JsonMapper.ToWrapper (LitJson.WrapperFactory factory, System.String json)
+LitJson.JsonMapper.ToObject (System.String json)
+LitJsonFxJsonObjectConverter.ConvertToSPLoginResponse (System.String dataString) (at Assets/SocialPlay-SDK/Scripts/Web/LitJsonFxJsonObjectConverter.cs:276)
+MockWebItemService.SPLogin_UserLogin (Guid gameID, System.String userEmail, System.String password, System.Action`1 callback) (at Assets/SocialPlay-SDK/Scripts/Web/MockWebItemService.cs:130)
+TestConvertToSPLoginResponse.Start () (at Assets/SDKTests/SocialplaySDKUnitTests/IServiceObjectConverterTests/TestConvertToSPLoginResponse.cs:9)
+]]>
+          </stack-trace>
+        </failure>
+      </test-case>
+    </results>
+  </test-suite>
+</test-results>
+ssLibs/build/mcs/class/corlib/System.Collections.Generic/Dictionary.cs:150)
+LitJson.JsonReader.Read ()
+Rethrow as JsonException: Invalid token '34' in input string
+LitJson.JsonReader.Read ()
+LitJson.JsonMapper.ReadValue (LitJson.WrapperFactory factory, LitJson.JsonReader reader)
+LitJson.JsonMapper.ToWrapper (LitJson.WrapperFactory factory, System.String json)
+LitJson.JsonMapper.ToObject (System.String json)
+LitJsonFxJsonObjectConverter.ConvertToListItemBundle (System.String dataString) (at Assets/SocialPlay-SDK/Scripts/Web/LitJsonFxJsonObjectConverter.cs:198)
+MockWebItemService.GetItemBundles (System.String appID, System.Action`1 callback) (at Assets/SocialPlay-SDK/Scripts/Web/MockWebItemService.cs:70)
+TestConvertToListItemBundle.Start () (at Assets/SDKTests/SocialplaySDKUnitTests/IServiceObjectConverterTests/TestConvertToListItemBundle.cs:9)
+]]>
+          </stack-trace>
+        </failure>
+      </test-case>
+      <test-case name="8. TestConvertToSPLoginResponse" executed="True" result="Error" success="False" time="0.017">
+        <failure>
+          <message>
+<![CDATA[IntegrationTest started (8. TestConvertToSPLoginResponse)
+KeyNotFoundException: The given key was not present in the dictionary.
+IntegrationTest failed with exception (8. TestConvertToSPLoginResponse)
+]]>
+          </message>
+          <stack-trace>
+<![CDATA[System.Collections.Generic.Dictionary`2[System.Int32,System.Int32[]].get_Item (Int32 key) (at /Users/builduser/buildslave/monoAndRuntimeClassLibs/build/mcs/class/corlib/System.Collections.Generic/Dictionary.cs:150)
+LitJson.JsonReader.Read ()
+Rethrow as JsonException: Invalid token '34' in input string
+LitJson.JsonReader.Read ()
+LitJson.JsonMapper.ReadValue (LitJson.WrapperFactory factory, LitJson.JsonReader reader)
+LitJson.JsonMapper.ToWrapper (LitJson.WrapperFactory factory, System.String json)
+LitJson.JsonMapper.ToObject (System.String json)
+LitJsonFxJsonObjectConverter.ConvertToSPLoginResponse (System.String dataString) (at Assets/SocialPlay-SDK/Scripts/Web/LitJsonFxJsonObjectConverter.cs:276)
+MockWebItemService.SPLogin_UserLogin (Guid gameID, System.String userEmail, System.String password, System.Action`1 callback) (at Assets/SocialPlay-SDK/Scripts/Web/MockWebItemService.cs:130)
+TestConvertToSPLoginResponse.Start () (at Assets/SDKTests/SocialplaySDKUnitTests/IServiceObjectConverterTests/TestConvertToSPLoginResponse.cs:9)
+]]>
           </stack-trace>
         </failure>
       </test-case>
