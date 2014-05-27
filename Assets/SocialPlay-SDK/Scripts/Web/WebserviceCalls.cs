@@ -77,6 +77,8 @@ public class WebserviceCalls : MonoBehaviour, IServiceCalls
 
     public void MoveItemStack(Guid StackToMove, int MoveAmount, string DestinationOwnerID, string DestinationOwnerType, Guid AppID, int DestinationLocation, Action<Guid> callback)
     {
+        Debug.Log(StackToMove.ToString());
+
         string url = string.Format("{0}MoveItemStack?StackToMove={1}&MoveAmount={2}&DestinationOwnerID={3}&DestinationOwnerType={4}&AppID={5}&DestinationLocation={6}", cloudGoodsURL, StackToMove, MoveAmount, DestinationOwnerID, DestinationOwnerType, AppID.ToString(), DestinationLocation);
         WWW www = new WWW(url);
 

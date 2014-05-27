@@ -33,7 +33,6 @@ public class NewtonsoftJsonObjectConverter : IServiceObjectConverter {
         Guid tmpGuid = new Guid(JToken.Parse(dataString).ToString());
         Debug.Log("test guid: " + tmpGuid.ToString());
         return tmpGuid;
-
     }
 
     public string ConvertToString(string dataString)
@@ -77,6 +76,7 @@ public class NewtonsoftJsonObjectConverter : IServiceObjectConverter {
 
             storeItemInfo.itemDetail = storeItemDetails;
 
+            //TODO implement addDate of store item
             //storeItemInfo.addedDate = (DateTime)storeItemsJsonArray[i]["AddedDate"];
 
             JArray tagsArray = JArray.Parse(storeItemsJsonArray[i]["tags"].ToString());

@@ -13,174 +13,130 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter {
 
         string parsedString = ParseString(ObjectData);
 
-        Debug.Log(parsedString);
-
         if (parsedString == "[]")
             return new List<ItemData>();
 
-        //LitJson.JsonData jsonData = LitJson.JsonMapper.ToObject<LitJson.JsonData>(ObjectData);
-
-        ////for (int i = 0; i < itemsData.Count; i++)
-        ////{
-        ////    SocialPlay.Data.ItemData itemData = new SocialPlay.Data.ItemData();
-        ////    itemData.StackLocationID = new Guid(itemsData[i]["StackLocationID"].ToString());
-        ////    itemData.Amount = int.Parse(itemsData[i]["Amount"].ToString());
-        ////    itemData.Detail = itemsData[i]["Detail"].ToString();
-        ////    itemData.ItemID = int.Parse(itemsData[i]["ItemID"].ToString());
-        ////    itemData.Type = int.Parse(itemsData[i]["Type"].ToString());
-        ////    itemData.Location = int.Parse(itemsData[i]["Location"].ToString());
-        ////    itemData.BaseItemEnergy = int.Parse(itemsData[i]["BaseItemEnergy"].ToString());
-        ////    itemData.Energy = int.Parse(itemsData[i]["Energy"].ToString());
-        ////    itemData.SellPrice = int.Parse(itemsData[i]["SellPrice"].ToString());
-        ////    itemData.Name = itemsData["Name"].ToString();
-        ////    itemData.Image = itemsData["Image"].ToString();
-        ////    itemData.Quality = int.Parse(itemsData[i]["Quality"].ToString());
-        ////    itemData.Behaviours = itemsData[i]["Behaviours"].ToString();
-        ////    itemData.BaseItemID = int.Parse(itemsData[i]["BaseItemID"].ToString());
-        ////    itemData.Description = itemsData[i]["Description"].ToString();
-        ////    itemData.AssetBundleName = itemsData[i]["AssetBundleName"].ToString();
-        ////    itemData.Tags = itemsData[i]["Tags"].ToString();
-
-        ////    itemDataList.Add(itemData);
-        ////}
-
-        //List<ItemData> items = ItemConversion.converter.ConvertItems(itemDataList);
-
-        string data = "";
-
         JsonReader reader = new JsonReader(parsedString);
-
+        Debug.Log(parsedString);
         reader.Read();
 
         if (reader.Token.ToString() == "ArrayStart")
         {
-
             while (reader.Token.ToString() != "ArrayEnd")
             {
                 reader.Read();
 
                 if (reader.Token.ToString() == "ObjectStart")
                 {
-                    reader.Read();
                     SocialPlay.Data.ItemData itemData = new SocialPlay.Data.ItemData();
 
                     while (reader.Token.ToString() != "ObjectEnd")
                     {
-                        
-
                         reader.Read();
 
                         if (reader.Token.ToString() == "PropertyName")
                         {
-                            if (reader.Value.ToString() == "StackLocationID") {
-                                reader.Read();
+                            Debug.Log(reader.Value.ToString());
+                            string propertyString = reader.Value.ToString();
+
+                            reader.Read();
+
+                            if (propertyString == "StackLocationID")
+                            {
                                 itemData.StackLocationID = new Guid(reader.Value.ToString());
+                                Debug.Log(itemData.StackLocationID.ToString());
                             }
-                            if (reader.Value.ToString() == "Amount") {
-                                reader.Read();
+                            if (propertyString == "Amount")
+                            {
                                 int tmpInt = 0;
                                 int.TryParse(reader.Value.ToString(), out tmpInt);
 
                                 itemData.Amount = tmpInt;
                             }
-                            if (reader.Value.ToString() == "Detail") {
-                                reader.Read();
+                            if (propertyString == "Detail")
+                            {
                                 itemData.Detail = reader.Value.ToString();
                             }
-                            if (reader.Value.ToString() == "ItemID") {
-                                reader.Read();
-
+                            if (propertyString == "ItemID")
+                            {
                                 int tmpInt = 0;
                                 int.TryParse(reader.Value.ToString(), out tmpInt);
 
                                 itemData.ItemID = tmpInt;
                             }
-                            if (reader.Value.ToString() == "Type") {
-                                reader.Read();
-
+                            if (propertyString == "Type")
+                            {
                                 int tmpInt = 0;
                                 int.TryParse(reader.Value.ToString(), out tmpInt);
 
                                 itemData.Type = tmpInt;
                             }
-                            if (reader.Value.ToString() == "Location") {
-                                reader.Read();
-
+                            if (propertyString == "Location")
+                            {
                                 int tmpInt = 0;
                                 int.TryParse(reader.Value.ToString(), out tmpInt);
 
                                 itemData.Location = tmpInt;
                             }
-                            if (reader.Value.ToString() == "BaseItemEnergy") {
-                                reader.Read();
-
+                            if (propertyString == "BaseItemEnergy")
+                            {
                                 int tmpInt = 0;
                                 int.TryParse(reader.Value.ToString(), out tmpInt);
 
                                 itemData.BaseItemEnergy = tmpInt;
                             }
-                            if (reader.Value.ToString() == "Energy") {
-                                reader.Read();
-
+                            if (propertyString == "Energy")
+                            {
                                 int tmpInt = 0;
                                 int.TryParse(reader.Value.ToString(), out tmpInt);
 
                                 itemData.Energy = tmpInt;
                             }
-                            if (reader.Value.ToString() == "SellPrice") {
-                                reader.Read();
-
+                            if (propertyString == "SellPrice")
+                            {
                                 int tmpInt = 0;
                                 int.TryParse(reader.Value.ToString(), out tmpInt);
 
                                 itemData.SellPrice = tmpInt;
                             }
-                            if (reader.Value.ToString() == "Name") {
-                                reader.Read();
-
+                            if (propertyString == "Name")
+                            {
                                 itemData.Name = reader.Value.ToString();
                             }
-                            if (reader.Value.ToString() == "Image") {
-                                reader.Read();
-
+                            if (propertyString == "Image")
+                            {
                                 itemData.Image = reader.Value.ToString();
                             }
-                            if (reader.Value.ToString() == "Quality") {
-                                reader.Read();
-
+                            if (propertyString == "Quality")
+                            {
                                 int tmpInt = 0;
                                 int.TryParse(reader.Value.ToString(), out tmpInt);
 
                                 itemData.Quality = tmpInt;
                             }
-                            if (reader.Value.ToString() == "Behaviours") {
-                                reader.Read();
-
+                            if (propertyString == "Behaviours")
+                            {
                                 itemData.Behaviours = reader.Value.ToString();
                             }
-                            if (reader.Value.ToString() == "BaseItemID") {
-                                reader.Read();
-
+                            if (propertyString == "BaseItemID")
+                            {
                                 int tmpInt = 0;
                                 int.TryParse(reader.Value.ToString(), out tmpInt);
 
                                 itemData.BaseItemID = tmpInt;
                             }
-                            if (reader.Value.ToString() == "Description") {
-                                reader.Read();
-
+                            if (propertyString == "Description")
+                            {
                                 itemData.Description = reader.Value.ToString();
                             }
-                            if (reader.Value.ToString() == "AssetBundleName") {
-                                reader.Read();
-
+                            if (propertyString == "AssetBundleName")
+                            {
                                 itemData.AssetBundleName = reader.Value.ToString();
                             }
-                            if (reader.Value.ToString() == "Tags") {
-                                reader.Read();
-
+                            if (propertyString == "Tags")
+                            {
                                 itemData.Tags = reader.Value.ToString();
-                            }
+}
                         }
                         
                     }
@@ -193,8 +149,6 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter {
 
         List<ItemData> items = ItemConversion.converter.ConvertItems(itemDataList);
 
-        Debug.Log(items.Count);
-
         return items;
     }
 
@@ -202,6 +156,7 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter {
     public Guid ConvertToGuid(string dataString)
     {
         string guidString = ParseString(dataString);
+        Debug.Log(guidString);
         Guid newGuid = new Guid(guidString);
         return newGuid;
     }
