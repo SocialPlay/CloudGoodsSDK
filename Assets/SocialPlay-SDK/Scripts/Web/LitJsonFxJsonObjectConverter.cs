@@ -5,47 +5,60 @@ using System.Collections.Generic;
 using SocialPlay.Data;
 using LitJson;
 using JsonFx.Json;
+using Newtonsoft.Json.Linq;
 
 public class LitJsonFxJsonObjectConverter : IServiceObjectConverter {
 
     public List<ItemData> ConvertToItemDataList(string ObjectData)
     {
-        ItemDataList itemDataList = new SocialPlay.Data.ItemDataList();
+        //ItemDataList itemDataList = new SocialPlay.Data.ItemDataList();
 
-        string parsedString = ParseString(ObjectData);
+        //string parsedString = ParseString(ObjectData);
 
-        Debug.Log(parsedString);
+        //Debug.Log(parsedString);
 
-        if (parsedString == "[]")
-            return new List<ItemData>();
+        //if (parsedString == "[]")
+        //    return new List<ItemData>();
 
-        //SocialPlay.Data.ItemDataList itemsData = LitJson.JsonMapper.ToObject<ItemDataList>(ObjectData);
+        //LitJson.JsonData jsonData = LitJson.JsonMapper.ToObject<LitJson.JsonData>(ObjectData);
 
-        LitJson.JsonData jsonData = LitJson.JsonMapper.ToObject<LitJson.JsonData>(ObjectData);
+        ////for (int i = 0; i < itemsData.Count; i++)
+        ////{
+        ////    SocialPlay.Data.ItemData itemData = new SocialPlay.Data.ItemData();
+        ////    itemData.StackLocationID = new Guid(itemsData[i]["StackLocationID"].ToString());
+        ////    itemData.Amount = int.Parse(itemsData[i]["Amount"].ToString());
+        ////    itemData.Detail = itemsData[i]["Detail"].ToString();
+        ////    itemData.ItemID = int.Parse(itemsData[i]["ItemID"].ToString());
+        ////    itemData.Type = int.Parse(itemsData[i]["Type"].ToString());
+        ////    itemData.Location = int.Parse(itemsData[i]["Location"].ToString());
+        ////    itemData.BaseItemEnergy = int.Parse(itemsData[i]["BaseItemEnergy"].ToString());
+        ////    itemData.Energy = int.Parse(itemsData[i]["Energy"].ToString());
+        ////    itemData.SellPrice = int.Parse(itemsData[i]["SellPrice"].ToString());
+        ////    itemData.Name = itemsData["Name"].ToString();
+        ////    itemData.Image = itemsData["Image"].ToString();
+        ////    itemData.Quality = int.Parse(itemsData[i]["Quality"].ToString());
+        ////    itemData.Behaviours = itemsData[i]["Behaviours"].ToString();
+        ////    itemData.BaseItemID = int.Parse(itemsData[i]["BaseItemID"].ToString());
+        ////    itemData.Description = itemsData[i]["Description"].ToString();
+        ////    itemData.AssetBundleName = itemsData[i]["AssetBundleName"].ToString();
+        ////    itemData.Tags = itemsData[i]["Tags"].ToString();
 
-        //for (int i = 0; i < itemsData.Count; i++)
-        //{
-        //    SocialPlay.Data.ItemData itemData = new SocialPlay.Data.ItemData();
-        //    itemData.StackLocationID = new Guid(itemsData[i]["StackLocationID"].ToString());
-        //    itemData.Amount = int.Parse(itemsData[i]["Amount"].ToString());
-        //    itemData.Detail = itemsData[i]["Detail"].ToString();
-        //    itemData.ItemID = int.Parse(itemsData[i]["ItemID"].ToString());
-        //    itemData.Type = int.Parse(itemsData[i]["Type"].ToString());
-        //    itemData.Location = int.Parse(itemsData[i]["Location"].ToString());
-        //    itemData.BaseItemEnergy = int.Parse(itemsData[i]["BaseItemEnergy"].ToString());
-        //    itemData.Energy = int.Parse(itemsData[i]["Energy"].ToString());
-        //    itemData.SellPrice = int.Parse(itemsData[i]["SellPrice"].ToString());
-        //    itemData.Name = itemsData["Name"].ToString();
-        //    itemData.Image = itemsData["Image"].ToString();
-        //    itemData.Quality = int.Parse(itemsData[i]["Quality"].ToString());
-        //    itemData.Behaviours = itemsData[i]["Behaviours"].ToString();
-        //    itemData.BaseItemID = int.Parse(itemsData[i]["BaseItemID"].ToString());
-        //    itemData.Description = itemsData[i]["Description"].ToString();
-        //    itemData.AssetBundleName = itemsData[i]["AssetBundleName"].ToString();
-        //    itemData.Tags = itemsData[i]["Tags"].ToString();
+        ////    itemDataList.Add(itemData);
+        ////}
 
-        //    itemDataList.Add(itemData);
-        //}
+        //List<ItemData> items = ItemConversion.converter.ConvertItems(itemDataList);
+
+        string data = "";
+        ItemDataList itemDataList = null;
+
+        if (ObjectData == "\"[]\"")
+        {
+            List<ItemData> convertedItems = new List<ItemData>();
+        }
+
+        data = JToken.Parse(ObjectData).ToString();
+
+        itemDataList = Newtonsoft.Json.JsonConvert.DeserializeObject<ItemDataList>(data);
 
         List<ItemData> items = ItemConversion.converter.ConvertItems(itemDataList);
 
