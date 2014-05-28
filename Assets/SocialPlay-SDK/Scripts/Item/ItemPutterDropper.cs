@@ -16,8 +16,11 @@ public class ItemPutterDropper : MonoBehaviour, IItemPutter
 
     void Start()
     {
-        gameItemDrop = gameObject.AddComponent<ItemDrop>();
-        gameItemDrop.dropParentObject = transform;
+        if (GetComponent<ItemDrop>())
+            gameItemDrop = GetComponent<ItemDrop>();
+        else
+            gameItemDrop = gameObject.AddComponent<ItemDrop>();
+        
     }
 
     public void PutGameItem(List<ItemData> items)
@@ -30,6 +33,7 @@ public class ItemPutterDropper : MonoBehaviour, IItemPutter
         foreach (ItemData dropItem in dropItems)
         {
             ItemData data = dropItem.GetComponent<ItemData>();
+
             GameObject model;
             if (prefabinitilizer != null)
             {
@@ -45,7 +49,8 @@ public class ItemPutterDropper : MonoBehaviour, IItemPutter
             }
 
             gameItemDrop.DropItemIntoWorld(data, dropTransform.position, model);
-            Destroy(dropItem.gameObject);
+
+            DestroyObject(dropItem.gameObject);
         }
     }
 

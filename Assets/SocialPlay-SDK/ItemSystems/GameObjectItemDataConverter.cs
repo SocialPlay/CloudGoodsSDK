@@ -41,7 +41,7 @@ public class GameObjectItemDataConverter : ItemDataConverter
             Resources.UnloadUnusedAssets();
         }
 
-       // ItemComponentInitalizer.InitializeItemWithComponents(convertedItems);
+        ItemComponentInitalizer.InitializeItemWithComponents(convertedItems, AddComponetTo.prefab);
 
         return convertedItems;
     }
