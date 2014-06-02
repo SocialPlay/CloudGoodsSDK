@@ -136,15 +136,13 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter {
                             if (propertyString == "Tags")
                             {
                                 itemData.Tags = reader.Value.ToString();
-}
+                            }
                         }
-                        
                     }
 
                     itemDataList.Add(itemData);
                 }
             }
-
         }
 
         List<ItemData> items = ItemConversion.converter.ConvertItems(itemDataList);
@@ -218,6 +216,8 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter {
 
     public WebserviceCalls.UserInfo ConvertToUserInfo(string dataString)
     {
+        Debug.Log(dataString);
+
         string userInfoString = ParseString(dataString);
 
         JsonData data = LitJson.JsonMapper.ToObject(userInfoString);

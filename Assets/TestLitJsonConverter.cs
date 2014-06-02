@@ -6,7 +6,6 @@ using SocialPlay.Data;
 
 public class TestLitJsonConverter : MonoBehaviour {
 
-	// Use this for initialization
 	void Start () {
         WebserviceCalls.webservice.GetOwnerItems("", "", 0, Guid.Empty, OnReceivedItemDataList);
         //WebserviceCalls.webservice.MoveItemStack(Guid.Empty, 0, "", "", Guid.Empty, 0, OnReceivedGuid);

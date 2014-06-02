@@ -21,7 +21,6 @@ public class WebserviceCalls : MonoBehaviour, IServiceCalls
 
     string cloudGoodsURL = "https://SocialPlayWebService.azurewebsites.net/cloudgoods/cloudgoodsservice.svc/";
 
-
     void Awake()
     {
         if (webservice == null)
@@ -284,6 +283,65 @@ public class WebserviceCalls : MonoBehaviour, IServiceCalls
         StartCoroutine(ServiceGetString(www, callback));
     }
 
+
+    public void GetToken(string appID, string securePayload, Action<string> callback)
+    {
+        string url = cloudGoodsURL + "GetToken?appID=" + appID + "&payload=" + WWW.EscapeURL(EncryptStringUnity(securePayload));
+
+        WWW www = new WWW(url);
+
+        StartCoroutine(ServiceGetString(www, (x) => {
+            SecureCall(DecryptString(AppSecret, x.Replace("\\", "")), "", callback);
+        }));
+    }
+
+    public void SecureCall(string token, string securePayload, Action<string> callback)
+    {
+        List<WebModels.ItemsInfo> listOfItems = new List<WebModels.ItemsInfo>();
+
+        WebModels.ItemsInfo item = new WebModels.ItemsInfo();
+        item.amount = 1;
+        item.ItemID = 106465;
+        item.location = 0;
+        listOfItems.Add(item);
+
+        GiveOwnerItemWebserviceRequest request = new GiveOwnerItemWebserviceRequest();
+        request.listOfItems = listOfItems;
+        request.ownerID = "ef595214-369f-4313-9ac7-b0036e5ac25c";
+        request.appID = GameAuthentication.GetAppID();
+        request.OwnerType = WebModels.OwnerTypes.User;
+
+        string newStringRequest = JsonConvert.SerializeObject(request);
+
+        SecurePayload payload = new SecurePayload();
+        payload.token = token;
+        payload.data = newStringRequest;
+
+        string securePayloadString = JsonConvert.SerializeObject(payload);
+
+        Debug.Log(securePayloadString);
+
+        string url = cloudGoodsURL + "SecureAction?appID=" + GameAuthentication.GetAppID() + "&payload=" + WWW.EscapeURL(EncryptStringUnity(securePayloadString));
+
+        WWW www = new WWW(url);
+
+        StartCoroutine(ServiceGetString(www, callback));
+    }
+
+    public class SecurePayload
+    {
+        public string token;
+        public string data;
+    }
+
+    public class GiveOwnerItemWebserviceRequest
+    {
+        public List<WebModels.ItemsInfo> listOfItems;
+        public WebModels.OwnerTypes OwnerType;
+        public string ownerID;
+        public string appID;
+    }
+
     #endregion
 
     #region RecipeCalls
@@ -474,5 +532,40 @@ public class WebserviceCalls : MonoBehaviour, IServiceCalls
             HashProvider.Clear();
         }
         return Convert.ToBase64String(Results);
+    }
+
+    public static string DecryptString(string passphrase, string Message)
+    {
+        byte[] Results;
+        UTF8Encoding UTF8 = new UTF8Encoding();
+
+        MD5CryptoServiceProvider HashProvider = new MD5CryptoServiceProvider();
+        byte[] TDESKey = HashProvider.ComputeHash(UTF8.GetBytes(passphrase));
+
+        TripleDESCryptoServiceProvider TDESAlgorithm = new TripleDESCryptoServiceProvider();
+
+        TDESAlgorithm.Key = TDESKey;
+        TDESAlgorithm.Mode = CipherMode.ECB;
+        TDESAlgorithm.Padding = PaddingMode.PKCS7;
+
+        byte[] DataToDecrypt = Convert.FromBase64String(Message);
+
+        try
+        {
+            ICryptoTransform Decryptor = TDESAlgorithm.CreateDecryptor();
+            Results = Decryptor.TransformFinalBlock(DataToDecrypt, 0, DataToDecrypt.Length);
+        }
+        catch (Exception ex)
+        {
+            TDESAlgorithm.Clear();
+            HashProvider.Clear();
+            return ex.ToString();
+        }
+        finally
+        {
+            TDESAlgorithm.Clear();
+            HashProvider.Clear();
+        }
+        return UTF8.GetString(Results);
     }
 }

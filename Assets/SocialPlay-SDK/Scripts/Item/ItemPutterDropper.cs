@@ -8,7 +8,6 @@ using SocialPlay.Data;
 
 public class ItemPutterDropper : MonoBehaviour, IItemPutter
 {
-
     public GameObject defaultDropModelPrefab;
     public Transform dropTransform;
     public ItemPrefabInitilizer prefabinitilizer;
@@ -20,7 +19,6 @@ public class ItemPutterDropper : MonoBehaviour, IItemPutter
             gameItemDrop = GetComponent<ItemDrop>();
         else
             gameItemDrop = gameObject.AddComponent<ItemDrop>();
-        
     }
 
     public void PutGameItem(List<ItemData> items)
@@ -53,7 +51,4 @@ public class ItemPutterDropper : MonoBehaviour, IItemPutter
             DestroyObject(dropItem.gameObject);
         }
     }
-
-
-
 }

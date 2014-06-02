@@ -5,7 +5,6 @@ using Newtonsoft.Json.Linq;
 
 public class SaveToLocation : MonoBehaviour
 {
-
     public ItemOwnerTypes DestinationOwnerType;
 
     public ItemContainer Container = null;

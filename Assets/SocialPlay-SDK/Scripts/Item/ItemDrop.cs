@@ -13,7 +13,7 @@ public class ItemDrop : MonoBehaviour
     {
         if (item != null)
         {
-           
+       
             List<ItemData> items = new List<ItemData>();
             items.Add(item);
             List<GameObject> dropItems = ItemConverter.ConvertToItemDropObject(items, true);
