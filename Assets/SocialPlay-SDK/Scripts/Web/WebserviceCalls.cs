@@ -41,21 +41,6 @@ public class WebserviceCalls : MonoBehaviour, IServiceCalls
         }
     }
 
-    public class UserInfo
-    {
-        public string userGuid = "";
-        public bool isNewUserToWorld = false;
-        public string userName = "";
-        public string userEmail = "";
-
-        public UserInfo(string newUserGuid, string newUserName, string newUserEmail)
-        {
-            userGuid = newUserGuid;
-            userName = newUserName;
-            userEmail = newUserEmail;
-        }
-    }
-
     #region ItemContainerManagementCalls
 
     public void GenerateItemsAtLocation(string OwnerID, string OwnerType, int Location, Guid AppID, int MinimumEnergyOfItem, int TotalEnergyToGenerate, Action<List<ItemData>> callback, string ANDTags = "", string ORTags = "")
@@ -121,14 +106,9 @@ public class WebserviceCalls : MonoBehaviour, IServiceCalls
         StartCoroutine(ServiceGetString(www, callback));
     }
 
-    public void GiveOwnerItems(WebModels.OwnerTypes OwnerType, List<WebModels.ItemsInfo> listOfItems, Action<string> callback)
+    public void GiveOwnerItems(string ownerID, WebModels.OwnerTypes OwnerType, List<WebModels.ItemsInfo> listOfItems, Action<string> callback)
     {
-        string jsonList = JsonConvert.SerializeObject(listOfItems);
-
-        string url = string.Format("{0}GiveOwnerItems?AppID={1}&OwnerID={2}&OwnerType={3}&listOfItems={4}", cloudGoodsURL, ItemSystemGameData.AppID, ItemSystemGameData.UserID.ToString(), OwnerType.ToString(), jsonList);
-        WWW www = new WWW(url);
-
-        StartCoroutine(ServiceGetString(www, callback));
+        GetToken(GameAuthentication.GetAppID(), ownerID, "1", listOfItems, callback);
     }
 
     #endregion
@@ -281,65 +261,6 @@ public class WebserviceCalls : MonoBehaviour, IServiceCalls
         WWW www = new WWW(url);
 
         StartCoroutine(ServiceGetString(www, callback));
-    }
-
-
-    public void GetToken(string appID, string securePayload, Action<string> callback)
-    {
-        string url = cloudGoodsURL + "GetToken?appID=" + appID + "&payload=" + WWW.EscapeURL(EncryptStringUnity(securePayload));
-
-        WWW www = new WWW(url);
-
-        StartCoroutine(ServiceGetString(www, (x) => {
-            SecureCall(DecryptString(AppSecret, x.Replace("\\", "")), "", callback);
-        }));
-    }
-
-    public void SecureCall(string token, string securePayload, Action<string> callback)
-    {
-        List<WebModels.ItemsInfo> listOfItems = new List<WebModels.ItemsInfo>();
-
-        WebModels.ItemsInfo item = new WebModels.ItemsInfo();
-        item.amount = 1;
-        item.ItemID = 106465;
-        item.location = 0;
-        listOfItems.Add(item);
-
-        GiveOwnerItemWebserviceRequest request = new GiveOwnerItemWebserviceRequest();
-        request.listOfItems = listOfItems;
-        request.ownerID = "ef595214-369f-4313-9ac7-b0036e5ac25c";
-        request.appID = GameAuthentication.GetAppID();
-        request.OwnerType = WebModels.OwnerTypes.User;
-
-        string newStringRequest = JsonConvert.SerializeObject(request);
-
-        SecurePayload payload = new SecurePayload();
-        payload.token = token;
-        payload.data = newStringRequest;
-
-        string securePayloadString = JsonConvert.SerializeObject(payload);
-
-        Debug.Log(securePayloadString);
-
-        string url = cloudGoodsURL + "SecureAction?appID=" + GameAuthentication.GetAppID() + "&payload=" + WWW.EscapeURL(EncryptStringUnity(securePayloadString));
-
-        WWW www = new WWW(url);
-
-        StartCoroutine(ServiceGetString(www, callback));
-    }
-
-    public class SecurePayload
-    {
-        public string token;
-        public string data;
-    }
-
-    public class GiveOwnerItemWebserviceRequest
-    {
-        public List<WebModels.ItemsInfo> listOfItems;
-        public WebModels.OwnerTypes OwnerType;
-        public string ownerID;
-        public string appID;
     }
 
     #endregion
@@ -501,6 +422,78 @@ public class WebserviceCalls : MonoBehaviour, IServiceCalls
 
     #endregion
 
+    #region ServiceObjects
+
+    public class GiveOwnerItemWebserviceRequest
+    {
+        public List<WebModels.ItemsInfo> listOfItems;
+        public WebModels.OwnerTypes OwnerType;
+        public string ownerID;
+        public string appID;
+    }
+
+    public class SecurePayload
+    {
+        public string token;
+        public string data;
+    }
+
+    public class UserInfo
+    {
+        public string userGuid = "";
+        public bool isNewUserToWorld = false;
+        public string userName = "";
+        public string userEmail = "";
+
+        public UserInfo(string newUserGuid, string newUserName, string newUserEmail)
+        {
+            userGuid = newUserGuid;
+            userName = newUserName;
+            userEmail = newUserEmail;
+        }
+    }
+
+    #endregion
+
+    #region Utility Functions
+
+    public void GetToken(string appID, string ownerID, string tokenType, List<WebModels.ItemsInfo> items, Action<string> callback)
+    {
+        string url = cloudGoodsURL + "GetToken?appID=" + appID + "&payload=" + WWW.EscapeURL(EncryptStringUnity(tokenType));
+
+        WWW www = new WWW(url);
+
+        StartCoroutine(ServiceGetString(www, (x) =>
+        {
+            SecureCall(DecryptString(AppSecret, x.Replace("\\", "")), "", items, callback);
+        }));
+    }
+
+    public void SecureCall(string token, string ownerID, List<WebModels.ItemsInfo> items, Action<string> callback)
+    {
+        GiveOwnerItemWebserviceRequest request = new GiveOwnerItemWebserviceRequest();
+        request.listOfItems = items;
+        request.ownerID = "ef595214-369f-4313-9ac7-b0036e5ac25c";
+        request.appID = GameAuthentication.GetAppID();
+        request.OwnerType = WebModels.OwnerTypes.User;
+
+        string newStringRequest = JsonConvert.SerializeObject(request);
+
+        SecurePayload payload = new SecurePayload();
+        payload.token = token;
+        payload.data = newStringRequest;
+
+        string securePayloadString = JsonConvert.SerializeObject(payload);
+
+        Debug.Log(securePayloadString);
+
+        string url = cloudGoodsURL + "SecureAction?appID=" + GameAuthentication.GetAppID() + "&payload=" + WWW.EscapeURL(EncryptStringUnity(securePayloadString));
+
+        WWW www = new WWW(url);
+
+        StartCoroutine(ServiceGetString(www, callback));
+    }
+
     public string EncryptStringUnity(string Message)
     {
         byte[] Results;
@@ -568,4 +561,6 @@ public class WebserviceCalls : MonoBehaviour, IServiceCalls
         }
         return UTF8.GetString(Results);
     }
+
+    #endregion
 }
