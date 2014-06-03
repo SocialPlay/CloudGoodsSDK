@@ -37,7 +37,7 @@ public class SaveSlotsToLocation : MonoBehaviour
             if (isSave == true && SlotedContainer.slots[slotId].persistantID != -1)
             {
                 data.isLocked = true;
-                SP.MoveItemStack(data.stackID, data.stackSize, GetOwnerID(), DestinationOwnerType.ToString(), ItemSystemGameData.AppID, SlotedContainer.slots[slotId].persistantID, delegate(Guid x)
+                SP.MoveItemStack(data.stackID, data.stackSize, GetOwnerID(), DestinationOwnerType.ToString(), SlotedContainer.slots[slotId].persistantID, delegate(Guid x)
                 {
                     try
                     {

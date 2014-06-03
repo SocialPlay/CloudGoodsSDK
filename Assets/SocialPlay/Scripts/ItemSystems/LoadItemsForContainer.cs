@@ -8,7 +8,7 @@ public class LoadItemsForContainer : ContainerItemLoader
 
     public override void LoadItems()
     {
-        SP.GetOwnerItems(GetOwnerID(), SourceOwnerType.ToString(), sourceLocation, ItemSystemGameData.AppID, RecivedItems);
+        SP.GetOwnerItems(GetOwnerID(), SourceOwnerType.ToString(), sourceLocation, RecivedItems);
     }
 }
 

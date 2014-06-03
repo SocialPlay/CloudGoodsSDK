@@ -215,7 +215,7 @@ LitJson.JsonMapper.ReadValue (LitJson.WrapperFactory factory, LitJson.JsonReader
 LitJson.JsonMapper.ToWrapper (LitJson.WrapperFactory factory, System.String json)
 LitJson.JsonMapper.ToObject (System.String json)
 LitJsonFxJsonObjectConverter.ConvertToSPLoginResponse (System.String dataString) (at Assets/SocialPlay-SDK/Scripts/Web/LitJsonFxJsonObjectConverter.cs:276)
-MockWebItemService.Login (Guid gameID, System.String userEmail, System.String password, System.Action`1 callback) (at Assets/SocialPlay-SDK/Scripts/Web/MockWebItemService.cs:130)
+MockWebItemService.SPLogin_UserLogin (Guid gameID, System.String userEmail, System.String password, System.Action`1 callback) (at Assets/SocialPlay-SDK/Scripts/Web/MockWebItemService.cs:130)
 TestConvertToSPLoginResponse.Start () (at Assets/SDKTests/SocialplaySDKUnitTests/IServiceObjectConverterTests/TestConvertToSPLoginResponse.cs:9)
 ]]>
           </stack-trace>
@@ -255,7 +255,7 @@ LitJson.JsonMapper.ReadValue (LitJson.WrapperFactory factory, LitJson.JsonReader
 LitJson.JsonMapper.ToWrapper (LitJson.WrapperFactory factory, System.String json)
 LitJson.JsonMapper.ToObject (System.String json)
 LitJsonFxJsonObjectConverter.ConvertToSPLoginResponse (System.String dataString) (at Assets/SocialPlay-SDK/Scripts/Web/LitJsonFxJsonObjectConverter.cs:276)
-MockWebItemService.Login (Guid gameID, System.String userEmail, System.String password, System.Action`1 callback) (at Assets/SocialPlay-SDK/Scripts/Web/MockWebItemService.cs:130)
+MockWebItemService.SPLogin_UserLogin (Guid gameID, System.String userEmail, System.String password, System.Action`1 callback) (at Assets/SocialPlay-SDK/Scripts/Web/MockWebItemService.cs:130)
 TestConvertToSPLoginResponse.Start () (at Assets/SDKTests/SocialplaySDKUnitTests/IServiceObjectConverterTests/TestConvertToSPLoginResponse.cs:9)
 ]]>
           </stack-trace>

@@ -95,13 +95,13 @@ public class NGUI_SPLogin : MonoBehaviour
 
     #region webservice responce events
 
-    void RecivedUserGuid(SP.UserInfo obj)
+	void RecivedUserGuid(SP.UserInfo obj)
     {
         if (autoLoginToggle != null && autoLoginToggle.value == true)
         {
-            PlayerPrefs.SetString("SocialPlay_UserGuid", obj.ID.ToString());
+            PlayerPrefs.SetString("SocialPlay_UserGuid", obj.userGuid.ToString());
             PlayerPrefs.SetString("SocialPlay_UserName", obj.userName);
-            PlayerPrefs.SetString("SocialPlay_UserEmail", obj.email);
+            PlayerPrefs.SetString("SocialPlay_UserEmail", obj.userEmail);
         }
 
         resendVerificationTextObject.SetActive(false);

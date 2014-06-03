@@ -7,7 +7,7 @@ using SocialPlay.Data;
 public class TestLitJsonConverter : MonoBehaviour {
 
 	void Start () {
-        SP.GetOwnerItems("", "", 0, Guid.Empty, OnReceivedItemDataList);
+        SP.GetOwnerItems("", "", 0, OnReceivedItemDataList);
         //SP.MoveItemStack(Guid.Empty, 0, "", "", Guid.Empty, 0, OnReceivedGuid);
         //SP.GetStoreItems("", OnReceivedStoreItems);
         //SP.GetGameRecipes("", OnReceivedListRecipes);

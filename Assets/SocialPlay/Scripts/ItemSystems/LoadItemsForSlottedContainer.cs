@@ -13,7 +13,7 @@ public class LoadItemsForSlottedContainer : ContainerItemLoader
 
         foreach (SlottedContainerSlotData slot in (Container as SlottedItemContainer).slots.Values)
         {
-            SP.GetOwnerItems(GetOwnerID(), SourceOwnerType.ToString(), slot.persistantID, ItemSystemGameData.AppID, RecivedItems);
+            SP.GetOwnerItems(GetOwnerID(), SourceOwnerType.ToString(), slot.persistantID, RecivedItems);
         }
      
     }

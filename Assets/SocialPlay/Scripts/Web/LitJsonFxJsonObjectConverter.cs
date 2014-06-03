@@ -226,7 +226,7 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter {
 
         SP.UserInfo userinfo = new SP.UserInfo(data["userGuid"].ToString(), data["userName"].ToString(), "");
 
-        if (data["userEmail"] != null) userinfo.email = data["userEmail"].ToString();
+        if (data["userEmail"] != null) userinfo.userEmail = data["userEmail"].ToString();
 
         return userinfo;
     }
@@ -379,10 +379,13 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter {
 
         JsonData data = LitJson.JsonMapper.ToObject(parsedString);
 
-        JsonData userData = LitJson.JsonMapper.ToObject(data["message"].ToString());
+		SP.UserInfo userInfo = null;
 
-        //SP.UserInfo userInfo = new SP.UserInfo(new Guid(userData["ID"].ToString()), userData["name"].ToString(), userData["email"].ToString());
-        SP.UserInfo userInfo = new SP.UserInfo(userData["ID"].ToString(), userData["name"].ToString(), userData["email"].ToString());
+		if (data["code"].ToString() == "0")
+		{
+			JsonData userData = LitJson.JsonMapper.ToObject(data["message"].ToString());
+			userInfo = new SP.UserInfo(userData["ID"].ToString(), userData["name"].ToString(), userData["email"].ToString());
+		}
 
         SP.UserResponse responce = new SP.UserResponse(int.Parse(data["code"].ToString()), data["message"].ToString(), userInfo);
 

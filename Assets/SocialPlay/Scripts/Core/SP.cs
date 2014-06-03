@@ -28,18 +28,32 @@ public class SP : MonoBehaviour//, IServiceCalls
     }
     public class UserInfo
     {
-        public string ID = "";
+		public string userGuid = "";
         public bool isNewUserToWorld = false;
         public string userName = "";
-        public string email = "";
+		public string userEmail = "";
 
-        public UserInfo(string ID, string userName, string email)
-        {
-            this.ID = ID;
-            this.userName = userName;
-            this.email = email;
-        }
+		public UserInfo(string newUserGuid, string newUserName, string newUserEmail)
+		{
+			userGuid = newUserGuid;
+			userName = newUserName;
+			userEmail = newUserEmail;
+		}
     }
+
+	public class LoginUserInfo
+	{
+		public Guid ID;
+		public string name;
+		public string email;
+
+		public LoginUserInfo(Guid userID, string userName, string userEmail)
+		{
+			ID = userID;
+			name = userName;
+			email = userEmail;
+		}
+	}
 
     public class UserResponse
     {
@@ -67,12 +81,12 @@ public class SP : MonoBehaviour//, IServiceCalls
     static public Action<string> onErrorEvent;
     static public event Action<UserResponse> OnUserLogin;
     //static public event Action onLogout;
-    static public event Action<UserInfo> OnUserInfo;
+	static public event Action<UserInfo> OnUserInfo;
     static public event Action<UserResponse> OnUserRegister;
     static public event Action<UserResponse> OnForgotPassword;
     static public event Action<UserResponse> OnVerificationSent;
     static public event Action<string> OnRegisteredUserToSession;
-    static public event Action<SP.UserInfo> OnUserAuthorizedEvent;
+	static public event Action<UserInfo> OnUserAuthorizedEvent;
 
     #endregion
 
@@ -82,25 +96,61 @@ public class SP : MonoBehaviour//, IServiceCalls
     /// Returns the AppSecret saved on settings.
     /// </summary>
 
-    static public string AppSecret { get { return SocialPlaySettings.AppSecret; } }
+    static public string AppSecret 
+	{ 
+		get 
+		{
+			if (string.IsNullOrEmpty(SocialPlaySettings.AppSecret))
+				Debug.LogError("AppSecret has not been defined. Open Social Play Settings from the menu.");
+
+			return SocialPlaySettings.AppSecret; 
+		} 
+	}
 
     /// <summary>
     /// Returns the AppID saved on settings.
     /// </summary>
 
-    static public string AppID { get { return SocialPlaySettings.AppID; } }
+	static public string AppID 
+	{ 
+		get 
+		{ 
+			if (string.IsNullOrEmpty(SocialPlaySettings.AppID)) 
+				Debug.LogError("AppID has not been defined. Open Social Play Settings from the menu.");
+
+			return SocialPlaySettings.AppID; 
+		} 
+	}
 
     /// <summary>
     /// Returns the URL saved on settings.
     /// </summary>
     
-    static public string Url { get { return SocialPlaySettings.Url; } }
+    static public string Url 
+	{ 
+		get 
+		{
+			if (string.IsNullOrEmpty(SocialPlaySettings.Url))
+				Debug.LogError("Url has not been defined. Open Social Play Settings from the menu.");
+
+			return SocialPlaySettings.Url; 
+		} 
+	}
 
     /// <summary>
     /// Returns the Asset Bundles URL saved on settings.
     /// </summary>
 
-    static public string BundlesUrl { get { return SocialPlaySettings.BundlesUrl; } }
+    static public string BundlesUrl 
+	{ 
+		get 
+		{
+			if (string.IsNullOrEmpty(SocialPlaySettings.BundlesUrl))
+				Debug.LogError("BundlesUrl has not been defined. Open Social Play Settings from the menu.");
+
+			return SocialPlaySettings.BundlesUrl; 
+		} 
+	}
 
     /// <summary>
     /// Returns a the AppID inside a new Guid. If you need string only use AppID instead.
@@ -132,9 +182,9 @@ public class SP : MonoBehaviour//, IServiceCalls
 
     #region Game Authentication
 
-    static public void OnUserAuthorized(SP.UserInfo socialplayMsg)
+	static public void OnUserAuthorized(UserInfo socialplayMsg)
     {
-        new ItemSystemGameData(AppID, socialplayMsg.ID, -1, Guid.NewGuid().ToString(), socialplayMsg.userName, socialplayMsg.email);
+		new ItemSystemGameData(AppID, socialplayMsg.userGuid.ToString(), -1, Guid.NewGuid().ToString(), socialplayMsg.userName, socialplayMsg.userEmail);
 
         if (OnUserAuthorizedEvent != null)
             OnUserAuthorizedEvent(socialplayMsg);
@@ -151,35 +201,35 @@ public class SP : MonoBehaviour//, IServiceCalls
 
     #region ItemContainerManagementCalls
 
-    static public void GenerateItemsAtLocation(string OwnerID, string OwnerType, int Location, Guid AppID, int MinimumEnergyOfItem, int TotalEnergyToGenerate, Action<List<ItemData>> callback, string ANDTags = "", string ORTags = "")
+    static public void GenerateItemsAtLocation(string OwnerID, string OwnerType, int Location, int MinimumEnergyOfItem, int TotalEnergyToGenerate, Action<List<ItemData>> callback, string ANDTags = "", string ORTags = "")
     {
-        string url = string.Format("{0}GenerateItemsAtLocation?OwnerID={1}&OwnerType={2}&Location={3}&AppID={4}&MinimumEnergyOfItem={5}&TotalEnergyToGenerate={6}&ANDTags={7}&ORTags={8}", Url, OwnerID, OwnerType, Location, AppID, MinimumEnergyOfItem, TotalEnergyToGenerate, ANDTags, ORTags);
+        string url = string.Format("{0}GenerateItemsAtLocation?OwnerID={1}&OwnerType={2}&Location={3}&AppID={4}&MinimumEnergyOfItem={5}&TotalEnergyToGenerate={6}&ANDTags={7}&ORTags={8}", Url, OwnerID, OwnerType, Location, GetAppID(), MinimumEnergyOfItem, TotalEnergyToGenerate, ANDTags, ORTags);
         
         WWW www = new WWW(url);
         Get().StartCoroutine(Get().ServiceCallGetListItemDatas(www, callback));
     }
 
-    static public void GetOwnerItems(string ownerID, string ownerType, int location, Guid AppID, Action<List<ItemData>> callback)
+    static public void GetOwnerItems(string ownerID, string ownerType, int location, Action<List<ItemData>> callback)
     {
-        string url = string.Format("{0}GetOwnerItems?ownerID={1}&ownerType={2}&location={3}&AppID={4}", Url, ownerID, ownerType, location, AppID.ToString());
+		string url = string.Format("{0}GetOwnerItems?ownerID={1}&ownerType={2}&location={3}&AppID={4}", Url, ownerID, ownerType, location, GetAppID());
         WWW www = new WWW(url);
 
         Get().StartCoroutine(Get().ServiceCallGetListItemDatas(www, callback));
     }
 
-    static public void MoveItemStack(Guid StackToMove, int MoveAmount, string DestinationOwnerID, string DestinationOwnerType, Guid AppID, int DestinationLocation, Action<Guid> callback)
+    static public void MoveItemStack(Guid StackToMove, int MoveAmount, string DestinationOwnerID, string DestinationOwnerType, int DestinationLocation, Action<Guid> callback)
     {
         Debug.Log(StackToMove.ToString());
 
-        string url = string.Format("{0}MoveItemStack?StackToMove={1}&MoveAmount={2}&DestinationOwnerID={3}&DestinationOwnerType={4}&AppID={5}&DestinationLocation={6}", Url, StackToMove, MoveAmount, DestinationOwnerID, DestinationOwnerType, AppID.ToString(), DestinationLocation);
+		string url = string.Format("{0}MoveItemStack?StackToMove={1}&MoveAmount={2}&DestinationOwnerID={3}&DestinationOwnerType={4}&AppID={5}&DestinationLocation={6}", Url, StackToMove, MoveAmount, DestinationOwnerID, DestinationOwnerType, GetAppID(), DestinationLocation);
         WWW www = new WWW(url);
 
         Get().StartCoroutine(Get().ServiceGetGuid(www, callback));
     }
 
-    static public void MoveItemStacks(string stacks, string DestinationOwnerID, string DestinationOwnerType, Guid AppID, int DestinationLocation, Action<MoveMultipleItemsResponse> callback)
+    static public void MoveItemStacks(string stacks, string DestinationOwnerID, string DestinationOwnerType, int DestinationLocation, Action<MoveMultipleItemsResponse> callback)
     {
-        string url = string.Format("{0}MoveItemStacks?stacks={1}&DestinationOwnerID={2}&DestinationOwnerType={3}&AppID={4}&DestinationLocation={5}", Url, stacks, DestinationOwnerID, DestinationOwnerType, AppID.ToString(), DestinationLocation);
+		string url = string.Format("{0}MoveItemStacks?stacks={1}&DestinationOwnerID={2}&DestinationOwnerType={3}&AppID={4}&DestinationLocation={5}", Url, stacks, DestinationOwnerID, DestinationOwnerType, GetAppID(), DestinationLocation);
 
         WWW www = new WWW(url);
 
@@ -214,14 +264,9 @@ public class SP : MonoBehaviour//, IServiceCalls
         Get().StartCoroutine(Get().ServiceGetString(www, callback));
     }
 
-    static public void GiveOwnerItems(WebModels.OwnerTypes OwnerType, List<WebModels.ItemsInfo> listOfItems, Action<string> callback)
+    static public void GiveOwnerItems(string ownerID, WebModels.OwnerTypes OwnerType, List<WebModels.ItemsInfo> listOfItems, Action<string> callback)
     {
-        string jsonList = JsonConvert.SerializeObject(listOfItems);
-
-        string url = string.Format("{0}GiveOwnerItems?AppID={1}&OwnerID={2}&OwnerType={3}&listOfItems={4}", Url, ItemSystemGameData.AppID, ItemSystemGameData.UserID.ToString(), OwnerType.ToString(), jsonList);
-        WWW www = new WWW(url);
-
-        Get().StartCoroutine(Get().ServiceGetString(www, callback));
+		GetToken(ownerID, "1", listOfItems, callback);
     }
 
     #endregion
@@ -277,15 +322,16 @@ public class SP : MonoBehaviour//, IServiceCalls
             {
                 if (OnUserInfo != null)
                 {
-                    UserInfo userInfo = response.userInfo;
-                    SP.OnUserAuthorized(new UserInfo(userInfo.ID.ToString(), userInfo.userName, userInfo.email));
-                    OnUserInfo(userInfo);
+					LoginUserInfo userInfo = Newtonsoft.Json.JsonConvert.DeserializeObject<LoginUserInfo>(response.message);
+					UserInfo ui = new UserInfo(userInfo.ID.ToString(), userInfo.name, userInfo.email);
+					OnUserAuthorized(ui);
+					OnUserInfo(ui);
                 }
             }
             else
             {
                 if (OnUserLogin != null) OnUserLogin(response);
-                if (response != null) onSuccess(response);
+				if (onSuccess != null) onSuccess(response);
             }
         }));
     }
@@ -300,7 +346,7 @@ public class SP : MonoBehaviour//, IServiceCalls
         {
             if (response.code == 7) if (onErrorEvent != null) onErrorEvent("ServerRelatedError");
             if (OnUserRegister != null) OnUserRegister(response);
-            if (response != null) onSuccess(response);
+			if (onSuccess != null) onSuccess(response);
         }));
     }
 
@@ -416,51 +462,43 @@ public class SP : MonoBehaviour//, IServiceCalls
         Get().StartCoroutine(Get().ServiceGetString(www, callback));
     }
 
+	static public void GetToken(string ownerID, string tokenType, List<WebModels.ItemsInfo> items, Action<string> callback)
+	{
+		string url = Url + "GetToken?appID=" + AppID + "&payload=" + WWW.EscapeURL(EncryptStringUnity(tokenType));
 
-    static public void GetToken(string securePayload, Action<string> callback)
-    {
-        string url = Url + "GetToken?appID=" + AppID + "&payload=" + WWW.EscapeURL(EncryptStringUnity(securePayload));
+		WWW www = new WWW(url);
 
-        WWW www = new WWW(url);
+		Get().StartCoroutine(Get().ServiceGetString(www, (x) =>
+		{
+			SecureCall(DecryptString(AppSecret, x.Replace("\\", "")), "", items, callback);
+		}));
+	}
 
-        Get().StartCoroutine(Get().ServiceGetString(www, (x) =>
-        {
-            SecureCall(DecryptString(AppSecret, x.Replace("\\", "")), "", callback);
-        }));
-    }
 
-    static public void SecureCall(string token, string securePayload, Action<string> callback)
-    {
-        List<WebModels.ItemsInfo> listOfItems = new List<WebModels.ItemsInfo>();
+	static public void SecureCall(string token, string ownerID, List<WebModels.ItemsInfo> items, Action<string> callback)
+	{
+		GiveOwnerItemWebserviceRequest request = new GiveOwnerItemWebserviceRequest();
+		request.listOfItems = items;
+		request.ownerID = "ef595214-369f-4313-9ac7-b0036e5ac25c";
+		request.appID = AppID;
+		request.OwnerType = WebModels.OwnerTypes.User;
 
-        WebModels.ItemsInfo item = new WebModels.ItemsInfo();
-        item.amount = 1;
-        item.ItemID = 106465;
-        item.location = 0;
-        listOfItems.Add(item);
+		string newStringRequest = JsonConvert.SerializeObject(request);
 
-        GiveOwnerItemWebserviceRequest request = new GiveOwnerItemWebserviceRequest();
-        request.listOfItems = listOfItems;
-        request.ownerID = "ef595214-369f-4313-9ac7-b0036e5ac25c";
-        request.appID = AppID;
-        request.OwnerType = WebModels.OwnerTypes.User;
+		SecurePayload payload = new SecurePayload();
+		payload.token = token;
+		payload.data = newStringRequest;
 
-        string newStringRequest = JsonConvert.SerializeObject(request);
+		string securePayloadString = JsonConvert.SerializeObject(payload);
 
-        SecurePayload payload = new SecurePayload();
-        payload.token = token;
-        payload.data = newStringRequest;
+		Debug.Log(securePayloadString);
 
-        string securePayloadString = JsonConvert.SerializeObject(payload);
+		string url = Url + "SecureAction?appID=" + AppID + "&payload=" + WWW.EscapeURL(EncryptStringUnity(securePayloadString));
 
-        Debug.Log(securePayloadString);
+		WWW www = new WWW(url);
 
-        string url = Url + "SecureAction?appID=" + AppID + "&payload=" + WWW.EscapeURL(EncryptStringUnity(securePayloadString));
-
-        WWW www = new WWW(url);
-
-        Get().StartCoroutine(Get().ServiceGetString(www, callback));
-    }    
+		Get().StartCoroutine(Get().ServiceGetString(www, callback));
+	}
 
     #endregion
 
@@ -520,10 +558,10 @@ public class SP : MonoBehaviour//, IServiceCalls
             Debug.Log(www.text);
             callback(serviceConverter.ConvertToUserInfo(www.text));
         }
-        else
-        {
-            onErrorEvent("Error:" + www.error);
-        }
+		else
+		{
+			if (onErrorEvent != null) onErrorEvent("Error: " + www.error);
+		}
     }
 
 
@@ -533,8 +571,10 @@ public class SP : MonoBehaviour//, IServiceCalls
 
         if (www.error == null)
             callback(serviceConverter.ConvertToItemDataList(www.text));
-        else
-            onErrorEvent(www.error);
+		else
+		{
+			if (onErrorEvent != null) onErrorEvent("Error: " + www.error);
+		}
     }
 
     IEnumerator ServiceGetStoreItems(WWW www, Action<List<StoreItemInfo>> callback)
@@ -543,28 +583,34 @@ public class SP : MonoBehaviour//, IServiceCalls
 
         if (www.error == null)
             callback(serviceConverter.ConvertToStoreItems(www.text));
-        else
-            onErrorEvent(www.error);
+		else
+		{
+			if (onErrorEvent != null) onErrorEvent("Error: " + www.error);
+		}
     }
 
     IEnumerator ServiceGetGuid(WWW www, Action<Guid> callback)
     {
         yield return www;
 
-        if (www.error == null)
-            callback(serviceConverter.ConvertToGuid(www.text));
-        else
-            onErrorEvent(www.error);
+		if (www.error == null)
+			callback(serviceConverter.ConvertToGuid(www.text));
+		else
+		{
+			if (onErrorEvent != null) onErrorEvent("Error: " + www.error);
+		}
     }
 
     IEnumerator ServiceGetRecipeInfos(WWW www, Action<List<RecipeInfo>> callback)
     {
         yield return www;
 
-        if (www.error == null)
-            callback(serviceConverter.ConvertToListRecipeInfo(www.text));
-        else
-            onErrorEvent(www.error);
+		if (www.error == null)
+			callback(serviceConverter.ConvertToListRecipeInfo(www.text));
+		else
+		{
+			if (onErrorEvent != null) onErrorEvent("Error: " + www.error);
+		}
     }
 
     IEnumerator ServiceGetItemBundles(WWW www, Action<List<ItemBundle>> callback)
@@ -573,20 +619,24 @@ public class SP : MonoBehaviour//, IServiceCalls
 
         Debug.Log(www.text);
 
-        if (www.error == null)
-            callback(serviceConverter.ConvertToListItemBundle(www.text));
-        else
-            onErrorEvent(www.error);
+		if (www.error == null)
+			callback(serviceConverter.ConvertToListItemBundle(www.text));
+		else
+		{
+			if (onErrorEvent != null) onErrorEvent("Error: " + www.error);
+		}
     }
 
     IEnumerator ServiceGetCreditBundles(WWW www, Action<List<CreditBundleItem>> callback)
     {
         yield return www;
         Debug.Log(www.text);
-        if (www.error == null)
-            callback(serviceConverter.ConvertToListCreditBundleItem(www.text));
-        else
-            onErrorEvent(www.error);
+		if (www.error == null)
+			callback(serviceConverter.ConvertToListCreditBundleItem(www.text));
+		else
+		{
+			if (onErrorEvent != null) onErrorEvent("Error: " + www.error);
+		}
     }
 
     IEnumerator ServiceMoveItemsResponse(WWW www, Action<MoveMultipleItemsResponse> callback)
@@ -600,7 +650,7 @@ public class SP : MonoBehaviour//, IServiceCalls
         }
         else
         {
-            onErrorEvent("Error: " + www.error);
+			if (onErrorEvent != null) onErrorEvent("Error: " + www.error);
         }
     }
 
@@ -615,7 +665,7 @@ public class SP : MonoBehaviour//, IServiceCalls
         }
         else
         {
-            onErrorEvent("Error: " + www.error);
+            if(onErrorEvent!= null) onErrorEvent("Error: " + www.error);
         }
     }
 
