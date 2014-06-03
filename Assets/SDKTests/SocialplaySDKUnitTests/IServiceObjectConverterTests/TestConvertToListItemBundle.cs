@@ -6,7 +6,7 @@ public class TestConvertToListItemBundle : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        WebserviceCalls.webservice.GetItemBundles("", OnReceivedItemBundles);
+        SP.GetItemBundles(OnReceivedItemBundles);
 	}
 
     void OnReceivedItemBundles(List<ItemBundle> itemBundles)

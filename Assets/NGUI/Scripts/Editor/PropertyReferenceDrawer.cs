@@ -58,6 +58,14 @@ public class PropertyReferenceDrawer
 			FieldInfo[] fields = type.GetFields(flags);
 			PropertyInfo[] props = type.GetProperties(flags);
 
+			// The component itself without any method
+			if (PropertyReference.Convert(comp, filter))
+			{
+				Entry ent = new Entry();
+				ent.target = comp;
+				list.Add(ent);
+			}
+
 			for (int b = 0; b < fields.Length; ++b)
 			{
 				FieldInfo field = fields[b];
@@ -122,7 +130,7 @@ public class PropertyReferenceDrawer
 		return names;
 	}
 
-#if !UNITY_3_5
+#if !UNITY_3_5 && !UNITY_4_0 && !UNITY_4_1 && !UNITY_4_2
 	/// <summary>
 	/// The property is either going to be 16 or 34 pixels tall, depending on whether the target has been set or not.
 	/// </summary>

@@ -1,13 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class TestSecureCalls : MonoBehaviour {
-
-    public WebserviceCalls webservicecalls;
-
-	// Use this for initialization
-	void Start () {
-        webservicecalls.GetToken(GameAuthentication.GetAppID(), "1", OnReceivedToken);
+public class TestSecureCalls : MonoBehaviour 
+{
+	void Start () 
+    {
+        SP.GetToken("1", OnReceivedToken);
 	}
 
     void OnReceivedToken(string token)

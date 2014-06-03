@@ -58,6 +58,8 @@ public class UIInputEditor : UIWidgetContainerEditor
 			NGUIEditorTools.DrawPaddedProperty(serializedObject, "inputType");
 #if MOBILE
 			NGUIEditorTools.DrawPaddedProperty(serializedObject, "keyboardType");
+#else
+			NGUIEditorTools.DrawPaddedProperty(serializedObject, "onReturnKey");
 #endif
 			NGUIEditorTools.DrawPaddedProperty(serializedObject, "validation");
 
@@ -68,7 +70,7 @@ public class UIInputEditor : UIWidgetContainerEditor
 			if (sp.hasMultipleDifferentValues || input.characterLimit > 0)
 			{
 				EditorGUILayout.PropertyField(sp);
-				GUILayout.Space(18f);
+				NGUIEditorTools.DrawPadding();
 			}
 			else
 			{

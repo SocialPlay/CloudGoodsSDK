@@ -167,23 +167,22 @@ public class UIAtlasMaker : EditorWindow
 	{
 		Dictionary<string, int> spriteList = new Dictionary<string, int>();
 
-		if (NGUISettings.atlas != null)
-		{
-			BetterList<string> spriteNames = NGUISettings.atlas.GetListOfSprites();
-			foreach (string sp in spriteNames) spriteList.Add(sp, 0);
-		}
-
 		// If we have textures to work with, include them as well
 		if (textures.Count > 0)
 		{
 			List<string> texNames = new List<string>();
 			foreach (Texture tex in textures) texNames.Add(tex.name);
 			texNames.Sort();
+			foreach (string tex in texNames) spriteList.Add(tex, 2);
+		}
 
-			foreach (string tex in texNames)
+		if (NGUISettings.atlas != null)
+		{
+			BetterList<string> spriteNames = NGUISettings.atlas.GetListOfSprites();
+			foreach (string sp in spriteNames)
 			{
-				if (spriteList.ContainsKey(tex)) spriteList[tex] = 1;
-				else spriteList.Add(tex, 2);
+				if (spriteList.ContainsKey(sp)) spriteList[sp] = 1;
+				else spriteList.Add(sp, 0);
 			}
 		}
 		return spriteList;
@@ -712,17 +711,17 @@ public class UIAtlasMaker : EditorWindow
 		NGUIEditorTools.SetLabelWidth(80f);
 		GUILayout.Space(3f);
 
-		NGUIEditorTools.DrawHeader("Input");
-		NGUIEditorTools.BeginContents();
+		NGUIEditorTools.DrawHeader("Input", true);
+		NGUIEditorTools.BeginContents(false);
 
 		GUILayout.BeginHorizontal();
 		{
 			ComponentSelector.Draw<UIAtlas>("Atlas", NGUISettings.atlas, OnSelectAtlas, true, GUILayout.MinWidth(80f));
 
-			//EditorGUI.BeginDisabledGroup(NGUISettings.atlas == null);
-			//if (GUILayout.Button("New", GUILayout.Width(40f)))
-			//    NGUISettings.atlas = null;
-			//EditorGUI.EndDisabledGroup();
+			EditorGUI.BeginDisabledGroup(NGUISettings.atlas == null);
+			if (GUILayout.Button("New", GUILayout.Width(40f)))
+				NGUISettings.atlas = null;
+			EditorGUI.EndDisabledGroup();
 		}
 		GUILayout.EndHorizontal();
 
@@ -866,12 +865,14 @@ public class UIAtlasMaker : EditorWindow
 
 			if (create)
 			{
-				string prefabPath = EditorUtility.SaveFilePanelInProject("Save As", "New Atlas.prefab", "prefab", "Save atlas as...");
+				string path = EditorUtility.SaveFilePanelInProject("Save As",
+					"New Atlas.prefab", "prefab", "Save atlas as...", NGUISettings.currentPath);
 
-				if (!string.IsNullOrEmpty(prefabPath))
+				if (!string.IsNullOrEmpty(path))
 				{
-					GameObject go = AssetDatabase.LoadAssetAtPath(prefabPath, typeof(GameObject)) as GameObject;
-					string matPath = prefabPath.Replace(".prefab", ".mat");
+					NGUISettings.currentPath = System.IO.Path.GetDirectoryName(path);
+					GameObject go = AssetDatabase.LoadAssetAtPath(path, typeof(GameObject)) as GameObject;
+					string matPath = path.Replace(".prefab", ".mat");
 					replace = true;
 
 					// Try to load the material
@@ -892,11 +893,11 @@ public class UIAtlasMaker : EditorWindow
 					}
 
 					// Create a new prefab for the atlas
-					Object prefab = (go != null) ? go : PrefabUtility.CreateEmptyPrefab(prefabPath);
+					Object prefab = (go != null) ? go : PrefabUtility.CreateEmptyPrefab(path);
 
 					// Create a new game object for the atlas
-					string atlasName = prefabPath.Replace(".prefab", "");
-					atlasName = atlasName.Substring(prefabPath.LastIndexOfAny(new char[] { '/', '\\' }) + 1);
+					string atlasName = path.Replace(".prefab", "");
+					atlasName = atlasName.Substring(path.LastIndexOfAny(new char[] { '/', '\\' }) + 1);
 					go = new GameObject(atlasName);
 					go.AddComponent<UIAtlas>().spriteMaterial = mat;
 
@@ -907,7 +908,7 @@ public class UIAtlasMaker : EditorWindow
 					AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
 
 					// Select the atlas
-					go = AssetDatabase.LoadAssetAtPath(prefabPath, typeof(GameObject)) as GameObject;
+					go = AssetDatabase.LoadAssetAtPath(path, typeof(GameObject)) as GameObject;
 					NGUISettings.atlas = go.GetComponent<UIAtlas>();
 					Selection.activeGameObject = go;
 				}

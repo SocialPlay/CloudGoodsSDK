@@ -8,7 +8,7 @@ public class TestConvertToItemDataList : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        WebserviceCalls.webservice.GenerateItemsAtLocation("", "", 0, Guid.Empty, 0, 0, OnReceivedGeneratedItems, "");
+        SP.GenerateItemsAtLocation("", "", 0, Guid.Empty, 0, 0, OnReceivedGeneratedItems, "");
     }
 
     void OnReceivedGeneratedItems(List<ItemData> receivedItems)

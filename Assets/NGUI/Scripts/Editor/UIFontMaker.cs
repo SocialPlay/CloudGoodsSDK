@@ -105,11 +105,11 @@ public class UIFontMaker : EditorWindow
 		GUILayout.Space(3f);
 
 		NGUIEditorTools.DrawHeader("Input", true);
-		NGUIEditorTools.BeginContents();
+		NGUIEditorTools.BeginContents(false);
 
 		GUILayout.BeginHorizontal();
 		mType = (FontType)EditorGUILayout.EnumPopup("Type", mType, GUILayout.MinWidth(200f));
-		GUILayout.Space(18f);
+		NGUIEditorTools.DrawPadding();
 		GUILayout.EndHorizontal();
 		Create create = Create.None;
 
@@ -123,7 +123,7 @@ public class UIFontMaker : EditorWindow
 			EditorGUI.BeginDisabledGroup(NGUISettings.fontData == null || NGUISettings.fontTexture == null);
 			{
 				NGUIEditorTools.DrawHeader("Output", true);
-				NGUIEditorTools.BeginContents();
+				NGUIEditorTools.BeginContents(false);
 				ComponentSelector.Draw<UIAtlas>(NGUISettings.atlas, OnSelectAtlas, false);
 				NGUIEditorTools.EndContents();
 			}
@@ -171,7 +171,7 @@ public class UIFontMaker : EditorWindow
 				if (mType == FontType.Dynamic)
 				{
 					NGUISettings.fontStyle = (FontStyle)EditorGUILayout.EnumPopup(NGUISettings.fontStyle);
-					GUILayout.Space(18f);
+					NGUIEditorTools.DrawPadding();
 				}
 			}
 			GUILayout.EndHorizontal();
@@ -190,13 +190,14 @@ public class UIFontMaker : EditorWindow
 
 					if (GUILayout.Button("Find " + filename))
 					{
-						string path = EditorUtility.OpenFilePanel("Find " + filename, "Assets",
+						string path = EditorUtility.OpenFilePanel("Find " + filename, NGUISettings.currentPath,
 							(Application.platform == RuntimePlatform.WindowsEditor) ? "dll" : "dylib");
 
 						if (!string.IsNullOrEmpty(path))
 						{
 							if (System.IO.Path.GetFileName(path) == filename)
 							{
+								NGUISettings.currentPath = System.IO.Path.GetDirectoryName(path);
 								NGUISettings.pathToFreeType = path;
 							}
 							else Debug.LogError("The library must be named '" + filename + "'");
@@ -340,7 +341,7 @@ public class UIFontMaker : EditorWindow
 				EditorGUI.BeginDisabledGroup(ttf == null || isBuiltIn || !FreeType.isPresent);
 				{
 					NGUIEditorTools.DrawHeader("Output", true);
-					NGUIEditorTools.BeginContents();
+					NGUIEditorTools.BeginContents(false);
 					ComponentSelector.Draw<UIAtlas>(NGUISettings.atlas, OnSelectAtlas, false);
 					NGUIEditorTools.EndContents();
 
@@ -371,8 +372,15 @@ public class UIFontMaker : EditorWindow
 		if (create == Create.None) return;
 
 		// Open the "Save As" file dialog
-		string prefabPath = EditorUtility.SaveFilePanelInProject("Save As", "New Font.prefab", "prefab", "Save font as...");
+#if UNITY_3_5
+		string prefabPath = EditorUtility.SaveFilePanel("Save As",
+			NGUISettings.currentPath, "New Font.prefab", "prefab");
+#else
+		string prefabPath = EditorUtility.SaveFilePanelInProject("Save As",
+			"New Font.prefab", "prefab", "Save font as...", NGUISettings.currentPath);
+#endif
 		if (string.IsNullOrEmpty(prefabPath)) return;
+		NGUISettings.currentPath = System.IO.Path.GetDirectoryName(prefabPath);
 
 		// Load the font's prefab
 		GameObject go = AssetDatabase.LoadAssetAtPath(prefabPath, typeof(GameObject)) as GameObject;

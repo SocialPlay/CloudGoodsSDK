@@ -7,14 +7,14 @@ using SocialPlay.Data;
 public class TestLitJsonConverter : MonoBehaviour {
 
 	void Start () {
-        WebserviceCalls.webservice.GetOwnerItems("", "", 0, Guid.Empty, OnReceivedItemDataList);
-        //WebserviceCalls.webservice.MoveItemStack(Guid.Empty, 0, "", "", Guid.Empty, 0, OnReceivedGuid);
-        //WebserviceCalls.webservice.GetStoreItems("", OnReceivedStoreItems);
-        //WebserviceCalls.webservice.GetGameRecipes("", OnReceivedListRecipes);
-        //WebserviceCalls.webservice.GetCreditBundles("", 0, OnReceivedCreditBundles);
-        //WebserviceCalls.webservice.SPLogin_UserLogin(Guid.Empty, "", "", OnReceivedLoginResponse);
-        //WebserviceCalls.webservice.GetUserFromWorld(Guid.Empty, 0, "", "", "", OnReceivedUserInfo);
-        //WebserviceCalls.webservice.GetItemBundles("", OnReceivedItemBundles);
+        SP.GetOwnerItems("", "", 0, Guid.Empty, OnReceivedItemDataList);
+        //SP.MoveItemStack(Guid.Empty, 0, "", "", Guid.Empty, 0, OnReceivedGuid);
+        //SP.GetStoreItems("", OnReceivedStoreItems);
+        //SP.GetGameRecipes("", OnReceivedListRecipes);
+        //SP.GetCreditBundles("", 0, OnReceivedCreditBundles);
+        //SP.Login(Guid.Empty, "", "", OnReceivedLoginResponse);
+        //SP.GetUserFromWorld(Guid.Empty, 0, "", "", "", OnReceivedUserInfo);
+        //SP.GetItemBundles("", OnReceivedItemBundles);
 	}
 
     void OnReceivedItemBundles(List<ItemBundle> itemBundles)
@@ -25,14 +25,14 @@ public class TestLitJsonConverter : MonoBehaviour {
         }
     }
 
-    void OnReceivedUserInfo(WebserviceCalls.UserInfo userInfo)
+    void OnReceivedUserInfo(SP.UserInfo userInfo)
     {
         Debug.Log("User info: " + userInfo.userName);
     }
 
-    void OnReceivedLoginResponse(SPLogin.SPLogin_Responce response)
+    void OnReceivedLoginResponse(SP.UserResponse response)
     {
-        Debug.Log("Login Response: " + response.code + " UserInfo: " + response.userInfo.name);
+        Debug.Log("Login Response: " + response.code + " UserInfo: " + response.userInfo.userName);
     }
 
     void OnReceivedMoveMultipleItemsResponse(MoveMultipleItemsResponse moveItems)

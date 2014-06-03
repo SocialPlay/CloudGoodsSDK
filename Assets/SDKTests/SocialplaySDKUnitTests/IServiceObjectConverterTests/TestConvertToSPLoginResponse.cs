@@ -6,10 +6,10 @@ public class TestConvertToSPLoginResponse : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        WebserviceCalls.webservice.SPLogin_UserLogin(Guid.Empty, "", "", OnReceivedSPLoginResponse);
+        SP.Login("", "", OnReceivedSPLoginResponse);
 	}
 
-    void OnReceivedSPLoginResponse(SPLogin.SPLogin_Responce response)
+    void OnReceivedSPLoginResponse(SP.UserResponse response)
     {
         if (response.code == 0)
             IntegrationTest.Pass(gameObject);

@@ -365,7 +365,7 @@ public class UIScrollView : MonoBehaviour
 		if (!horizontal) constraint.x = 0f;
 		if (!vertical) constraint.y = 0f;
 
-		if (constraint.sqrMagnitude > 1f)
+		if (constraint.sqrMagnitude > 0.1f)
 		{
 			if (!instant && dragEffect == DragEffect.MomentumAndSpring)
 			{
@@ -396,6 +396,12 @@ public class UIScrollView : MonoBehaviour
 		SpringPanel sp = GetComponent<SpringPanel>();
 		if (sp != null) sp.enabled = false;
 	}
+
+	/// <summary>
+	/// Update the values of the associated scroll bars.
+	/// </summary>
+
+	public void UpdateScrollbars () { UpdateScrollbars(true); }
 
 	/// <summary>
 	/// Update the values of the associated scroll bars.
@@ -571,6 +577,12 @@ public class UIScrollView : MonoBehaviour
 	}
 
 	/// <summary>
+	/// Manually invalidate the scroll view's bounds so that they update next time.
+	/// </summary>
+
+	public void InvalidateBounds () { mCalculatedBounds = true; }
+
+	/// <summary>
 	/// Reset the scroll view's position to the top-left corner.
 	/// It's recommended to call this function before AND after you re-populate the scroll view's contents (ex: switching window tabs).
 	/// Another option is to populate the scroll view's contents, reset its position, then call this function to reposition the clipping.
@@ -629,7 +641,7 @@ public class UIScrollView : MonoBehaviour
 	}
 
 	/// <summary>
-	/// Move the scroll view by the specified amount.
+	/// Move the scroll view by the specified local space amount.
 	/// </summary>
 
 	public virtual void MoveRelative (Vector3 relative)
@@ -645,7 +657,7 @@ public class UIScrollView : MonoBehaviour
 	}
 
 	/// <summary>
-	/// Move the scroll view by the specified amount.
+	/// Move the scroll view by the specified world space amount.
 	/// </summary>
 
 	public void MoveAbsolute (Vector3 absolute)
@@ -686,7 +698,7 @@ public class UIScrollView : MonoBehaviour
 				DisableSpring();
 
 				// Remember the hit position
-				mLastPos = UICamera.lastHit.point;
+				mLastPos = UICamera.lastWorldPosition;
 
 				// Create the plane to drag along
 				mPlane = new Plane(mTrans.rotation * Vector3.back, mLastPos);
@@ -743,7 +755,7 @@ public class UIScrollView : MonoBehaviour
 				Vector3 offset = currentPos - mLastPos;
 				mLastPos = currentPos;
 
-				if (offset.x != 0f || offset.y != 0f)
+				if (offset.x != 0f || offset.y != 0f || offset.z != 0f)
 				{
 					offset = mTrans.InverseTransformDirection(offset);
 
@@ -774,7 +786,7 @@ public class UIScrollView : MonoBehaviour
 				// Move the scroll view
 				if (!iOSDragEmulation || dragEffect != DragEffect.MomentumAndSpring)
 				{
-					MoveAbsolute(offset);	
+					MoveAbsolute(offset);
 				}
 				else
 				{

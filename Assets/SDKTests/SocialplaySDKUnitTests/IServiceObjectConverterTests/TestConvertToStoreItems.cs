@@ -2,14 +2,16 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class TestConvertToStoreItems : MonoBehaviour {
+public class TestConvertToStoreItems : MonoBehaviour
+{
 
-	// Use this for initialization
-	void Start () {
-	    WebserviceCalls.webservice.GetStoreItems("", OnReceivedStoreItems);
-	}
-	
-	void OnReceivedStoreItems(List<StoreItemInfo> storeItemInfo)
+    // Use this for initialization
+    void Start()
+    {
+        SP.GetStoreItems(OnReceivedStoreItems);
+    }
+
+    void OnReceivedStoreItems(List<StoreItemInfo> storeItemInfo)
     {
         if (storeItemInfo[0].ID == 409)
             IntegrationTest.Pass(gameObject);
@@ -17,3 +19,4 @@ public class TestConvertToStoreItems : MonoBehaviour {
             IntegrationTest.Fail(gameObject);
     }
 }
+
