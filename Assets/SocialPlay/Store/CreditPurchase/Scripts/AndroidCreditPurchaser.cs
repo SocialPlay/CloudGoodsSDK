@@ -9,7 +9,7 @@ public class AndroidCreditPurchaser : MonoBehaviour, IPlatformPurchaser {
 
     public List<string> androidProductNames;
 
-    public AndroidJavaObject cls_StorePurchaser;
+    //public AndroidJavaObject cls_StorePurchaser;
     public event Action<string> RecievedPurchaseResponse;
 
     public string publicAndroidKey;
@@ -24,48 +24,40 @@ public class AndroidCreditPurchaser : MonoBehaviour, IPlatformPurchaser {
 
     void initStore()
     {
-#if UNITY_ANDROID && !UNITY_EDITOR
-        cls_StorePurchaser = new AndroidJavaClass("com.storetest.StorePurchaser");
-        using (AndroidJavaClass cls = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
-        {
-            using (AndroidJavaObject obj_Activity = cls.GetStatic<AndroidJavaObject>("currentActivity"))
-            {
-                cls_StorePurchaser.CallStatic("initStore", obj_Activity, publicAndroidKey);
-            }
-        }
-#endif
+        //cls_StorePurchaser = new AndroidJavaClass("com.storetest.StorePurchaser");
+        //using (AndroidJavaClass cls = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
+        //{
+        //    using (AndroidJavaObject obj_Activity = cls.GetStatic<AndroidJavaObject>("currentActivity"))
+        //    {
+        //        cls_StorePurchaser.CallStatic("initStore", obj_Activity, publicAndroidKey);
+        //    }
+        //}
     }
 
     public void Purchase(string bundleID, int amount, string userID)
     {
-        currentBundleID = int.Parse(bundleID);
+        //currentBundleID = int.Parse(bundleID);
 
-#if UNITY_EDITOR
-        Debug.Log("Purchase: "+bundleID+" amount: "+amount+" user: "+userID);
-#endif
-
-#if UNITY_ANDROID && !UNITY_EDITOR
-        using (AndroidJavaClass cls = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
-        {
-            using (AndroidJavaObject obj_Activity = cls.GetStatic<AndroidJavaObject>("currentActivity"))
-            {
-                cls_StorePurchaser.CallStatic("makePurchase", obj_Activity, GetProductIDFromBundleID(currentBundleID));
-            }
-        }
-#endif
+        //using (AndroidJavaClass cls = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
+        //{
+        //    using (AndroidJavaObject obj_Activity = cls.GetStatic<AndroidJavaObject>("currentActivity"))
+        //    {
+        //        cls_StorePurchaser.CallStatic("makePurchase", obj_Activity, GetProductIDFromBundleID(currentBundleID));
+        //    }
+        //}
     }
 
     void outputDebugStringValue()
     {
-        TextMesh t = (TextMesh)gameObject.GetComponent(typeof(TextMesh));
-        using (AndroidJavaClass cls = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
-        {
-            using (AndroidJavaObject obj_Activity = cls.GetStatic<AndroidJavaObject>("currentActivity"))
-            {
-                string javaReturn = cls_StorePurchaser.CallStatic<string>("retrieveDebugValue");
-                t.text = javaReturn;
-            }
-        }
+        //TextMesh t = (TextMesh)gameObject.GetComponent(typeof(TextMesh));
+        //using (AndroidJavaClass cls = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
+        //{
+        //    using (AndroidJavaObject obj_Activity = cls.GetStatic<AndroidJavaObject>("currentActivity"))
+        //    {
+        //        string javaReturn = cls_StorePurchaser.CallStatic<string>("retrieveDebugValue");
+        //        t.text = javaReturn;
+        //    }
+        //}
     }
 
     void RecieveFromJava(string message)
@@ -82,7 +74,7 @@ public class AndroidCreditPurchaser : MonoBehaviour, IPlatformPurchaser {
 
             string bundleJsonString = JsonConvert.SerializeObject(bundlePurchaseRequest);
 
-            SP.PurchaseCreditBundles(bundleJsonString, OnReceivedPurchaseResponse);
+            WebserviceCalls.webservice.PurchaseCreditBundles(new Guid(GameAuthentication.GetAppID()), bundleJsonString, OnReceivedPurchaseResponse);
         }
     }
 
