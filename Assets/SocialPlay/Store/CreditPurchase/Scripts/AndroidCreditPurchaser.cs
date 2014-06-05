@@ -74,7 +74,7 @@ public class AndroidCreditPurchaser : MonoBehaviour, IPlatformPurchaser {
 
             string bundleJsonString = JsonConvert.SerializeObject(bundlePurchaseRequest);
 
-            WebserviceCalls.webservice.PurchaseCreditBundles(new Guid(GameAuthentication.GetAppID()), bundleJsonString, OnReceivedPurchaseResponse);
+            SP.PurchaseCreditBundles(bundleJsonString, OnReceivedPurchaseResponse);
         }
     }
 
