@@ -13,7 +13,7 @@ public class ItemPutterDropper : MonoBehaviour, IItemPutter
     public ItemPrefabInitilizer prefabinitilizer;
     ItemDrop gameItemDrop;
 
-    void Start()
+    void Awake()
     {
         if (GetComponent<ItemDrop>())
             gameItemDrop = GetComponent<ItemDrop>();

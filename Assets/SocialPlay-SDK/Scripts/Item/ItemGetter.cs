@@ -19,7 +19,7 @@ public class ItemGetter : MonoBehaviour
 
     Transform previousParent;
 
-    void Start()
+    void Awake()
     {
         //we do this so that if the object which sends out the packet gets deleted ( e.g. a mining node disapears after it is mined ), yet we still need this script to exist to receive the packet.
         previousParent = transform.parent;

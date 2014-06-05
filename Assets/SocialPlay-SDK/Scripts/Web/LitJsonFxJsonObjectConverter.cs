@@ -192,7 +192,8 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter {
                 StoreItemDetail detail = new StoreItemDetail();
                 detail.propertyName = storeItemDetailArray[j]["Name"].ToString();
                 detail.propertyValue = int.Parse(storeItemDetailArray[j]["Value"].ToString());
-                detail.invertEnergy = (bool)storeItemDetailArray[j]["InvertEnergy"];
+
+                //detail.invertEnergy = (bool)storeItemDetailArray[j]["InvertEnergy"];
 
                 storeItemDetails.Add(detail);
             }

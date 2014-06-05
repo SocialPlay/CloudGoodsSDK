@@ -342,6 +342,8 @@ public class WebserviceCalls : MonoBehaviour, IServiceCalls
     {
         yield return www;
 
+        Debug.Log(www.text);
+
         if (www.error == null)
             callback(ServiceConverter.ConvertToStoreItems(www.text));
         else
