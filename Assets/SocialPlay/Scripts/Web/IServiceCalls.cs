@@ -58,6 +58,6 @@ public interface IServiceCalls
 
     void ResendVerificationEmail(string userEmail, Action<SP.UserResponse> callback);
 
-    void GiveOwnerItems(WebModels.OwnerTypes OwnerType, List<WebModels.ItemsInfo> listOfItems, Action<string> callback);
+    void GiveOwnerItems(string ownerID, WebModels.OwnerTypes OwnerType, List<WebModels.ItemsInfo> listOfItems, Action<string> callback);
 }
 
