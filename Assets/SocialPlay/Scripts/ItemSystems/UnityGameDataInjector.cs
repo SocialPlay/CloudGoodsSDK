@@ -25,7 +25,7 @@ public class UnityGameDataInjector : MonoBehaviour
 
         if (msg == string.Empty)
         {
-            new ItemSystemGameData(AppID, UserID, InstanceID, SessionID, "User name", "");
+            //new ItemSystemGameData(AppID, UserID, InstanceID, SessionID, "User name", "");
         }
         else
         {

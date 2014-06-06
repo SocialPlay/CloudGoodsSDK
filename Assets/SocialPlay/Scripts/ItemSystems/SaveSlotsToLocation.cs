@@ -77,10 +77,10 @@ public class SaveSlotsToLocation : MonoBehaviour
     {
         switch (DestinationOwnerType)
         {
-            case ItemOwnerTypes.Instance:
-                return ItemSystemGameData.InstanceID.ToString();
+            //case ItemOwnerTypes.Instance:
+           //     return ItemSystemGameData.InstanceID.ToString();
             case ItemOwnerTypes.Session:
-                return ItemSystemGameData.SessionID.ToString();
+                return SP.user.sessionID.ToString();
             case ItemOwnerTypes.User:
                 return SP.user.userID.ToString();
         }

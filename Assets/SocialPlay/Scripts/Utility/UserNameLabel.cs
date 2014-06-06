@@ -7,15 +7,15 @@ public class UserNameLabel : MonoBehaviour
 
     void OnEnable()
     {
-        SP.OnRegisteredUserToSession += GameAuthentication_OnUserAuthEvent;
+        SP.OnRegisteredUserToSession += OnRegisteredUserToSession;
     }
     void OnDisable()
     {
-        SP.OnRegisteredUserToSession -= GameAuthentication_OnUserAuthEvent;
+        SP.OnRegisteredUserToSession -= OnRegisteredUserToSession;
     }
 
-    void GameAuthentication_OnUserAuthEvent(string obj)
+    void OnRegisteredUserToSession(string obj)
     {
-        label.text = ItemSystemGameData.userName;
+        label.text = SP.user.userName;
     }
 }

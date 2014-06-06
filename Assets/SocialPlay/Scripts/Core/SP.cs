@@ -141,6 +141,15 @@ public class SP : MonoBehaviour//, IServiceCalls
 		}
 	}
 
+    /// <summary>
+    /// True if the user is logged in.
+    /// </summary>
+
+    static public bool isLogged
+    {
+        get { return user != null && user.sessionID != Guid.Empty; }
+    }
+
 	/// <summary>
 	/// Current user information.
 	/// </summary>
@@ -184,8 +193,8 @@ public class SP : MonoBehaviour//, IServiceCalls
 			OnUserAuthorized(user);
 
         SP.RegisterGameSession(1, (Guid sessionGuid) =>
-        {			
-            ItemSystemGameData.SessionID = sessionGuid;
+        {
+            user.sessionID = sessionGuid;
             if (OnRegisteredUserToSession != null) OnRegisteredUserToSession(user.userID.ToString());
         });
 
@@ -195,9 +204,9 @@ public class SP : MonoBehaviour//, IServiceCalls
 
     #region ItemContainerManagementCalls
 
-    static public void GenerateItemsAtLocation(string OwnerID, string OwnerType, int Location, int MinimumEnergyOfItem, int TotalEnergyToGenerate, Action<List<ItemData>> callback, string ANDTags = "", string ORTags = "")
+    static public void GenerateItemsAtLocation(string OwnerType, int Location, int MinimumEnergyOfItem, int TotalEnergyToGenerate, Action<List<ItemData>> callback, string ANDTags = "", string ORTags = "")
     {
-        string url = string.Format("{0}GenerateItemsAtLocation?OwnerID={1}&OwnerType={2}&Location={3}&AppID={4}&MinimumEnergyOfItem={5}&TotalEnergyToGenerate={6}&ANDTags={7}&ORTags={8}", Url, OwnerID, OwnerType, Location, GuidAppID, MinimumEnergyOfItem, TotalEnergyToGenerate, ANDTags, ORTags);
+        string url = string.Format("{0}GenerateItemsAtLocation?OwnerID={1}&OwnerType={2}&Location={3}&AppID={4}&MinimumEnergyOfItem={5}&TotalEnergyToGenerate={6}&ANDTags={7}&ORTags={8}", Url, user.sessionID, OwnerType, Location, GuidAppID, MinimumEnergyOfItem, TotalEnergyToGenerate, ANDTags, ORTags);
         
         WWW www = new WWW(url);
         Get().StartCoroutine(Get().ServiceCallGetListItemDatas(www, callback));
@@ -385,7 +394,7 @@ public class SP : MonoBehaviour//, IServiceCalls
         PlayerPrefs.DeleteKey("SocialPlay_UserName");
         PlayerPrefs.DeleteKey("SocialPlay_UserEmail");
 
-        new ItemSystemGameData(Guid.Empty.ToString(), Guid.Empty.ToString(), 0, Guid.Empty.ToString(), "", "");
+        user = null;
     }
 
     #endregion

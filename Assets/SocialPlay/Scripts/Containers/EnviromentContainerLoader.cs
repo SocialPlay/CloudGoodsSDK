@@ -30,7 +30,7 @@ public class EnviromentContainerLoader : MonoBehaviour
 
     public void Start()
     {
-        if (ItemSystemGameData.SessionID != Guid.Empty)
+        if (SP.isLogged)
         {
             LoadAllContainerItems();
         }

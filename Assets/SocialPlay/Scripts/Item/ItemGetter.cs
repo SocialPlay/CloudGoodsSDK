@@ -56,7 +56,7 @@ public class ItemGetter : MonoBehaviour
 
         Debug.Log("andtags: " + andTagsString);
 
-        SP.GenerateItemsAtLocation(ItemSystemGameData.SessionID.ToString(), "Session", 0, minEnergy, MaxEnergy, OnReceivedGeneratedItems, andTagsString);
+        SP.GenerateItemsAtLocation("Session", 0, minEnergy, MaxEnergy, OnReceivedGeneratedItems, andTagsString);
     }
 
     public void OnReceivedGeneratedItems(List<ItemData> generatedItems)
