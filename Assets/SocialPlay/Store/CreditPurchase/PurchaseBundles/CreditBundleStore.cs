@@ -71,6 +71,11 @@ public class CreditBundleStore : MonoBehaviour
         nguiItem.Id = item.ID.ToString();
         nguiItem.CurrencyName = item.CurrencyName;
         nguiItem.CurrencyIcon = creditBundleIcon.Get(nguiItem.Amount, nguiItem.CurrencyIcon);
+        Debug.Log("item.ID " + item.ID);
+
+        // This is temporal until its added on the portal
+        if (SocialPlaySettings.CreditBundlesDescription.Count != 0)
+            nguiItem.Description = (item.ID - 1) <= SocialPlaySettings.CreditBundlesDescription.Count ? SocialPlaySettings.CreditBundlesDescription[item.ID - 1] : "";
 
         nguiItem.OnPurchaseRequest = OnPurchaseRequest;
     }

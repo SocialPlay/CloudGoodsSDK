@@ -22,7 +22,8 @@ public class SocialPlaySettings : ScriptableObject
     public string url = "https://SocialPlayWebService.azurewebsites.net/cloudgoods/cloudgoodsservice.svc/";
     public string bundlesUrl = "https://socialplay.blob.core.windows.net/unityassetbundles/";
 	public string androidKey = "";
-	public List<string> androidProductNames;
+	public List<string> androidProductNames = new List<string>();
+    public List<string> creditBundlesDescription = new List<string>();
 
     static SocialPlaySettings mInst;
 
@@ -82,4 +83,12 @@ public class SocialPlaySettings : ScriptableObject
 			return instance.androidProductNames;
 		}
 	}
+
+    static public List<string> CreditBundlesDescription
+    {
+        get
+        {
+            return instance.creditBundlesDescription;
+        }
+    }
 }
