@@ -44,6 +44,8 @@ public class CreditBundleStore : MonoBehaviour
 
             GetBundle();
 
+            SP.GetPaidCurrencyBalance(null);
+
             isInitialized = true;
         }
         catch (System.Exception ex )
