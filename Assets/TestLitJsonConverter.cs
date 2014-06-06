@@ -25,12 +25,12 @@ public class TestLitJsonConverter : MonoBehaviour {
         }
     }
 
-    void OnReceivedUserInfo(SP.UserInfo userInfo)
+    void OnReceivedUserInfo(SocialPlayUser userInfo)
     {
         Debug.Log("User info: " + userInfo.userName);
     }
 
-    void OnReceivedLoginResponse(SP.UserResponse response)
+    void OnReceivedLoginResponse(UserResponse response)
     {
         Debug.Log("Login Response: " + response.code + " UserInfo: " + response.userInfo.userName);
     }
@@ -62,9 +62,9 @@ public class TestLitJsonConverter : MonoBehaviour {
         }
     }
 
-    void OnReceivedStoreItems(List<StoreItemInfo> storeItems)
+    void OnReceivedStoreItems(List<StoreItem> storeItems)
     {
-        foreach (StoreItemInfo storeItem in storeItems)
+        foreach (StoreItem storeItem in storeItems)
         {
             Debug.Log("Store Items: " + storeItem.itemName);
         }

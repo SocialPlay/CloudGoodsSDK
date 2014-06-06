@@ -31,7 +31,7 @@ public abstract class ContainerItemLoader : MonoBehaviour
             case ItemOwnerTypes.Session:
                 return ItemSystemGameData.SessionID.ToString();
             case ItemOwnerTypes.User:
-                return ItemSystemGameData.UserID.ToString();
+                return SP.user.userID.ToString();
         }
         return "";
     }

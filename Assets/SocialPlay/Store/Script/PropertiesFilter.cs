@@ -20,11 +20,11 @@ public class PropertiesFilter : MonoBehaviour {
         }
     }
 
-    List<JToken> FilterProperties(List<StoreItemInfo> storeList, string filterType, int filterMin, int filterMax)
+    List<JToken> FilterProperties(List<StoreItem> storeList, string filterType, int filterMin, int filterMax)
     {
         List<JToken> newStoreList = new List<JToken>();
 
-        foreach(StoreItemInfo storeInfo in storeList)
+        foreach(StoreItem storeInfo in storeList)
         {
             if (storeInfo.itemDetail.Count > 0)
             {

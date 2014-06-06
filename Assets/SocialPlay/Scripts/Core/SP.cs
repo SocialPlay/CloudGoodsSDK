@@ -12,81 +12,20 @@ using System.Security.Cryptography;
 
 public class SP : MonoBehaviour//, IServiceCalls
 {
-    #region Internal Classes
-    public class SecurePayload
-    {
-        public string token;
-        public string data;
-    }
-
-    public class GiveOwnerItemWebserviceRequest
-    {
-        public List<WebModels.ItemsInfo> listOfItems;
-        public WebModels.OwnerTypes OwnerType;
-        public string ownerID;
-        public string appID;
-    }
-    public class UserInfo
-    {
-		public string userGuid = "";
-        public bool isNewUserToWorld = false;
-        public string userName = "";
-		public string userEmail = "";
-
-		public UserInfo(string newUserGuid, string newUserName, string newUserEmail)
-		{
-			userGuid = newUserGuid;
-			userName = newUserName;
-			userEmail = newUserEmail;
-		}
-    }
-
-	public class LoginUserInfo
-	{
-		public Guid ID;
-		public string name;
-		public string email;
-
-		public LoginUserInfo(Guid userID, string userName, string userEmail)
-		{
-			ID = userID;
-			name = userName;
-			email = userEmail;
-		}
-	}
-
-    public class UserResponse
-    {
-        public int code;
-        public string message;
-        public UserInfo userInfo;
-
-        public UserResponse(int caseCode, string msg, UserInfo newUserInfo)
-        {
-            code = caseCode;
-            message = msg;
-            userInfo = newUserInfo;
-        }
-
-        public override string ToString()
-        {
-            return "Code :" + code + "\nMessage :" + message;
-        }
-    }
-
-    #endregion
-
     #region Global Events/Callbacks
 
     static public Action<string> onErrorEvent;
     static public event Action<UserResponse> OnUserLogin;
     //static public event Action onLogout;
-	static public event Action<UserInfo> OnUserInfo;
+	static public event Action<SocialPlayUser> OnUserInfo;
     static public event Action<UserResponse> OnUserRegister;
     static public event Action<UserResponse> OnForgotPassword;
     static public event Action<UserResponse> OnVerificationSent;
     static public event Action<string> OnRegisteredUserToSession;
-	static public event Action<UserInfo> OnUserAuthorizedEvent;
+	static public event Action<SocialPlayUser> OnUserAuthorized;
+	static public event Action<List<StoreItem>> OnStoreListLoaded;
+	static public event Action<int> OnFreeCurrency;
+	static public event Action<int> OnPaidCurrency;
 
     #endregion
 
@@ -157,15 +96,63 @@ public class SP : MonoBehaviour//, IServiceCalls
     /// </summary>
     /// <returns></returns>
 
-    static public Guid GetAppID()
+    static public Guid GuidAppID
     {
-        return new Guid(AppID);
+		get { return new Guid(AppID); }
     }
+
+	/// <summary>
+	/// Cached store items list.
+	/// </summary>
+
+	static public List<StoreItem> storeItems { get; private set; }
+
+	/// <summary>
+	/// Current amount of free currency. You can listen to the event OnFreeCurrency which will be triggered everytime this value changes.
+	/// </summary>
+
+	static public int freeCurrency
+	{ 
+		get { return mFree; }
+		private set
+		{
+			if (mFree != value)
+			{
+				mFree = value;
+				if (OnFreeCurrency != null) OnFreeCurrency(mFree);
+			}
+		}
+	}
+
+	/// <summary>
+	/// Current amount of paid currency. You can listen to the event OnPaidCurrency which will be triggered everytime this value changes.
+	/// </summary>
+
+	static public int paidCurrency
+	{
+		get { return mPaid; }
+		private set
+		{
+			if (mPaid != value)
+			{
+				mPaid = value;
+				if (OnPaidCurrency != null) OnPaidCurrency(mPaid);
+			}
+		}
+	}
+
+	/// <summary>
+	/// Current user information.
+	/// </summary>
+
+	static public SocialPlayUser user { get; private set; }
 
     #region Private Members
 
     static IServiceObjectConverter mService;
 
+	static int mFree = 0;
+	static int mPaid = 0;
     static SP mInst;
     static SP Get()
     {
@@ -177,22 +164,29 @@ public class SP : MonoBehaviour//, IServiceCalls
         }
         return mInst;
     }
+	static string buyUrl = "http://socialplaywebservice.azurewebsites.net/publicservice.svc/";
 
     #endregion
 
     #region Game Authentication
 
-	static public void OnUserAuthorized(UserInfo socialplayMsg)
+	static public void AuthorizeUser(SocialPlayUser userInfo)
     {
-		new ItemSystemGameData(AppID, socialplayMsg.userGuid.ToString(), -1, Guid.NewGuid().ToString(), socialplayMsg.userName, socialplayMsg.userEmail);
+		user = userInfo;
+		user.userID = new Guid(user.userGuid.ToString());
+		user.sessionID = Guid.NewGuid();
 
-        if (OnUserAuthorizedEvent != null)
-            OnUserAuthorizedEvent(socialplayMsg);
+		GetStoreItems(OnStoreListLoaded);
+		GetFreeCurrencyBalance(0, null);
+		GetPaidCurrencyBalance(null);
 
-        SP.RegisterGameSession(ItemSystemGameData.UserID, 1, (Guid sessionGuid) =>
-        {
+        if (OnUserAuthorized != null)
+			OnUserAuthorized(user);
+
+        SP.RegisterGameSession(1, (Guid sessionGuid) =>
+        {			
             ItemSystemGameData.SessionID = sessionGuid;
-            if (OnRegisteredUserToSession != null) OnRegisteredUserToSession(ItemSystemGameData.UserID.ToString());
+            if (OnRegisteredUserToSession != null) OnRegisteredUserToSession(user.userID.ToString());
         });
 
     }
@@ -203,7 +197,7 @@ public class SP : MonoBehaviour//, IServiceCalls
 
     static public void GenerateItemsAtLocation(string OwnerID, string OwnerType, int Location, int MinimumEnergyOfItem, int TotalEnergyToGenerate, Action<List<ItemData>> callback, string ANDTags = "", string ORTags = "")
     {
-        string url = string.Format("{0}GenerateItemsAtLocation?OwnerID={1}&OwnerType={2}&Location={3}&AppID={4}&MinimumEnergyOfItem={5}&TotalEnergyToGenerate={6}&ANDTags={7}&ORTags={8}", Url, OwnerID, OwnerType, Location, GetAppID(), MinimumEnergyOfItem, TotalEnergyToGenerate, ANDTags, ORTags);
+        string url = string.Format("{0}GenerateItemsAtLocation?OwnerID={1}&OwnerType={2}&Location={3}&AppID={4}&MinimumEnergyOfItem={5}&TotalEnergyToGenerate={6}&ANDTags={7}&ORTags={8}", Url, OwnerID, OwnerType, Location, GuidAppID, MinimumEnergyOfItem, TotalEnergyToGenerate, ANDTags, ORTags);
         
         WWW www = new WWW(url);
         Get().StartCoroutine(Get().ServiceCallGetListItemDatas(www, callback));
@@ -211,7 +205,7 @@ public class SP : MonoBehaviour//, IServiceCalls
 
     static public void GetOwnerItems(string ownerID, string ownerType, int location, Action<List<ItemData>> callback)
     {
-		string url = string.Format("{0}GetOwnerItems?ownerID={1}&ownerType={2}&location={3}&AppID={4}", Url, ownerID, ownerType, location, GetAppID());
+		string url = string.Format("{0}GetOwnerItems?ownerID={1}&ownerType={2}&location={3}&AppID={4}", Url, ownerID, ownerType, location, GuidAppID);
         WWW www = new WWW(url);
 
         Get().StartCoroutine(Get().ServiceCallGetListItemDatas(www, callback));
@@ -221,7 +215,7 @@ public class SP : MonoBehaviour//, IServiceCalls
     {
         Debug.Log(StackToMove.ToString());
 
-		string url = string.Format("{0}MoveItemStack?StackToMove={1}&MoveAmount={2}&DestinationOwnerID={3}&DestinationOwnerType={4}&AppID={5}&DestinationLocation={6}", Url, StackToMove, MoveAmount, DestinationOwnerID, DestinationOwnerType, GetAppID(), DestinationLocation);
+		string url = string.Format("{0}MoveItemStack?StackToMove={1}&MoveAmount={2}&DestinationOwnerID={3}&DestinationOwnerType={4}&AppID={5}&DestinationLocation={6}", Url, StackToMove, MoveAmount, DestinationOwnerID, DestinationOwnerType, GuidAppID, DestinationLocation);
         WWW www = new WWW(url);
 
         Get().StartCoroutine(Get().ServiceGetGuid(www, callback));
@@ -229,7 +223,7 @@ public class SP : MonoBehaviour//, IServiceCalls
 
     static public void MoveItemStacks(string stacks, string DestinationOwnerID, string DestinationOwnerType, int DestinationLocation, Action<MoveMultipleItemsResponse> callback)
     {
-		string url = string.Format("{0}MoveItemStacks?stacks={1}&DestinationOwnerID={2}&DestinationOwnerType={3}&AppID={4}&DestinationLocation={5}", Url, stacks, DestinationOwnerID, DestinationOwnerType, GetAppID(), DestinationLocation);
+		string url = string.Format("{0}MoveItemStacks?stacks={1}&DestinationOwnerID={2}&DestinationOwnerType={3}&AppID={4}&DestinationLocation={5}", Url, stacks, DestinationOwnerID, DestinationOwnerType, GuidAppID, DestinationLocation);
 
         WWW www = new WWW(url);
 
@@ -273,18 +267,18 @@ public class SP : MonoBehaviour//, IServiceCalls
 
     #region UserManagement
 
-    static public void GetUserFromWorld(int platformID, string platformUserID, string userName, string userEmail, Action<UserInfo> callback)
+    static public void GetUserFromWorld(SocialPlayPlatform platform, string platformUserID, string userName, string userEmail, Action<SocialPlayUser> callback)
     {
-        string url = Url + "GetUserFromWorld?appID=" + GetAppID() + "&platformID=" + platformID + "&platformUserID=" + platformUserID + "&userName=" + WWW.EscapeURL(userName) + "&loginUserEmail=" + userEmail;
+		string url = Url + "GetUserFromWorld?appID=" + GuidAppID + "&platformID=" + (int)platform + "&platformUserID=" + platformUserID + "&userName=" + WWW.EscapeURL(userName) + "&loginUserEmail=" + userEmail;
 
         WWW www = new WWW(url);
 
         Get().StartCoroutine(Get().ServiceGetUserInfo(www, callback));
     }
 
-    static public void RegisterGameSession(Guid userID, int instanceID, Action<Guid> callback)
+    static public void RegisterGameSession(int instanceID, Action<Guid> callback)
     {
-        string url = Url + "RegisterSession?UserId=" + userID + "&AppID=" + AppID + "&InstanceId=" + instanceID;
+        string url = Url + "RegisterSession?UserId=" + user.userID + "&AppID=" + AppID + "&InstanceId=" + instanceID;
 
         WWW www = new WWW(url);
 
@@ -309,9 +303,17 @@ public class SP : MonoBehaviour//, IServiceCalls
         Get().StartCoroutine(Get().ServiceGetString(www, callback));
     }
 
+	static public void LoginWithPlatformUser(SocialPlayPlatform platform, string platformUserID, string userName)
+	{
+		GetUserFromWorld(platform, platformUserID, userName, null, (SocialPlayUser user) =>
+		{
+			AuthorizeUser(user);
+		});
+	}
+
     static public void Login(string userEmail, string password, Action<UserResponse> onSuccess)
     {
-        string url = string.Format("{0}SPLoginUserLogin?gameID={1}&userEMail={2}&userPassword={3}", Url, GetAppID(), WWW.EscapeURL(userEmail), WWW.EscapeURL(password));
+        string url = string.Format("{0}SPLoginUserLogin?gameID={1}&userEMail={2}&userPassword={3}", Url, GuidAppID, WWW.EscapeURL(userEmail), WWW.EscapeURL(password));
 
         WWW www = new WWW(url);
 
@@ -323,8 +325,8 @@ public class SP : MonoBehaviour//, IServiceCalls
                 if (OnUserInfo != null)
                 {
 					LoginUserInfo userInfo = Newtonsoft.Json.JsonConvert.DeserializeObject<LoginUserInfo>(response.message);
-					UserInfo ui = new UserInfo(userInfo.ID.ToString(), userInfo.name, userInfo.email);
-					OnUserAuthorized(ui);
+					SocialPlayUser ui = new SocialPlayUser(userInfo.ID.ToString(), userInfo.name, userInfo.email);
+					AuthorizeUser(ui);
 					OnUserInfo(ui);
                 }
             }
@@ -338,7 +340,7 @@ public class SP : MonoBehaviour//, IServiceCalls
 
     static public void Register(string userEmail, string password, string userName, Action<UserResponse> onSuccess)
     {
-        string url = string.Format("{0}SPLoginUserRegister?gameID={1}&userEMail={2}&userPassword={3}&userName={4}", Url, GetAppID(), WWW.EscapeURL(userEmail), WWW.EscapeURL(password), WWW.EscapeURL(userName));
+        string url = string.Format("{0}SPLoginUserRegister?gameID={1}&userEMail={2}&userPassword={3}&userName={4}", Url, GuidAppID, WWW.EscapeURL(userEmail), WWW.EscapeURL(password), WWW.EscapeURL(userName));
 
         WWW www = new WWW(url);
 
@@ -352,7 +354,7 @@ public class SP : MonoBehaviour//, IServiceCalls
 
     static public void ForgotPassword(string userEmail, Action<UserResponse> onSuccess)
     {
-        string url = string.Format("{0}ForgotPassword?gameID={1}&userEMail={2}", Url, GetAppID(), WWW.EscapeURL(userEmail));
+        string url = string.Format("{0}ForgotPassword?gameID={1}&userEMail={2}", Url, GuidAppID, WWW.EscapeURL(userEmail));
         WWW www = new WWW(url);
 
         Get().StartCoroutine(Get().ServiceSpLoginResponse(www, (UserResponse response) =>
@@ -366,7 +368,7 @@ public class SP : MonoBehaviour//, IServiceCalls
 
     static public void ResendVerificationEmail(string userEmail, Action<UserResponse> onSuccess)
     {
-        string url = string.Format("{0}ResendVerificationEmail?gameID={1}&userEMail={2}", Url, GetAppID(), WWW.EscapeURL(userEmail));
+        string url = string.Format("{0}ResendVerificationEmail?gameID={1}&userEMail={2}", Url, GuidAppID, WWW.EscapeURL(userEmail));
         WWW www = new WWW(url);
 
         Get().StartCoroutine(Get().ServiceSpLoginResponse(www, (UserResponse response) =>
@@ -390,40 +392,105 @@ public class SP : MonoBehaviour//, IServiceCalls
 
     #region StoreCalls
 
-    static public void GetFreeCurrencyBalance(string userID, int accessLocation, Action<string> callback)
+    static public void GetFreeCurrencyBalance(int accessLocation, Action<int> callback)
     {
-        string url = Url + "GetFreeCurrencyBalance?userID=" + userID + "&accessLocation=" + accessLocation + "&appID=" + AppID;
+		string url = Url + "GetFreeCurrencyBalance?userID=" + user.userID.ToString() + "&accessLocation=" + accessLocation + "&appID=" + AppID;
 
         WWW www = new WWW(url);
 
-        Get().StartCoroutine(Get().ServiceGetString(www, callback));
+		Get().StartCoroutine(Get().ServiceGetString(www, (string value) => { freeCurrency = System.Convert.ToInt16(value); if (callback != null) callback(freeCurrency); }));
     }
 
-    static public void GetPaidCurrencyBalance(string userID, Action<string> callback)
+    static public void GetPaidCurrencyBalance(Action<int> callback)
     {
-        string url = Url + "GetPaidCurrencyBalance?userID=" + userID + "&appID=" + AppID;
+		string url = Url + "GetPaidCurrencyBalance?userID=" + user.userID.ToString() + "&appID=" + AppID;
 
         WWW www = new WWW(url);
 
-        Get().StartCoroutine(Get().ServiceGetString(www, callback));
+		Get().StartCoroutine(Get().ServiceGetString(www, (string value) => { paidCurrency = System.Convert.ToInt16(value); if (callback != null) callback(paidCurrency); }));
     }
 
-    static public void GetStoreItems(Action<List<StoreItemInfo>> callback)
+	/// <summary>
+	/// Loads and return the list of store items from the server.
+	/// </summary>
+	/// <param name="callback"></param>
+
+    static public void GetStoreItems(Action<List<StoreItem>> callback)
     {
         string url = Url + "LoadStoreItems?appID=" + AppID;
 
         WWW www = new WWW(url);
 
-        Get().StartCoroutine(Get().ServiceGetStoreItems(www, callback));
+		Get().StartCoroutine(Get().ServiceGetStoreItems(www, (List<StoreItem> items) => 
+		{
+			storeItems = items;
+			if (callback != null) callback(storeItems);
+		}));
     }
 
-    static public void StoreItemPurchase(string URL, Guid userID, int itemID, int amount, string paymentType, int saveLocation, Action<string> callback)
+	/// <summary>
+	/// Returns an item from the store by its id.
+	/// </summary>
+	/// <param name="name"></param>
+	/// <returns></returns>
+
+	static public StoreItem GetStoreItem(int itemID)
+	{
+		if (storeItems == null)
+		{
+			Debug.LogWarning("Store Item list has not been loaded yet.");
+			return null;
+		}
+
+		StoreItem item = null;
+
+		for (int i = 0, imax = storeItems.Count; i < imax; i++)
+		{
+			if (storeItems[i].itemID == itemID)
+			{
+				item = storeItems[i];
+				break;
+			}
+		}
+
+		return item;
+	}
+
+	/// <summary>
+	/// Returns an item from the store by its name.
+	/// </summary>
+	/// <param name="name"></param>
+	/// <returns></returns>
+
+	static public StoreItem GetStoreItem(string name)
+	{	
+		if (storeItems == null)
+		{
+			Debug.LogWarning("Store Item list has not been loaded yet.");
+			return null;
+		}
+
+		StoreItem item = null;
+
+		for (int i = 0, imax = storeItems.Count; i < imax; i++)
+		{
+			if (storeItems[i].itemName.StartsWith(name, StringComparison.InvariantCultureIgnoreCase))
+			{
+				item = storeItems[i];
+				break;
+			}
+		}
+
+		return item;
+	}
+
+	static public void StoreItemPurchase(int itemID, int amount, CurrencyType paymentType, int saveLocation, Action<string> callback)
     {
-        string url = URL + "StoreItemPurchase?UserID=" + userID + "&ItemID=" + itemID + "&Amount=" + amount + "&PaymentType=" + paymentType + "&AppID=" + GetAppID() + "&saveLocation=" + saveLocation;
+		string url = buyUrl + "StoreItemPurchase?UserID=" + user.userID + "&ItemID=" + itemID + "&Amount=" + amount + "&PaymentType=" + paymentType + "&AppID=" + GuidAppID + "&saveLocation=" + saveLocation;
 
         WWW www = new WWW(url);
-
-        Get().StartCoroutine(Get().ServiceGetString(www, callback));
+		//currencyBalance.SetItemPaidCurrency(dataObj["Balance"].ToString());
+		Get().StartCoroutine(Get().ServiceGetString(www, (string message) => { GetFreeCurrencyBalance(0, null); GetPaidCurrencyBalance(null); if (callback != null) callback(message); }));
     }
 
     static public void GetItemBundles(Action<List<ItemBundle>> callback)
@@ -435,13 +502,13 @@ public class SP : MonoBehaviour//, IServiceCalls
         Get().StartCoroutine(Get().ServiceGetItemBundles(www, callback));
     }
 
-    static public void PurchaseItemBundles(Guid UserID, int bundleID, string paymentType, int location, Action<string> callback)
+	static public void PurchaseItemBundles(int bundleID, CurrencyType paymentType, int location, Action<string> callback)
     {
-        string url = Url + "PurchaseItemBundle?AppID=" + GetAppID() + "&UserID=" + UserID + "&BundleID=" + bundleID + "&PaymentType=" + paymentType + "&Location=" + location;
+		string url = buyUrl + "PurchaseItemBundle?AppID=" + GuidAppID + "&UserID=" + user.userID + "&BundleID=" + bundleID + "&PaymentType=" + paymentType + "&Location=" + location;
 
         WWW www = new WWW(url);
 
-        Get().StartCoroutine(Get().ServiceGetString(www, callback));
+		Get().StartCoroutine(Get().ServiceGetString(www, (string message) => { GetFreeCurrencyBalance(0, null); GetPaidCurrencyBalance(null); if (callback != null) callback(message); }));
     }
 
     static public void GetCreditBundles(int platformID, Action<List<CreditBundleItem>> callback)
@@ -455,11 +522,11 @@ public class SP : MonoBehaviour//, IServiceCalls
 
     static public void PurchaseCreditBundles(string payload, Action<string> callback)
     {
-        string url = Url + "PurchaseCreditBundle?AppID=" + GetAppID() + "&payload=" + WWW.EscapeURL(EncryptStringUnity(payload));
+		string url = buyUrl + "PurchaseCreditBundle?AppID=" + GuidAppID + "&payload=" + WWW.EscapeURL(EncryptStringUnity(payload));
 
         WWW www = new WWW(url);
 
-        Get().StartCoroutine(Get().ServiceGetString(www, callback));
+		Get().StartCoroutine(Get().ServiceGetString(www, (string message) => { GetFreeCurrencyBalance(0, null); GetPaidCurrencyBalance(null); if (callback != null) callback(message); }));
     }
 
 	static public void GetToken(string ownerID, string tokenType, List<WebModels.ItemsInfo> items, Action<string> callback)
@@ -474,6 +541,28 @@ public class SP : MonoBehaviour//, IServiceCalls
 		}));
 	}
 
+	/// <summary>
+	/// Search store items with given string.
+	/// </summary>
+	/// <param name="storeItems"></param>
+	/// <param name="searchFilter"></param>
+	/// <returns></returns>
+
+	static public List<StoreItem> SearchStoreItems(List<StoreItem> storeItems, string searchFilter)
+    {
+        if (searchFilter.Length == 0)
+        {
+            return storeItems;
+        }
+
+        List<StoreItem> filteredStoreItems = new List<StoreItem>();
+		for (int i = 0, imax = storeItems.Count; i < imax; i++)
+		{
+			StoreItem storeItemInfo = storeItems[i];
+			if (storeItemInfo.itemName.StartsWith(searchFilter.ToLower(), StringComparison.InvariantCultureIgnoreCase)) filteredStoreItems.Add(storeItemInfo);
+		}
+        return filteredStoreItems;
+    }
 
 	static public void SecureCall(string token, string ownerID, List<WebModels.ItemsInfo> items, Action<string> callback)
 	{
@@ -503,9 +592,9 @@ public class SP : MonoBehaviour//, IServiceCalls
     #endregion
 
     #region RecipeCalls
-    static public void GetGameRecipes(string appID, Action<List<RecipeInfo>> callback)
+    static public void GetGameRecipes(Action<List<RecipeInfo>> callback)
     {
-        string url = Url + "GetRecipes?appID=" + appID;
+        string url = Url + "GetRecipes?appID=" + AppID;
 
         WWW www = new WWW(url);
 
@@ -514,15 +603,15 @@ public class SP : MonoBehaviour//, IServiceCalls
 
     static public void CompleteQueueItem(int QueueID, int percentScore, int location, Action<string> callback)
     {
-        string url = string.Format("{0}CompleteQueueItem?gameID={1}&QueueID={2}&percentScore={3}&location={4}", Url, GetAppID(), QueueID, percentScore, location);
+        string url = string.Format("{0}CompleteQueueItem?gameID={1}&QueueID={2}&percentScore={3}&location={4}", Url, GuidAppID, QueueID, percentScore, location);
         WWW www = new WWW(url);
 
         Get().StartCoroutine(Get().ServiceGetString(www, callback));
     }
 
-    static public void AddInstantCraftToQueue(Guid UserID, int ItemID, int Amount, List<KeyValuePair<string, int>> ItemIngredients, Action<string> callback)
+    static public void AddInstantCraftToQueue(int ItemID, int Amount, List<KeyValuePair<string, int>> ItemIngredients, Action<string> callback)
     {
-        string url = string.Format("{0}AddInstantCraftToQueue?gameID={1}&UserID={2}&ItemID={3}&Amount={4}&ItemIngredients={5}", Url, GetAppID(), UserID, ItemID, Amount, WWW.EscapeURL(JsonConvert.SerializeObject(ItemIngredients)));
+        string url = string.Format("{0}AddInstantCraftToQueue?gameID={1}&UserID={2}&ItemID={3}&Amount={4}&ItemIngredients={5}", Url, GuidAppID, user.userID, ItemID, Amount, WWW.EscapeURL(JsonConvert.SerializeObject(ItemIngredients)));
 
         WWW www = new WWW(url);
 
@@ -548,7 +637,7 @@ public class SP : MonoBehaviour//, IServiceCalls
         }
     }
 
-    IEnumerator ServiceGetUserInfo(WWW www, Action<UserInfo> callback)
+    IEnumerator ServiceGetUserInfo(WWW www, Action<SocialPlayUser> callback)
     {
         yield return www;
 
@@ -577,7 +666,7 @@ public class SP : MonoBehaviour//, IServiceCalls
 		}
     }
 
-    IEnumerator ServiceGetStoreItems(WWW www, Action<List<StoreItemInfo>> callback)
+    IEnumerator ServiceGetStoreItems(WWW www, Action<List<StoreItem>> callback)
     {
         yield return www;
 
@@ -616,8 +705,6 @@ public class SP : MonoBehaviour//, IServiceCalls
     IEnumerator ServiceGetItemBundles(WWW www, Action<List<ItemBundle>> callback)
     {
         yield return www;
-
-        Debug.Log(www.text);
 
 		if (www.error == null)
 			callback(serviceConverter.ConvertToListItemBundle(www.text));

@@ -55,27 +55,19 @@ public class StoreOrganizer : MonoBehaviour
     void OrganizeStore()
     {
       
-        List<StoreItemInfo> AllItems = storeLoader.GetStoreItemList();
+        List<StoreItem> AllItems = storeLoader.GetStoreItemList();
         if (AllItems.Count == 0)
         {
             Debug.Log("No items to sort at this point");
             return;
         }
-        List<StoreItemInfo> storeList = AllItems.GetRange(0, AllItems.Count);
+        List<StoreItem> storeList = AllItems.GetRange(0, AllItems.Count);
 
-        foreach (FilterItem filter in activeFilters)
-        {
-            storeList = filter.FilterStoreList(storeList);
-        }
-       storeList = SearchNameFilter.FilterStoreItemsFromSearch(storeList, searchFilter);
-        if (currentSort != null)
-        {
-            storeList = currentSort.Sort(storeList, currentSortDirection);
-        }
-        else
-        {
-            storeList = SortStoreItemsBy.DefaultSort(storeList);
-        }
+        foreach (FilterItem filter in activeFilters) storeList = filter.FilterStoreList(storeList);
+
+        storeList = SP.SearchStoreItems(storeList, searchFilter);
+        if (currentSort != null) storeList = currentSort.Sort(storeList, currentSortDirection);
+        else storeList = SortStoreItemsBy.DefaultSort(storeList);
 
         storeLoader.LoadStoreWithPaging(storeList, 0);
 

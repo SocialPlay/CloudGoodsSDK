@@ -1,16 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 using Facebook;
-using CloudGoodsSDK.Models;
 using System;
-using CloudGoods;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 
 public class FaceBookMobileAuthentication : MonoBehaviour
 {
     public static event System.Action loggedIN;
-    public static event System.Action OnRecivedUserInfo;
+    //public static event System.Action OnRecivedUserInfo;
     public static string FBUserName = string.Empty;
 
     void OnEnable()
@@ -44,18 +42,13 @@ public class FaceBookMobileAuthentication : MonoBehaviour
    
         if (string.IsNullOrEmpty(response.Error))
         {
-            PlatformUser socialPlayUserObj = new PlatformUser();
-            socialPlayUserObj.appID = SP.GetAppID();
-            socialPlayUserObj.platformID = 1;
-            socialPlayUserObj.platformUserID = FB.UserId;
-            socialPlayUserObj.userName = FBInfo["first_name"].ToString();
-            Systems.UserGetter.GetSocialPlayUser(socialPlayUserObj, SP.OnUserAuthorized);
+			SP.LoginWithPlatformUser(SocialPlayPlatform.Facebook, FB.UserId, FBInfo["first_name"].ToString());
 
-            if (OnRecivedUserInfo != null)
-            {
-                OnRecivedUserInfo();
-            }
-        }
+			/*if (OnRecivedUserInfo != null)
+			{
+				OnRecivedUserInfo();
+			}*/
+		}
     }
 
     void AuthCallback(FBResult result)

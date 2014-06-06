@@ -16,6 +16,6 @@ public abstract class FilterItem : MonoBehaviour
         filterLabel.text = filterDisplayName;
     }
 
-    public abstract List<StoreItemInfo> FilterStoreList(List<StoreItemInfo> storeList);
+    public abstract List<StoreItem> FilterStoreList(List<StoreItem> storeList);
 
 }

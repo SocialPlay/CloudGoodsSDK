@@ -16,7 +16,7 @@ using System.Collections.Generic;
 public class CreditBundleStore : MonoBehaviour
 {
     public GameObject Grid;
-    public CurrencyBalance currencyBalance;
+    //public CurrencyBalance currencyBalance;
     public PurchaseResponsePopupHandler purchaseResponseHandler;
 
     IGridLoader gridLoader;
@@ -79,13 +79,13 @@ public class CreditBundleStore : MonoBehaviour
         nguiItem.CurrencyName = item.CurrencyName;
         nguiItem.CurrencyIcon = creditBundleIcon.Get(nguiItem.Amount, nguiItem.CurrencyIcon);
 
-        nguiItem.PurhcaseButtonClicked = OnPurchaseRequest;
+        nguiItem.OnPurchaseRequest = OnPurchaseRequest;
     }
 
-    void OnPurchaseRequest(GameObject obj)
+    void OnPurchaseRequest()
     {
-        string id = obj.transform.parent.GetComponent<NGUIBundleItem>().Id;
-        platformPurchasor.Purchase(id, 1, ItemSystemGameData.UserID.ToString());
+        string id = UIButton.current.transform.parent.GetComponent<NGUIBundleItem>().Id;
+        platformPurchasor.Purchase(id, 1, SP.user.userID.ToString());
     }
 
     void OnRecievedPurchaseResponse(string data)
@@ -97,7 +97,7 @@ public class CreditBundleStore : MonoBehaviour
 
         if (dataObj["StatusCode"].ToString() == "1")
         {
-            currencyBalance.SetItemPaidCurrency(dataObj["Balance"].ToString());
+            //currencyBalance.SetItemPaidCurrency(dataObj["Balance"].ToString());
             purchaseResponseHandler.HandlePurchaseSuccess();
         }
         else

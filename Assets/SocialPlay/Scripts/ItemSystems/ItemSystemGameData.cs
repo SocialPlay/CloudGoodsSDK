@@ -15,7 +15,7 @@ public class ItemSystemGameData
     public ItemSystemGameData(string AppID, string UserID, int InstanceID, string SessionID, string userName, string userEmail)
     {
         ItemSystemGameData.AppID = new Guid(AppID);
-        ItemSystemGameData.UserID = new Guid(UserID);
+		ItemSystemGameData.UserID = new Guid(UserID);
         ItemSystemGameData.InstanceID = InstanceID;
         ItemSystemGameData.SessionID = new Guid(SessionID);
         ItemSystemGameData.userName = userName;

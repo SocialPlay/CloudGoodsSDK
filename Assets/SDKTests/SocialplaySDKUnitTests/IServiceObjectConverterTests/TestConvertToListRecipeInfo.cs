@@ -6,7 +6,7 @@ public class TestConvertToListRecipeInfo : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        SP.GetGameRecipes("", OnReceivedRecipes);
+        SP.GetGameRecipes(OnReceivedRecipes);
 	}
 
     void OnReceivedRecipes(List<RecipeInfo> recipes)

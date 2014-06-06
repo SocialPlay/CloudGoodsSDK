@@ -3,13 +3,10 @@ using System.Collections;
 using System;
 using Newtonsoft.Json.Linq;
 
-using CloudGoodsSDK.Models;
-using CloudGoods;
-
 public class WebPlatformLink
 {
     public static Action OnGuestModeActivated;
-    public static Action<SP.UserInfo> OnRecievedUser;
+    //public static Action<UserInfo> OnRecievedUser;
 
     public void Initiate()
     {
@@ -30,24 +27,19 @@ public class WebPlatformLink
             return;
         }
 
-        var userinfo = new PlatformUser();
-
         try
         {
-            userinfo.platformUserID = jobject["userID"].ToString();
-            userinfo.userName = jobject["userName"].ToString();
-            userinfo.platformID = int.Parse(jobject["platformID"].ToString());
-            userinfo.appID = Systems.AppId;
+			SP.LoginWithPlatformUser((SocialPlayPlatform)Enum.Parse(typeof(SocialPlayPlatform), jobject["platformID"].ToString()), jobject["userID"].ToString(), jobject["userName"].ToString());
         }
         catch (Exception)
         {
             throw new Exception("Platform web script has passed in incorrect data");
-        }
+        }		
 
-        Systems.UserGetter.GetSocialPlayUser(userinfo, (user) =>
+        /*Systems.UserGetter.GetSocialPlayUser(userinfo, (user) =>
         {
             if (OnRecievedUser != null)
                 OnRecievedUser(user);
-        });
+        });*/
     }
 }

@@ -23,39 +23,12 @@ public class ItemRecipeCache : MonoBehaviour {
         }
         else
         {
-            SP.GetGameRecipes(ItemSystemGameData.AppID.ToString(), (x) =>
-                    {
-                        CachedRecipes = x;
-                        callback(x);
-                    }
-                );
+            SP.GetGameRecipes((x) =>
+                {
+                    CachedRecipes = x;
+                    callback(x);
+                }
+            );
         }
     }
-}
-
-public class RecipeInfo
-{
-    public int recipeID;
-    public string name;
-    public int energy;
-    public string description;
-    public string imgURL;
-
-    public List<ItemDetail> RecipeDetails;
-    public List<IngredientDetail> IngredientDetails;
-}
-
-public class IngredientDetail
-{
-    public string name;
-    public int ingredientID;
-    public int amount;
-    public int energy;
-    public string imgURL;
-}
-
-public class ItemDetail
-{
-    public string name;
-    public float value;
 }

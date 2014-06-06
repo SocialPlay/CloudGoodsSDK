@@ -90,13 +90,13 @@ public class SortStoreItemsBy : MonoBehaviour
         popUpList.items = sortOptions;
     }
 
-    public static List<StoreItemInfo> DefaultSort(List<StoreItemInfo> StoreItems)
+    public static List<StoreItem> DefaultSort(List<StoreItem> StoreItems)
     {
         StoreItems.Sort(SortByName);
         return StoreItems;
     }
 
-    static int SortByName(StoreItemInfo x, StoreItemInfo y)
+    static int SortByName(StoreItem x, StoreItem y)
     {
         return x.itemName.ToLower().CompareTo(y.itemName.ToLower());
     }

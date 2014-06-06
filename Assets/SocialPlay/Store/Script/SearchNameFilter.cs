@@ -42,19 +42,5 @@ public class SearchNameFilter : MonoBehaviour
         }
     }
 
-    public static List<StoreItemInfo> FilterStoreItemsFromSearch(List<StoreItemInfo> storeItems, string searchFilter)
-    {
-        if (searchFilter.Length == 0)
-        {
-            return storeItems;
-        }
-
-        List<StoreItemInfo> filteredStoreItems = new List<StoreItemInfo>();
-        foreach(StoreItemInfo storeItemInfo in storeItems)
-        {
-            if (storeItemInfo.itemName.ToLower().Contains(searchFilter.ToLower()))
-                filteredStoreItems.Add(storeItemInfo);
-        }
-        return filteredStoreItems;
-    }
+    
 }

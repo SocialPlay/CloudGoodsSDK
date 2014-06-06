@@ -12,25 +12,25 @@ public interface IServiceCalls
 
     void MoveItemStack(Guid StackToMove, int MoveAmount, string DestinationOwnerID, string DestinationOwnerType, int DestinationLocation, Action<Guid> callback);
 
-    void GetUserFromWorld(int platformID, string platformUserID, string userName, string userEmail, Action<SP.UserInfo> callback);
+    void GetUserFromWorld(SocialPlayPlatform platform, string platformUserID, string userName, string userEmail, Action<SocialPlayUser> callback);
 
-    void GetStoreItems(Action<List<StoreItemInfo>> callback);
+    void GetStoreItems(Action<List<StoreItem>> callback);
 
-    void GetFreeCurrencyBalance(string userID, int accessLocation, Action<string> callback);
+    void GetFreeCurrencyBalance(int accessLocation, Action<string> callback);
 
-    void GetPaidCurrencyBalance(string userID, Action<string> callback);
+    void GetPaidCurrencyBalance(Action<string> callback);
 
-    void RegisterGameSession(Guid userID, int instanceID, Action<Guid> callback);
+    void RegisterGameSession(int instanceID, Action<Guid> callback);
 
     void GetGameRecipes(Action<List<RecipeInfo>> callback);
 
-    void StoreItemPurchase(string URL, Guid userID, int itemID, int amount, string paymentType, int saveLocation, Action<string> callback);
+    void StoreItemPurchase(int itemID, int amount, string paymentType, int saveLocation, Action<string> callback);
 
     void GetItemBundles(Action<List<ItemBundle>> callback);
 
-    void PurchaseItemBundles(Guid UserID, int bundleID, string paymentType, int location, Action<string> callback);
+    void PurchaseItemBundles(int bundleID, string paymentType, int location, Action<string> callback);
 
-    void GetCreditBundles(int platform, Action<List<CreditBundleItem>> callback);
+	void GetCreditBundles(SocialPlayPlatform platform, Action<List<CreditBundleItem>> callback);
 
     void PurchaseCreditBundles(string payload, Action<string> callback);
 
@@ -48,15 +48,15 @@ public interface IServiceCalls
 
     void CompleteQueueItem(int QueueID, int percentScore, int location, Action<string> callback);
 
-    void AddInstantCraftToQueue(Guid UserID, int ItemID, int Amount, List<KeyValuePair<string, int>> ItemIngredients, Action<string> callback);
+    void AddInstantCraftToQueue(int ItemID, int Amount, List<KeyValuePair<string, int>> ItemIngredients, Action<string> callback);
 
-    void Login(string userEmail, string password, Action<SP.UserResponse> callback);
+    void Login(string userEmail, string password, Action<UserResponse> callback);
 
-    void Register(string userEmail, string password, string userName, Action<SP.UserResponse> callback);
+    void Register(string userEmail, string password, string userName, Action<UserResponse> callback);
 
-    void ForgotPassword(string userEmail, Action<SP.UserResponse> callback);
+    void ForgotPassword(string userEmail, Action<UserResponse> callback);
 
-    void ResendVerificationEmail(string userEmail, Action<SP.UserResponse> callback);
+    void ResendVerificationEmail(string userEmail, Action<UserResponse> callback);
 
     void GiveOwnerItems(string ownerID, WebModels.OwnerTypes OwnerType, List<WebModels.ItemsInfo> listOfItems, Action<string> callback);
 }

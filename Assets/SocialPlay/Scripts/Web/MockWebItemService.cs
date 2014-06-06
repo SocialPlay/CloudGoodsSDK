@@ -29,27 +29,27 @@ public class MockWebItemService : MonoBehaviour, IServiceCalls
         callback(ServiceConverter.ConvertToGuid("\"73bcdbe5-48b8-4e8e-97bb-7fbb5b4b6155\""));
     }
 
-    public void GetUserFromWorld(int platformID, string platformUserID, string userName, string userEmail, Action<SP.UserInfo> callback)
+	public void GetUserFromWorld(SocialPlayPlatform platform, string platformUserID, string userName, string userEmail, Action<SocialPlayUser> callback)
     {
         callback(ServiceConverter.ConvertToUserInfo("\"{\"userGuid\":\"c6afc667-bf54-4948-ad00-530b539f4122\",\"isNewUserToWorld\":false,\"userName\":\"Editor Test User\",\"userEmail\":null}\""));
     }
 
-    public void GetStoreItems(Action<List<StoreItemInfo>> callback)
+    public void GetStoreItems(Action<List<StoreItem>> callback)
     {
         callback(ServiceConverter.ConvertToStoreItems("\"[{\"ID\":409,\"Image\":\"https:\\/\\/socialplay.blob.core.windows.net\\/itemimages\\/2b828b8e-8c1e-4090-a0bc-c1677e258eba.png\",\"Name\":\"Class3Item1\",\"ItemID\":51829,\"CreditValue\":1,\"CoinValue\":110,\"AddDate\":\"2014-04-30T16:28:05.497\",\"Detail\":\"[{\\\"Name\\\":\\\"CP One\\\",\\\"Value\\\":\\\"7\\\",\\\"InvertEnergy\\\":false},{\\\"Name\\\":\\\"CP Two\\\",\\\"Value\\\":\\\"20\\\",\\\"InvertEnergy\\\":true},{\\\"Name\\\":\\\"CP Three\\\",\\\"Value\\\":\\\"2\\\",\\\"InvertEnergy\\\":false}]\",\"Behaviours\":[],\"tags\":[]},{\"ID\":413,\"Image\":\"https:\\/\\/socialplay.blob.core.windows.net\\/itemimages\\/2b828b8e-8c1e-4090-a0bc-c1677e258eba.png\",\"Name\":\"Class2Item2\",\"ItemID\":51833,\"CreditValue\":9,\"CoinValue\":2138,\"AddDate\":\"2014-04-30T16:28:05.53\",\"Detail\":\"[{\\\"Name\\\":\\\"CP One\\\",\\\"Value\\\":\\\"10\\\",\\\"InvertEnergy\\\":false},{\\\"Name\\\":\\\"CP Two\\\",\\\"Value\\\":\\\"25\\\",\\\"InvertEnergy\\\":false}]\",\"Behaviours\":[],\"tags\":[]},{\"ID\":417,\"Image\":\"https:\\/\\/socialplay.blob.core.windows.net\\/itemimages\\/2b828b8e-8c1e-4090-a0bc-c1677e258eba.png\",\"Name\":\"Class3Item3\",\"ItemID\":51837,\"CreditValue\":4,\"CoinValue\":818,\"AddDate\":\"2014-04-30T16:28:05.547\",\"Detail\":\"[{\\\"Name\\\":\\\"CP One\\\",\\\"Value\\\":\\\"50\\\",\\\"InvertEnergy\\\":false},{\\\"Name\\\":\\\"CP Two\\\",\\\"Value\\\":\\\"25\\\",\\\"InvertEnergy\\\":true},{\\\"Name\\\":\\\"CP Three\\\",\\\"Value\\\":\\\"44\\\",\\\"InvertEnergy\\\":false}]\",\"Behaviours\":[],\"tags\":[]}]\""));
     }
 
-    public void GetFreeCurrencyBalance(string userID, int accessLocation, Action<string> callback)
+    public void GetFreeCurrencyBalance(int accessLocation, Action<string> callback)
     {
         callback(ServiceConverter.ConvertToString("\"1337\""));
     }
 
-    public void GetPaidCurrencyBalance(string userID, Action<string> callback)
+    public void GetPaidCurrencyBalance(Action<string> callback)
     {
 
     }
 
-    public void RegisterGameSession(Guid userID, int instanceID, Action<Guid> callback)
+    public void RegisterGameSession(int instanceID, Action<Guid> callback)
     {
 
     }
@@ -59,7 +59,7 @@ public class MockWebItemService : MonoBehaviour, IServiceCalls
         callback(ServiceConverter.ConvertToListRecipeInfo("\"[{\"ID\":280,\"Name\":\"Pistol\",\"Energy\":1073,\"Detail\":\"[{\\\"Name\\\":\\\"Damage\\\",\\\"Value\\\":30,\\\"InvertEnergy\\\":false},{\\\"Name\\\":\\\"Fire Rate\\\",\\\"Value\\\":0.3}]\",\"Description\":\"Standard issue firearm.\",\"Image\":\"https:\\/\\/socialplay.blob.core.windows.net\\/itemimages\\/2b828b8e-8c1e-4090-a0bc-c1677e258eba.png\",\"Recipe\":[{\"ID\":333,\"Amount\":59,\"Energy\":120,\"Image\":\"https:\\/\\/socialplay.blob.core.windows.net\\/itemimages\\/2b828b8e-8c1e-4090-a0bc-c1677e258eba.png\",\"Name\":\"Nuts\"},{\"ID\":311,\"Amount\":41,\"Energy\":40,\"Image\":\"https:\\/\\/socialplay.blob.core.windows.net\\/itemimages\\/2b828b8e-8c1e-4090-a0bc-c1677e258eba.png\",\"Name\":\"Wood\"}]},{\"ID\":282,\"Name\":\"Shotgun\",\"Energy\":1600,\"Detail\":\"[{\\\"Name\\\":\\\"Damage\\\",\\\"Value\\\":80,\\\"InvertEnergy\\\":false},{\\\"Name\\\":\\\"Fire Rate\\\",\\\"Value\\\":1}]\",\"Description\":\"Standard issue shotgun with a 4 bullet spread.\",\"Image\":\"https:\\/\\/socialplay.blob.core.windows.net\\/itemimages\\/2b828b8e-8c1e-4090-a0bc-c1677e258eba.png\",\"Recipe\":[{\"ID\":334,\"Amount\":50,\"Energy\":210,\"Image\":\"https:\\/\\/socialplay.blob.core.windows.net\\/itemimages\\/2b828b8e-8c1e-4090-a0bc-c1677e258eba.png\",\"Name\":\"Steel Plate\"},{\"ID\":333,\"Amount\":25,\"Energy\":120,\"Image\":\"https:\\/\\/socialplay.blob.core.windows.net\\/itemimages\\/2b828b8e-8c1e-4090-a0bc-c1677e258eba.png\",\"Name\":\"Nuts\"},{\"ID\":311,\"Amount\":25,\"Energy\":40,\"Image\":\"https:\\/\\/socialplay.blob.core.windows.net\\/itemimages\\/2b828b8e-8c1e-4090-a0bc-c1677e258eba.png\",\"Name\":\"Wood\"}]}]\""));
     }
 
-    public void StoreItemPurchase(string URL, Guid userID, int itemID, int amount, string paymentType, int saveLocation, Action<string> callback)
+    public void StoreItemPurchase(int itemID, int amount, string paymentType, int saveLocation, Action<string> callback)
     {
 
     }
@@ -69,12 +69,12 @@ public class MockWebItemService : MonoBehaviour, IServiceCalls
         callback(ServiceConverter.ConvertToListItemBundle("\"[{\"ID\":1,\"Name\":\"Test Bundle\",\"Description\":\"Test bundle description\",\"Image\":\"\",\"CreditPrice\":5,\"CoinPrice\":100,\"items\":[{\"Quantity\":5,\"Name\":\"Class1Item1\",\"Image\":\"https:\\/\\/socialplay.blob.core.windows.net\\/itemimages\\/2b828b8e-8c1e-4090-a0bc-c1677e258eba.png\",\"Detail\":\"[{\\\"Name\\\":\\\"CP One\\\",\\\"Value\\\":5,\\\"InvertEnergy\\\":false},{\\\"Name\\\":\\\"CP Two\\\",\\\"Value\\\":20,\\\"InvertEnergy\\\":true}]\",\"Description\":\"\",\"Quality\":1,\"Behaviours\":[]},{\"Quantity\":8,\"Name\":\"Class1Item2\",\"Image\":\"https:\\/\\/socialplay.blob.core.windows.net\\/itemimages\\/2b828b8e-8c1e-4090-a0bc-c1677e258eba.png\",\"Detail\":\"[{\\\"Name\\\":\\\"CP One\\\",\\\"Value\\\":25,\\\"InvertEnergy\\\":false},{\\\"Name\\\":\\\"CP Two\\\",\\\"Value\\\":2,\\\"InvertEnergy\\\":true}]\",\"Description\":\"\",\"Quality\":1,\"Behaviours\":[]},{\"Quantity\":3,\"Name\":\"Class2Item1\",\"Image\":\"https:\\/\\/socialplay.blob.core.windows.net\\/itemimages\\/2b828b8e-8c1e-4090-a0bc-c1677e258eba.png\",\"Detail\":\"[{\\\"Name\\\":\\\"CP One\\\",\\\"Value\\\":\\\"20\\\",\\\"InvertEnergy\\\":false},{\\\"Name\\\":\\\"CP Two\\\",\\\"Value\\\":\\\"19\\\",\\\"InvertEnergy\\\":false}]\",\"Description\":\"\",\"Quality\":1,\"Behaviours\":[]}],\"State\":1},{\"ID\":2,\"Name\":\"1 Item Test Bundle\",\"Description\":\"Bundle containing a single item\",\"Image\":\"\",\"CreditPrice\":1,\"CoinPrice\":10,\"items\":[{\"Quantity\":100,\"Name\":\"Class1Item2\",\"Image\":\"https:\\/\\/socialplay.blob.core.windows.net\\/itemimages\\/2b828b8e-8c1e-4090-a0bc-c1677e258eba.png\",\"Detail\":\"[{\\\"Name\\\":\\\"CP One\\\",\\\"Value\\\":25,\\\"InvertEnergy\\\":false},{\\\"Name\\\":\\\"CP Two\\\",\\\"Value\\\":2,\\\"InvertEnergy\\\":true}]\",\"Description\":\"\",\"Quality\":1,\"Behaviours\":[]}],\"State\":1}]\""));
     }
 
-    public void PurchaseItemBundles(Guid UserID, int bundleID, string paymentType, int location, Action<string> callback)
+    public void PurchaseItemBundles(int bundleID, string paymentType, int location, Action<string> callback)
     {
 
     }
 
-    public void GetCreditBundles(int platform, Action<List<CreditBundleItem>> callback)
+    public void GetCreditBundles(SocialPlayPlatform platform, Action<List<CreditBundleItem>> callback)
     {
         callback(ServiceConverter.ConvertToListCreditBundleItem("\"[{\"ID\":1,\"Name\":\"15 Credits\",\"Image\":null,\"Description\":null,\"Cost\":1.00,\"CreditAmount\":15},{\"ID\":2,\"Name\":\"30 Credits\",\"Image\":null,\"Description\":null,\"Cost\":2.00,\"CreditAmount\":30},{\"ID\":3,\"Name\":\"75 Credits\",\"Image\":null,\"Description\":null,\"Cost\":5.00,\"CreditAmount\":75},{\"ID\":4,\"Name\":\"150 Credits\",\"Image\":null,\"Description\":null,\"Cost\":10.00,\"CreditAmount\":150},{\"ID\":5,\"Name\":\"300 Credits\",\"Image\":null,\"Description\":null,\"Cost\":20.00,\"CreditAmount\":300},{\"ID\":6,\"Name\":\"750 Credits\",\"Image\":null,\"Description\":null,\"Cost\":50.00,\"CreditAmount\":750}]\""));
     }
@@ -119,27 +119,27 @@ public class MockWebItemService : MonoBehaviour, IServiceCalls
 
     }
 
-    public void AddInstantCraftToQueue(Guid UserID, int ItemID, int Amount, List<KeyValuePair<string, int>> ItemIngredients, Action<string> callback)
+    public void AddInstantCraftToQueue(int ItemID, int Amount, List<KeyValuePair<string, int>> ItemIngredients, Action<string> callback)
     {
 
     }
 
-    public void Login(string userEmail, string password, Action<SP.UserResponse> callback)
+    public void Login(string userEmail, string password, Action<UserResponse> callback)
     {
         callback(ServiceConverter.ConvertToSPLoginResponse("\"{\"code\":0,\"message\":\"{\\\"ID\\\":\\\"1645c50a-538c-45b5-97f7-492b448f3c20\\\",\\\"name\\\":\\\"Test User\\\",\\\"email\\\":\\\"Testuser@gmail.com\\\"}\"}\""));
     }
 
-    public void Register(string userEmail, string password, string userName, Action<SP.UserResponse> callback)
+    public void Register(string userEmail, string password, string userName, Action<UserResponse> callback)
     {
 
     }
 
-    public void ForgotPassword(string userEmail, Action<SP.UserResponse> callback)
+    public void ForgotPassword(string userEmail, Action<UserResponse> callback)
     {
 
     }
 
-    public void ResendVerificationEmail(string userEmail, Action<SP.UserResponse> callback)
+    public void ResendVerificationEmail(string userEmail, Action<UserResponse> callback)
     {
 
     }

@@ -4,14 +4,14 @@ using Newtonsoft.Json.Linq;
 
 public class StoreItemTooltipSetup : MonoBehaviour, ITooltipSetup
 {
-    StoreItem item;
+	UIStoreItem item;
 
     public string Setup()
     {
-        item = GetComponent<StoreItem>();
-        string formated = "[" + NGUIText.EncodeColor(GetColorQuality(1)) + "]" + item.storeItemInfo.itemName;
+		item = GetComponent<UIStoreItem>();
+        string formated = "[" + NGUIText.EncodeColor(GetColorQuality(1)) + "]" + item.storeItem.itemName;
 
-        foreach(StoreItemDetail detail in item.storeItemInfo.itemDetail)
+		foreach (StoreItemDetail detail in item.storeItem.itemDetail)
         {
             Debug.Log(detail.propertyName);
             formated = string.Format("{0}\n [" + NGUIText.EncodeColor(Color.white) + "]{1}: {2}", formated, detail.propertyName, detail.propertyValue.ToString());

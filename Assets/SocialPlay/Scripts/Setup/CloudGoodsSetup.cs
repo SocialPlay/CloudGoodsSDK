@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Collections;
 using System;
-using CloudGoods;
 
 
 public class CloudGoodsSetup : MonoBehaviour
@@ -10,16 +9,14 @@ public class CloudGoodsSetup : MonoBehaviour
 
     void Start()
     {
-        WebPlatformLink.OnRecievedUser += OnReceivedSocialPlayUser;
+       SP.OnUserAuthorized += OnReceivedSocialPlayUser;
 
         WebPlatformLink webplatformLink = new WebPlatformLink();
         webplatformLink.Initiate();
     }
 
-    void OnReceivedSocialPlayUser(SP.UserInfo socialplayMsg)
+    void OnReceivedSocialPlayUser(SocialPlayUser socialplayMsg)
     {
-        new ItemSystemGameData(SP.AppID, socialplayMsg.userGuid, 1, Guid.NewGuid().ToString(), socialplayMsg.userName, socialplayMsg.userEmail);
-
         if(CloudGoodsInitialized != null)
             CloudGoodsInitialized(true);
     }

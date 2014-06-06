@@ -9,7 +9,7 @@ public class TestConvertToStoreItems : MonoBehaviour {
 	    SP.GetStoreItems(OnReceivedStoreItems);
 	}
 	
-	void OnReceivedStoreItems(List<StoreItemInfo> storeItemInfo)
+	void OnReceivedStoreItems(List<StoreItem> storeItemInfo)
     {
         if (storeItemInfo[0].ID == 409)
             IntegrationTest.Pass(gameObject);
