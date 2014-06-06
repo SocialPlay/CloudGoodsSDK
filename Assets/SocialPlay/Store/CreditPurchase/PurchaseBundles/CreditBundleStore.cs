@@ -15,18 +15,22 @@ using System.Collections.Generic;
 
 public class CreditBundleStore : MonoBehaviour
 {
+    public PlatformPurchase platformPurchase;
     public GameObject Grid;
-    //public CurrencyBalance currencyBalance;
     public PurchaseResponsePopupHandler purchaseResponseHandler;
 
     IGridLoader gridLoader;
-    public GameObject platformPurchaserObj;
     IPlatformPurchaser platformPurchasor;
     CreditBundleIcon creditBundleIcon = new CreditBundleIcon();
 
     public bool isInitialized = false;
 
-    void Start()
+    void Awake()
+    {
+        SP.OnRegisteredUserToSession += SP_OnRegisteredUserToSession;
+    }
+
+    void SP_OnRegisteredUserToSession(string obj)
     {
         Initialize();
     }
@@ -35,7 +39,7 @@ public class CreditBundleStore : MonoBehaviour
     {
         try
         {
-            platformPurchasor = (IPlatformPurchaser)platformPurchaserObj.GetComponent(typeof(IPlatformPurchaser));
+            platformPurchasor = GetPlatformPurchaser();
             platformPurchasor.RecievedPurchaseResponse += OnRecievedPurchaseResponse;
 
             GetBundle();
@@ -106,6 +110,27 @@ public class CreditBundleStore : MonoBehaviour
 
     }
 
+    IPlatformPurchaser GetPlatformPurchaser()
+    {
+        switch (platformPurchase)
+        {
+            case PlatformPurchase.android:
+                return new AndroidCreditPurchaser();
+            case PlatformPurchase.facebook:
+                return new FaceBookPurchaser();
+            default:
+                return null;
+        }
+    }
+
+}
+
+public enum PlatformPurchase
+{
+    android,
+    ios,
+    facebook,
+    kongergate
 }
 
 public class CreditBundleItem

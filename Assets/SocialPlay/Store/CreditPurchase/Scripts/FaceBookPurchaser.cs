@@ -24,9 +24,9 @@ class FaceBookPurchaser : IPlatformPurchaser
 
     public void OnReceivedPurchaseResponse(string data)
     {
-        string parsedData = Newtonsoft.Json.Linq.JToken.Parse(data).ToString();
+        Newtonsoft.Json.Linq.JToken parsedData = Newtonsoft.Json.Linq.JToken.Parse(data);
 
-        Debug.Log(parsedData);
+        Debug.Log(parsedData.ToString());
         if (RecievedPurchaseResponse != null)
             RecievedPurchaseResponse(data);
 
