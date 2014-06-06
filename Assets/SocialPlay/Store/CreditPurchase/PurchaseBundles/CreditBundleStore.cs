@@ -15,9 +15,8 @@ using System.Collections.Generic;
 
 public class CreditBundleStore : MonoBehaviour
 {
-    public PlatformPurchase platformPurchase;
+    public PlatformPurchase platformPurchase = PlatformPurchase.Facebook;
     public GameObject Grid;
-    public PurchaseResponsePopupHandler purchaseResponseHandler;
 
     IGridLoader gridLoader;
     IPlatformPurchaser platformPurchasor;
@@ -27,10 +26,10 @@ public class CreditBundleStore : MonoBehaviour
 
     void Awake()
     {
-        SP.OnRegisteredUserToSession += SP_OnRegisteredUserToSession;
+        SP.OnRegisteredUserToSession += OnRegisteredUserToSession;
     }
 
-    void SP_OnRegisteredUserToSession(string obj)
+    void OnRegisteredUserToSession(string obj)
     {
         Initialize();
     }
@@ -42,9 +41,7 @@ public class CreditBundleStore : MonoBehaviour
             platformPurchasor = GetPlatformPurchaser();
             platformPurchasor.RecievedPurchaseResponse += OnRecievedPurchaseResponse;
 
-            GetBundle();
-
-            SP.GetPaidCurrencyBalance(null);
+            SP.GetCreditBundles(3, OnPurchaseBundlesRecieved);
 
             isInitialized = true;
         }
@@ -59,17 +56,7 @@ public class CreditBundleStore : MonoBehaviour
         platformPurchasor.RecievedPurchaseResponse -= OnRecievedPurchaseResponse;
     }
 
-    public void GetBundle()
-    {
-        SP.GetCreditBundles(3, OnPurchaseBundlesRecieved);
-    }
-
     void OnPurchaseBundlesRecieved(List<CreditBundleItem> data)
-    {
-        InitializeGridWithBundles(data);
-    }
-
-    public void InitializeGridWithBundles(List<CreditBundleItem> data)
     {
         gridLoader = (IGridLoader)Grid.GetComponent(typeof(IGridLoader));
         gridLoader.ItemAdded += OnItemInGrid;
@@ -102,12 +89,11 @@ public class CreditBundleStore : MonoBehaviour
 
         if (dataObj["StatusCode"].ToString() == "1")
         {
-            //currencyBalance.SetItemPaidCurrency(dataObj["Balance"].ToString());
-            purchaseResponseHandler.HandlePurchaseSuccess();
+            NGUITools.Broadcast("OnPurchaseSuccess");
         }
         else
         {
-            purchaseResponseHandler.HandleGeneralPurchaseFail();
+            NGUITools.Broadcast("OnPurchaseFail");
         }
 
     }
@@ -116,30 +102,13 @@ public class CreditBundleStore : MonoBehaviour
     {
         switch (platformPurchase)
         {
-            case PlatformPurchase.android:
-                return new AndroidCreditPurchaser();
-            case PlatformPurchase.facebook:
-                return new FaceBookPurchaser();
+            case PlatformPurchase.Android:
+                return gameObject.AddComponent<AndroidCreditPurchaser>();
+            case PlatformPurchase.Facebook:
+                return gameObject.AddComponent<FaceBookPurchaser>();
             default:
                 return null;
         }
     }
 
-}
-
-public enum PlatformPurchase
-{
-    android,
-    ios,
-    facebook,
-    kongergate
-}
-
-public class CreditBundleItem
-{
-    public int Amount = 0;
-    public string Cost = "";
-    public int ID = 0;
-    public string CurrencyName = "";
-    public string CurrencyIcon = "";
 }

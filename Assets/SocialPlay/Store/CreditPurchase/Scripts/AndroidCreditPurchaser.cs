@@ -95,11 +95,3 @@ public class AndroidCreditPurchaser : MonoBehaviour, IPlatformPurchaser
     }
 
 }
-
-public class BundlePurchaseRequest
-{
-    public int BundleID;
-    public Guid UserID;
-    public string ReceiptToken;
-    public int PaymentPlatform;
-}

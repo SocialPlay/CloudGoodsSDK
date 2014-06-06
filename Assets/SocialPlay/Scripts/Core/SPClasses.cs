@@ -67,6 +67,16 @@ public class UserResponse
 
 #region Bundles
 
+public class CreditBundleItem
+{
+    public int Amount = 0;
+    public string Cost = "";
+    public int ID = 0;
+    public string CurrencyName = "";
+    public string CurrencyIcon = "";
+}
+
+
 public class ItemBundle
 {
     public int ID;
@@ -103,6 +113,14 @@ public class BundleItemDetails
     public int Value;
 
     public string BundleDetailName;
+}
+
+public class BundlePurchaseRequest
+{
+    public int BundleID;
+    public Guid UserID;
+    public string ReceiptToken;
+    public int PaymentPlatform;
 }
 
 #endregion

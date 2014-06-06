@@ -3,7 +3,7 @@ using UnityEngine;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 
-class FaceBookPurchaser : IPlatformPurchaser
+public class FaceBookPurchaser : MonoBehaviour, IPlatformPurchaser
 {
     public event Action<string> RecievedPurchaseResponse;
     public int currentBundleID = 0;

@@ -12,7 +12,7 @@ public class PurchaseResponsePopupHandler : MonoBehaviour
     public string purchaseSuccessTitle = "Item Purchased";
     public string purchaseSuccessMessage = "Purchase successful";
 
-    public void HandlePurchaseSuccess()
+    public void OnPurchaseSuccess()
     {
         //Logic For on purchase Success
         statusWindow.SetStatusMessage(purchaseSuccessTitle, purchaseSuccessMessage);
@@ -24,7 +24,7 @@ public class PurchaseResponsePopupHandler : MonoBehaviour
         statusWindow.SetStatusMessage("Error", "There was an error with your purchase");
     }
 
-    public void HandleGeneralPurchaseFail()
+    public void OnPurchaseFail()
     {
         //logic for CallWithGetTextureOnSameFrame purchase fail
     }

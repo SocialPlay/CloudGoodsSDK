@@ -31,3 +31,11 @@ public enum CurrencyType
 	Coins,
 	Credits
 }
+
+public enum PlatformPurchase
+{
+    Android,
+    IOS,
+    Facebook,
+    Kongergate
+}
