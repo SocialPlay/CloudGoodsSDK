@@ -82,9 +82,8 @@ public class CreditBundleStore : MonoBehaviour
         nguiItem.OnPurchaseRequest = OnPurchaseRequest;
     }
 
-    void OnPurchaseRequest()
+    void OnPurchaseRequest(string id)
     {
-        string id = UIButton.current.transform.parent.GetComponent<NGUIBundleItem>().Id;
         platformPurchasor.Purchase(id, 1, SP.user.userID.ToString());
     }
 

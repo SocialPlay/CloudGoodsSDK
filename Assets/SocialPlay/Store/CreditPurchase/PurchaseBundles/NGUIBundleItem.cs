@@ -48,7 +48,7 @@ public class NGUIBundleItem : MonoBehaviour
     public string Id { get; set; }
 
     public UIButton PurchaseButton;
-	public Action OnPurchaseRequest;
+	public Action<string> OnPurchaseRequest;
 
 	void Awake()
 	{
@@ -57,7 +57,7 @@ public class NGUIBundleItem : MonoBehaviour
 
 	void OnClick()
     {
-        if(OnPurchaseRequest != null) OnPurchaseRequest();
+        if(OnPurchaseRequest != null) OnPurchaseRequest(Id);
     }
 
 }
