@@ -38,7 +38,7 @@ class FaceBookPurchaser : IPlatformPurchaser
         bundlePurchaseRequest.ReceiptToken = parsedData["payment_id"].ToString();
 
         //TODO implement platform check for platform credit bundle purchase
-        bundlePurchaseRequest.PaymentPlatform = 3;
+        bundlePurchaseRequest.PaymentPlatform = 1;
 
         string bundleJsonString = JsonConvert.SerializeObject(bundlePurchaseRequest);
 
