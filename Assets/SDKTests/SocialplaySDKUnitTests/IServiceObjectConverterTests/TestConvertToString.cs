@@ -5,12 +5,12 @@ public class TestConvertToString : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        SP.GetFreeCurrencyBalance("", 0, OnStringCallback);
+        SP.GetFreeCurrencyBalance(0, OnStringCallback);
 	}
 
-    void OnStringCallback(string stringCallback)
+    void OnStringCallback(int stringCallback)
     {
-        if (stringCallback == "1337")
+        if (stringCallback == 1337)
             IntegrationTest.Pass(gameObject);
         else
             IntegrationTest.Fail(gameObject);

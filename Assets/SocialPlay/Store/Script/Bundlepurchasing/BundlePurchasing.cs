@@ -66,29 +66,29 @@ public class BundlePurchasing : MonoBehaviour {
         BundleDisplayGrid.repositionNow = true;
     }
 
-    private void ChangePurchaseButtonDisplay(int itemCreditCost, int itemCoinCost, SPBundle state)
+    private void ChangePurchaseButtonDisplay(int itemCreditCost, int itemCoinCost, SocialPlayBundle state)
     {
         switch (state)
         {
-            case SPBundle.CreditPurchasable:
+            case SocialPlayBundle.CreditPurchasable:
                 creditPurchaseButton.InsufficientFundsLabel.text = "Insufficent Funds";
-                creditPurchaseButton.SetState(itemCreditCost <= CurrencyBalance.paidCurrency);
+                creditPurchaseButton.SetState(itemCreditCost <= SP.paidCurrency);
                 coinPurchaseButton.InsufficientFundsLabel.text = "Credit Purchase Only";
                 coinPurchaseButton.SetState(false);
 
                 CreditAmount.text = itemCreditCost.ToString();
                 CoinAmount.text = "N/A";
                 break;
-            case SPBundle.CoinPurchasable:
+            case SocialPlayBundle.CoinPurchasable:
                 coinPurchaseButton.InsufficientFundsLabel.text = "Insufficent Funds";
-                coinPurchaseButton.SetState(itemCoinCost <= CurrencyBalance.freeCurrency);
+				coinPurchaseButton.SetState(itemCoinCost <= SP.freeCurrency);
                 creditPurchaseButton.InsufficientFundsLabel.text = "Coin Purchase Only";
                 creditPurchaseButton.SetState(false);
 
                 CreditAmount.text = "N/A";
                 CoinAmount.text = itemCoinCost.ToString();
                 break;
-            case SPBundle.Free:
+            case SocialPlayBundle.Free:
                 CreditAmount.text = "Free";
                 CoinAmount.text = "Free";
                 coinPurchaseButton.SetState(true);
@@ -97,8 +97,8 @@ public class BundlePurchasing : MonoBehaviour {
             default:
                 coinPurchaseButton.InsufficientFundsLabel.text = "Insufficent Funds";
                 creditPurchaseButton.InsufficientFundsLabel.text = "Insufficent Funds";
-                coinPurchaseButton.SetState(itemCoinCost <= CurrencyBalance.freeCurrency);
-                creditPurchaseButton.SetState(itemCreditCost <= CurrencyBalance.paidCurrency);
+                coinPurchaseButton.SetState(itemCoinCost <= SP.freeCurrency);
+                creditPurchaseButton.SetState(itemCreditCost <= SP.paidCurrency);
                 CreditAmount.text = itemCreditCost.ToString();
                 CoinAmount.text = itemCoinCost.ToString();
                 break;
@@ -121,13 +121,13 @@ public class BundlePurchasing : MonoBehaviour {
 
     public void PurchaseBundleWithCoin()
     {
-        SP.PurchaseItemBundles(ItemSystemGameData.UserID, currentItemBundle.ID, "Coins", purchaseContainerLocation, OnReceivedPurchaseCallback);
+        SP.PurchaseItemBundles(currentItemBundle.ID, CurrencyType.Coins, purchaseContainerLocation, OnReceivedPurchaseCallback);
         ClosePurchaseWindow();
     }
 
     public void PurchaseBundleWithCredit()
     {
-        SP.PurchaseItemBundles(ItemSystemGameData.UserID, currentItemBundle.ID, "Credits", purchaseContainerLocation, OnReceivedPurchaseCallback);
+		SP.PurchaseItemBundles(currentItemBundle.ID, CurrencyType.Credits, purchaseContainerLocation, OnReceivedPurchaseCallback);
         ClosePurchaseWindow();
     }
 

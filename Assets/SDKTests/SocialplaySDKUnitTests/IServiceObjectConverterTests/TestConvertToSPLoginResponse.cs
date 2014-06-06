@@ -9,7 +9,7 @@ public class TestConvertToSPLoginResponse : MonoBehaviour {
         SP.Login("", "", OnReceivedSPLoginResponse);
 	}
 
-    void OnReceivedSPLoginResponse(SP.UserResponse response)
+    void OnReceivedSPLoginResponse(UserResponse response)
     {
         if (response.code == 0)
             IntegrationTest.Pass(gameObject);

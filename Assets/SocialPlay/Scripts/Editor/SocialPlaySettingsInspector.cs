@@ -40,11 +40,9 @@ public class SocialPlaySettingsInspector : Editor
     static string[] derivedDBNames;
     static string[] derivedSpawnerNames;
 
-    //GUIContent myPageLink = new GUIContent("My Games", "Opens your games dashboard on the Player.IO web page");
     static GUIContent tutorialLink = new GUIContent("Tutorials", "Opens the Tutorial page in your browser.");
     static GUIContent devCenter = new GUIContent("Developer Portal", "Manage your items and recipes.");
     static GUIContent settingsContent = new GUIContent(" Settings", "Manage your game app settings");
-    //static public GUIContent newContent = new GUIContent(" Add New", iconNew, "Adds new item");
 
     /// <summary>
     /// Load mSettings.
@@ -110,12 +108,6 @@ public class SocialPlaySettingsInspector : Editor
         GUILayout.EndVertical();
 
         DrawGUI();
-
-        /*if (GUI.changed)
-        {
-            EditorUtility.SetDirty(target);
-            if(mDBGo != null) EditorUtility.SetDirty(mDBGo);
-        } */
     }
 
     static public void DrawGUI()
@@ -177,19 +169,66 @@ public class SocialPlaySettingsInspector : Editor
 
         string appId = EditorGUILayout.TextField("App ID", mSettings.appID);
         string appSecret = EditorGUILayout.TextField("App Secret", mSettings.appSecret);
+
+		EditorGUILayout.Separator();
+
+		GUILayout.Label("Urls", "BoldLabel");
         string url = EditorGUILayout.TextField("Url", mSettings.url);
         string bundlesUrl = EditorGUILayout.TextField("Bundles Url", mSettings.bundlesUrl);
+
+		EditorGUILayout.Separator();
+
+		GUILayout.Label("Android", "BoldLabel");
+		string androidKey = EditorGUILayout.TextField("Key", mSettings.androidKey);
+		EditorGUILayout.Separator();
+
+		GUILayout.BeginVertical("ShurikenEffectBg", GUILayout.MinHeight(20f));
+
+		EditorGUILayout.LabelField("Product Names", EditorStyles.boldLabel);
+
+		if (GUILayout.Button("Add New", GUILayout.Width(200)))
+			mSettings.androidProductNames.Add("");
+
+		for (int i = 0; i < mSettings.androidProductNames.Count; ++i)
+		{
+			GUILayout.BeginHorizontal();
+			GUI.backgroundColor = Color.white;
+			{
+				string iden = EditorGUILayout.TextField(mSettings.androidProductNames[i]);
+
+				GUI.backgroundColor = Color.red;
+				if (GUILayout.Button("X", GUILayout.Width(20f)))
+				{
+					mSettings.androidProductNames.RemoveAt(i);
+					--i;
+				}
+				else if (iden != mSettings.androidProductNames[i])
+				{					
+					mSettings.androidProductNames[i] = iden;
+					NGUIEditorTools.RegisterUndo("Android Product Name", mSettings);
+				}
+				GUI.backgroundColor = Color.white;
+			}
+			GUILayout.EndHorizontal();
+		}
+		EditorGUILayout.Separator();
+
+		GUILayout.EndVertical();
 
         if (mSettings.appID != appId ||
             mSettings.appSecret != appSecret ||
             mSettings.url != url ||
-            mSettings.bundlesUrl != bundlesUrl)
+            mSettings.bundlesUrl != bundlesUrl ||
+			mSettings.androidKey != androidKey)
         {
             mSettings.appID = appId;
             mSettings.appSecret = appSecret;
             mSettings.url = url;
-            mSettings.bundlesUrl = bundlesUrl;
+			mSettings.bundlesUrl = bundlesUrl;
+			mSettings.androidKey = androidKey;
+			NGUIEditorTools.RegisterUndo("Social Play Settings", mSettings);
         }
+		
 
         EditorGUILayout.Separator();
     }

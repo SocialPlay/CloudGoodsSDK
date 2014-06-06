@@ -22,13 +22,13 @@ public class FilterNewestItems
             throw new Exception("The display count should only be positive numbers.");
     }
 
-    public List<StoreItemInfo> FilterItems(List<StoreItemInfo> items, SortTimeType timeType, int displayCount, int allowedDifference)
+    public List<StoreItem> FilterItems(List<StoreItem> items, SortTimeType timeType, int displayCount, int allowedDifference)
     {
         int displayItemCounter = 0;
-        List<StoreItemInfo> filteredItems = new List<StoreItemInfo>();
+        List<StoreItem> filteredItems = new List<StoreItem>();
         itemDisplayCount = displayCount;
 
-        foreach (StoreItemInfo item in items)
+        foreach (StoreItem item in items)
         {
             displayItemCounter++;
             if (displayCount != 0 && displayItemCounter > displayCount) break;

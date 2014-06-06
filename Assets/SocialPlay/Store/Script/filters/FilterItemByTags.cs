@@ -16,11 +16,11 @@ public class FilterItemByTags : FilterItem
         filterBy = name;
     }
 
-    public override List<StoreItemInfo> FilterStoreList(List<StoreItemInfo> storeList)
+    public override List<StoreItem> FilterStoreList(List<StoreItem> storeList)
     {
-        List<StoreItemInfo> newStoreList = new List<StoreItemInfo>();
+        List<StoreItem> newStoreList = new List<StoreItem>();
 
-        foreach (StoreItemInfo storeitemInfo in storeList)
+        foreach (StoreItem storeitemInfo in storeList)
         {
             foreach(string tag in storeitemInfo.tags)
             {

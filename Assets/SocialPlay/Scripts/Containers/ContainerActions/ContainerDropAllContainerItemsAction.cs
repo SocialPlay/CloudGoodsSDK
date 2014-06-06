@@ -22,7 +22,7 @@ public class ContainerDropAllContainerItemsAction : ContainerActions
     {
         string convertedDropItems = ConvertContainerItemsToSerializedJsonObject();
 
-        SP.MoveItemStacks(convertedDropItems, ItemSystemGameData.UserID.ToString(), "Session", 0, MovedItems);
+        SP.MoveItemStacks(convertedDropItems, SP.user.userID.ToString(), "Session", 0, MovedItems);
     }
 
     void MovedItems(MoveMultipleItemsResponse moveItemResponses)

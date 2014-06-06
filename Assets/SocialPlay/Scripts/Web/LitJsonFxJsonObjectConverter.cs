@@ -165,18 +165,18 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter {
         return newString;
     }
 
-    public List<StoreItemInfo> ConvertToStoreItems(string dataString)
+    public List<StoreItem> ConvertToStoreItems(string dataString)
     {
         string storeString = ParseString(dataString);
 
-        List<StoreItemInfo> storeItems = new List<StoreItemInfo>();
+        List<StoreItem> storeItems = new List<StoreItem>();
 
         JsonData storeItemsJsonArray = LitJson.JsonMapper.ToObject(storeString);
 
 
         for (int i = 0; i < storeItemsJsonArray.Count; i++)
         {
-            StoreItemInfo storeItemInfo = new StoreItemInfo();
+            StoreItem storeItemInfo = new StoreItem();
             storeItemInfo.ID = int.Parse(storeItemsJsonArray[i]["ID"].ToString());
             storeItemInfo.itemName = storeItemsJsonArray[i]["Name"].ToString();
             storeItemInfo.itemID = int.Parse(storeItemsJsonArray[i]["ItemID"].ToString());
@@ -215,7 +215,7 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter {
         return storeItems;
     }
 
-    public SP.UserInfo ConvertToUserInfo(string dataString)
+	public SocialPlayUser ConvertToUserInfo(string dataString)
     {
         Debug.Log(dataString);
 
@@ -225,7 +225,7 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter {
 
         Debug.Log(data["userGuid"].ToString());
 
-        SP.UserInfo userinfo = new SP.UserInfo(data["userGuid"].ToString(), data["userName"].ToString(), "");
+		SocialPlayUser userinfo = new SocialPlayUser(data["userGuid"].ToString(), data["userName"].ToString(), "");
 
         if (data["userEmail"] != null) userinfo.userEmail = data["userEmail"].ToString();
 
@@ -308,7 +308,7 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter {
             itemBundle.Description = itemBundleData[i]["Description"].ToString();
             itemBundle.CreditPrice = int.Parse(itemBundleData[i]["CreditPrice"].ToString());
             itemBundle.CoinPrice = int.Parse(itemBundleData[i]["CoinPrice"].ToString());
-            itemBundle.State = (SPBundle)Enum.Parse(typeof(SPBundle), itemBundleData[i]["State"].ToString());
+            itemBundle.State = (SocialPlayBundle)Enum.Parse(typeof(SocialPlayBundle), itemBundleData[i]["State"].ToString());
 
             //TODO Implement itembundle behaviours
 
@@ -372,7 +372,7 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter {
         return infos;
     }
 
-    public SP.UserResponse ConvertToSPLoginResponse(string dataString)
+    public UserResponse ConvertToSPLoginResponse(string dataString)
     {
         string parsedString = ParseString(dataString);
 
@@ -380,15 +380,15 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter {
 
         JsonData data = LitJson.JsonMapper.ToObject(parsedString);
 
-		SP.UserInfo userInfo = null;
+		SocialPlayUser userInfo = null;
 
 		if (data["code"].ToString() == "0")
 		{
 			JsonData userData = LitJson.JsonMapper.ToObject(data["message"].ToString());
-			userInfo = new SP.UserInfo(userData["ID"].ToString(), userData["name"].ToString(), userData["email"].ToString());
+			userInfo = new SocialPlayUser(userData["ID"].ToString(), userData["name"].ToString(), userData["email"].ToString());
 		}
 
-        SP.UserResponse responce = new SP.UserResponse(int.Parse(data["code"].ToString()), data["message"].ToString(), userInfo);
+        UserResponse responce = new UserResponse(int.Parse(data["code"].ToString()), data["message"].ToString(), userInfo);
 
         return responce;
     }

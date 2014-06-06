@@ -13,7 +13,7 @@ public class DisplayNewestItems : MonoBehaviour
     public int timeDifference = 5;
 
     FilterNewestItems newestItemFilter = new FilterNewestItems();
-    List<StoreItemInfo> items = new List<StoreItemInfo>();
+    List<StoreItem> items = new List<StoreItem>();
 
     void Start()
     {
@@ -23,7 +23,7 @@ public class DisplayNewestItems : MonoBehaviour
         SP.GetStoreItems(OnReceivedStoreItems);
     }
 
-    void OnReceivedStoreItems(List<StoreItemInfo> storeItems)
+    void OnReceivedStoreItems(List<StoreItem> storeItems)
     {
             for (int i = 0; i < storeItems.Count; i++)
             {
@@ -36,7 +36,7 @@ public class DisplayNewestItems : MonoBehaviour
 
     void FilterItemsByDateTime()
     {
-        List<StoreItemInfo> newestItems = newestItemFilter.FilterItems(items, timeFilterType, itemDisplayCount, timeDifference);
+        List<StoreItem> newestItems = newestItemFilter.FilterItems(items, timeFilterType, itemDisplayCount, timeDifference);
 
         storeLoader.LoadStoreWithPaging(newestItems, 0);
     }

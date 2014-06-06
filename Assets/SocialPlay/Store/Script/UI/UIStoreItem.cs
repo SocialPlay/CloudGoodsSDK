@@ -4,28 +4,28 @@ using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System;
 
-public class StoreItem : MonoBehaviour
+public class UIStoreItem : MonoBehaviour
 {
-    public StoreItemInfo storeItemInfo;
+	public int itemId = 0;
+	public GameObject loader;
+	public StoreItem storeItem { get; private set; }
 
-    public UISprite itemImageSprite;
-    UIButton button = null;
+    //public UISprite itemImageSprite;
+	
 
-    void Awake()
-    {
-        if (button == null)
-        {
+	void Awake()
+	{
+		NGUITools.SetActive(loader, true);
+		if (itemId != 0)
+		{
+			SP.OnStoreListLoaded += OnStoreListLoaded;
+		}
+	}
 
-        }
-    }
-
-
-    public void SetItemInfo(StoreItemInfo newStoreItemInfo)
-    {
-        storeItemInfo = newStoreItemInfo;
-
-        GetItemTexture(storeItemInfo.imageURL);
-    }
+	void OnStoreListLoaded(List<StoreItem> storeList)
+	{
+		SetItemData(SP.GetStoreItem(itemId));
+	}
 
     void GetItemTexture(string URL)
     {
@@ -39,10 +39,17 @@ public class StoreItem : MonoBehaviour
         yield return www;
         UITexture uiTexture = gameObject.GetComponentInChildren<UITexture>();
         uiTexture.mainTexture = www.texture;
+		NGUITools.SetActive(loader, false);
     }
 
+	public virtual void SetItemData(StoreItem item)
+	{
+		storeItem = item;
+		GetItemTexture(storeItem.imageURL);
+	}
 
-    public void SetItemImage(int newImageName)
+
+    /*public void SetItemImage(int newImageName)
     {
         string imageName = newImageName.ToString();
 
@@ -58,26 +65,5 @@ public class StoreItem : MonoBehaviour
             }
         }
     }
-
-}
-
-public class StoreItemInfo
-{
-    public int ID = 0;
-    public string itemName = "";
-    public List<StoreItemDetail> itemDetail = new List<StoreItemDetail>();
-    public DateTime addedDate;
-    public string behaviours;
-    public List<string> tags;
-    public int itemID = 0;
-    public int creditValue = 0;
-    public int coinValue = 0;
-    public string imageURL = "";
-}
-
-public class StoreItemDetail
-{
-    public string propertyName;
-    public int propertyValue;
-    public bool invertEnergy;
+	*/
 }

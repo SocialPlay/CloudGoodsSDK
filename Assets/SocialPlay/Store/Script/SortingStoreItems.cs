@@ -20,7 +20,7 @@ public class SortingStoreItems : MonoBehaviour {
         }
     }
 
-    void SortPageByType(List<StoreItemInfo> storeItems, string propertySort, bool isDesc)
+    void SortPageByType(List<StoreItem> storeItems, string propertySort, bool isDesc)
     {
         for (int x = 0; x < storeItems.Count; x++)
         {

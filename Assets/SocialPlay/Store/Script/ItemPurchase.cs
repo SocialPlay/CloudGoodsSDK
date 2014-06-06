@@ -7,9 +7,7 @@ public class ItemPurchase : MonoBehaviour
 
     public static event Action<string> OnPurchasedItem;
 
-    StoreItem itemInfo;
-
-    public CurrencyBalance currencyBalance;
+	UIStoreItem itemInfo;
 
     public UILabel itemNameDisplay;
     public UILabel itemCreditCostDisplay;
@@ -92,39 +90,38 @@ public class ItemPurchase : MonoBehaviour
 
     private void ChangePurchaseButtonDisplay(int itemCreditCost, int itemCoinCost)
     {
-        coinPurchaseButton.SetState(itemCoinCost <= CurrencyBalance.freeCurrency);
-        creditPurchaseButton.SetState(itemCreditCost <= CurrencyBalance.paidCurrency);
+        coinPurchaseButton.SetState(itemCoinCost <= SP.freeCurrency);
+        creditPurchaseButton.SetState(itemCreditCost <= SP.paidCurrency);
     }
 
-    public void DisplayItemPurchasePanel(StoreItem item)
+    public void DisplayItemPurchasePanel(UIStoreItem item)
     {
         itemInfo = item;
-        itemNameDisplay.text = item.storeItemInfo.itemName;
-        itemCreditCostDisplay.text = item.storeItemInfo.creditValue.ToString();
-        itemCoinCostDisplay.text = item.storeItemInfo.coinValue.ToString();
+		itemNameDisplay.text = item.storeItem.itemName;
+		itemCreditCostDisplay.text = item.storeItem.creditValue.ToString();
+        itemCoinCostDisplay.text = item.storeItem.coinValue.ToString();
         itemQuantityAmount.text = "1";
 
         itemTexture.mainTexture = item.gameObject.GetComponentInChildren<UITexture>().mainTexture;
 
-        ChangePurchaseButtonDisplay(item.storeItemInfo.creditValue, item.storeItemInfo.coinValue);
+        ChangePurchaseButtonDisplay(item.storeItem.creditValue, item.storeItem.coinValue);
     }
 
     void PurchaseItemWithCredits(GameObject button)
     {
-        SP.StoreItemPurchase("http://socialplaywebservice.azurewebsites.net/publicservice.svc/", ItemSystemGameData.UserID, itemInfo.storeItemInfo.itemID, int.Parse(itemQuantityAmount.text), "Credits", currencyBalance.AccessLocation, OnReceivedItemPurchaseConfirmation);
+        SP.StoreItemPurchase(itemInfo.storeItem.itemID, int.Parse(itemQuantityAmount.text), CurrencyType.Credits, 0, OnReceivedItemPurchaseConfirmation);
         ClosePanel();
     }
 
     void PurchaseItemWithCoins(GameObject button)
     {
-        SP.StoreItemPurchase("http://socialplaywebservice.azurewebsites.net/publicservice.svc/", ItemSystemGameData.UserID, itemInfo.storeItemInfo.itemID, int.Parse(itemQuantityAmount.text), "Coins", currencyBalance.AccessLocation, OnReceivedItemPurchaseConfirmation);
+		SP.StoreItemPurchase(itemInfo.storeItem.itemID, int.Parse(itemQuantityAmount.text), CurrencyType.Coins, 0, OnReceivedItemPurchaseConfirmation);
         ClosePanel();
     }
-
+	
     void OnReceivedItemPurchaseConfirmation(string msg)
     {
         purchaseConfirmationPanel.SetActive(true);
-        currencyBalance.GetCurrencyBalance("");
         ReloadContainerItems();
 
         if(OnPurchasedItem != null)

@@ -42,9 +42,9 @@ public class NewtonsoftJsonObjectConverter : IServiceObjectConverter {
         return convertedString;
     }
 
-    public List<StoreItemInfo> ConvertToStoreItems(string dataString)
+    public List<StoreItem> ConvertToStoreItems(string dataString)
     {
-        List<StoreItemInfo> storeItems = new List<StoreItemInfo>();
+        List<StoreItem> storeItems = new List<StoreItem>();
 
         JToken token = JToken.Parse(dataString);
 
@@ -53,7 +53,7 @@ public class NewtonsoftJsonObjectConverter : IServiceObjectConverter {
 
         for (int i = 0; i < storeItemsJsonArray.Count; i++)
         {
-            StoreItemInfo storeItemInfo = new StoreItemInfo();
+            StoreItem storeItemInfo = new StoreItem();
             storeItemInfo.ID = int.Parse(storeItemsJsonArray[i]["ID"].ToString());
             storeItemInfo.itemName = storeItemsJsonArray[i]["Name"].ToString();
             storeItemInfo.itemID = int.Parse(storeItemsJsonArray[i]["ItemID"].ToString());
@@ -93,10 +93,10 @@ public class NewtonsoftJsonObjectConverter : IServiceObjectConverter {
         return storeItems;
     }
 
-    public SP.UserInfo ConvertToUserInfo(string ObjectData)
+    public SocialPlayUser ConvertToUserInfo(string ObjectData)
     {
         JToken token = JToken.Parse(ObjectData);
-        SP.UserInfo userGuid = JsonConvert.DeserializeObject<SP.UserInfo>(token.ToString());
+		SocialPlayUser userGuid = JsonConvert.DeserializeObject<SocialPlayUser>(token.ToString());
 
         return userGuid;
     }
@@ -229,13 +229,13 @@ public class NewtonsoftJsonObjectConverter : IServiceObjectConverter {
         return infos;
     }
 
-    public SP.UserResponse ConvertToSPLoginResponse(string dataString)
+    public UserResponse ConvertToSPLoginResponse(string dataString)
     {
         JToken token = JToken.Parse(dataString);
 
-        SP.UserResponse responce = Newtonsoft.Json.JsonConvert.DeserializeObject<SP.UserResponse>(token.ToString());
+        UserResponse responce = Newtonsoft.Json.JsonConvert.DeserializeObject<UserResponse>(token.ToString());
 
-        SP.UserInfo userinfo = Newtonsoft.Json.JsonConvert.DeserializeObject<SP.UserInfo>(responce.message);
+		SocialPlayUser userinfo = Newtonsoft.Json.JsonConvert.DeserializeObject<SocialPlayUser>(responce.message);
 
         responce.userInfo = userinfo;
 

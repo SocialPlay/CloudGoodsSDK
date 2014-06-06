@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public enum SPPlatforms
+public enum SocialPlayPlatform
 {
     Facebook = 1,
     SocialPlay = 2,
@@ -10,7 +10,7 @@ public enum SPPlatforms
     Custom = 5
 }
 
-public enum SPBundle
+public enum SocialPlayBundle
 {
     CreditCoinPurchaseable = 1,
     CreditPurchasable = 2,
@@ -24,4 +24,10 @@ public enum SocialPlayMessage
     OnSPLogout,
     OnForgotPassword,
     OnVerificationSent,
+}
+
+public enum CurrencyType
+{
+	Coins,
+	Credits
 }

@@ -12,9 +12,9 @@ public interface IServiceObjectConverter {
 
     string ConvertToString(string dataString);
 
-    List<StoreItemInfo> ConvertToStoreItems(string dataString);
+    List<StoreItem> ConvertToStoreItems(string dataString);
 
-    SP.UserInfo ConvertToUserInfo(string dataString);
+    SocialPlayUser ConvertToUserInfo(string dataString);
 
     List<RecipeInfo> ConvertToListRecipeInfo(string dataString);
 
@@ -24,6 +24,6 @@ public interface IServiceObjectConverter {
 
     MoveMultipleItemsResponse ConvertToMoveMultipleItemsResponse(string dataString);
 
-    SP.UserResponse ConvertToSPLoginResponse(string dataString);
+    UserResponse ConvertToSPLoginResponse(string dataString);
 
 }

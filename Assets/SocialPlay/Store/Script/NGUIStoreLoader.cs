@@ -6,20 +6,19 @@ using Newtonsoft.Json.Linq;
 
 public class NGUIStoreLoader : MonoBehaviour
 {
+	public UIGrid grid;
     public GameObject itemPurchasePanel;
 
     public GameObject pageButtonPrefab;
     public GameObject itemButtonPrefab;
-    public GameObject itemGridObject;
     public GameObject pageGridObject;
 
     public int maxGridAmount = 32;
 
-    UIGrid itemGrid;
     UIGrid pageGrid;
 
-    List<StoreItemInfo> items = new List<StoreItemInfo>();
-    List<StoreItemInfo> filteredList = new List<StoreItemInfo>();
+    List<StoreItem> items = new List<StoreItem>();
+    List<StoreItem> filteredList = new List<StoreItem>();
 
     List<GameObject> currentPageItems = new List<GameObject>();
 
@@ -29,16 +28,16 @@ public class NGUIStoreLoader : MonoBehaviour
     void Awake()
     {
         pageGrid = pageGridObject.GetComponent<UIGrid>();
-        itemGrid = itemGridObject.GetComponent<UIGrid>();
+		SP.OnStoreListLoaded += OnStoreListLoaded;
     }
 
-    public void SetMasterList(List<StoreItemInfo> listItems)
+	void OnStoreListLoaded(List<StoreItem> listItems)
     {
         items = listItems;
         LoadStoreWithPaging(items, 0);
     }
 
-    public void LoadStoreWithPaging(List<StoreItemInfo> listItems, int pageNum)
+    public void LoadStoreWithPaging(List<StoreItem> listItems, int pageNum)
     {
         filteredList = listItems;
 
@@ -53,18 +52,16 @@ public class NGUIStoreLoader : MonoBehaviour
 
         for (int i = pageNum * maxGridAmount; i < (pageNum * maxGridAmount + PageMax); i++)
         {
-            GameObject newItem = (GameObject)GameObject.Instantiate(itemButtonPrefab);
-            newItem.transform.parent = itemGridObject.transform;
-            newItem.transform.localScale = new Vector3(1, 1, 1);
+			GameObject newItem = NGUITools.AddChild(grid.gameObject, itemButtonPrefab);
             currentPageItems.Add(newItem);
 
-            StoreItem itemInfo = newItem.GetComponent<StoreItem>();
-            itemInfo.SetItemInfo(listItems[i]);
+			UIStoreItem itemInfo = newItem.GetComponent<UIStoreItem>();
+            itemInfo.SetItemData(listItems[i]);
 
             UIEventListener.Get(itemInfo.gameObject).onClick += DisplayItemPurchasePanel;
         }
 
-        itemGrid.repositionNow = true;
+        grid.repositionNow = true;
 
         SetPageButtons(GetPageAmount(listItems.Count));
     }
@@ -87,7 +84,7 @@ public class NGUIStoreLoader : MonoBehaviour
 
     private void ClearCurrentGrid()
     {
-        itemGridObject.transform.DetachChildren();
+		grid.transform.DetachChildren();
 
         foreach (GameObject gridItemObj in currentPageItems)
         {
@@ -96,7 +93,7 @@ public class NGUIStoreLoader : MonoBehaviour
 
         currentPageItems.Clear();
 
-        itemGrid.Reposition();
+        grid.Reposition();
     }
 
     int GetPageAmount(int itemCount)
@@ -160,7 +157,7 @@ public class NGUIStoreLoader : MonoBehaviour
         }
     }
 
-    public List<StoreItemInfo> GetStoreItemList()
+    public List<StoreItem> GetStoreItemList()
     {
         return items;
     }
@@ -169,6 +166,6 @@ public class NGUIStoreLoader : MonoBehaviour
     {
         itemPurchasePanel.SetActive(true);
 
-        itemPurchasePanel.GetComponent<ItemPurchase>().DisplayItemPurchasePanel(itemButton.GetComponent<StoreItem>());
+		itemPurchasePanel.GetComponent<ItemPurchase>().DisplayItemPurchasePanel(itemButton.GetComponent<UIStoreItem>());
     }
 }

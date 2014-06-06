@@ -85,9 +85,9 @@ public class NGUI_SPLogin : MonoBehaviour
 
         if (!string.IsNullOrEmpty(PlayerPrefs.GetString("SocialPlay_UserGuid")))
         {
-            SP.UserInfo userInfo = new SP.UserInfo(PlayerPrefs.GetString("SocialPlay_UserGuid"), PlayerPrefs.GetString("SocialPlay_UserName"), PlayerPrefs.GetString("SocialPlay_UserEmail"));
+			SocialPlayUser userInfo = new SocialPlayUser(PlayerPrefs.GetString("SocialPlay_UserGuid"), PlayerPrefs.GetString("SocialPlay_UserName"), PlayerPrefs.GetString("SocialPlay_UserEmail"));
 
-            SP.OnUserAuthorized(userInfo);
+            SP.AuthorizeUser(userInfo);
 
             RecivedUserGuid(userInfo);
         }
@@ -95,7 +95,7 @@ public class NGUI_SPLogin : MonoBehaviour
 
     #region webservice responce events
 
-	void RecivedUserGuid(SP.UserInfo obj)
+	void RecivedUserGuid(SocialPlayUser obj)
     {
         if (autoLoginToggle != null && autoLoginToggle.value == true)
         {
@@ -110,13 +110,13 @@ public class NGUI_SPLogin : MonoBehaviour
         ContainerKeybinding.EnableKeybinding("Login");
     }
 
-    void ResentVerificationResponce(SP.UserResponse responce)
+    void ResentVerificationResponce(UserResponse responce)
     {
         resendVerificationTextObject.SetActive(false);
         loginErrorLabel.text = responce.message;
     }
 
-    void ForgotPasswordResponce(SP.UserResponse responce)
+    void ForgotPasswordResponce(UserResponse responce)
     {
         //resendVerificationTextObject.SetActive(false);
         //loginErrorLabel.text = responce.message;
@@ -125,7 +125,7 @@ public class NGUI_SPLogin : MonoBehaviour
 
     }
 
-    void RecivedLoginResponce(SP.UserResponse recivedMessage)
+    void RecivedLoginResponce(UserResponse recivedMessage)
     {
         if (recivedMessage.code == 3)
         {
@@ -137,7 +137,7 @@ public class NGUI_SPLogin : MonoBehaviour
         loginErrorLabel.text = recivedMessage.message;
     }
 
-    void RegisterMessageResponce(SP.UserResponse responce)
+    void RegisterMessageResponce(UserResponse responce)
     {
         resendVerificationTextObject.SetActive(false);
 

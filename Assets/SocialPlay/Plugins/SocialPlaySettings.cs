@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 [System.Serializable]
 public class SocialPlaySettings : ScriptableObject
@@ -20,6 +21,8 @@ public class SocialPlaySettings : ScriptableObject
     public ScreenType screen;
     public string url = "https://SocialPlayWebService.azurewebsites.net/cloudgoods/cloudgoodsservice.svc/";
     public string bundlesUrl = "https://socialplay.blob.core.windows.net/unityassetbundles/";
+	public string androidKey = "";
+	public List<string> androidProductNames;
 
     static SocialPlaySettings mInst;
 
@@ -63,4 +66,20 @@ public class SocialPlaySettings : ScriptableObject
             return instance.bundlesUrl;
         }
     }
+
+	static public string AndroidKey
+	{
+		get
+		{
+			return instance.androidKey;
+		}
+	}
+
+	static public List<string> AndroidProductNames
+	{
+		get
+		{
+			return instance.androidProductNames;
+		}
+	}
 }

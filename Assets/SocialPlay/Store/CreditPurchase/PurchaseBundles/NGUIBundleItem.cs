@@ -37,15 +37,27 @@ public class NGUIBundleItem : MonoBehaviour
         set { cost.text = value; }
     }
 
+	public UILabel description;
+
+	public string Description
+	{
+		get { return description.text; }
+		set { description.text = value; }
+	}
+
     public string Id { get; set; }
 
     public UIButton PurchaseButton;
+	public Action OnPurchaseRequest;
 
-    Action<GameObject> purchaseButtonClicked;
+	void Awake()
+	{
+		EventDelegate.Add(PurchaseButton.onClick, OnClick);
+	}
 
-    public Action<GameObject> PurhcaseButtonClicked
+	void OnClick()
     {
-        set { UIEventListener.Get(PurchaseButton.gameObject).onClick += obj => value(obj); }
+        if(OnPurchaseRequest != null) OnPurchaseRequest();
     }
 
 }

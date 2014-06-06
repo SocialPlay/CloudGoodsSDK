@@ -8,7 +8,7 @@ public class SortByProperty : ISortItem
 
     public string propertyToSort;
 
-    public override List<StoreItemInfo> Sort(List<StoreItemInfo> StoreItems, int direction)
+    public override List<StoreItem> Sort(List<StoreItem> StoreItems, int direction)
     {
         this.direction = direction;
         if (string.IsNullOrEmpty(propertyToSort))
@@ -17,14 +17,14 @@ public class SortByProperty : ISortItem
         }
         else
         {
-            List<StoreItemInfo> sorted = new List<StoreItemInfo>(StoreItems);
+            List<StoreItem> sorted = new List<StoreItem>(StoreItems);
             sorted.Sort(CompareItemsByPropertys);
             return sorted;
         }
     }
 
 
-    public int CompareItemsByPropertys(StoreItemInfo x, StoreItemInfo y)
+    public int CompareItemsByPropertys(StoreItem x, StoreItem y)
     {
         int nullcheck = CheckIfNull(x, y);
         if (nullcheck != -10)
@@ -128,7 +128,7 @@ public class SortByProperty : ISortItem
     }
 
 
-    int CheckDetailIsValid(StoreItemInfo x, StoreItemInfo y)
+    int CheckDetailIsValid(StoreItem x, StoreItem y)
     {
         //TODO Check for validation
         int returened = -10;
