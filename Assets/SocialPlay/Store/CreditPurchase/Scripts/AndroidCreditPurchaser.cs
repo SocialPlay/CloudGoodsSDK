@@ -6,7 +6,7 @@ using SocialPlay;
 using Newtonsoft.Json;
 
 public class AndroidCreditPurchaser : MonoBehaviour, IPlatformPurchaser {
-
+    
     public List<string> androidProductNames;
 
     //public AndroidJavaObject cls_StorePurchaser;
@@ -24,40 +24,46 @@ public class AndroidCreditPurchaser : MonoBehaviour, IPlatformPurchaser {
 
     void initStore()
     {
-        //cls_StorePurchaser = new AndroidJavaClass("com.storetest.StorePurchaser");
-        //using (AndroidJavaClass cls = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
-        //{
-        //    using (AndroidJavaObject obj_Activity = cls.GetStatic<AndroidJavaObject>("currentActivity"))
-        //    {
-        //        cls_StorePurchaser.CallStatic("initStore", obj_Activity, publicAndroidKey);
-        //    }
-        //}
+#if UNITY_ANDROID
+        cls_StorePurchaser = new AndroidJavaClass("com.storetest.StorePurchaser");
+        using (AndroidJavaClass cls = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
+        {
+            using (AndroidJavaObject obj_Activity = cls.GetStatic<AndroidJavaObject>("currentActivity"))
+            {
+                cls_StorePurchaser.CallStatic("initStore", obj_Activity, publicAndroidKey);
+            }
+        }
+#endif
     }
 
     public void Purchase(string bundleID, int amount, string userID)
     {
-        //currentBundleID = int.Parse(bundleID);
+        #if UNITY_ANDROID
+        currentBundleID = int.Parse(bundleID);
 
-        //using (AndroidJavaClass cls = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
-        //{
-        //    using (AndroidJavaObject obj_Activity = cls.GetStatic<AndroidJavaObject>("currentActivity"))
-        //    {
-        //        cls_StorePurchaser.CallStatic("makePurchase", obj_Activity, GetProductIDFromBundleID(currentBundleID));
-        //    }
-        //}
+        using (AndroidJavaClass cls = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
+        {
+            using (AndroidJavaObject obj_Activity = cls.GetStatic<AndroidJavaObject>("currentActivity"))
+            {
+                cls_StorePurchaser.CallStatic("makePurchase", obj_Activity, GetProductIDFromBundleID(currentBundleID));
+            }
+        }
+#endif
     }
 
     void outputDebugStringValue()
     {
-        //TextMesh t = (TextMesh)gameObject.GetComponent(typeof(TextMesh));
-        //using (AndroidJavaClass cls = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
-        //{
-        //    using (AndroidJavaObject obj_Activity = cls.GetStatic<AndroidJavaObject>("currentActivity"))
-        //    {
-        //        string javaReturn = cls_StorePurchaser.CallStatic<string>("retrieveDebugValue");
-        //        t.text = javaReturn;
-        //    }
-        //}
+#if UNITY_ANDROID
+        TextMesh t = (TextMesh)gameObject.GetComponent(typeof(TextMesh));
+        using (AndroidJavaClass cls = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
+        {
+            using (AndroidJavaObject obj_Activity = cls.GetStatic<AndroidJavaObject>("currentActivity"))
+            {
+                string javaReturn = cls_StorePurchaser.CallStatic<string>("retrieveDebugValue");
+                t.text = javaReturn;
+            }
+        }
+#endif
     }
 
     void RecieveFromJava(string message)
