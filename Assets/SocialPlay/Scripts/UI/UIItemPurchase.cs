@@ -1,0 +1,97 @@
+﻿using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+using System;
+
+public class UIItemPurchase : UIStoreItem 
+{
+	public UILabel amountLabel;
+	public UILabel valueLabel;
+	public int amount = 1;
+	public int location = 0;
+	public CurrencyType currency = CurrencyType.Credits;	
+	public string amountFormat = "X {0}";
+	public bool localize = true;
+	public UILabel buttonLabel;
+	public string useString = "Use";
+	public string buyString = "Buy";
+
+	int mAmount = 0;
+	ItemData mItem;
+	StoreItem mStoreItem;
+	UILocalize mLoc;
+
+	void Awake()
+	{
+		if (localize)
+		{
+			mLoc = buttonLabel.cachedGameObject.GetComponent<UILocalize>();
+			if (mLoc == null)
+				mLoc = buttonLabel.cachedGameObject.AddComponent<UILocalize>();
+
+			mLoc.key = buyString;
+		}
+	}
+
+	protected override void OnEnable()
+	{
+		base.OnEnable();
+
+		if (itemID != 0) SP.OnItemsLoaded += OnItemsLoaded;
+	}
+
+	protected override void OnDisable()
+	{
+		base.OnDisable();
+
+		if (itemID != 0) SP.OnItemsLoaded -= OnItemsLoaded;
+	}
+
+	void OnItemsLoaded(List<ItemData> items)
+	{
+		Debug.Log("OnItemsLoaded " + items.Count);
+
+		mItem = SP.GetItem(itemID);
+
+		Debug.Log("Item found: " + mItem != null);
+
+		if (mItem != null)
+		{
+			Debug.Log("Item " + mItem.itemName);
+			if (nameLabel != null) nameLabel.text = mItem.itemName;
+			if (amountLabel != null) amountLabel.text = string.Format(amountFormat, mItem.stackSize);
+
+			mAmount = mItem.stackSize;
+			if(localize) mLoc.key = useString;
+			else buttonLabel.text = useString;
+		}
+		else
+		{
+			if (amountLabel != null) amountLabel.text = string.Format(amountFormat, 0);
+			if (localize) mLoc.key = buyString;
+			else buttonLabel.text = buyString;
+		}
+	}
+
+	protected override void OnStoreListLoaded(List<StoreItem> storeList)
+	{
+		mStoreItem = SP.GetStoreItem(itemID);
+		if (nameLabel != null) nameLabel.text = mStoreItem.itemName;
+		if (amountLabel != null) amountLabel.text = mItem == null ? string.Format(amountFormat, 0) : string.Format(amountFormat, mItem.stackSize);
+		Debug.Log("StoreItem " + mStoreItem.itemName + " / coin val " + mStoreItem.coinValue + " / credit val " + mStoreItem.creditValue);
+		//mStoreItem.creditValue
+		//SetItemData(SP.GetStoreItem(itemID));
+		GetItemTexture(mStoreItem.imageURL);
+	}	
+
+	void OnReceivedItemPurchaseConfirmation(string msg)
+	{
+		Debug.Log("OnReceivedItemPurchaseConfirmation " + msg);
+	}
+
+	public void BuyOrUse()
+	{
+		if (mAmount > 0) SP.UseItem(mItem, (string message) => { Debug.Log("Use Item: " + message); });
+		else SP.StoreItemPurchase(itemID, amount, currency, location, OnReceivedItemPurchaseConfirmation);
+	}
+}

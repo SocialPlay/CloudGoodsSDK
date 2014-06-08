@@ -21,9 +21,6 @@ public class ItemPurchase : MonoBehaviour
     public PurchaseButtonDisplay creditPurchaseButton;
     public PurchaseButtonDisplay coinPurchaseButton;
 
-    public GameObject purchaseConfirmationPanel;
-    public GameObject purchaseConfirmationButton;
-
     public UITexture itemTexture;
 
     void OnEnable()
@@ -32,7 +29,6 @@ public class ItemPurchase : MonoBehaviour
         UIEventListener.Get(decreaseQuantityButton).onClick += DecreaseQuantityAmount;
         UIEventListener.Get(creditPurchaseButton.ActiveButton.gameObject).onClick += PurchaseItemWithCredits;
         UIEventListener.Get(coinPurchaseButton.ActiveButton.gameObject).onClick += PurchaseItemWithCoins;
-        UIEventListener.Get(purchaseConfirmationButton).onClick += OnPurchaseConfirmationButtonPressed;
 
     }
 
@@ -121,7 +117,6 @@ public class ItemPurchase : MonoBehaviour
 	
     void OnReceivedItemPurchaseConfirmation(string msg)
     {
-        purchaseConfirmationPanel.SetActive(true);
         ReloadContainerItems();
 
         if(OnPurchasedItem != null)
@@ -140,10 +135,6 @@ public class ItemPurchase : MonoBehaviour
         }
     }
 
-    void OnPurchaseConfirmationButtonPressed(GameObject button)
-    {
-        purchaseConfirmationPanel.SetActive(false);
-    }
 
     public void ClosePanel()
     {

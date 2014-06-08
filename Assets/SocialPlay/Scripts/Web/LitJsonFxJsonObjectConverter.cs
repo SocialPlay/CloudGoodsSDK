@@ -36,7 +36,7 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter {
 
                         if (reader.Token.ToString() == "PropertyName")
                         {
-                            Debug.Log(reader.Value.ToString());
+                            //Debug.Log(reader.Value.ToString());
                             string propertyString = reader.Value.ToString();
 
                             reader.Read();

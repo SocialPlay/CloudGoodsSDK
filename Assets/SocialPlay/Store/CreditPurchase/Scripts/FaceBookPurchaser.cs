@@ -51,7 +51,7 @@ public class FaceBookPurchaser : MonoBehaviour, IPlatformPurchaser
 
     void OnPurchaseCreditsCallback(string data)
     {
-        SP.GetPaidCurrencyBalance(null);
+        //SP.GetPaidCurrencyBalance(null);
     }
 }
 

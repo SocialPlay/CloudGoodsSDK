@@ -24,6 +24,7 @@ public class SP : MonoBehaviour//, IServiceCalls
     static public event Action<string> OnRegisteredUserToSession;
 	static public event Action<SocialPlayUser> OnUserAuthorized;
 	static public event Action<List<StoreItem>> OnStoreListLoaded;
+	static public event Action<List<ItemData>> OnItemsLoaded;
 	static public event Action<int> OnFreeCurrency;
 	static public event Action<int> OnPaidCurrency;
 
@@ -108,6 +109,12 @@ public class SP : MonoBehaviour//, IServiceCalls
 	static public List<StoreItem> storeItems { get; private set; }
 
 	/// <summary>
+	/// Cached user items list.
+	/// </summary>
+
+	static public List<ItemData> userItems { get; private set; }
+
+	/// <summary>
 	/// Current amount of free currency. You can listen to the event OnFreeCurrency which will be triggered everytime this value changes.
 	/// </summary>
 
@@ -183,8 +190,9 @@ public class SP : MonoBehaviour//, IServiceCalls
     {
 		user = userInfo;
 		user.userID = new Guid(user.userGuid.ToString());
-		user.sessionID = Guid.NewGuid();
-
+		user.sessionID = Guid.NewGuid();		
+		
+		GetOwnerItems(user.userID.ToString(), "User", 0, OnItemsLoaded);
 		GetStoreItems(OnStoreListLoaded);
 		GetFreeCurrencyBalance(0, null);
 		GetPaidCurrencyBalance(null);
@@ -212,13 +220,92 @@ public class SP : MonoBehaviour//, IServiceCalls
         Get().StartCoroutine(Get().ServiceCallGetListItemDatas(www, callback));
     }
 
+	/// <summary>
+	/// Loads item list from the specified owner.
+	/// </summary>
+	/// <param name="ownerID"></param>
+	/// <param name="ownerType"></param>
+	/// <param name="location"></param>
+	/// <param name="callback"></param>
+
     static public void GetOwnerItems(string ownerID, string ownerType, int location, Action<List<ItemData>> callback)
     {
 		string url = string.Format("{0}GetOwnerItems?ownerID={1}&ownerType={2}&location={3}&AppID={4}", Url, ownerID, ownerType, location, GuidAppID);
         WWW www = new WWW(url);
 
-        Get().StartCoroutine(Get().ServiceCallGetListItemDatas(www, callback));
+		Get().StartCoroutine(Get().ServiceCallGetListItemDatas(www, (List<ItemData> ownerItems) =>
+		{
+			userItems = ownerItems;
+			if (callback != null) callback(userItems);
+		}));
     }
+
+	/// <summary>
+	/// Returns a single item from the user item list by its id
+	/// </summary>
+	/// <param name="name"></param>
+
+	static public ItemData GetItem(int id)
+	{
+		if (userItems == null)
+		{
+			Debug.LogWarning("User Item list has not been loaded yet.");
+			return null;
+		}
+
+		if (userItems.Count == 0)
+		{
+			Debug.LogWarning("User Item list is empty.");
+			return null;
+		}
+
+		ItemData item = null;
+
+		for (int i = 0, imax = userItems.Count; i < imax; i++)
+		{
+			//Debug.Log("UserItems " + userItems[i].itemName + " / " + userItems[i].stackSize + " / " + userItems[i].varianceID);
+			if (userItems[i].varianceID == id)
+			{
+				item = userItems[i];
+				break;
+			}
+		}
+
+		return item;
+	}
+
+	/// <summary>
+	/// Returns a single item from the user item list by its name
+	/// </summary>
+	/// <param name="name"></param>
+
+	static public ItemData GetItem(string name)
+	{
+		if (userItems == null)
+		{
+			Debug.LogWarning("User Item list has not been loaded yet.");
+			return null;
+		}
+
+		if (userItems.Count == 0)
+		{
+			Debug.LogWarning("User Item list is empty.");
+			return null;
+		}
+
+		ItemData item = null;
+
+		for (int i = 0, imax = userItems.Count; i < imax; i++)
+		{
+			if (userItems[i].itemName.StartsWith(name, StringComparison.InvariantCultureIgnoreCase))
+			{
+				item = userItems[i];
+				break;
+			}
+		}
+
+		return item;
+	}
 
     static public void MoveItemStack(Guid StackToMove, int MoveAmount, string DestinationOwnerID, string DestinationOwnerType, int DestinationLocation, Action<Guid> callback)
     {
@@ -245,15 +332,34 @@ public class SP : MonoBehaviour//, IServiceCalls
 
         WWW www = new WWW(url);
 
-        Get().StartCoroutine(Get().ServiceGetString(www, callback));
+		Get().StartCoroutine(Get().ServiceGetString(www, (string message) => { GetOwnerItems(user.userID.ToString(), "User", 0, OnItemsLoaded); if (callback != null) callback(message); }));
     }
+
+	/// <summary>
+	/// Consume the specified item and removes it from your item list.
+	/// </summary>
+	/// <param name="item"></param>
+	/// <param name="callback"></param>
+
+	static public void UseItem(ItemData item, Action<string> callback)
+	{
+		if (item == null)
+		{
+			Debug.LogWarning("Item is null");
+			return;
+		}
+		string url = string.Format("{0}DeductStackAmount?stackID={1}&amount={2}", Url, item.stackID, 1);
+		WWW www = new WWW(url);
+
+		Get().StartCoroutine(Get().ServiceGetString(www, (string message) => { GetOwnerItems(user.userID.ToString(), "User", 0, OnItemsLoaded); if (callback != null) callback(message); }));
+	}
 
     static public void DeductStackAmount(Guid StackRemove, int amount, Action<string> callback)
     {
         string url = string.Format("{0}DeductStackAmount?stackID={1}&amount={2}", Url, StackRemove, amount);
         WWW www = new WWW(url);
 
-        Get().StartCoroutine(Get().ServiceGetString(www, callback));
+		Get().StartCoroutine(Get().ServiceGetString(www, (string message) => { GetOwnerItems(user.userID.ToString(), "User", 0, OnItemsLoaded); if (callback != null) callback(message); }));
     }
 
     static public void RemoveItemStacks(List<Guid> StacksToRemove, Action<string> callback)
@@ -264,7 +370,7 @@ public class SP : MonoBehaviour//, IServiceCalls
         string url = string.Format("{0}RemoveStackItems?stacks={1}", Url, stacksInfo);
         WWW www = new WWW(url);
 
-        Get().StartCoroutine(Get().ServiceGetString(www, callback));
+		Get().StartCoroutine(Get().ServiceGetString(www, (string message) => { GetOwnerItems(user.userID.ToString(), "User", 0, OnItemsLoaded); if (callback != null) callback(message); }));
     }
 
     static public void GiveOwnerItems(string ownerID, WebModels.OwnerTypes OwnerType, List<WebModels.ItemsInfo> listOfItems, Action<string> callback)
@@ -499,7 +605,16 @@ public class SP : MonoBehaviour//, IServiceCalls
 
         WWW www = new WWW(url);
 		//currencyBalance.SetItemPaidCurrency(dataObj["Balance"].ToString());
-		Get().StartCoroutine(Get().ServiceGetString(www, (string message) => { GetFreeCurrencyBalance(0, null); GetPaidCurrencyBalance(null); if (callback != null) callback(message); }));
+		Get().StartCoroutine(Get().ServiceGetString(www, (string message) => 
+		{ 
+			Debug.Log("Purchase " + message);
+			if (message == "NSF") NGUITools.Broadcast(SocialPlayMessage.OnNotEnoughFunds.ToString());
+			else NGUITools.Broadcast(SocialPlayMessage.OnPurchaseSuccess.ToString());
+			GetOwnerItems(user.userID.ToString(), "User", 0, OnItemsLoaded);
+			GetFreeCurrencyBalance(0, null); 
+			GetPaidCurrencyBalance(null); 
+			if (callback != null) callback(message); 
+		}));
     }
 
     static public void GetItemBundles(Action<List<ItemBundle>> callback)
@@ -517,7 +632,16 @@ public class SP : MonoBehaviour//, IServiceCalls
 
         WWW www = new WWW(url);
 
-		Get().StartCoroutine(Get().ServiceGetString(www, (string message) => { GetFreeCurrencyBalance(0, null); GetPaidCurrencyBalance(null); if (callback != null) callback(message); }));
+		Get().StartCoroutine(Get().ServiceGetString(www, (string message) => 
+		{
+			if (message == "NSF") NGUITools.Broadcast(SocialPlayMessage.OnNotEnoughFunds.ToString());
+			else NGUITools.Broadcast(SocialPlayMessage.OnPurchaseSuccess.ToString());
+
+			GetOwnerItems(user.userID.ToString(), "User", 0, OnItemsLoaded);
+			GetFreeCurrencyBalance(0, null); 
+			GetPaidCurrencyBalance(null); 
+			if (callback != null) callback(message); 
+		}));
     }
 
     static public void GetCreditBundles(int platformID, Action<List<CreditBundleItem>> callback)
@@ -535,7 +659,15 @@ public class SP : MonoBehaviour//, IServiceCalls
 
         WWW www = new WWW(url);
 
-		Get().StartCoroutine(Get().ServiceGetString(www, (string message) => { GetFreeCurrencyBalance(0, null); GetPaidCurrencyBalance(null); if (callback != null) callback(message); }));
+		Get().StartCoroutine(Get().ServiceGetString(www, (string message) => 
+		{
+			if (message == "NSF") NGUITools.Broadcast(SocialPlayMessage.OnNotEnoughFunds.ToString());
+			else NGUITools.Broadcast(SocialPlayMessage.OnPurchaseSuccess.ToString());
+
+			GetFreeCurrencyBalance(0, null); 
+			GetPaidCurrencyBalance(null); 
+			if (callback != null) callback(message); 
+		}));
     }
 
 	static public void GetToken(string ownerID, string tokenType, List<WebModels.ItemsInfo> items, Action<string> callback)

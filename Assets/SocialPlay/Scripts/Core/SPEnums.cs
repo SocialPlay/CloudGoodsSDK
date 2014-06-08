@@ -24,6 +24,10 @@ public enum SocialPlayMessage
     OnSPLogout,
     OnForgotPassword,
     OnVerificationSent,
+	OnNotEnoughFunds,
+	OnPurchaseSuccess,
+	OnPurchaseFail,
+	OnPurchaseAmountError
 }
 
 public enum CurrencyType

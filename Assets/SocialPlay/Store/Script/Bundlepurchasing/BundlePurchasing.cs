@@ -2,9 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class BundlePurchasing : MonoBehaviour {
-
-    public GameObject PurchaseConfirmationWindow;
+public class BundlePurchasing : MonoBehaviour 
+{
 
     public PurchaseButtonDisplay creditPurchaseButton;
     public PurchaseButtonDisplay coinPurchaseButton;
@@ -133,12 +132,8 @@ public class BundlePurchasing : MonoBehaviour {
 
     void OnReceivedPurchaseCallback(string data)
     {
+		Debug.Log("OnReceivedPurchaseCallback " + data);
         //TODO handle callback for success and error
-        PurchaseConfirmationWindow.SetActive(true);
-    }
-
-    public void ClosePurchaseStatusWindow()
-    {
-        PurchaseConfirmationWindow.SetActive(false);
+        //PurchaseConfirmationWindow.SetActive(true);
     }
 }

@@ -94,11 +94,11 @@ public class CreditBundleStore : MonoBehaviour
 
         if (dataObj["StatusCode"].ToString() == "1")
         {
-            NGUITools.Broadcast("OnPurchaseSuccess");
+            NGUITools.Broadcast(SocialPlayMessage.OnPurchaseSuccess.ToString());
         }
         else
         {
-            NGUITools.Broadcast("OnPurchaseFail");
+			NGUITools.Broadcast(SocialPlayMessage.OnPurchaseFail.ToString());
         }
 
     }

@@ -1,8 +1,5 @@
-﻿using SocialPlay.Data;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using UnityEngine;
 using Newtonsoft.Json.Linq;
 
@@ -49,6 +46,7 @@ public class ItemData : MonoBehaviour
 
     public virtual void CreatNew(out ItemData newItem, int amount, ItemContainer ownerContainer)
     {
+		Debug.Log("CreatNew " + itemName);
         newItem = NewItem();
         newItem.stackSize = amount;
         newItem.ownerContainer = ownerContainer;
@@ -80,7 +78,7 @@ public class ItemData : MonoBehaviour
     {
 
         GameObject tmp = Instantiate(this.gameObject) as GameObject;
-        tmp.name = "(" + itemID + "," + quality + ")" + itemName;
+        tmp.name = "(" + itemID + "," + quality + ")" + itemName;		
         return tmp.GetComponent<ItemData>();
     }
 
@@ -124,6 +122,7 @@ public class ItemData : MonoBehaviour
 
     public void SetItemData(ItemData itemData)
     {
+		Debug.Log("SetItemData " + itemData.itemName);
         stackSize = itemData.stackSize;
         ownerContainer = itemData.ownerContainer;
         itemName = itemData.itemName;

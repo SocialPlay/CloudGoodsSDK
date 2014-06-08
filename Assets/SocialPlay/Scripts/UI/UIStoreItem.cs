@@ -6,28 +6,33 @@ using System;
 
 public class UIStoreItem : MonoBehaviour
 {
-	public int itemId = 0;
+	public int itemID = 0;
 	public GameObject loader;
+	public UILabel nameLabel;
+	public UILabel descriptionLabel;
 	public StoreItem storeItem { get; private set; }
 
     //public UISprite itemImageSprite;
 	
 
-	void Awake()
+	protected virtual void OnEnable()
 	{
-		NGUITools.SetActive(loader, true);
-		if (itemId != 0)
-		{
-			SP.OnStoreListLoaded += OnStoreListLoaded;
-		}
+		if (loader != null) NGUITools.SetActive(loader, true);
+
+		if (itemID != 0) SP.OnStoreListLoaded += OnStoreListLoaded;
 	}
 
-	void OnStoreListLoaded(List<StoreItem> storeList)
+	protected virtual void OnDisable()
 	{
-		SetItemData(SP.GetStoreItem(itemId));
+		if (itemID != 0) SP.OnStoreListLoaded -= OnStoreListLoaded;
 	}
 
-    void GetItemTexture(string URL)
+	protected virtual void OnStoreListLoaded(List<StoreItem> storeList)
+	{
+		SetItemData(SP.GetStoreItem(itemID));
+	}
+
+    protected void GetItemTexture(string URL)
     {
         if (!this.gameObject.activeInHierarchy) return;
         WWW www = new WWW(URL);
@@ -39,11 +44,13 @@ public class UIStoreItem : MonoBehaviour
         yield return www;
         UITexture uiTexture = gameObject.GetComponentInChildren<UITexture>();
         uiTexture.mainTexture = www.texture;
-		NGUITools.SetActive(loader, false);
+		if (loader != null) NGUITools.SetActive(loader, false);
     }
 
 	public virtual void SetItemData(StoreItem item)
 	{
+		if (nameLabel != null) nameLabel.text = item.itemName;
+		//if(descriptionLabel != null) descriptionLabel.text = item. <-- There is no description on StoreItems. This is a must have.
 		storeItem = item;
 		GetItemTexture(storeItem.imageURL);
 	}
