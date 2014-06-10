@@ -17,7 +17,7 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter {
             return new List<ItemData>();
 
         JsonReader reader = new JsonReader(parsedString);
-        Debug.Log(parsedString);
+        //Debug.Log(parsedString);
         reader.Read();
 
         if (reader.Token.ToString() == "ArrayStart")
@@ -154,7 +154,6 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter {
     public Guid ConvertToGuid(string dataString)
     {
         string guidString = ParseString(dataString);
-        Debug.Log(guidString);
         Guid newGuid = new Guid(guidString);
         return newGuid;
     }
@@ -176,6 +175,16 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter {
 
         for (int i = 0; i < storeItemsJsonArray.Count; i++)
         {
+			for(int e = 0, emax = storeItemsJsonArray[i].Count; e<emax; e++)
+			{
+				if (storeItemsJsonArray[i][e].IsArray)
+				{
+					for(int x = 0, xmax = storeItemsJsonArray[i][e].Count; x<xmax; x++)
+					{
+						Debug.Log("storeItem " + storeItemsJsonArray[i][e][x]);
+					}
+				}
+			}
             StoreItem storeItemInfo = new StoreItem();
             storeItemInfo.ID = int.Parse(storeItemsJsonArray[i]["ID"].ToString());
             storeItemInfo.itemName = storeItemsJsonArray[i]["Name"].ToString();
@@ -217,13 +226,8 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter {
 
 	public SocialPlayUser ConvertToUserInfo(string dataString)
     {
-        Debug.Log(dataString);
-
         string userInfoString = ParseString(dataString);
-
         JsonData data = LitJson.JsonMapper.ToObject(userInfoString);
-
-        Debug.Log(data["userGuid"].ToString());
 
 		SocialPlayUser userinfo = new SocialPlayUser(data["userGuid"].ToString(), data["userName"].ToString(), "");
 

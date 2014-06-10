@@ -82,16 +82,11 @@ public class UIItemPurchase : UIStoreItem
 		//mStoreItem.creditValue
 		//SetItemData(SP.GetStoreItem(itemID));
 		GetItemTexture(mStoreItem.imageURL);
-	}	
-
-	void OnReceivedItemPurchaseConfirmation(string msg)
-	{
-		Debug.Log("OnReceivedItemPurchaseConfirmation " + msg);
 	}
 
 	public void BuyOrUse()
 	{
 		if (mAmount > 0) SP.UseItem(mItem, (string message) => { Debug.Log("Use Item: " + message); });
-		else SP.StoreItemPurchase(itemID, amount, currency, location, OnReceivedItemPurchaseConfirmation);
+		else SP.StoreItemPurchase(itemID, amount, currency, location);
 	}
 }

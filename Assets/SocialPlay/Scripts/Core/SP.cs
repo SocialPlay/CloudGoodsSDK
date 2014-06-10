@@ -215,7 +215,9 @@ public class SP : MonoBehaviour//, IServiceCalls
     static public void GenerateItemsAtLocation(string OwnerType, int Location, int MinimumEnergyOfItem, int TotalEnergyToGenerate, Action<List<ItemData>> callback, string ANDTags = "", string ORTags = "")
     {
         string url = string.Format("{0}GenerateItemsAtLocation?OwnerID={1}&OwnerType={2}&Location={3}&AppID={4}&MinimumEnergyOfItem={5}&TotalEnergyToGenerate={6}&ANDTags={7}&ORTags={8}", Url, user.sessionID, OwnerType, Location, GuidAppID, MinimumEnergyOfItem, TotalEnergyToGenerate, ANDTags, ORTags);
-        
+
+		Debug.Log("GenerateItemsAtLocation " + OwnerType);
+
         WWW www = new WWW(url);
         Get().StartCoroutine(Get().ServiceCallGetListItemDatas(www, callback));
     }
@@ -230,8 +232,15 @@ public class SP : MonoBehaviour//, IServiceCalls
 
     static public void GetOwnerItems(string ownerID, string ownerType, int location, Action<List<ItemData>> callback)
     {
+		if (string.IsNullOrEmpty(ownerID))
+		{
+			Debug.LogWarning("OwnerID cannot be empty");
+			return;
+		}
 		string url = string.Format("{0}GetOwnerItems?ownerID={1}&ownerType={2}&location={3}&AppID={4}", Url, ownerID, ownerType, location, GuidAppID);
         WWW www = new WWW(url);
+
+		Debug.Log("GetOwnerItems " + ownerID);
 
 		Get().StartCoroutine(Get().ServiceCallGetListItemDatas(www, (List<ItemData> ownerItems) =>
 		{
@@ -513,7 +522,12 @@ public class SP : MonoBehaviour//, IServiceCalls
 
         WWW www = new WWW(url);
 
-		Get().StartCoroutine(Get().ServiceGetString(www, (string value) => { freeCurrency = System.Convert.ToInt16(value); if (callback != null) callback(freeCurrency); }));
+		Get().StartCoroutine(Get().ServiceGetString(www, (string value) => 
+		{
+			Debug.Log("GetFreeCurrencyBalance " + value);
+			freeCurrency = System.Convert.ToInt16(value); 
+			if (callback != null) callback(freeCurrency); 
+		}));
     }
 
     static public void GetPaidCurrencyBalance(Action<int> callback)
@@ -522,7 +536,12 @@ public class SP : MonoBehaviour//, IServiceCalls
 
         WWW www = new WWW(url);
 
-		Get().StartCoroutine(Get().ServiceGetString(www, (string value) => { paidCurrency = System.Convert.ToInt16(value); if (callback != null) callback(paidCurrency); }));
+		Get().StartCoroutine(Get().ServiceGetString(www, (string value) => 
+		{
+			Debug.Log("GetPaidCurrencyBalance " + value);
+			paidCurrency = System.Convert.ToInt16(value); 
+			if (callback != null) callback(paidCurrency); 
+		}));
     }
 
 	/// <summary>
@@ -599,8 +618,47 @@ public class SP : MonoBehaviour//, IServiceCalls
 		return item;
 	}
 
+	/// <summary>
+	/// Purchase an item from the store.
+	/// </summary>
+	/// <param name="itemID"></param>
+	/// <param name="amount"></param>
+	/// <param name="paymentType"></param>
+
+	static public void StoreItemPurchase(int itemID, int amount, CurrencyType paymentType)
+	{
+		StoreItemPurchase(itemID, amount, paymentType, 0, null);
+	}
+
+	/// <summary>
+	/// Purchase an item from the store.
+	/// </summary>
+	/// <param name="itemID"></param>
+	/// <param name="amount"></param>
+	/// <param name="paymentType"></param>
+	/// <param name="saveLocation"></param>
+
+	static public void StoreItemPurchase(int itemID, int amount, CurrencyType paymentType, int saveLocation)
+	{
+		StoreItemPurchase(itemID, amount, paymentType, saveLocation, null);
+	}
+
+	/// <summary>
+	/// Purchase an item from the store.
+	/// </summary>
+	/// <param name="itemID"></param>
+	/// <param name="amount"></param>
+	/// <param name="paymentType"></param>
+	/// <param name="saveLocation"></param>
+	/// <param name="callback"></param>
+
 	static public void StoreItemPurchase(int itemID, int amount, CurrencyType paymentType, int saveLocation, Action<string> callback)
     {
+		/*if (!isLogged)
+		{
+			Debug.LogWarning("Can't do this if you are not authenticated.")
+			return;
+		}*/
 		string url = buyUrl + "StoreItemPurchase?UserID=" + user.userID + "&ItemID=" + itemID + "&Amount=" + amount + "&PaymentType=" + paymentType + "&AppID=" + GuidAppID + "&saveLocation=" + saveLocation;
 
         WWW www = new WWW(url);
@@ -785,7 +843,6 @@ public class SP : MonoBehaviour//, IServiceCalls
         // check for errors
         if (www.error == null)
         {
-            Debug.Log(www.text);
             callback(serviceConverter.ConvertToUserInfo(www.text));
         }
 		else

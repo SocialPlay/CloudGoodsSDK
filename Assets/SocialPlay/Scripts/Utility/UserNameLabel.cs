@@ -7,14 +7,14 @@ public class UserNameLabel : MonoBehaviour
 
     void OnEnable()
     {
-        SP.OnRegisteredUserToSession += OnRegisteredUserToSession;
+		SP.OnUserAuthorized += OnUserAuthorized;
     }
     void OnDisable()
     {
-        SP.OnRegisteredUserToSession -= OnRegisteredUserToSession;
+		SP.OnUserAuthorized -= OnUserAuthorized;
     }
 
-    void OnRegisteredUserToSession(string obj)
+	void OnUserAuthorized(SocialPlayUser user)
     {
         label.text = SP.user.userName;
     }
