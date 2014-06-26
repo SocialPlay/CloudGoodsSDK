@@ -22,14 +22,9 @@ public class SocialPlaySettingsInspector : Editor
     static SocialPlaySettings.ScreenType screen { get { return mSettings.screen; } set { mSettings.screen = value; } }
     static Vector2 scrollPos;
 
-    //static public string iconPath = SocialPlaySettings.mainPath + "Icons/" + (EditorGUIUtility.isProSkin ? "Dark" : "Light") + "/";
     static public string iconPath = SocialPlaySettings.mainPath + "Icons/";
 
     static public Texture2D spLogo { get { if (mLogo == null) mLogo = AssetDatabase.LoadAssetAtPath(iconPath + "SocialPlay_Logo_small.png", typeof(Texture2D)) as Texture2D; return mLogo; } }
-    //static public Texture2D iconList { get { if (mListIcon == null) mListIcon = AssetDatabase.LoadAssetAtPath(iconPath + "IconList.png", typeof(Texture2D)) as Texture2D; return mListIcon; } }
-    //static public Texture2D iconThumb { get { if (mThumbIcon == null) mThumbIcon = AssetDatabase.LoadAssetAtPath(iconPath + "IconThumbnails.png", typeof(Texture2D)) as Texture2D; return mThumbIcon; } }
-    //static public Texture2D iconSettings { get { if (mSettingsIcon == null) mSettingsIcon = AssetDatabase.LoadAssetAtPath(iconPath + "IconSettings.png", typeof(Texture2D)) as Texture2D; return mSettingsIcon; } }
-    //static public Texture2D iconNew { get { if (mNewIcon == null) mNewIcon = AssetDatabase.LoadAssetAtPath(iconPath + "IconNew.png", typeof(Texture2D)) as Texture2D; return mNewIcon; } }
 
     static Texture2D mLogo;
     static Texture2D mListIcon;
@@ -78,7 +73,6 @@ public class SocialPlaySettingsInspector : Editor
 
     public override void OnInspectorGUI()
     {
-        //mDB = target as Inventory;
         if (mInst == null) mInst = this;
 
         GUILayout.BeginVertical(GUILayout.Width(spLogo.height));
@@ -103,7 +97,6 @@ public class SocialPlaySettingsInspector : Editor
 
         GUILayout.EndHorizontal();
         GUILayout.EndVertical();
-        //EditorGUILayout.EndHorizontal();
         GUILayout.EndHorizontal();
         GUILayout.EndVertical();
 
