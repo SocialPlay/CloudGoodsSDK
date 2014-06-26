@@ -192,8 +192,8 @@ public class SP : MonoBehaviour//, IServiceCalls
 		user.userID = new Guid(user.userGuid.ToString());
 		user.sessionID = Guid.NewGuid();		
 		
-		GetOwnerItems(user.userID.ToString(), "User", 0, OnItemsLoaded);
-		GetStoreItems(OnStoreListLoaded);
+		//GetOwnerItems(user.userID.ToString(), "User", 0, OnItemsLoaded);
+		//GetStoreItems(OnStoreListLoaded);
 		GetFreeCurrencyBalance(0, null);
 		GetPaidCurrencyBalance(null);
 

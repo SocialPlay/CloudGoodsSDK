@@ -1,28 +1,27 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Runtime.InteropServices;
+using System;
 
 public class iOSConnect : MonoBehaviour {
+
+    static public Action<string> onReceivedMessage;
 
     [DllImport("__Internal")]
     private static extern void _PrintMessageFromUnity(string message);
 
-    public static void PrintMessageToXcode(string message)
+    public static void RequestInAppPurchase(string productID)
     {
+		iOSConnect.onReceivedMessage ("Called print message function");
         if (Application.platform != RuntimePlatform.OSXEditor)
         {
-            _PrintMessageFromUnity(message);
+			iOSConnect.onReceivedMessage("In IOS: called print from unity");
+			_PrintMessageFromUnity(productID);
         }
     }
 
-    [DllImport("__Internal")]
-    private static extern void _SetBadgeNumber(int badgeNumer);
-
-    public static void SetBadgeNumber(int badgeNumber)
-    {
-        if (Application.platform != RuntimePlatform.OSXEditor)
-        {
-            _SetBadgeNumber(badgeNumber);
-        }
-    }
+	public void ReceivedMessageFromXCode(string message)
+	{
+		iOSConnect.onReceivedMessage (message);
+	}
 }

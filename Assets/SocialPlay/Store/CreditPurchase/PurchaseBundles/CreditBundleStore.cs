@@ -111,6 +111,8 @@ public class CreditBundleStore : MonoBehaviour
                 return gameObject.AddComponent<AndroidCreditPurchaser>();
             case PlatformPurchase.Facebook:
                 return gameObject.AddComponent<FaceBookPurchaser>();
+			case PlatformPurchase.IOS:
+				return gameObject.AddComponent<iOSCreditPurchaser>();
             default:
                 return null;
         }
