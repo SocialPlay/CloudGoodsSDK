@@ -843,10 +843,12 @@ public class SP : MonoBehaviour//, IServiceCalls
         // check for errors
         if (www.error == null)
         {
+            Debug.Log(www.text);
             callback(serviceConverter.ConvertToUserInfo(www.text));
         }
 		else
 		{
+            Debug.Log(www.error);
 			if (onErrorEvent != null) onErrorEvent("Error: " + www.error);
 		}
     }

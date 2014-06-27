@@ -364,11 +364,18 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter {
             creditBundle.ID = int.Parse(creditBundleObj[i]["ID"].ToString());
             creditBundle.CurrencyName = "$";
 
+            for (int j = 0; j < creditBundleObj[i]["Data"].Count; j++)
+            {
+                Debug.Log("Data info: " + creditBundleObj[i]["Data"][j]["Key"].ToString() + "  ,   " + creditBundleObj[i]["Data"][j]["Value"].ToString());
+                creditBundle.CreditPlatformIDs.Add(creditBundleObj[i]["Data"][j]["Key"].ToString(), creditBundleObj[i]["Data"][j]["Value"].ToString());
+            }
+
             creditBundles.Add(creditBundle);
         }
 
         return creditBundles;
     }
+
     public MoveMultipleItemsResponse ConvertToMoveMultipleItemsResponse(string dataString)
     {
         MoveMultipleItemsResponse infos = LitJson.JsonMapper.ToObject<MoveMultipleItemsResponse>(dataString);
