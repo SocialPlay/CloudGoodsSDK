@@ -40,8 +40,11 @@ public class SP : MonoBehaviour//, IServiceCalls
 	{ 
 		get 
 		{
-			if (string.IsNullOrEmpty(SocialPlaySettings.AppSecret))
-				Debug.LogError("AppSecret has not been defined. Open Social Play Settings from the menu.");
+            if (string.IsNullOrEmpty(SocialPlaySettings.AppSecret))
+            {
+                Debug.LogError("AppSecret has not been defined. Open Social Play Settings from the menu.");
+                onErrorEvent("AppSecret has not been defined. Open Social Play Settings from the menu.");
+            }
 
 			return SocialPlaySettings.AppSecret; 
 		} 
@@ -54,9 +57,12 @@ public class SP : MonoBehaviour//, IServiceCalls
 	static public string AppID 
 	{ 
 		get 
-		{ 
-			if (string.IsNullOrEmpty(SocialPlaySettings.AppID)) 
-				Debug.LogError("AppID has not been defined. Open Social Play Settings from the menu.");
+		{
+            if (string.IsNullOrEmpty(SocialPlaySettings.AppID))
+            {
+                Debug.LogError("AppID has not been defined. Open Social Play Settings from the menu.");
+                onErrorEvent("AppID has not been defined. Open Social Play Settings from the menu.");
+            }
 
 			return SocialPlaySettings.AppID; 
 		} 
