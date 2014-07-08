@@ -1,18 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class iOSMessage : MonoBehaviour {
+public class DebugMessage : MonoBehaviour {
 
 	public UILabel label;
-	
+
 	// Use this for initialization
 	void Awake () {
-		iOSConnect.onReceivedMessage += OnReceivedIOSMessage;
+		iOSConnect.onReceivedMessage += OnIOSMessage;
 	}
-
-	void OnReceivedIOSMessage(string message)
-	{
+	
+	void OnIOSMessage(string message){
 		label.text = message;
 	}
-
 }

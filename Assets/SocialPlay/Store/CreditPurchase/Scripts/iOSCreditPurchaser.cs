@@ -14,6 +14,7 @@ public class iOSCreditPurchaser : MonoBehaviour, IPlatformPurchaser {
 	
 	public void Purchase(string id, int amount, string userID)
 	{
+		Debug.Log ("Purchase clicked for : " + id);
 		iOSConnect.RequestInAppPurchase (id);
 	}
 	

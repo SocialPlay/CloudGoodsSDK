@@ -38,7 +38,9 @@ public class CreditBundleStore : MonoBehaviour
     {
         try
         {
+			Debug.Log("Initialize credit store");
             platformPurchasor = GetPlatformPurchaser();
+			Debug.Log("Platform pruchaser: " + platformPurchasor);
             platformPurchasor.RecievedPurchaseResponse += OnRecievedPurchaseResponse;
 
             SP.GetCreditBundles(3, OnPurchaseBundlesRecieved);
@@ -68,10 +70,13 @@ public class CreditBundleStore : MonoBehaviour
         NGUIBundleItem nguiItem = obj.GetComponent<NGUIBundleItem>();
         nguiItem.Amount = item.Amount.ToString();
         nguiItem.Cost = item.Cost.ToString();
-        nguiItem.Id = item.ID.ToString();
+		if (item.CreditPlatformIDs.ContainsKey("Product_ID"))
+						nguiItem.Id = item.CreditPlatformIDs ["Product_ID"].ToString ();
+				else
+						nguiItem.Id = item.ID.ToString();
         nguiItem.CurrencyName = item.CurrencyName;
-        nguiItem.CurrencyIcon = creditBundleIcon.Get(nguiItem.Amount, nguiItem.CurrencyIcon);
-        Debug.Log("item.ID " + item.ID);
+        //nguiItem.CurrencyIcon = creditBundleIcon.Get(nguiItem.Amount, nguiItem.CurrencyIcon);
+        Debug.Log("item.IBD " + item.ID);
 
         // This is temporal until its added on the portal
         if (SocialPlaySettings.CreditBundlesDescription.Count != 0)
@@ -82,6 +87,7 @@ public class CreditBundleStore : MonoBehaviour
 
     void OnPurchaseRequest(string id)
     {
+		Debug.Log ("Purchase request");
         platformPurchasor.Purchase(id, 1, SP.user.userID.ToString());
     }
 
@@ -112,6 +118,7 @@ public class CreditBundleStore : MonoBehaviour
             case PlatformPurchase.Facebook:
                 return gameObject.AddComponent<FaceBookPurchaser>();
 			case PlatformPurchase.IOS:
+				Debug.Log("Setting ios purchaser");
 				return gameObject.AddComponent<iOSCreditPurchaser>();
             default:
                 return null;

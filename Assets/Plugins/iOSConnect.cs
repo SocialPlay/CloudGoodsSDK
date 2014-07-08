@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 using System;
 
 public class iOSConnect : MonoBehaviour {
-
+	
     static public Action<string> onReceivedMessage;
 
     [DllImport("__Internal")]
@@ -12,10 +12,10 @@ public class iOSConnect : MonoBehaviour {
 
     public static void RequestInAppPurchase(string productID)
     {
-		iOSConnect.onReceivedMessage ("Called print message function");
+		Debug.Log ("Called print message function");
         if (Application.platform != RuntimePlatform.OSXEditor)
         {
-			iOSConnect.onReceivedMessage("In IOS: called print from unity");
+			Debug.Log("In IOS: called print from unity");
 			_PrintMessageFromUnity(productID);
         }
     }
@@ -24,4 +24,5 @@ public class iOSConnect : MonoBehaviour {
 	{
 		iOSConnect.onReceivedMessage (message);
 	}
+
 }

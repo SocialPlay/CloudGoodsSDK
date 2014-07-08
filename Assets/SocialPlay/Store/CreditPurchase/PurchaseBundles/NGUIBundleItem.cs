@@ -57,6 +57,7 @@ public class NGUIBundleItem : MonoBehaviour
 
 	void OnClick()
     {
+		Debug.Log ("Buy button clicked");
         if(OnPurchaseRequest != null) OnPurchaseRequest(Id);
     }
 

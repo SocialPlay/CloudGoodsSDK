@@ -9,12 +9,16 @@
 #import <Foundation/Foundation.h>
 #import <StoreKit/StoreKit.h>
 
-@interface SocialplayiOSConnect : NSObject
+#define kInAppPurchaseManagerTransactionFailedNotification @"kInAppPurchaseManagerTransactionFailedNotification"
+#define kInAppPurchaseManagerTransactionSucceededNotification @"kInAppPurchaseManagerTransactionSucceededNotification"
+
+
+#define kInAppPurchaseManagerProductsFetchedNotification @"kInAppPurchaseManagerProductsFetchedNotification"
+
+@interface SocialplayiOSConnect : NSObject <SKProductsRequestDelegate, SKPaymentTransactionObserver>
 
 -(id)init;
-
-- (void)validateProductIdentifiers:(NSArray *)productIdentifiers;
-
 - (void)productsRequest:(SKProductsRequest *)request;
+
 
 @end
