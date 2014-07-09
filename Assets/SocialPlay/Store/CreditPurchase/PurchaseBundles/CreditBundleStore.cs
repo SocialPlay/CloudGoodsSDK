@@ -71,12 +71,12 @@ public class CreditBundleStore : MonoBehaviour
         nguiItem.Amount = item.Amount.ToString();
         nguiItem.Cost = item.Cost.ToString();
 		if (item.CreditPlatformIDs.ContainsKey("Product_ID"))
-						nguiItem.Id = item.CreditPlatformIDs ["Product_ID"].ToString ();
-				else
-						nguiItem.Id = item.ID.ToString();
+		    nguiItem.ProductID = item.CreditPlatformIDs ["Product_ID"].ToString ();
+
+        nguiItem.BundleID = item.ID.ToString();
+
         nguiItem.CurrencyName = item.CurrencyName;
         //nguiItem.CurrencyIcon = creditBundleIcon.Get(nguiItem.Amount, nguiItem.CurrencyIcon);
-        Debug.Log("item.IBD " + item.ID);
 
         // This is temporal until its added on the portal
         if (SocialPlaySettings.CreditBundlesDescription.Count != 0)
@@ -85,10 +85,10 @@ public class CreditBundleStore : MonoBehaviour
         nguiItem.OnPurchaseRequest = OnPurchaseRequest;
     }
 
-    void OnPurchaseRequest(string id)
+    void OnPurchaseRequest(NGUIBundleItem item)
     {
 		Debug.Log ("Purchase request");
-        platformPurchasor.Purchase(id, 1, SP.user.userID.ToString());
+        platformPurchasor.Purchase(item, 1, SP.user.userID.ToString());
     }
 
     void OnRecievedPurchaseResponse(string data)

@@ -13,7 +13,7 @@ public class GenericSocialPlayPurchase : IPlatformPurchaser
     int currentAmount = 0;
     string currentUserID = "";
 
-    public void Purchase(string id, int amount, string userID)
+    public void Purchase(NGUIBundleItem bundleItem, int amount, string userID)
     {
         //if (GatherGameInfo.allInfo.platformID == 4)
         //{
@@ -24,7 +24,7 @@ public class GenericSocialPlayPurchase : IPlatformPurchaser
         OKCallBack += new Action<GameObject>(FaceBookPurchaser_OKCallBack);
         CancelCallBack += new Action<GameObject>(FaceBookPurchaser_CancelCallBack);
 
-        currentitemID = id;
+        currentitemID = bundleItem.BundleID;
         currentAmount = amount;
         currentUserID = userID;
 

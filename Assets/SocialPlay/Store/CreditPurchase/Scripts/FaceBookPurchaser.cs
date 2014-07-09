@@ -8,13 +8,13 @@ public class FaceBookPurchaser : MonoBehaviour, IPlatformPurchaser
     public event Action<string> RecievedPurchaseResponse;
     public int currentBundleID = 0;
 
-    public void Purchase(string id, int amount, string userID)
+    public void Purchase(NGUIBundleItem bundleItem, int amount, string userID)
     {
-        currentBundleID = int.Parse(id);
+        currentBundleID = int.Parse(bundleItem.BundleID);
         //Console.WriteLine("Credit bundle purchase:  ID: " + id + " Amount: " + amount);
-        Debug.Log("ID: " + id + "\nAmount: " + amount + "\nUserID: " + userID);
+        Debug.Log("ID: " + bundleItem.BundleID + "\nAmount: " + amount + "\nUserID: " + userID);
 
-        FB.Canvas.Pay(product: "https://socialplay-staging.azurewebsites.net/CreditBundleDataFacebook?BundleID=" + id,
+        FB.Canvas.Pay(product: "https://socialplay-staging.azurewebsites.net/CreditBundleDataFacebook?BundleID=" + bundleItem.BundleID,
                       quantity: amount,
                       callback: delegate(FBResult response)
                       {

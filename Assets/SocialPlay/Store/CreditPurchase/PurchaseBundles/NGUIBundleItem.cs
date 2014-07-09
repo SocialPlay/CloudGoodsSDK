@@ -45,10 +45,12 @@ public class NGUIBundleItem : MonoBehaviour
 		set { description.text = value; }
 	}
 
-    public string Id { get; set; }
+    public string ProductID { get; set; }
+
+    public string BundleID { get; set; }
 
     public UIButton PurchaseButton;
-	public Action<string> OnPurchaseRequest;
+	public Action< NGUIBundleItem> OnPurchaseRequest;
 
 	void Awake()
 	{
@@ -58,7 +60,7 @@ public class NGUIBundleItem : MonoBehaviour
 	void OnClick()
     {
 		Debug.Log ("Buy button clicked");
-        if(OnPurchaseRequest != null) OnPurchaseRequest(Id);
+        if(OnPurchaseRequest != null) OnPurchaseRequest(this);
     }
 
 }

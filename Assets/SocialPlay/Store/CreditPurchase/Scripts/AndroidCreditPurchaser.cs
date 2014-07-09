@@ -36,9 +36,9 @@ public class AndroidCreditPurchaser : MonoBehaviour, IPlatformPurchaser
 #endif
 
 
-    public void Purchase(string bundleID, int amount, string userID)
+    public void Purchase(NGUIBundleItem bundleItem, int amount, string userID)
     {
-        currentBundleID = int.Parse(bundleID);
+        currentBundleID = int.Parse(bundleItem.BundleID);
 #if UNITY_ANDROID && !UNITY_EDITOR
 		using (AndroidJavaClass cls = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
 		{

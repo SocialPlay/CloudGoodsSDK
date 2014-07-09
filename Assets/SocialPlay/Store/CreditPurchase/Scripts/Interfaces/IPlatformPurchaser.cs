@@ -10,7 +10,7 @@ public interface IPlatformPurchaser
 {
     event Action<string> RecievedPurchaseResponse;
 
-    void Purchase(string id, int amount, string userID);
+    void Purchase(NGUIBundleItem id, int amount, string userID);
     void OnReceivedPurchaseResponse(string data);
 }
 
