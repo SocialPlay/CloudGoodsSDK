@@ -29,8 +29,6 @@ SKProductsRequest *productsRequest;
     productsRequest = [[SKProductsRequest alloc] initWithProductIdentifiers:productIdentifiers];
     productsRequest.delegate = self;
     [productsRequest start];
-    
-    // we will release the request object in the delegate callback
 }
 
 #pragma mark -
@@ -57,9 +55,10 @@ SKProductsRequest *productsRequest;
     for (NSString *invalidProductId in response.invalidProductIdentifiers)
     {
         NSLog(@"Invalid product id: %@" , invalidProductId);
+        
+        UnitySendMessage("iOSConnect", "ReceivedMessageFromXCode", "Invalid ProductID");
     }
     
-    // finally release the reqest we alloc/init’ed in requestProUpgradeProductData
     [productsRequest release];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:kInAppPurchaseManagerProductsFetchedNotification object:self userInfo:nil];
@@ -98,12 +97,12 @@ SKProductsRequest *productsRequest;
     if (wasSuccessful)
     {
         // send out a notification that we’ve finished the transaction
-        UnitySendMessage("iOSConnect", "ReceivedMessageFromXCode", "trasaction success");
+        UnitySendMessage("iOSConnect", "ReceivedMessageFromXCode", "Success");
     }
     else
     {
         // send out a notification for the failed transactionß
-        UnitySendMessage("iOSConnect", "ReceivedMessageFromXCode", "transaction failed");
+        UnitySendMessage("iOSConnect", "ReceivedMessageFromXCode", "Failed");
     }
 }
 
@@ -128,7 +127,7 @@ SKProductsRequest *productsRequest;
     {
         NSLog(@"Cancel happened, finish transaction");
         // this is fine, the user just cancelled, so don’t notify
-        UnitySendMessage("iOSConnect", "ReceivedMessageFromXCode", "transaction cancelled");
+        UnitySendMessage("iOSConnect", "ReceivedMessageFromXCode", "Transaction Cancelled");
         [[SKPaymentQueue defaultQueue] finishTransaction:finishedTransaction];
     }
 }

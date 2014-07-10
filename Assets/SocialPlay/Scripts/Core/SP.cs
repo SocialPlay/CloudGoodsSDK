@@ -719,7 +719,11 @@ public class SP : MonoBehaviour//, IServiceCalls
 
     static public void PurchaseCreditBundles(string payload, Action<string> callback)
     {
+		Debug.Log (SP.AppSecret);
+
 		string url = Url + "PurchaseCreditBundle?AppID=" + GuidAppID + "&payload=" + WWW.EscapeURL(EncryptStringUnity(payload));
+
+		Debug.Log (url);
 
         WWW www = new WWW(url);
 

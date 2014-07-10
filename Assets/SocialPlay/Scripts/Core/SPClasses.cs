@@ -119,7 +119,7 @@ public class BundleItemDetails
 public class BundlePurchaseRequest
 {
     public int BundleID;
-    public Guid UserID;
+    public string UserID;
     public string ReceiptToken;
     public int PaymentPlatform;
 }

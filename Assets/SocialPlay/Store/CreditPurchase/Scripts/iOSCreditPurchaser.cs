@@ -2,6 +2,7 @@
 using System.Collections;
 using System;
 using Newtonsoft.Json;
+using LitJson;
 
 public class iOSCreditPurchaser : MonoBehaviour, IPlatformPurchaser {
 
@@ -15,6 +16,7 @@ public class iOSCreditPurchaser : MonoBehaviour, IPlatformPurchaser {
 	
 	public void Purchase(NGUIBundleItem bundleItem, int amount, string userID)
 	{
+		currentBundleID = int.Parse (bundleItem.BundleID);
 		iOSConnect.RequestInAppPurchase (bundleItem.ProductID);
 	}
 
@@ -25,13 +27,15 @@ public class iOSCreditPurchaser : MonoBehaviour, IPlatformPurchaser {
         {
             BundlePurchaseRequest bundlePurchaseRequest = new BundlePurchaseRequest();
             bundlePurchaseRequest.BundleID = currentBundleID;
-            bundlePurchaseRequest.UserID = SP.user.userID;
+            bundlePurchaseRequest.UserID = SP.user.userID.ToString();
             bundlePurchaseRequest.ReceiptToken = UnityEngine.Random.Range(1, 1000000).ToString();
 
             //TODO implement platform check for platform credit bundle purchase
             bundlePurchaseRequest.PaymentPlatform = 4;
 
-            string bundleJsonString = JsonConvert.SerializeObject(bundlePurchaseRequest);
+			Debug.Log("Current budle ID: : " + currentBundleID + "  UserID: " + bundlePurchaseRequest.UserID + "   Recipt token: " + bundlePurchaseRequest.ReceiptToken);
+
+			string bundleJsonString = JsonMapper.ToJson(bundlePurchaseRequest);
 
             SP.PurchaseCreditBundles(bundleJsonString, OnReceivedSocialplayCreditsResponse);
         }

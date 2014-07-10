@@ -71,7 +71,7 @@ public class AndroidCreditPurchaser : MonoBehaviour, IPlatformPurchaser
         {
             BundlePurchaseRequest bundlePurchaseRequest = new BundlePurchaseRequest();
             bundlePurchaseRequest.BundleID = currentBundleID;
-            bundlePurchaseRequest.UserID = SP.user.userID;
+            bundlePurchaseRequest.UserID = SP.user.userID.ToString();
             bundlePurchaseRequest.ReceiptToken = message;
 
             //TODO implement platform check for platform credit bundle purchase
