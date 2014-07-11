@@ -21,6 +21,7 @@ public class CreditBundleStore : MonoBehaviour
     IGridLoader gridLoader;
     IPlatformPurchaser platformPurchasor;
     CreditBundleIcon creditBundleIcon = new CreditBundleIcon();
+	bool isPurchaseRequest = false;
 
     public bool isInitialized = false;
 
@@ -38,12 +39,24 @@ public class CreditBundleStore : MonoBehaviour
     {
         try
         {
-			Debug.Log("Initialize credit store");
             platformPurchasor = GetPlatformPurchaser();
-			Debug.Log("Platform pruchaser: " + platformPurchasor);
             platformPurchasor.RecievedPurchaseResponse += OnRecievedPurchaseResponse;
 
-            SP.GetCreditBundles(3, OnPurchaseBundlesRecieved);
+			int currentplatform = 0;
+
+			#if UNITY_EDITOR
+				currentplatform = 1;
+			#endif
+
+			#if UNITY_ANDROID && !UNITY_EDITOR
+				currentplatform = 3;
+			#endif
+
+			#if UNITY_IPHONE && !UNITY_EDITOR
+				currentplatform = 4;
+			#endif
+
+            SP.GetCreditBundles(currentplatform, OnPurchaseBundlesRecieved);
 
             isInitialized = true;
         }
@@ -73,6 +86,9 @@ public class CreditBundleStore : MonoBehaviour
 		if (item.CreditPlatformIDs.ContainsKey("Product_ID"))
 		    nguiItem.ProductID = item.CreditPlatformIDs ["Product_ID"].ToString ();
 
+		if (item.CreditPlatformIDs.ContainsKey("IOS_Product_ID"))
+			nguiItem.ProductID = item.CreditPlatformIDs ["IOS_Product_ID"].ToString ();
+
         nguiItem.BundleID = item.ID.ToString();
 
         nguiItem.CurrencyName = item.CurrencyName;
@@ -87,14 +103,19 @@ public class CreditBundleStore : MonoBehaviour
 
     void OnPurchaseRequest(NGUIBundleItem item)
     {
-		Debug.Log ("Purchase request");
-        platformPurchasor.Purchase(item, 1, SP.user.userID.ToString());
+		if (!isPurchaseRequest) {
+			isPurchaseRequest = true;
+						platformPurchasor.Purchase (item, 1, SP.user.userID.ToString ());
+				}
     }
 
     void OnRecievedPurchaseResponse(string data)
     {
+		Debug.Log ("Received purchase response");
 
-        JToken dataToken = JToken.Parse(data);
+		isPurchaseRequest = false;
+
+        /*JToken dataToken = JToken.Parse(data);
         JToken dataObj = JToken.Parse(dataToken.ToString());
 
 
@@ -105,7 +126,7 @@ public class CreditBundleStore : MonoBehaviour
         else
         {
 			NGUITools.Broadcast(SocialPlayMessage.OnPurchaseFail.ToString());
-        }
+        }*/
 
     }
 
@@ -118,7 +139,6 @@ public class CreditBundleStore : MonoBehaviour
             case PlatformPurchase.Facebook:
                 return gameObject.AddComponent<FaceBookPurchaser>();
 			case PlatformPurchase.IOS:
-				Debug.Log("Setting ios purchaser");
 				return gameObject.AddComponent<iOSCreditPurchaser>();
             default:
                 return null;

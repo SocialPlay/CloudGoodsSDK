@@ -12,10 +12,8 @@ public class iOSConnect : MonoBehaviour {
 
     public static void RequestInAppPurchase(string productID)
     {
-		Debug.Log ("Called print message function");
         if (Application.platform != RuntimePlatform.OSXEditor)
         {
-			Debug.Log("In IOS: called print from unity");
 			_PrintMessageFromUnity(productID);
         }
     }

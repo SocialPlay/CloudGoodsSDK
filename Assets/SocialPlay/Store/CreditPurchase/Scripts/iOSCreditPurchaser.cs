@@ -30,24 +30,22 @@ public class iOSCreditPurchaser : MonoBehaviour, IPlatformPurchaser {
             bundlePurchaseRequest.UserID = SP.user.userID.ToString();
             bundlePurchaseRequest.ReceiptToken = UnityEngine.Random.Range(1, 1000000).ToString();
 
-            //TODO implement platform check for platform credit bundle purchase
             bundlePurchaseRequest.PaymentPlatform = 4;
-
-			Debug.Log("Current budle ID: : " + currentBundleID + "  UserID: " + bundlePurchaseRequest.UserID + "   Recipt token: " + bundlePurchaseRequest.ReceiptToken);
 
 			string bundleJsonString = JsonMapper.ToJson(bundlePurchaseRequest);
 
             SP.PurchaseCreditBundles(bundleJsonString, OnReceivedSocialplayCreditsResponse);
         }
-        else if (data == "Failed")
+        else if (data == "Failed" || data == "Cancelled")
         {
-
+			RecievedPurchaseResponse("Cancelled");
         }
 	}
 
     public void OnReceivedSocialplayCreditsResponse(string data)
     {
-        Debug.Log("Socialplay give credits callback: " + data);
+
+		RecievedPurchaseResponse("Success");
         SP.GetPaidCurrencyBalance(null);
     }
 	

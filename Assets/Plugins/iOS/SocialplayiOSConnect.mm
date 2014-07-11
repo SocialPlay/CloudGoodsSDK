@@ -127,7 +127,7 @@ SKProductsRequest *productsRequest;
     {
         NSLog(@"Cancel happened, finish transaction");
         // this is fine, the user just cancelled, so don’t notify
-        UnitySendMessage("iOSConnect", "ReceivedMessageFromXCode", "Transaction Cancelled");
+        UnitySendMessage("iOSConnect", "ReceivedMessageFromXCode", "Cancelled");
         [[SKPaymentQueue defaultQueue] finishTransaction:finishedTransaction];
     }
 }
