@@ -7,21 +7,21 @@ public class AndroidCreditPurchaser : MonoBehaviour, IPlatformPurchaser
 {
     public int currentBundleID = 0;
 
-#if UNITY_ANDROID && !UNITY_EDITOR
+
 	public AndroidJavaObject cls_StorePurchaser;
-#endif
+
     public event Action<string> RecievedPurchaseResponse;
 
     void Start()
     {
         gameObject.name = "AndroidCreditPurchaser";
 
-#if UNITY_ANDROID && !UNITY_EDITOR
+
         initStore();
-#endif
+
     }
 
-#if UNITY_ANDROID && !UNITY_EDITOR
+
 	void initStore()
 	{
 		cls_StorePurchaser = new AndroidJavaClass("com.storetest.StorePurchaser");
@@ -33,13 +33,13 @@ public class AndroidCreditPurchaser : MonoBehaviour, IPlatformPurchaser
 			}
 		}
 	}
-#endif
+
 
 
     public void Purchase(NGUIBundleItem bundleItem, int amount, string userID)
     {
         currentBundleID = int.Parse(bundleItem.BundleID);
-#if UNITY_ANDROID && !UNITY_EDITOR
+
 		using (AndroidJavaClass cls = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
 		{
 			using (AndroidJavaObject obj_Activity = cls.GetStatic<AndroidJavaObject>("currentActivity"))
@@ -47,12 +47,12 @@ public class AndroidCreditPurchaser : MonoBehaviour, IPlatformPurchaser
 				cls_StorePurchaser.CallStatic("makePurchase", obj_Activity, GetProductIDFromBundleID(currentBundleID));
 			}
 		}
-#endif
+
     }
 
     void outputDebugStringValue()
     {
-#if UNITY_ANDROID && !UNITY_EDITOR
+
 		TextMesh t = (TextMesh)gameObject.GetComponent(typeof(TextMesh));
 		using (AndroidJavaClass cls = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
 		{
@@ -62,7 +62,7 @@ public class AndroidCreditPurchaser : MonoBehaviour, IPlatformPurchaser
 				t.text = javaReturn;
 			}
 		}
-#endif
+
     }
 
     void RecieveFromJava(string message)
