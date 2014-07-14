@@ -56,7 +56,7 @@ public class CreditBundleStore : MonoBehaviour
 				currentplatform = 4;
 			#endif
 
-            SP.GetCreditBundles(currentplatform, OnPurchaseBundlesRecieved);
+            SP.GetCreditBundles(3, OnPurchaseBundlesRecieved);
 
             isInitialized = true;
         }
@@ -83,8 +83,9 @@ public class CreditBundleStore : MonoBehaviour
         NGUIBundleItem nguiItem = obj.GetComponent<NGUIBundleItem>();
         nguiItem.Amount = item.Amount.ToString();
         nguiItem.Cost = item.Cost.ToString();
-		if (item.CreditPlatformIDs.ContainsKey("Product_ID"))
-		    nguiItem.ProductID = item.CreditPlatformIDs ["Product_ID"].ToString ();
+
+        if (item.CreditPlatformIDs.ContainsKey("Android_Product_ID"))
+            nguiItem.ProductID = item.CreditPlatformIDs["Android_Product_ID"];
 
 		if (item.CreditPlatformIDs.ContainsKey("IOS_Product_ID"))
 			nguiItem.ProductID = item.CreditPlatformIDs ["IOS_Product_ID"].ToString ();

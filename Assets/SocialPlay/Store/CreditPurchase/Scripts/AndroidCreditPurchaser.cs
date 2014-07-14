@@ -7,6 +7,7 @@ public class AndroidCreditPurchaser : MonoBehaviour, IPlatformPurchaser
 {
     public int currentBundleID = 0;
 
+    public UILabel debugMessage;
 
 	public AndroidJavaObject cls_StorePurchaser;
 
@@ -15,21 +16,28 @@ public class AndroidCreditPurchaser : MonoBehaviour, IPlatformPurchaser
     void Start()
     {
         gameObject.name = "AndroidCreditPurchaser";
-
-
+        debugMessage = GameObject.Find("DebugLabel").GetComponent<UILabel>();
         initStore();
-
     }
 
 
 	void initStore()
 	{
 		cls_StorePurchaser = new AndroidJavaClass("com.storetest.StorePurchaser");
+
+        debugMessage.text = "init store";
+
 		using (AndroidJavaClass cls = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
 		{
+            debugMessage.text = "found unityplayer";
+
 			using (AndroidJavaObject obj_Activity = cls.GetStatic<AndroidJavaObject>("currentActivity"))
 			{
+                debugMessage.text = "found current acticvity : " + obj_Activity.ToString();
+                cls.CallStatic("UnitySendMessage", "CreditStore", "RecieveFromJava", "whoowhoo"); 
 				cls_StorePurchaser.CallStatic("initStore", obj_Activity, SocialPlaySettings.AndroidKey);
+
+                outputDebugStringValue();
 			}
 		}
 	}
@@ -40,11 +48,13 @@ public class AndroidCreditPurchaser : MonoBehaviour, IPlatformPurchaser
     {
         currentBundleID = int.Parse(bundleItem.BundleID);
 
+        debugMessage.text = "Purchase item: " + bundleItem.ProductID;
+
 		using (AndroidJavaClass cls = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
 		{
 			using (AndroidJavaObject obj_Activity = cls.GetStatic<AndroidJavaObject>("currentActivity"))
 			{
-				cls_StorePurchaser.CallStatic("makePurchase", obj_Activity, GetProductIDFromBundleID(currentBundleID));
+				cls_StorePurchaser.CallStatic("makePurchase", obj_Activity, bundleItem.ProductID);
 			}
 		}
 
@@ -52,14 +62,12 @@ public class AndroidCreditPurchaser : MonoBehaviour, IPlatformPurchaser
 
     void outputDebugStringValue()
     {
-
-		TextMesh t = (TextMesh)gameObject.GetComponent(typeof(TextMesh));
 		using (AndroidJavaClass cls = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
 		{
 			using (AndroidJavaObject obj_Activity = cls.GetStatic<AndroidJavaObject>("currentActivity"))
 			{
 				string javaReturn = cls_StorePurchaser.CallStatic<string>("retrieveDebugValue");
-				t.text = javaReturn;
+				debugMessage.text = javaReturn;
 			}
 		}
 
@@ -81,11 +89,15 @@ public class AndroidCreditPurchaser : MonoBehaviour, IPlatformPurchaser
 
             SP.PurchaseCreditBundles(bundleJsonString, OnReceivedPurchaseResponse);
         }
+        else
+        {
+            OnReceivedPurchaseResponse(message);
+        }
     }
 
-    string GetProductIDFromBundleID(int ID)
+    void DebugFromJava(string message)
     {
-        return SocialPlaySettings.AndroidProductNames[ID - 1];
+        debugMessage.text = message;
     }
 
     public void OnReceivedPurchaseResponse(string data)
