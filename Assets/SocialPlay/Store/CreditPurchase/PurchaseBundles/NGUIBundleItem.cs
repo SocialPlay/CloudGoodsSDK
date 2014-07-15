@@ -21,9 +21,9 @@ public class NGUIBundleItem : MonoBehaviour
         set { currenyName.text = value; }
     }
 
-    public UISprite currencyIcon;
+    public UITexture currencyIcon;
 
-    public UISprite CurrencyIcon
+    public UITexture CurrencyIcon
     {
         get { return currencyIcon; }
         set { currencyIcon = value; }
@@ -61,6 +61,12 @@ public class NGUIBundleItem : MonoBehaviour
     {
 		Debug.Log ("Buy button clicked");
         if(OnPurchaseRequest != null) OnPurchaseRequest(this);
+    }
+
+    public void SetCredtiBundleIcon(Texture2D texture)
+    {
+        if (currencyIcon != null)
+            currencyIcon.mainTexture = texture;
     }
 
 }

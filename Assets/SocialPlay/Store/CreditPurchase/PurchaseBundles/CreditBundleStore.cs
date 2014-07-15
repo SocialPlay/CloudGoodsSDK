@@ -99,6 +99,13 @@ public class CreditBundleStore : MonoBehaviour
         if (SocialPlaySettings.CreditBundlesDescription.Count != 0)
             nguiItem.Description = (item.ID - 1) <= SocialPlaySettings.CreditBundlesDescription.Count ? SocialPlaySettings.CreditBundlesDescription[item.ID - 1] : "";
 
+        Debug.Log("get credit bundle texture: " + item.CurrencyIcon);
+
+        ItemTextureCache.instance.GetItemTexture(item.CurrencyIcon,delegate(ItemTextureCache.ImageStatus imageStatus, Texture2D texture)
+                {
+                    nguiItem.SetCredtiBundleIcon(texture);
+                } );
+
         nguiItem.OnPurchaseRequest = OnPurchaseRequest;
     }
 
