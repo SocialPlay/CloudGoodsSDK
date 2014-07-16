@@ -166,6 +166,8 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter {
 
     public List<StoreItem> ConvertToStoreItems(string dataString)
     {
+        Debug.Log("convert to store items: " + dataString);
+
         string storeString = ParseString(dataString);
 
         List<StoreItem> storeItems = new List<StoreItem>();
@@ -200,7 +202,8 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter {
             {
                 StoreItemDetail detail = new StoreItemDetail();
                 detail.propertyName = storeItemDetailArray[j]["Name"].ToString();
-                detail.propertyValue = int.Parse(storeItemDetailArray[j]["Value"].ToString());
+                Debug.Log(storeItemDetailArray[j]["Value"].ToString());
+                detail.propertyValue = float.Parse(storeItemDetailArray[j]["Value"].ToString());
 
                 //detail.invertEnergy = (bool)storeItemDetailArray[j]["InvertEnergy"];
 

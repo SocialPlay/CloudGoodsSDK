@@ -145,7 +145,7 @@ public class StoreItem
 public class StoreItemDetail
 {
 	public string propertyName;
-	public int propertyValue;
+	public float propertyValue;
 	public bool invertEnergy;
 }
 

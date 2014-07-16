@@ -7,7 +7,6 @@ public class DisplayNewestItems : MonoBehaviour
 {
     public NGUIStoreLoader storeLoader;
 
-    public string appID;
     public FilterNewestItems.SortTimeType timeFilterType = FilterNewestItems.SortTimeType.hours;
     public int itemDisplayCount = 0;
     public int timeDifference = 5;
