@@ -7,8 +7,6 @@ public class AndroidCreditPurchaser : MonoBehaviour, IPlatformPurchaser
 {
     public int currentBundleID = 0;
 
-    public UILabel debugMessage;
-
 	public AndroidJavaObject cls_StorePurchaser;
 
     public event Action<string> RecievedPurchaseResponse;
@@ -16,7 +14,6 @@ public class AndroidCreditPurchaser : MonoBehaviour, IPlatformPurchaser
     void Start()
     {
         gameObject.name = "AndroidCreditPurchaser";
-        debugMessage = GameObject.Find("DebugLabel").GetComponent<UILabel>();
         initStore();
     }
 
@@ -25,15 +22,10 @@ public class AndroidCreditPurchaser : MonoBehaviour, IPlatformPurchaser
 	{
 		cls_StorePurchaser = new AndroidJavaClass("com.storetest.StorePurchaser");
 
-        debugMessage.text = "init store";
-
 		using (AndroidJavaClass cls = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
 		{
-            debugMessage.text = "found unityplayer";
-
 			using (AndroidJavaObject obj_Activity = cls.GetStatic<AndroidJavaObject>("currentActivity"))
 			{
-                debugMessage.text = "found current acticvity : " + obj_Activity.ToString();
                 cls.CallStatic("UnitySendMessage", "CreditStore", "RecieveFromJava", "whoowhoo"); 
 				cls_StorePurchaser.CallStatic("initStore", obj_Activity, SocialPlaySettings.AndroidKey);
 
@@ -47,8 +39,6 @@ public class AndroidCreditPurchaser : MonoBehaviour, IPlatformPurchaser
     public void Purchase(NGUIBundleItem bundleItem, int amount, string userID)
     {
         currentBundleID = int.Parse(bundleItem.BundleID);
-
-        debugMessage.text = "Purchase item: " + bundleItem.ProductID;
 
 		using (AndroidJavaClass cls = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
 		{
@@ -67,7 +57,6 @@ public class AndroidCreditPurchaser : MonoBehaviour, IPlatformPurchaser
 			using (AndroidJavaObject obj_Activity = cls.GetStatic<AndroidJavaObject>("currentActivity"))
 			{
 				string javaReturn = cls_StorePurchaser.CallStatic<string>("retrieveDebugValue");
-				debugMessage.text = javaReturn;
 			}
 		}
 
@@ -97,7 +86,7 @@ public class AndroidCreditPurchaser : MonoBehaviour, IPlatformPurchaser
 
     void DebugFromJava(string message)
     {
-        debugMessage.text = message;
+        Debug.Log("Debug from Java: " + message);
     }
 
     public void OnReceivedPurchaseResponse(string data)
