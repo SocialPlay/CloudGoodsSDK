@@ -56,7 +56,7 @@ public class CreditBundleStore : MonoBehaviour
 				currentplatform = 4;
 			#endif
 
-            SP.GetCreditBundles(3, OnPurchaseBundlesRecieved);
+            SP.GetCreditBundles(currentplatform, OnPurchaseBundlesRecieved);
 
             isInitialized = true;
         }
