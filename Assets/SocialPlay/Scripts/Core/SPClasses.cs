@@ -3,66 +3,66 @@ using System.Collections.Generic;
 
 public class SecurePayload
 {
-	public string token;
-	public string data;
+    public string token;
+    public string data;
 }
 
 public class GiveOwnerItemWebserviceRequest
 {
-	public List<WebModels.ItemsInfo> listOfItems;
-	public WebModels.OwnerTypes OwnerType;
-	public string ownerID;
-	public string appID;
+    public List<WebModels.ItemsInfo> listOfItems;
+    public WebModels.OwnerTypes OwnerType;
+    public string ownerID;
+    public string appID;
 }
 
 public class SocialPlayUser
 {
-	public string userGuid = "";
-	public bool isNewUserToWorld = false;
-	public string userName = "";
-	public string userEmail = "";
-	public Guid sessionID;
-	public Guid userID;
+    public string userGuid = "";
+    public bool isNewUserToWorld = false;
+    public string userName = "";
+    public string userEmail = "";
+    public Guid sessionID;
+    public Guid userID;
 
-	public SocialPlayUser(string newUserGuid, string newUserName, string newUserEmail)
-	{
-		userGuid = newUserGuid;
-		userName = newUserName;
-		userEmail = newUserEmail;
-	}
+    public SocialPlayUser(string newUserGuid, string newUserName, string newUserEmail)
+    {
+        userGuid = newUserGuid;
+        userName = newUserName;
+        userEmail = newUserEmail;
+    }
 }
 
 public class LoginUserInfo
 {
-	public Guid ID;
-	public string name;
-	public string email;
+    public Guid ID;
+    public string name;
+    public string email;
 
-	public LoginUserInfo(Guid userID, string userName, string userEmail)
-	{
-		ID = userID;
-		name = userName;
-		email = userEmail;
-	}
+    public LoginUserInfo(Guid userID, string userName, string userEmail)
+    {
+        ID = userID;
+        name = userName;
+        email = userEmail;
+    }
 }
 
 public class UserResponse
 {
-	public int code;
-	public string message;
-	public SocialPlayUser userInfo;
+    public int code;
+    public string message;
+    public SocialPlayUser userInfo;
 
-	public UserResponse(int caseCode, string msg, SocialPlayUser newUserInfo)
-	{
-		code = caseCode;
-		message = msg;
-		userInfo = newUserInfo;
-	}
+    public UserResponse(int caseCode, string msg, SocialPlayUser newUserInfo)
+    {
+        code = caseCode;
+        message = msg;
+        userInfo = newUserInfo;
+    }
 
-	public override string ToString()
-	{
-		return "Code :" + code + "\nMessage :" + message;
-	}
+    public override string ToString()
+    {
+        return "Code :" + code + "\nMessage :" + message;
+    }
 }
 
 #region Bundles
@@ -75,7 +75,7 @@ public class CreditBundleItem
     public string CurrencyName = "";
     public string CurrencyIcon = "";
 
-    public Dictionary<string, string> CreditPlatformIDs = new Dictionary<string,string>();
+    public Dictionary<string, string> CreditPlatformIDs = new Dictionary<string, string>();
 }
 
 
@@ -124,29 +124,37 @@ public class BundlePurchaseRequest
     public int PaymentPlatform;
 }
 
+public class WorldCurrencyInfo
+{
+    public string FreeCurrencyName;
+    public string FreeCurrencyImage;
+    public string PaidCurrencyName;
+    public string PaidCurrencyImage;
+}
+
 #endregion
 
 #region Items
 
 public class StoreItem
 {
-	public int ID = 0;
-	public string itemName = "";
-	public List<StoreItemDetail> itemDetail = new List<StoreItemDetail>();
-	public DateTime addedDate;
-	public string behaviours;
-	public List<string> tags;
-	public int itemID = 0;
-	public int creditValue = 0;
-	public int coinValue = 0;
-	public string imageURL = "";
+    public int ID = 0;
+    public string itemName = "";
+    public List<StoreItemDetail> itemDetail = new List<StoreItemDetail>();
+    public DateTime addedDate;
+    public string behaviours;
+    public List<string> tags;
+    public int itemID = 0;
+    public int creditValue = 0;
+    public int coinValue = 0;
+    public string imageURL = "";
 }
 
 public class StoreItemDetail
 {
-	public string propertyName;
-	public float propertyValue;
-	public bool invertEnergy;
+    public string propertyName;
+    public int propertyValue;
+    public bool invertEnergy;
 }
 
 #endregion
@@ -155,29 +163,29 @@ public class StoreItemDetail
 
 public class RecipeInfo
 {
-	public int recipeID;
-	public string name;
-	public int energy;
-	public string description;
-	public string imgURL;
+    public int recipeID;
+    public string name;
+    public int energy;
+    public string description;
+    public string imgURL;
 
-	public List<ItemDetail> RecipeDetails;
-	public List<IngredientDetail> IngredientDetails;
+    public List<ItemDetail> RecipeDetails;
+    public List<IngredientDetail> IngredientDetails;
 }
 
 public class IngredientDetail
 {
-	public string name;
-	public int ingredientID;
-	public int amount;
-	public int energy;
-	public string imgURL;
+    public string name;
+    public int ingredientID;
+    public int amount;
+    public int energy;
+    public string imgURL;
 }
 
 public class ItemDetail
 {
-	public string name;
-	public float value;
+    public string name;
+    public float value;
 }
 
 #endregion

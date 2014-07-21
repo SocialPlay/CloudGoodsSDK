@@ -242,4 +242,8 @@ public class NewtonsoftJsonObjectConverter : IServiceObjectConverter {
         return responce;
     }
 
+    public WorldCurrencyInfo ConvertToWorldCurrencyInfo(string dataString)
+    {
+        return new WorldCurrencyInfo();
+    }
 }

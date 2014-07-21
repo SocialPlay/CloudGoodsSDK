@@ -5,7 +5,8 @@ using System.Collections.Generic;
 using SocialPlay.Data;
 using LitJson;
 
-public class LitJsonFxJsonObjectConverter : IServiceObjectConverter {
+public class LitJsonFxJsonObjectConverter : IServiceObjectConverter
+{
 
     public List<ItemData> ConvertToItemDataList(string ObjectData)
     {
@@ -166,8 +167,6 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter {
 
     public List<StoreItem> ConvertToStoreItems(string dataString)
     {
-        Debug.Log("convert to store items: " + dataString);
-
         string storeString = ParseString(dataString);
 
         List<StoreItem> storeItems = new List<StoreItem>();
@@ -177,16 +176,16 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter {
 
         for (int i = 0; i < storeItemsJsonArray.Count; i++)
         {
-			for(int e = 0, emax = storeItemsJsonArray[i].Count; e<emax; e++)
-			{
-				if (storeItemsJsonArray[i][e].IsArray)
-				{
-					for(int x = 0, xmax = storeItemsJsonArray[i][e].Count; x<xmax; x++)
-					{
-						Debug.Log("storeItem " + storeItemsJsonArray[i][e][x]);
-					}
-				}
-			}
+            for (int e = 0, emax = storeItemsJsonArray[i].Count; e < emax; e++)
+            {
+                if (storeItemsJsonArray[i][e].IsArray)
+                {
+                    for (int x = 0, xmax = storeItemsJsonArray[i][e].Count; x < xmax; x++)
+                    {
+                        Debug.Log("storeItem " + storeItemsJsonArray[i][e][x]);
+                    }
+                }
+            }
             StoreItem storeItemInfo = new StoreItem();
             storeItemInfo.ID = int.Parse(storeItemsJsonArray[i]["ID"].ToString());
             storeItemInfo.itemName = storeItemsJsonArray[i]["Name"].ToString();
@@ -202,8 +201,7 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter {
             {
                 StoreItemDetail detail = new StoreItemDetail();
                 detail.propertyName = storeItemDetailArray[j]["Name"].ToString();
-                Debug.Log(storeItemDetailArray[j]["Value"].ToString());
-                detail.propertyValue = float.Parse(storeItemDetailArray[j]["Value"].ToString());
+                detail.propertyValue = int.Parse(storeItemDetailArray[j]["Value"].ToString());
 
                 //detail.invertEnergy = (bool)storeItemDetailArray[j]["InvertEnergy"];
 
@@ -227,12 +225,12 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter {
         return storeItems;
     }
 
-	public SocialPlayUser ConvertToUserInfo(string dataString)
+    public SocialPlayUser ConvertToUserInfo(string dataString)
     {
         string userInfoString = ParseString(dataString);
         JsonData data = LitJson.JsonMapper.ToObject(userInfoString);
 
-		SocialPlayUser userinfo = new SocialPlayUser(data["userGuid"].ToString(), data["userName"].ToString(), "");
+        SocialPlayUser userinfo = new SocialPlayUser(data["userGuid"].ToString(), data["userName"].ToString(), "");
 
         if (data["userEmail"] != null) userinfo.userEmail = data["userEmail"].ToString();
 
@@ -395,17 +393,33 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter {
 
         JsonData data = LitJson.JsonMapper.ToObject(parsedString);
 
-		SocialPlayUser userInfo = null;
+        SocialPlayUser userInfo = null;
 
-		if (data["code"].ToString() == "0")
-		{
-			JsonData userData = LitJson.JsonMapper.ToObject(data["message"].ToString());
-			userInfo = new SocialPlayUser(userData["ID"].ToString(), userData["name"].ToString(), userData["email"].ToString());
-		}
+        if (data["code"].ToString() == "0")
+        {
+            JsonData userData = LitJson.JsonMapper.ToObject(data["message"].ToString());
+            userInfo = new SocialPlayUser(userData["ID"].ToString(), userData["name"].ToString(), userData["email"].ToString());
+        }
 
         UserResponse responce = new UserResponse(int.Parse(data["code"].ToString()), data["message"].ToString(), userInfo);
 
         return responce;
+    }
+
+    public WorldCurrencyInfo ConvertToWorldCurrencyInfo(string dataString)
+    {
+        Debug.Log(dataString);
+
+        JsonData worldCurrencyInfoObj = LitJson.JsonMapper.ToObject(dataString);
+
+        WorldCurrencyInfo worldCurrencyInfo = new WorldCurrencyInfo();
+
+        worldCurrencyInfo.FreeCurrencyName = worldCurrencyInfoObj["InGameCurrencyName"].ToString();
+        worldCurrencyInfo.FreeCurrencyImage = worldCurrencyInfoObj["InGameCurrencyImage"].ToString();
+        worldCurrencyInfo.PaidCurrencyName = worldCurrencyInfoObj["PaidCurrencyName"].ToString();
+        worldCurrencyInfo.PaidCurrencyImage = worldCurrencyInfoObj["PaidCurrencyImage"].ToString();
+
+        return worldCurrencyInfo;
     }
 
     string ParseString(string dataString)

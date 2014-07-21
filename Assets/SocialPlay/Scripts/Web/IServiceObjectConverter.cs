@@ -4,7 +4,8 @@ using System;
 using System.Collections.Generic;
 using SocialPlay.Data;
 
-public interface IServiceObjectConverter {
+public interface IServiceObjectConverter
+{
 
     List<ItemData> ConvertToItemDataList(string ObjectData);
 
@@ -25,5 +26,7 @@ public interface IServiceObjectConverter {
     MoveMultipleItemsResponse ConvertToMoveMultipleItemsResponse(string dataString);
 
     UserResponse ConvertToSPLoginResponse(string dataString);
+
+    WorldCurrencyInfo ConvertToWorldCurrencyInfo(string dataString);
 
 }

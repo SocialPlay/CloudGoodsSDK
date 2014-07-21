@@ -33,6 +33,7 @@ public class CreditBundleStore : MonoBehaviour
     void OnRegisteredUserToSession(string obj)
     {
         Initialize();
+        SP.GetWorldCurrencyInfo(null);
     }
 
     public void Initialize()
@@ -98,8 +99,6 @@ public class CreditBundleStore : MonoBehaviour
         // This is temporal until its added on the portal
         if (SocialPlaySettings.CreditBundlesDescription.Count != 0)
             nguiItem.Description = (item.ID - 1) <= SocialPlaySettings.CreditBundlesDescription.Count ? SocialPlaySettings.CreditBundlesDescription[item.ID - 1] : "";
-
-        Debug.Log("get credit bundle texture: " + item.CurrencyIcon);
 
         ItemTextureCache.instance.GetItemTexture(item.CurrencyIcon,delegate(ItemTextureCache.ImageStatus imageStatus, Texture2D texture)
                 {
