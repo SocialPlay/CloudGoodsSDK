@@ -19,7 +19,8 @@ public class SocialPlaySettings : ScriptableObject
     public string appID = "d5f9fa77-cc3d-450f-946b-ff16d3d68357";
     public string appSecret;
     public ScreenType screen;
-    public string url = "https://SocialPlayWebService.azurewebsites.net/cloudgoods/cloudgoodsservice.svc/";
+    public string url = "http://webservice.socialplay.com/cloudgoods/cloudgoodsservice.svc/";
+    public string localurl = "http://192.168.0.197/webservice/cloudgoods/cloudgoodsservice.svc/";
     public string bundlesUrl = "https://socialplay.blob.core.windows.net/unityassetbundles/";
 	public string androidKey = "";
 	public List<string> androidProductNames = new List<string>();
