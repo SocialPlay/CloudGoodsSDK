@@ -165,93 +165,93 @@ public class SocialPlaySettingsInspector : Editor
 
 		EditorGUILayout.Separator();
 
-		GUILayout.Label("Urls", "BoldLabel");
-        string url = EditorGUILayout.TextField("Url", mSettings.url);
-        string bundlesUrl = EditorGUILayout.TextField("Bundles Url", mSettings.bundlesUrl);
+        //GUILayout.Label("Urls", "BoldLabel");
+        //string url = EditorGUILayout.TextField("Url", mSettings.url);
+        //string bundlesUrl = EditorGUILayout.TextField("Bundles Url", mSettings.bundlesUrl);
 
-		EditorGUILayout.Separator();
+        //EditorGUILayout.Separator();
 
-		GUILayout.Label("Android", "BoldLabel");
-		string androidKey = EditorGUILayout.TextField("Key", mSettings.androidKey);
-		EditorGUILayout.Separator();
+        //GUILayout.Label("Android", "BoldLabel");
+        //string androidKey = EditorGUILayout.TextField("Key", mSettings.androidKey);
+        //EditorGUILayout.Separator();
 
-		GUILayout.BeginVertical("ShurikenEffectBg", GUILayout.MinHeight(20f));
+        //GUILayout.BeginVertical("ShurikenEffectBg", GUILayout.MinHeight(20f));
 
-		EditorGUILayout.LabelField("Product Names", EditorStyles.boldLabel);
+        //EditorGUILayout.LabelField("Product Names", EditorStyles.boldLabel);
 
-		if (GUILayout.Button("Add New", GUILayout.Width(200)))
-			mSettings.androidProductNames.Add("");
+        //if (GUILayout.Button("Add New", GUILayout.Width(200)))
+        //    mSettings.androidProductNames.Add("");
 
-		for (int i = 0; i < mSettings.androidProductNames.Count; ++i)
-		{
-			GUILayout.BeginHorizontal();
-			GUI.backgroundColor = Color.white;
-			{
-				string iden = EditorGUILayout.TextField(mSettings.androidProductNames[i]);
+        //for (int i = 0; i < mSettings.androidProductNames.Count; ++i)
+        //{
+        //    GUILayout.BeginHorizontal();
+        //    GUI.backgroundColor = Color.white;
+        //    {
+        //        string iden = EditorGUILayout.TextField(mSettings.androidProductNames[i]);
 
-				GUI.backgroundColor = Color.red;
-				if (GUILayout.Button("X", GUILayout.Width(20f)))
-				{
-					mSettings.androidProductNames.RemoveAt(i);
-					--i;
-				}
-				else if (iden != mSettings.androidProductNames[i])
-				{					
-					mSettings.androidProductNames[i] = iden;
-					NGUIEditorTools.RegisterUndo("Android Product Name", mSettings);
-				}
-				GUI.backgroundColor = Color.white;
-			}
-			GUILayout.EndHorizontal();
-		}
-		EditorGUILayout.Separator();
+        //        GUI.backgroundColor = Color.red;
+        //        if (GUILayout.Button("X", GUILayout.Width(20f)))
+        //        {
+        //            mSettings.androidProductNames.RemoveAt(i);
+        //            --i;
+        //        }
+        //        else if (iden != mSettings.androidProductNames[i])
+        //        {					
+        //            mSettings.androidProductNames[i] = iden;
+        //            NGUIEditorTools.RegisterUndo("Android Product Name", mSettings);
+        //        }
+        //        GUI.backgroundColor = Color.white;
+        //    }
+        //    GUILayout.EndHorizontal();
+        //}
+        //EditorGUILayout.Separator();
 
-		GUILayout.EndVertical();
+        //GUILayout.EndVertical();
 
-        GUILayout.BeginVertical("ShurikenEffectBg", GUILayout.MinHeight(20f));
+        //GUILayout.BeginVertical("ShurikenEffectBg", GUILayout.MinHeight(20f));
 
-        EditorGUILayout.LabelField("Bundles Descriptions", EditorStyles.boldLabel);
+        //EditorGUILayout.LabelField("Bundles Descriptions", EditorStyles.boldLabel);
 
-        if (GUILayout.Button("Add New", GUILayout.Width(200)))
-            mSettings.creditBundlesDescription.Add("");
+        //if (GUILayout.Button("Add New", GUILayout.Width(200)))
+        //    mSettings.creditBundlesDescription.Add("");
 
-        for (int i = 0; i < mSettings.creditBundlesDescription.Count; ++i)
-        {
-            GUILayout.BeginHorizontal();
-            GUI.backgroundColor = Color.white;
-            {
-                string iden = EditorGUILayout.TextField(mSettings.creditBundlesDescription[i]);
+        //for (int i = 0; i < mSettings.creditBundlesDescription.Count; ++i)
+        //{
+        //    GUILayout.BeginHorizontal();
+        //    GUI.backgroundColor = Color.white;
+        //    {
+        //        string iden = EditorGUILayout.TextField(mSettings.creditBundlesDescription[i]);
 
-                GUI.backgroundColor = Color.red;
-                if (GUILayout.Button("X", GUILayout.Width(20f)))
-                {
-                    mSettings.creditBundlesDescription.RemoveAt(i);
-                    --i;
-                }
-                else if (iden != mSettings.creditBundlesDescription[i])
-                {
-                    mSettings.creditBundlesDescription[i] = iden;
-                    NGUIEditorTools.RegisterUndo("Bundle Description", mSettings);
-                }
-                GUI.backgroundColor = Color.white;
-            }
-            GUILayout.EndHorizontal();
-        }
-        EditorGUILayout.Separator();
+        //        GUI.backgroundColor = Color.red;
+        //        if (GUILayout.Button("X", GUILayout.Width(20f)))
+        //        {
+        //            mSettings.creditBundlesDescription.RemoveAt(i);
+        //            --i;
+        //        }
+        //        else if (iden != mSettings.creditBundlesDescription[i])
+        //        {
+        //            mSettings.creditBundlesDescription[i] = iden;
+        //            NGUIEditorTools.RegisterUndo("Bundle Description", mSettings);
+        //        }
+        //        GUI.backgroundColor = Color.white;
+        //    }
+        //    GUILayout.EndHorizontal();
+        //}
+        //EditorGUILayout.Separator();
 
-        GUILayout.EndVertical();
+        //GUILayout.EndVertical();
 
         if (mSettings.appID != appId ||
-            mSettings.appSecret != appSecret ||
-            mSettings.url != url ||
-            mSettings.bundlesUrl != bundlesUrl ||
-			mSettings.androidKey != androidKey)
+            mSettings.appSecret != appSecret )
+            //mSettings.url != url ||
+            //mSettings.bundlesUrl != bundlesUrl ||
+            //mSettings.androidKey != androidKey)
         {
             mSettings.appID = appId;
             mSettings.appSecret = appSecret;
-            mSettings.url = url;
-			mSettings.bundlesUrl = bundlesUrl;
-			mSettings.androidKey = androidKey;
+            //mSettings.url = url;
+            //mSettings.bundlesUrl = bundlesUrl;
+            //mSettings.androidKey = androidKey;
 			NGUIEditorTools.RegisterUndo("Social Play Settings", mSettings);
         }
 		

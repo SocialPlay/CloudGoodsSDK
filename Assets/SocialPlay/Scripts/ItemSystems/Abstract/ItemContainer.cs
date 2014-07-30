@@ -4,15 +4,19 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-public abstract class ItemContainer : MonoBehaviour
+public class ItemContainer : MonoBehaviour
 {
-    [HideInInspector]
-    public List<ItemData> containerItems;
+    public List<ItemData> containerItems = new List<ItemData>();
 
     /// <summary>
     /// Called after the contaienr added an item.
     /// </summary>
     public event Action<ItemData, bool> AddedItem;
+
+    /// <summary>
+    /// The developers implementation of what functionality will happen when a user tries to add an item into the container
+    /// </summary>
+    public IContainerAddAction containerAddAction;
 
     /// <summary>
     /// Called after the Container itemData the item stack size or location in the Container
@@ -51,9 +55,19 @@ public abstract class ItemContainer : MonoBehaviour
 
     private ItemContainerRestrictor restriction = null;
 
+    public IContainerRestrictor ContainerRestrictor;
+
     private bool isPerformingAction = false;
 
-    protected void ModifiedItemEvent(ItemData item, bool isSave)
+    void Awake()
+    {
+        if (GetComponent(typeof(IContainerAddAction)) == null)
+            containerAddAction = gameObject.AddComponent<BasicAddContainer>();
+        else
+            containerAddAction = (IContainerAddAction)GetComponent(typeof(IContainerAddAction));
+    }
+
+    public void ModifiedItemEvent(ItemData item, bool isSave)
     {
         if (ModifiedItem != null)
         {
@@ -61,7 +75,7 @@ public abstract class ItemContainer : MonoBehaviour
         }
     }
 
-    protected void ClearItemEvent()
+    public void ClearItemEvent()
     {
         if (ClearItems != null)
         {
@@ -69,7 +83,7 @@ public abstract class ItemContainer : MonoBehaviour
         }
     }
 
-    protected void AddItemEvent(ItemData item, bool isSave)
+    public void AddItemEvent(ItemData item, bool isSave)
     {
         if (AddedItem != null)
         {
@@ -77,7 +91,7 @@ public abstract class ItemContainer : MonoBehaviour
         }
     }
 
-    protected void RemoveItemEvent(ItemData item, int amount, bool isMoving)
+    public void RemoveItemEvent(ItemData item, int amount, bool isMoving)
     {
         if (RemovedItem != null)
         {
@@ -107,28 +121,33 @@ public abstract class ItemContainer : MonoBehaviour
         return MyContainerAddState(itemData);
     }
 
-    protected abstract ContainerAddState MyContainerAddState(ItemData modified);
-
-
-
-
-    public void Add(ItemData itemData, int amount = -1, bool isSave = true)
+    protected ContainerAddState MyContainerAddState(ItemData modified)
     {
-        if (restriction == null)
+        int addAbleAmount = modified.stackSize;
+        if (ItemContainerStackRestrictor.Restrictor != null)
         {
-            restriction = this.GetComponentInChildren<ItemContainerRestrictor>();
-        }
+            int restrictionAmount = ItemContainerStackRestrictor.Restrictor.GetRestrictedAmount(modified, this);
 
-        if (restriction != null)
-        {
-            if (restriction.IsRestricted(ItemContainerRestrictor.ContainerAction.add))
+            if (restrictionAmount != -1 && restrictionAmount > modified.stackSize)
             {
-                return;
+                addAbleAmount = restrictionAmount;
             }
         }
 
-        AddItem(itemData, amount, isSave);
 
+        return new ContainerAddState(ContainerAddState.ActionState.Add, addAbleAmount);
+    }
+
+    public void Add(ItemData itemData, int amount = -1, bool isSave = true)
+    {
+        if (ContainerRestrictor == null)
+        {
+            containerAddAction.AddItem(itemData, amount, isSave);
+        }
+        else if (ContainerRestrictor != null && ContainerRestrictor.CanAddToContainer(itemData))
+        {
+            containerAddAction.AddItem(itemData, amount, isSave);
+        }
     }
 
 
@@ -149,10 +168,49 @@ public abstract class ItemContainer : MonoBehaviour
         RemoveItem(itemData, isMoving, amount);
     }
 
-    protected abstract void AddItem(ItemData modified, int amount = -1, bool isSave = true);
-    protected abstract void RemoveItem(ItemData modified, bool isMoving, int amount = -1);
-    public abstract int Contains(ItemData modified);
-    public abstract void Clear();
+    protected void RemoveItem(ItemData modified, bool isMoving, int amount = -1)
+    {
+        foreach (ItemData item in containerItems)
+        {
+            if (item.itemName.Equals(modified.itemName))
+            {
+                if (amount == -1 || item.stackSize <= amount)
+                {
+                    containerItems.Remove(item);
+                }
+                else
+                {
+                    item.stackSize -= amount;
+                }
+                RemoveItemEvent(item, amount, isMoving);
+                return;
+            }
+        }
+        return;
+    }
+
+    public int Contains(ItemData modified)
+    {
+        foreach (ItemData item in containerItems)
+        {
+            if (item.IsSameItemAs(modified))
+            {
+                return item.stackSize;
+            }
+        }
+        return 0;
+    }
+
+    public void Clear()
+    {
+        foreach (ItemData item in containerItems)
+        {
+            Destroy(item.gameObject);
+        }
+
+        containerItems.Clear();
+        ClearItemEvent();
+    }
 
     public void OnItemSingleClick(ItemData item)
     {
