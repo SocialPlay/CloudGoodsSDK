@@ -50,6 +50,7 @@ public class SaveToLocation : MonoBehaviour
         if (isSave == true)
         {
             data.isLocked = true;
+            Debug.Log("Moving item: " + data.stackID + "   AMount: " + data.stackSize);
             SP.MoveItemStack(data.stackID, data.stackSize, GetOwnerID(), DestinationOwnerType.ToString(), DestinationLocation, delegate(Guid x)
             {
                 Debug.Log("Added: " + x + "\nOriginal: " + data.stackID.ToString());

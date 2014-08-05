@@ -122,7 +122,7 @@ public class ItemData : MonoBehaviour
 
     public void SetItemData(ItemData itemData)
     {
-		Debug.Log("SetItemData " + itemData.itemName);
+		Debug.Log("SetItemData " + itemData.itemName + "    StackSize: " + itemData.stackSize);
         stackSize = itemData.stackSize;
         ownerContainer = itemData.ownerContainer;
         itemName = itemData.itemName;

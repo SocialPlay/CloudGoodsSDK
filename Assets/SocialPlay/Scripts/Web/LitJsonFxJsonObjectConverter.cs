@@ -18,7 +18,7 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter
             return new List<ItemData>();
 
         JsonReader reader = new JsonReader(parsedString);
-        //Debug.Log(parsedString);
+        Debug.Log(parsedString);
         reader.Read();
 
         if (reader.Token.ToString() == "ArrayStart")
@@ -45,7 +45,6 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter
                             if (propertyString == "StackLocationID")
                             {
                                 itemData.StackLocationID = new Guid(reader.Value.ToString());
-                                Debug.Log(itemData.StackLocationID.ToString());
                             }
                             if (propertyString == "Amount")
                             {

@@ -3,9 +3,9 @@ using System.Collections;
 
 using System.Collections.Generic;
 
-public abstract class ContainerDisplay : MonoBehaviour
+public class ContainerDisplay : MonoBehaviour
 {
-
+    internal UIGrid viewArea;
     public GameObject ContainerDisplayObject;
     public ItemContainer itemContainer = null;
     public bool StartWindowActive = true;
@@ -15,25 +15,25 @@ public abstract class ContainerDisplay : MonoBehaviour
     private List<ContainerDisplayAction> disaplyActions = new List<ContainerDisplayAction>();
 
 
-    protected virtual void OnEnable()
+    protected void OnEnable()
     {
         itemContainer.AddedItem += AddedItem;
         itemContainer.RemovedItem += RemovedItem;
     }
 
 
-    protected virtual void OnDisable()
+    protected void OnDisable()
     {
         itemContainer.AddedItem -= AddedItem;
         itemContainer.RemovedItem -= RemovedItem;
     }
 
-    protected virtual void Start()
+    protected void Start()
     {
         SetupWindow();
     }
 
-    protected virtual void Update()
+    protected void Update()
     {
         if (!isActive)
         {
@@ -45,23 +45,39 @@ public abstract class ContainerDisplay : MonoBehaviour
         }
     }
 
-    protected virtual void AddedItem(ItemData data, bool isSave)
+    protected void AddedItem(ItemData itemData, bool isSave)
     {
-        AddDisplayItem(data as ItemData, this.transform);
+        itemData.transform.parent = viewArea.transform;
+        itemData.transform.localPosition = new Vector3(0, 0, -1);
+        itemData.transform.localScale = Vector3.one;
+        foreach (UIWidget item in itemData.GetComponentsInChildren<UIWidget>())
+        {
+            item.enabled = true;
+        }
+        foreach (MonoBehaviour item in itemData.GetComponentsInChildren<MonoBehaviour>())
+        {
+            if (item != null)
+            {
+                item.enabled = true;
+            }
+        }
+        viewArea.repositionNow = true;
     }
 
-    protected virtual void RemovedItem(ItemData data, int amount, bool isBeingMoved)
+    protected void RemovedItem(ItemData itemData, int amount, bool isBeingMoved)
     {
         if (!isBeingMoved)
         {
-            if (data.stackSize - amount < 0)
+            if (itemData.stackSize - amount < 0)
             {
-                RemoveDisplayItem(data as ItemData);
+                Destroy(itemData.gameObject);
+                viewArea.repositionNow = true;
             }
         }
-        else if (amount == -1 || data.stackSize == amount)
+        else if (amount == -1 || itemData.stackSize == amount)
         {
-            RemoveDisplayItem(data as ItemData);
+            Destroy(itemData.gameObject);
+            viewArea.repositionNow = true;
         }
     }
 
@@ -69,6 +85,7 @@ public abstract class ContainerDisplay : MonoBehaviour
     {
         isActive = StartWindowActive;
         ContainerDisplayObject.SetActive(true);
+        viewArea = ContainerDisplayObject.GetComponentInChildren<UIGrid>();  
     }
 
     private void GetDisplayActions()
@@ -90,7 +107,7 @@ public abstract class ContainerDisplay : MonoBehaviour
         }
     }
 
-    public virtual void ShowWindow()
+    public void ShowWindow()
     {
         if (isActive) return;
         isActive = true;
@@ -100,7 +117,7 @@ public abstract class ContainerDisplay : MonoBehaviour
         }
     }
 
-    public virtual void HideWindow()
+    public void HideWindow()
     {
         if (!isActive) return;
         foreach (ContainerDisplayAction action in disaplyActions)
@@ -120,6 +137,4 @@ public abstract class ContainerDisplay : MonoBehaviour
         isActive = state;
     }
 
-    public abstract void AddDisplayItem(ItemData itemData, Transform parent);
-    public abstract void RemoveDisplayItem(ItemData itemData);
 }

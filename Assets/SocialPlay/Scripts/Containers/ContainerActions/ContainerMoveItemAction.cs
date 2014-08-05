@@ -8,6 +8,6 @@ public class ContainerMoveItemAction : ContainerActions {
 
     public override void DoAction(ItemData item)
     {
-        ItemContainerManager.MoveItem(item, MoveToContainer);
+        ItemContainerManager.MoveItem(item, null, MoveToContainer);
     } 
 }

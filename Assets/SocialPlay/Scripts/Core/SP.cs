@@ -254,6 +254,7 @@ public class SP : MonoBehaviour//, IServiceCalls
 
         Get().StartCoroutine(Get().ServiceCallGetListItemDatas(www, (List<ItemData> ownerItems) =>
         {
+            Debug.Log("Owner Items: " + ownerItems.Count);
             userItems = ownerItems;
             if (callback != null) callback(userItems);
         }));
@@ -893,6 +894,8 @@ public class SP : MonoBehaviour//, IServiceCalls
     IEnumerator ServiceCallGetListItemDatas(WWW www, Action<List<ItemData>> callback)
     {
         yield return www;
+
+        Debug.Log("Owner items: " + www.text);
 
         if (www.error == null)
             callback(serviceConverter.ConvertToItemDataList(www.text));

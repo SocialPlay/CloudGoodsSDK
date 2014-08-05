@@ -20,7 +20,7 @@ public class AddItemToContainerDemo : MonoBehaviour {
         {
             ItemData itemObj = ItemConverter.ConvertItemDataToNGUIItemDataObject(item);
             Destroy(item.gameObject);
-            itemContainerOne.Add(itemObj);
+            itemContainerOne.Add(itemObj, itemObj.stackSize, false);
         }
     }
 

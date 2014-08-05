@@ -7,7 +7,7 @@ using UnityEngine;
 [System.Serializable]
 public class ItemContainerManager
 {
-    public static ContainerAddState.ActionState MoveItem(ItemData movingItemData, ItemContainer targetContainer)
+    public static ContainerAddState.ActionState MoveItem(ItemData movingItemData, ItemContainer lastContainer, ItemContainer targetContainer)
     {
         try
         {
@@ -16,6 +16,14 @@ public class ItemContainerManager
 
             if (targetContainer == null)
                 throw new Exception("Can not move item to null container");
+
+            if (lastContainer != null)
+            {
+                if (lastContainer.GetContainerRemoveState(movingItemData) == false)
+                {
+                    return ContainerAddState.ActionState.No;
+                }
+            }
 
             ContainerAddState targetAddState = targetContainer.GetContainerAddState(movingItemData);
 
