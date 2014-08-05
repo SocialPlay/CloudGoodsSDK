@@ -35,8 +35,7 @@ public class SocialPlaySettingsInspector : Editor
     static string[] derivedDBNames;
     static string[] derivedSpawnerNames;
 
-    static GUIContent tutorialLink = new GUIContent("Tutorials", "Opens the Tutorial page in your browser.");
-    static GUIContent devCenter = new GUIContent("Developer Portal", "Manage your items and recipes.");
+    static GUIContent devCenter = new GUIContent("Developer Portal", "Manage your items and players");
     static GUIContent settingsContent = new GUIContent(" Settings", "Manage your game app settings");
 
     /// <summary>
@@ -86,10 +85,6 @@ public class SocialPlaySettingsInspector : Editor
 
         GUILayout.BeginHorizontal();
 
-        if (GUILayout.Button(tutorialLink, GUILayout.MaxWidth(125)))
-        {
-            Application.OpenURL("http://developer.socialplay.com/#tutorials");
-        }
         if (GUILayout.Button(devCenter, GUILayout.MaxWidth(125)))
         {
             Application.OpenURL("http://developer.socialplay.com/");
@@ -149,6 +144,7 @@ public class SocialPlaySettingsInspector : Editor
                 DrawSettingsGUI();
                 break;
             case SocialPlaySettings.ScreenType.About:
+                DrawAboutGUI();
                 break;
         }
     }
@@ -176,6 +172,41 @@ public class SocialPlaySettingsInspector : Editor
 
         EditorGUILayout.Separator();
     }
-
     #endregion
+
+    static void DrawAboutGUI()
+    {
+        GUIStyle linkStyle = new GUIStyle();
+        linkStyle = new GUIStyle(GUI.skin.label);
+        linkStyle.normal.textColor = Color.blue;
+
+        Rect lastRect;
+
+        GUILayout.BeginVertical();
+        GUILayout.Space(5);
+        GUILayout.EndVertical();
+        GUILayout.Label("Cloud Goods: Your complete virtual goods monetization");
+        GUILayout.Label("solution.", GUILayout.Height(30));
+        GUILayout.Label("Need assistance or want to report a bug? Feel free to");
+        GUILayout.Label("contact us at support@socialplay.com", GUILayout.Height(40));
+        GUILayout.Label("For more information, visit:");
+        GUILayout.Label("developer.socialplay.com", linkStyle);
+        lastRect = GUILayoutUtility.GetLastRect();
+        EditorGUIUtility.AddCursorRect(lastRect, MouseCursor.Link);
+        if (lastRect.Contains(Event.current.mousePosition) && Event.current.type == EventType.MouseUp)
+        {
+            Application.OpenURL("http://developer.socialplay.com/");
+        }
+
+        GUILayout.Label("www.socialplay.com", linkStyle, GUILayout.Height(40));
+
+        lastRect = GUILayoutUtility.GetLastRect();
+        EditorGUIUtility.AddCursorRect(lastRect, MouseCursor.Link);
+        if (lastRect.Contains(Event.current.mousePosition) && Event.current.type == EventType.MouseUp)
+        {
+            Application.OpenURL("http://www.socialplay.com/");
+        }
+
+        GUILayout.Label("(c) 2014 SocialPlay Inc.");
+    }
 }

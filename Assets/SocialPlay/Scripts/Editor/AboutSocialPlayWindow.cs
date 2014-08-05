@@ -58,7 +58,7 @@ public class AboutSocialPlayWindow : EditorWindow
         GUILayout.BeginHorizontal();
         GUILayout.Space(5);
         GUILayout.BeginVertical();
-        GUILayout.Space(138);
+        GUILayout.Space(100);
         GUILayout.EndVertical();
         GUILayout.BeginVertical();
         GUILayout.Label("Cloud Goods", titleStyle);
@@ -69,7 +69,8 @@ public class AboutSocialPlayWindow : EditorWindow
         GUILayout.Label("Cloud Goods is a Virtual Goods and Virtual Economy service developed by SocialPlay.  Use Cloud ");
         GUILayout.Label("Goods to help you manage your players, items, and sales in real-time right from the web.  There's no");
         GUILayout.Label("need to republish your game, changes you make from the Developer Portal effect your games in real-");
-        GUILayout.Label("time.", GUILayout.Height(63));
+        GUILayout.Label("time.", GUILayout.Height(40));
+        GUILayout.Label("Start selling in minutes with the included IOS and Android in-app purchasing plugins", GUILayout.Height(40));
         GUILayout.BeginHorizontal();
         GUILayout.Label("Create an account at");
         
@@ -80,14 +81,14 @@ public class AboutSocialPlayWindow : EditorWindow
         {
             Application.OpenURL("http://developer.socialplay.com/");
         }
-        GUILayout.Label("and check out the tutorials to get started.");
-
-        GUILayout.FlexibleSpace();
+        GUILayout.Label("and check out the tutorials to get started. For");
+        
         
         GUILayout.EndHorizontal();
 
-        GUILayout.FlexibleSpace();
+        GUILayout.Label("support or bug reports, feel free to contact us at support@socialplay.com");
 
+        GUILayout.FlexibleSpace();
         GUILayout.BeginHorizontal();
         GUILayout.Label("(c) 2014 SocialPlay Inc.");
 
