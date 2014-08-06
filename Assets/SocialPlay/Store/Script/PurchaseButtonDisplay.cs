@@ -3,6 +3,7 @@ using System.Collections;
 
 public class PurchaseButtonDisplay : MonoBehaviour
 {
+    public CurrencyType currencyType;
     public UIButton ActiveButton;
     public UILabel InsufficientFundsLabel;
     public string InsufficientFundsTextOverride = "";
@@ -46,13 +47,20 @@ public class PurchaseButtonDisplay : MonoBehaviour
         {
             SetNotApplicable();
         }
-        else if (itemCost <= SP.freeCurrency)
+        else if (currencyType == CurrencyType.Credits)
         {
-            SetActive();
+            Debug.Log("paid");
+            if (itemCost > SP.paidCurrency)
+                SetInactive();
+            else
+                SetActive();
         }
-        else if (itemCost > SP.freeCurrency) 
+        else if (currencyType == CurrencyType.Coins) 
         {
-            SetInactive();
+            if (itemCost > SP.freeCurrency)
+                SetInactive();
+            else
+                SetActive();
         }
     }
 }
