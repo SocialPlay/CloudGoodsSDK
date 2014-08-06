@@ -627,6 +627,7 @@ public class SP : MonoBehaviour//, IServiceCalls
         Get().StartCoroutine(Get().ServiceGetStoreItems(www, (List<StoreItem> items) =>
         {
             storeItems = items;
+            OnStoreListLoaded(storeItems);
             if (callback != null) callback(storeItems);
         }));
     }
