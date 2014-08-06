@@ -47,8 +47,11 @@ public class ItemPurchase : MonoBehaviour
         int itemCreditCost = int.Parse(itemCreditCostDisplay.text);
         int itemCoinCost = int.Parse(itemCoinCostDisplay.text);
 
-        itemCreditCost = itemCreditCost / quantityAmount;
-        itemCoinCost = itemCoinCost / quantityAmount;
+        if(itemCreditCost >= 0)
+            itemCreditCost = itemCreditCost / quantityAmount;
+
+        if(itemCoinCost >= 0)
+            itemCoinCost = itemCoinCost / quantityAmount;
 
         quantityAmount++;
 
@@ -63,8 +66,11 @@ public class ItemPurchase : MonoBehaviour
         int itemCreditCost = int.Parse(itemCreditCostDisplay.text);
         int itemCoinCost = int.Parse(itemCoinCostDisplay.text);
 
-        itemCreditCost = itemCreditCost / quantityAmount;
-        itemCoinCost = itemCoinCost / quantityAmount;
+        if (itemCreditCost >= 0)
+            itemCreditCost = itemCreditCost / quantityAmount;
+
+        if (itemCoinCost >= 0)
+            itemCoinCost = itemCoinCost / quantityAmount;
 
         if (quantityAmount > 1)
             quantityAmount--;
@@ -74,11 +80,19 @@ public class ItemPurchase : MonoBehaviour
 
     private void ChangeAmountDisplay(int quantityAmount, ref int itemCreditCost, ref int itemCoinCost)
     {
-        itemCreditCost = itemCreditCost * quantityAmount;
-        itemCoinCost = itemCoinCost * quantityAmount;
+        if (itemCreditCost >= 0)
+            itemCreditCost = itemCreditCost * quantityAmount;
+        else
+            itemCreditCost = -1;
+
+        if (itemCoinCost >= 0)
+            itemCoinCost = itemCoinCost * quantityAmount;
+        else
+            itemCoinCost = -1;
 
         itemCreditCostDisplay.text = itemCreditCost.ToString();
-        itemCoinCostDisplay.text = itemCoinCost.ToString();
+            itemCoinCostDisplay.text = itemCoinCost.ToString();
+
         itemQuantityAmount.text = quantityAmount.ToString();
 
         ChangePurchaseButtonDisplay(itemCreditCost, itemCoinCost);
@@ -86,8 +100,8 @@ public class ItemPurchase : MonoBehaviour
 
     private void ChangePurchaseButtonDisplay(int itemCreditCost, int itemCoinCost)
     {
-        coinPurchaseButton.SetState(itemCoinCost <= SP.freeCurrency);
-        creditPurchaseButton.SetState(itemCreditCost <= SP.paidCurrency);
+        coinPurchaseButton.SetState(itemCoinCost);
+        creditPurchaseButton.SetState(itemCreditCost);
     }
 
     public void DisplayItemPurchasePanel(UIStoreItem item)
@@ -119,7 +133,7 @@ public class ItemPurchase : MonoBehaviour
     {
         ReloadContainerItems();
 
-        if(OnPurchasedItem != null)
+        if (OnPurchasedItem != null)
             OnPurchasedItem(msg);
     }
 

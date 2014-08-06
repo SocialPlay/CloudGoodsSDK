@@ -158,6 +158,33 @@ public class SP : MonoBehaviour//, IServiceCalls
         }
     }
 
+    static public Texture2D freeCurrencyTexture
+    {
+        get
+        {
+            if (tFree != null)
+                return tFree;
+            else
+            {
+                GetWorldCurrencyInfo(null);
+                return null;
+            }
+        }
+    }
+    static public Texture2D paidCurrencyTexture
+    {
+        get
+        {
+            if (tPaid != null)
+                return tPaid;
+            else
+            {
+                GetWorldCurrencyInfo(null);
+                return null;
+            }
+        }
+    }
+
     /// <summary>
     /// True if the user is logged in.
     /// </summary>
@@ -179,6 +206,8 @@ public class SP : MonoBehaviour//, IServiceCalls
 
     static int mFree = 0;
     static int mPaid = 0;
+    static Texture2D tFree;
+    static Texture2D tPaid;
     static SP mInst;
     static SP Get()
     {
@@ -206,6 +235,7 @@ public class SP : MonoBehaviour//, IServiceCalls
         //GetStoreItems(OnStoreListLoaded);
         GetFreeCurrencyBalance(0, null);
         GetPaidCurrencyBalance(null);
+        GetWorldCurrencyInfo(null);
 
         if (OnUserAuthorized != null)
             OnUserAuthorized(user);
@@ -559,7 +589,8 @@ public class SP : MonoBehaviour//, IServiceCalls
         string url = Url + "GetCurrencyInfo?AppID=" + AppID;
 
         WWW www = new WWW(url);
-        Debug.Log(url);
+
+        Debug.Log("get currency info");
 
         Get().StartCoroutine(Get().ServiceGetString(www, (string value) =>
         {
@@ -570,11 +601,13 @@ public class SP : MonoBehaviour//, IServiceCalls
 
             ItemTextureCache.instance.GetItemTexture(worldCurrencyInfo.PaidCurrencyImage, delegate(ItemTextureCache.ImageStatus imageStatus, Texture2D texture)
             {
+                tPaid = texture;
                 OnPaidCurrencyTexture(texture);
             });
 
             ItemTextureCache.instance.GetItemTexture(worldCurrencyInfo.FreeCurrencyImage, delegate(ItemTextureCache.ImageStatus imageStatus, Texture2D texture)
             {
+                tFree = texture;
                 OnFreeCurrencyTexture(texture);
             });
         }));
@@ -690,21 +723,15 @@ public class SP : MonoBehaviour//, IServiceCalls
 
     static public void StoreItemPurchase(int itemID, int amount, CurrencyType paymentType, int saveLocation, Action<string> callback)
     {
-        /*if (!isLogged)
-        {
-            Debug.LogWarning("Can't do this if you are not authenticated.")
-            return;
-        }*/
         string url = buyUrl + "StoreItemPurchase?UserID=" + user.userID + "&ItemID=" + itemID + "&Amount=" + amount + "&PaymentType=" + paymentType + "&AppID=" + GuidAppID + "&saveLocation=" + saveLocation;
 
         WWW www = new WWW(url);
-        //currencyBalance.SetItemPaidCurrency(dataObj["Balance"].ToString());
+
         Get().StartCoroutine(Get().ServiceGetString(www, (string message) =>
         {
             Debug.Log("Purchase " + message);
             if (message == "NSF") NGUITools.Broadcast(SocialPlayMessage.OnNotEnoughFunds.ToString());
             else NGUITools.Broadcast(SocialPlayMessage.OnPurchaseSuccess.ToString());
-            GetOwnerItems(user.userID.ToString(), "User", 0, OnItemsLoaded);
             GetFreeCurrencyBalance(0, null);
             GetPaidCurrencyBalance(null);
             if (callback != null) callback(message);

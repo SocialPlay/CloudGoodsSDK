@@ -32,18 +32,10 @@ public class UIStoreItem : MonoBehaviour
 		SetItemData(SP.GetStoreItem(itemID));
 	}
 
-    protected void GetItemTexture(string URL)
+    void OnReceivedItemTexture(ItemTextureCache.ImageStatus imageStatus, Texture2D texture)
     {
-        if (!this.gameObject.activeInHierarchy) return;
-        WWW www = new WWW(URL);
-        StartCoroutine(OnReceivedItemTexture(www));
-    }
-
-    IEnumerator OnReceivedItemTexture(WWW www)
-    {
-        yield return www;
         UITexture uiTexture = gameObject.GetComponentInChildren<UITexture>();
-        uiTexture.mainTexture = www.texture;
+        uiTexture.mainTexture = texture;
 		if (loader != null) NGUITools.SetActive(loader, false);
     }
 
@@ -52,7 +44,7 @@ public class UIStoreItem : MonoBehaviour
 		if (nameLabel != null) nameLabel.text = item.itemName;
 		//if(descriptionLabel != null) descriptionLabel.text = item. <-- There is no description on StoreItems. This is a must have.
 		storeItem = item;
-		GetItemTexture(storeItem.imageURL);
+        ItemTextureCache.instance.GetItemTexture(storeItem.imageURL, OnReceivedItemTexture);
 	}
 
 
