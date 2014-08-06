@@ -38,8 +38,6 @@ public abstract class ContainerItemLoader : MonoBehaviour
 
     protected void RecivedItems(List<ItemData> receivedItems)
     {
-        Debug.Log("received items: " + receivedItems.Count);
-
         if (ItemConversion.converter == null)
         {
             throw new Exception("Item conversion is not setup correctly!");
@@ -51,7 +49,6 @@ public abstract class ContainerItemLoader : MonoBehaviour
 
         if (LoadedItemsForContainerEvent != null)
         {
-            Debug.Log("load Items For Container");
             LoadedItemsForContainerEvent(receivedItems, Container);
         }
     }

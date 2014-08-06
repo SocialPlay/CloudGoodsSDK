@@ -102,6 +102,10 @@ public class ItemContainer : MonoBehaviour
 
     public ContainerAddState GetContainerAddState(ItemData itemData)
     {
+        if (itemData.isLocked)
+        {
+            return new ContainerAddState(ContainerAddState.ActionState.No);
+        }
 
         if (containerAddRestrictions.Count > 0)
         {
@@ -112,16 +116,16 @@ public class ItemContainer : MonoBehaviour
             }
         }
 
-        if (itemData.isLocked)
-        {
-            return new ContainerAddState(ContainerAddState.ActionState.No);
-        }
-
         return MyContainerAddState(itemData);
     }
 
     public bool GetContainerRemoveState(ItemData itemData)
     {
+        if (itemData.isLocked)
+        {
+            return false;
+        }
+
         if (containerAddRestrictions.Count > 0)
         {
             foreach (IContainerRestriction newRestriction in containerRemoveRestrictions)
@@ -129,11 +133,6 @@ public class ItemContainer : MonoBehaviour
                 if (newRestriction.IsRestricted(ContainerAction.remove, itemData))
                     return false;
             }
-        }
-
-        if (itemData.isLocked)
-        {
-            return false;
         }
 
         return true;

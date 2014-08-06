@@ -15,8 +15,6 @@ public class ItemContainerOnLoadInserter : MonoBehaviour {
     {
         foreach (ItemData item in items)
         {
-            Debug.Log("Adding item: " + item.itemName + "   stacksize: " + item.stackSize);
-
             ItemData itemData = ItemConverter.ConvertItemDataToNGUIItemDataObject(item);
 
             List<ItemData> componentInitailizerList = new List<ItemData>();

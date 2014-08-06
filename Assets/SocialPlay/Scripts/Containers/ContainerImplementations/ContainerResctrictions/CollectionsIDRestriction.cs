@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class CollectionsIDRestriction : MonoBehaviour, IContainerRestriction {
 
-    public List<int> ItemIDList = new List<int>();
+    public List<int> CollectionsIDList= new List<int>();
     public bool IsExcluded = false;
 
     ItemContainer restrictedContainer;
@@ -19,9 +19,9 @@ public class CollectionsIDRestriction : MonoBehaviour, IContainerRestriction {
     {
         if (IsExcluded)
         {
-            foreach (int itemID in ItemIDList)
+            foreach (int itemID in CollectionsIDList)
             {
-                if (itemData.varianceID == itemID)
+                if (itemData.itemID == itemID)
                     return true;
             }
 
@@ -29,9 +29,9 @@ public class CollectionsIDRestriction : MonoBehaviour, IContainerRestriction {
         }
         else
         {
-            foreach (int itemID in ItemIDList)
+            foreach (int itemID in CollectionsIDList)
             {
-                if (itemData.varianceID == itemID)
+                if (itemData.itemID == itemID)
                     return false;
             }
             return true;

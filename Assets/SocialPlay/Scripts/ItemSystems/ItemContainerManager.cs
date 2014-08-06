@@ -19,6 +19,8 @@ public class ItemContainerManager
 
             if (lastContainer != null)
             {
+                Debug.Log("last container found");
+                Debug.Log(lastContainer.GetContainerRemoveState(movingItemData));
                 if (lastContainer.GetContainerRemoveState(movingItemData) == false)
                 {
                     return ContainerAddState.ActionState.No;

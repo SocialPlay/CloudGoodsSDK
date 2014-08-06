@@ -280,11 +280,8 @@ public class SP : MonoBehaviour//, IServiceCalls
         string url = string.Format("{0}GetOwnerItems?ownerID={1}&ownerType={2}&location={3}&AppID={4}", Url, ownerID, ownerType, location, GuidAppID);
         WWW www = new WWW(url);
 
-        Debug.Log("GetOwnerItems " + ownerID);
-
         Get().StartCoroutine(Get().ServiceCallGetListItemDatas(www, (List<ItemData> ownerItems) =>
         {
-            Debug.Log("Owner Items: " + ownerItems.Count);
             userItems = ownerItems;
             if (callback != null) callback(userItems);
         }));
@@ -603,13 +600,15 @@ public class SP : MonoBehaviour//, IServiceCalls
             ItemTextureCache.instance.GetItemTexture(worldCurrencyInfo.PaidCurrencyImage, delegate(ItemTextureCache.ImageStatus imageStatus, Texture2D texture)
             {
                 tPaid = texture;
-                OnPaidCurrencyTexture(texture);
+                if(OnPaidCurrencyTexture != null)
+                    OnPaidCurrencyTexture(texture);
             });
 
             ItemTextureCache.instance.GetItemTexture(worldCurrencyInfo.FreeCurrencyImage, delegate(ItemTextureCache.ImageStatus imageStatus, Texture2D texture)
             {
                 tFree = texture;
-                OnFreeCurrencyTexture(texture);
+                if(OnFreeCurrencyTexture != null)
+                    OnFreeCurrencyTexture(texture);
             });
         }));
     }
