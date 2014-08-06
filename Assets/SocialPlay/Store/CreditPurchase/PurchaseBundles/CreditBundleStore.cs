@@ -33,7 +33,6 @@ public class CreditBundleStore : MonoBehaviour
     void OnRegisteredUserToSession(string obj)
     {
         Initialize();
-        SP.GetWorldCurrencyInfo(null);
     }
 
     public void Initialize()

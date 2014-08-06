@@ -35,8 +35,7 @@ public class SocialPlaySettingsInspector : Editor
     static string[] derivedDBNames;
     static string[] derivedSpawnerNames;
 
-    static GUIContent tutorialLink = new GUIContent("Tutorials", "Opens the Tutorial page in your browser.");
-    static GUIContent devCenter = new GUIContent("Developer Portal", "Manage your items and recipes.");
+    static GUIContent devCenter = new GUIContent("Developer Portal", "Manage your items and players");
     static GUIContent settingsContent = new GUIContent(" Settings", "Manage your game app settings");
 
     /// <summary>
@@ -86,10 +85,6 @@ public class SocialPlaySettingsInspector : Editor
 
         GUILayout.BeginHorizontal();
 
-        if (GUILayout.Button(tutorialLink, GUILayout.MaxWidth(125)))
-        {
-            Application.OpenURL("http://developer.socialplay.com/#tutorials");
-        }
         if (GUILayout.Button(devCenter, GUILayout.MaxWidth(125)))
         {
             Application.OpenURL("http://developer.socialplay.com/");
@@ -149,6 +144,7 @@ public class SocialPlaySettingsInspector : Editor
                 DrawSettingsGUI();
                 break;
             case SocialPlaySettings.ScreenType.About:
+                DrawAboutGUI();
                 break;
         }
     }
@@ -165,99 +161,52 @@ public class SocialPlaySettingsInspector : Editor
 
 		EditorGUILayout.Separator();
 
-        //GUILayout.Label("Urls", "BoldLabel");
-        //string url = EditorGUILayout.TextField("Url", mSettings.url);
-        //string bundlesUrl = EditorGUILayout.TextField("Bundles Url", mSettings.bundlesUrl);
-
-        //EditorGUILayout.Separator();
-
-        //GUILayout.Label("Android", "BoldLabel");
-        //string androidKey = EditorGUILayout.TextField("Key", mSettings.androidKey);
-        //EditorGUILayout.Separator();
-
-        //GUILayout.BeginVertical("ShurikenEffectBg", GUILayout.MinHeight(20f));
-
-        //EditorGUILayout.LabelField("Product Names", EditorStyles.boldLabel);
-
-        //if (GUILayout.Button("Add New", GUILayout.Width(200)))
-        //    mSettings.androidProductNames.Add("");
-
-        //for (int i = 0; i < mSettings.androidProductNames.Count; ++i)
-        //{
-        //    GUILayout.BeginHorizontal();
-        //    GUI.backgroundColor = Color.white;
-        //    {
-        //        string iden = EditorGUILayout.TextField(mSettings.androidProductNames[i]);
-
-        //        GUI.backgroundColor = Color.red;
-        //        if (GUILayout.Button("X", GUILayout.Width(20f)))
-        //        {
-        //            mSettings.androidProductNames.RemoveAt(i);
-        //            --i;
-        //        }
-        //        else if (iden != mSettings.androidProductNames[i])
-        //        {					
-        //            mSettings.androidProductNames[i] = iden;
-        //            NGUIEditorTools.RegisterUndo("Android Product Name", mSettings);
-        //        }
-        //        GUI.backgroundColor = Color.white;
-        //    }
-        //    GUILayout.EndHorizontal();
-        //}
-        //EditorGUILayout.Separator();
-
-        //GUILayout.EndVertical();
-
-        //GUILayout.BeginVertical("ShurikenEffectBg", GUILayout.MinHeight(20f));
-
-        //EditorGUILayout.LabelField("Bundles Descriptions", EditorStyles.boldLabel);
-
-        //if (GUILayout.Button("Add New", GUILayout.Width(200)))
-        //    mSettings.creditBundlesDescription.Add("");
-
-        //for (int i = 0; i < mSettings.creditBundlesDescription.Count; ++i)
-        //{
-        //    GUILayout.BeginHorizontal();
-        //    GUI.backgroundColor = Color.white;
-        //    {
-        //        string iden = EditorGUILayout.TextField(mSettings.creditBundlesDescription[i]);
-
-        //        GUI.backgroundColor = Color.red;
-        //        if (GUILayout.Button("X", GUILayout.Width(20f)))
-        //        {
-        //            mSettings.creditBundlesDescription.RemoveAt(i);
-        //            --i;
-        //        }
-        //        else if (iden != mSettings.creditBundlesDescription[i])
-        //        {
-        //            mSettings.creditBundlesDescription[i] = iden;
-        //            NGUIEditorTools.RegisterUndo("Bundle Description", mSettings);
-        //        }
-        //        GUI.backgroundColor = Color.white;
-        //    }
-        //    GUILayout.EndHorizontal();
-        //}
-        //EditorGUILayout.Separator();
-
-        //GUILayout.EndVertical();
-
         if (mSettings.appID != appId ||
-            mSettings.appSecret != appSecret )
-            //mSettings.url != url ||
-            //mSettings.bundlesUrl != bundlesUrl ||
-            //mSettings.androidKey != androidKey)
+            mSettings.appSecret != appSecret)
         {
             mSettings.appID = appId;
             mSettings.appSecret = appSecret;
-            //mSettings.url = url;
-            //mSettings.bundlesUrl = bundlesUrl;
-            //mSettings.androidKey = androidKey;
 			NGUIEditorTools.RegisterUndo("Social Play Settings", mSettings);
         }
 		
 
         EditorGUILayout.Separator();
     }
-
     #endregion
+
+    static void DrawAboutGUI()
+    {
+        GUIStyle linkStyle = new GUIStyle();
+        linkStyle = new GUIStyle(GUI.skin.label);
+        linkStyle.normal.textColor = Color.blue;
+
+        Rect lastRect;
+
+        GUILayout.BeginVertical();
+        GUILayout.Space(5);
+        GUILayout.EndVertical();
+        GUILayout.Label("Cloud Goods: Your complete virtual goods monetization");
+        GUILayout.Label("solution.", GUILayout.Height(30));
+        GUILayout.Label("Need assistance or want to report a bug? Feel free to");
+        GUILayout.Label("contact us at support@socialplay.com", GUILayout.Height(40));
+        GUILayout.Label("For more information, visit:");
+        GUILayout.Label("developer.socialplay.com", linkStyle);
+        lastRect = GUILayoutUtility.GetLastRect();
+        EditorGUIUtility.AddCursorRect(lastRect, MouseCursor.Link);
+        if (lastRect.Contains(Event.current.mousePosition) && Event.current.type == EventType.MouseUp)
+        {
+            Application.OpenURL("http://developer.socialplay.com/");
+        }
+
+        GUILayout.Label("www.socialplay.com", linkStyle, GUILayout.Height(40));
+
+        lastRect = GUILayoutUtility.GetLastRect();
+        EditorGUIUtility.AddCursorRect(lastRect, MouseCursor.Link);
+        if (lastRect.Contains(Event.current.mousePosition) && Event.current.type == EventType.MouseUp)
+        {
+            Application.OpenURL("http://www.socialplay.com/");
+        }
+
+        GUILayout.Label("(c) 2014 SocialPlay Inc.");
+    }
 }
