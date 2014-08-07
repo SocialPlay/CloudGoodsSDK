@@ -11,6 +11,8 @@ public class PurchaseButtonDisplay : MonoBehaviour
 
     public void SetInactive()
     {
+        ActiveButton.transform.parent.gameObject.SetActive(true);
+
         if (!string.IsNullOrEmpty(InsufficientFundsTextOverride) && InsufficientFundsTextOverride != InsufficientFundsLabel.text)
         {
             InsufficientFundsLabel.text = InsufficientFundsTextOverride;
@@ -22,6 +24,8 @@ public class PurchaseButtonDisplay : MonoBehaviour
 
     public void SetActive()
     {
+        ActiveButton.transform.parent.gameObject.SetActive(true);
+
         if (!string.IsNullOrEmpty(InsufficientFundsTextOverride) && InsufficientFundsTextOverride != InsufficientFundsLabel.text)
         {
             InsufficientFundsLabel.text = InsufficientFundsTextOverride;
@@ -32,8 +36,7 @@ public class PurchaseButtonDisplay : MonoBehaviour
 
     public void SetNotApplicable()
     {
-        ActiveButton.gameObject.SetActive(false);
-        InsufficientFundsLabel.gameObject.SetActive(false);
+        ActiveButton.transform.parent.gameObject.SetActive(false);
     }
 
     public void SetState(int itemCost)
@@ -44,7 +47,6 @@ public class PurchaseButtonDisplay : MonoBehaviour
         }
         else if (currencyType == CurrencyType.Credits)
         {
-            Debug.Log("paid");
             if (itemCost > SP.paidCurrency)
                 SetInactive();
             else

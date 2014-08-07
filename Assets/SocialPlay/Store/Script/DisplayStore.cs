@@ -28,7 +28,6 @@ public class DisplayStore : MonoBehaviour
             {
                 items.Add(storeItems[i]);
             }
-      
 
         FilterItemsByDateTime();
     }
