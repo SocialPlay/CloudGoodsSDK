@@ -32,13 +32,8 @@ public class PurchaseButtonDisplay : MonoBehaviour
 
     public void SetNotApplicable()
     {
-        if (!string.IsNullOrEmpty(InsufficientFundsTextOverride) && InsufficientFundsTextOverride != InsufficientFundsLabel.text)
-        {
-            InsufficientFundsLabel.text = InsufficientFundsTextOverride;
-        }
         ActiveButton.gameObject.SetActive(false);
-        InsufficientFundsLabel.text = "N/A";
-        InsufficientFundsLabel.gameObject.SetActive(true);
+        InsufficientFundsLabel.gameObject.SetActive(false);
     }
 
     public void SetState(int itemCost)

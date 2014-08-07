@@ -518,7 +518,7 @@ public class SP : MonoBehaviour//, IServiceCalls
 
     static public void ForgotPassword(string userEmail, Action<UserResponse> onSuccess)
     {
-        string url = string.Format("{0}ForgotPassword?gameID={1}&userEMail={2}", Url, GuidAppID, WWW.EscapeURL(userEmail));
+        string url = string.Format("{0}SPLoginForgotPassword?gameID={1}&userEMail={2}", Url, GuidAppID, WWW.EscapeURL(userEmail));
         WWW www = new WWW(url);
 
         Get().StartCoroutine(Get().ServiceSpLoginResponse(www, (UserResponse response) =>
