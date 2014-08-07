@@ -22,7 +22,10 @@ public class ItemIDRestriction : MonoBehaviour, IContainerRestriction {
             foreach (int itemID in ItemIDList)
             {
                 if (itemData.varianceID == itemID)
+                {
+                    Debug.LogWarning("Item Resticted for being added to container because it has a Item ID Restriction");
                     return true;
+                }
             }
 
             return false;
@@ -34,6 +37,8 @@ public class ItemIDRestriction : MonoBehaviour, IContainerRestriction {
                 if (itemData.varianceID == itemID)
                     return false;
             }
+
+            Debug.LogWarning("Item Resticted for being added to container because it has a Item ID Restriction");
             return true;
         }
     }

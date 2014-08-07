@@ -14,6 +14,7 @@ public class NoActionRestriction : MonoBehaviour, IContainerRestriction {
 
     public bool IsRestricted(ContainerAction containerAction, ItemData itemData)
     {
+        Debug.LogWarning("Item Resticted for being added to or removed from container because it has a No Action Restriction");
         return true;
     }
 }

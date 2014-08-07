@@ -126,7 +126,7 @@ public class ItemContainer : MonoBehaviour
             return false;
         }
 
-        if (containerAddRestrictions.Count > 0)
+        if (containerRemoveRestrictions.Count > 0)
         {
             foreach (IContainerRestriction newRestriction in containerRemoveRestrictions)
             {

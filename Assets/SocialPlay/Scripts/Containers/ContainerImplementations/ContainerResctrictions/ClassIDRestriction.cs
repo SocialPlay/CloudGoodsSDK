@@ -22,7 +22,10 @@ public class ClassIDRestriction : MonoBehaviour, IContainerRestriction {
             foreach (int classID in classIDList)
             {
                 if (itemData.classID == classID)
+                {
+                    Debug.LogWarning("Item Resticted for being added to container because it has a Class ID Restriction");
                     return true;
+                }
             }
 
             return false;
@@ -34,6 +37,8 @@ public class ClassIDRestriction : MonoBehaviour, IContainerRestriction {
                 if (itemData.classID == classID)
                     return false;
             }
+
+            Debug.LogWarning("Item Resticted for being added to container because it has a Class ID Restriction");
             return true;
         }
     }

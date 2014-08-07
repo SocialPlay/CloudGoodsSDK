@@ -17,7 +17,10 @@ public class ItemLimitRestriction : MonoBehaviour, IContainerRestriction {
         if (containerAction == ContainerAction.add)
         {
             if (restrictedContainer.containerItems.Count >= ContainerItemLimit)
+            {
+                Debug.LogWarning("Item Resticted for being added to container because it has a Item Limit Restriction");
                 return true;
+            }
         }
 
         return false;
