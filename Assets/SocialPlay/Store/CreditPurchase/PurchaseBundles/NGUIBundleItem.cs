@@ -41,8 +41,8 @@ public class NGUIBundleItem : MonoBehaviour
 
 	public string Description
 	{
-		get { return description.text; }
-		set { description.text = value; }
+		get { return description == null ? "" : description.text; }
+		set { if(description != null) description.text = value; }
 	}
 
     public string ProductID { get; set; }

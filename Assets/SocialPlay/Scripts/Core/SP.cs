@@ -265,6 +265,21 @@ public class SP : MonoBehaviour//, IServiceCalls
     /// <summary>
     /// Loads item list from the specified owner.
     /// </summary>
+    /// <param name="callback"></param>
+
+    static public void GetItems(Action<List<ItemData>> callback)
+    {
+        if (user == null)
+        {
+            Debug.LogWarning("Need to login first to get items.");
+            return;
+        }
+        GetOwnerItems(user.userID.ToString(), "User", 0, callback);
+    }
+
+    /// <summary>
+    /// Loads item list from the specified owner.
+    /// </summary>
     /// <param name="ownerID"></param>
     /// <param name="ownerType"></param>
     /// <param name="location"></param>
@@ -285,6 +300,30 @@ public class SP : MonoBehaviour//, IServiceCalls
             userItems = ownerItems;
             if (callback != null) callback(userItems);
         }));
+    }
+
+    /// <summary>
+    /// Returns true if the user have the specified item.
+    /// </summary>
+    /// <param name="name"></param>
+
+    static public bool HasItem(string name)
+    {
+        if (userItems == null)
+        {
+            Debug.LogWarning("User Item list has not been loaded yet.");
+            return false;
+        }
+
+        for (int i = 0, imax = userItems.Count; i < imax; i++)
+        {
+            if (userItems[i].itemName.StartsWith(name, StringComparison.InvariantCultureIgnoreCase))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /// <summary>
@@ -516,7 +555,7 @@ public class SP : MonoBehaviour//, IServiceCalls
 
     static public void ForgotPassword(string userEmail, Action<UserResponse> onSuccess)
     {
-        string url = string.Format("{0}ForgotPassword?gameID={1}&userEMail={2}", Url, GuidAppID, WWW.EscapeURL(userEmail));
+        string url = string.Format("{0}SPLoginForgotPassword?gameID={1}&userEMail={2}", Url, GuidAppID, WWW.EscapeURL(userEmail));
         WWW www = new WWW(url);
 
         Get().StartCoroutine(Get().ServiceSpLoginResponse(www, (UserResponse response) =>

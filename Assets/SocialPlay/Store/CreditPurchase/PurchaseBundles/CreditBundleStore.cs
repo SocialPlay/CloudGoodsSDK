@@ -93,6 +93,7 @@ public class CreditBundleStore : MonoBehaviour
         nguiItem.BundleID = item.ID.ToString();
 
         nguiItem.CurrencyName = item.CurrencyName;
+        nguiItem.Description = item.Description;
         //nguiItem.CurrencyIcon = creditBundleIcon.Get(nguiItem.Amount, nguiItem.CurrencyIcon);
 
         // This is temporal until its added on the portal

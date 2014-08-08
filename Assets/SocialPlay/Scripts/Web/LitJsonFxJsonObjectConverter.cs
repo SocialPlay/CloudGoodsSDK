@@ -361,6 +361,7 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter
             creditBundle.Amount = int.Parse(creditBundleObj[i]["CreditAmount"].ToString());
             creditBundle.Cost = creditBundleObj[i]["Cost"].ToString();
             creditBundle.CurrencyIcon = creditBundleObj[i]["Image"].ToString();
+            creditBundle.Description = creditBundleObj[i]["Description"].ToString();
             Debug.Log("Image");
             creditBundle.ID = int.Parse(creditBundleObj[i]["ID"].ToString());
             creditBundle.CurrencyName = "$";
