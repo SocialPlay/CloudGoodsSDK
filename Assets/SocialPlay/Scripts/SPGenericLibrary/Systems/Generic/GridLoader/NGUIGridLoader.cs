@@ -10,11 +10,11 @@ class NGUIGridLoader : MonoBehaviour, SocialPlay.Generic.IGridLoader
     public GameObject grid = null;
     public GameObject itemPrefab = null;
 
-    public event Action<CreditBundleItem, GameObject> ItemAdded;
+    public event Action<PaidCurrencyBundleItem, GameObject> ItemAdded;
 
-    public void LoadGrid(List<CreditBundleItem> PaidCurrenyBundles)
+    public void LoadGrid(List<PaidCurrencyBundleItem> PaidCurrenyBundles)
     {
-        foreach (CreditBundleItem PaidCurrencyBundle in PaidCurrenyBundles)
+        foreach (PaidCurrencyBundleItem PaidCurrencyBundle in PaidCurrenyBundles)
         {
             GameObject gItem = NGUITools.AddChild(grid, itemPrefab);
             if (ItemAdded != null)

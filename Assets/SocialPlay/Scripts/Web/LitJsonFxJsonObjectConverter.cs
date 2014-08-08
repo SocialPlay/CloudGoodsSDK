@@ -189,8 +189,8 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter
             storeItemInfo.ID = int.Parse(storeItemsJsonArray[i]["ID"].ToString());
             storeItemInfo.itemName = storeItemsJsonArray[i]["Name"].ToString();
             storeItemInfo.itemID = int.Parse(storeItemsJsonArray[i]["ItemID"].ToString());
-            storeItemInfo.creditValue = int.Parse(storeItemsJsonArray[i]["CreditValue"].ToString());
-            storeItemInfo.coinValue = int.Parse(storeItemsJsonArray[i]["CoinValue"].ToString());
+            storeItemInfo.paidCurrencyValue = int.Parse(storeItemsJsonArray[i]["CreditValue"].ToString());
+            storeItemInfo.freeCurrencyValue = int.Parse(storeItemsJsonArray[i]["CoinValue"].ToString());
 
             JsonData storeItemDetailArray = LitJson.JsonMapper.ToObject(storeItemsJsonArray[i]["Detail"].ToString());
 
@@ -347,9 +347,9 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter
         return ItemBundles;
     }
 
-    public List<CreditBundleItem> ConvertToListCreditBundleItem(string dataString)
+    public List<PaidCurrencyBundleItem> ConvertToListPaidCurrencyBundleItem(string dataString)
     {
-        List<CreditBundleItem> creditBundles = new List<CreditBundleItem>();
+        List<PaidCurrencyBundleItem> creditBundles = new List<PaidCurrencyBundleItem>();
 
         string parsedString = ParseString(dataString);
 
@@ -357,7 +357,7 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter
 
         for (int i = 0; i < creditBundleObj.Count; i++)
         {
-            CreditBundleItem creditBundle = new CreditBundleItem();
+            PaidCurrencyBundleItem creditBundle = new PaidCurrencyBundleItem();
             creditBundle.Amount = int.Parse(creditBundleObj[i]["CreditAmount"].ToString());
             creditBundle.Cost = creditBundleObj[i]["Cost"].ToString();
             creditBundle.CurrencyIcon = creditBundleObj[i]["Image"].ToString();

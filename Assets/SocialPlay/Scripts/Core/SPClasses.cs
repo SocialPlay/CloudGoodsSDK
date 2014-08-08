@@ -67,7 +67,7 @@ public class UserResponse
 
 #region Bundles
 
-public class CreditBundleItem
+public class PaidCurrencyBundleItem
 {
     public int Amount = 0;
     public string Cost = "";

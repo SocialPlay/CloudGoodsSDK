@@ -7,7 +7,7 @@ namespace SocialPlay.Generic
 {
 	public interface IGridLoader
 	{
-        event Action<CreditBundleItem, GameObject> ItemAdded;
-        void LoadGrid(List<CreditBundleItem> data);
+        event Action<PaidCurrencyBundleItem, GameObject> ItemAdded;
+        void LoadGrid(List<PaidCurrencyBundleItem> data);
 	}
 }

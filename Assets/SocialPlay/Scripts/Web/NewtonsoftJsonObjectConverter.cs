@@ -199,16 +199,16 @@ public class NewtonsoftJsonObjectConverter : IServiceObjectConverter {
         return ItemBundles;
     }
 
-    public List<CreditBundleItem> ConvertToListPaidCurrencyBundleItem(string dataString)
+    public List<PaidCurrencyBundleItem> ConvertToListPaidCurrencyBundleItem(string dataString)
     {
-        List<CreditBundleItem> PaidCurrencyBundles = new List<CreditBundleItem>();
+        List<PaidCurrencyBundleItem> PaidCurrencyBundles = new List<PaidCurrencyBundleItem>();
 
         JToken PaidCurrencyBundleParse = JToken.Parse(dataString);
         JArray PaidCurrencyBundleObj = JArray.Parse(PaidCurrencyBundleParse.ToString());
 
         for (int i = 0; i < PaidCurrencyBundleObj.Count; i++)
         {
-            CreditBundleItem PaidCurrencyBundle = new CreditBundleItem();
+            PaidCurrencyBundleItem PaidCurrencyBundle = new PaidCurrencyBundleItem();
             PaidCurrencyBundle.Amount = int.Parse(PaidCurrencyBundleObj[i]["CreditAmount"].ToString());
             PaidCurrencyBundle.Cost = PaidCurrencyBundleObj[i]["Cost"].ToString();
             PaidCurrencyBundle.CurrencyIcon = PaidCurrencyBundleObj[i].ToString();

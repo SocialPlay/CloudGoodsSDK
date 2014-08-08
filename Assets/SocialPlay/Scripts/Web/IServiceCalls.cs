@@ -30,7 +30,7 @@ public interface IServiceCalls
 
     void PurchaseItemBundles(int bundleID, string paymentType, int location, Action<string> callback);
 
-	void GetCreditBundles(SocialPlayPlatform platform, Action<List<CreditBundleItem>> callback);
+	void GetCreditBundles(SocialPlayPlatform platform, Action<List<PaidCurrencyBundleItem>> callback);
 
     void PurchaseCreditBundles(string payload, Action<string> callback);
 

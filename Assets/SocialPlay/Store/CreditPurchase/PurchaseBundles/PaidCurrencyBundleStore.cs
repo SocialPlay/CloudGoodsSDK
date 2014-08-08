@@ -13,14 +13,14 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 
-public class CreditBundleStore : MonoBehaviour
+public class PaidCurrencyBundleStore : MonoBehaviour
 {
     public PlatformPurchase platformPurchase = PlatformPurchase.Facebook;
     public GameObject Grid;
 
     IGridLoader gridLoader;
     IPlatformPurchaser platformPurchasor;
-    CreditBundleIcon creditBundleIcon = new CreditBundleIcon();
+    PaidCurrencyBundleIcon PaidCurrencyBundleIcon = new PaidCurrencyBundleIcon();
     bool isPurchaseRequest = false;
 
     public bool isInitialized = false;
@@ -71,14 +71,14 @@ public class CreditBundleStore : MonoBehaviour
         platformPurchasor.RecievedPurchaseResponse -= OnRecievedPurchaseResponse;
     }
 
-    void OnPurchaseBundlesRecieved(List<CreditBundleItem> data)
+    void OnPurchaseBundlesRecieved(List<PaidCurrencyBundleItem> data)
     {
         gridLoader = (IGridLoader)Grid.GetComponent(typeof(IGridLoader));
         gridLoader.ItemAdded += OnItemInGrid;
         gridLoader.LoadGrid(data);
     }
 
-    void OnItemInGrid(CreditBundleItem item, GameObject obj)
+    void OnItemInGrid(PaidCurrencyBundleItem item, GameObject obj)
     {
         NGUIBundleItem nguiItem = obj.GetComponent<NGUIBundleItem>();
         nguiItem.Amount = item.Amount.ToString();
@@ -146,11 +146,11 @@ public class CreditBundleStore : MonoBehaviour
         switch (platformPurchase)
         {
             case PlatformPurchase.Android:
-                return gameObject.AddComponent<AndroidCreditPurchaser>();
+                return gameObject.AddComponent<AndroidPaidCurrencyPurchaser>();
             case PlatformPurchase.Facebook:
                 return gameObject.AddComponent<FaceBookPurchaser>();
             case PlatformPurchase.IOS:
-                return gameObject.AddComponent<iOSCreditPurchaser>();
+                return gameObject.AddComponent<iOSPaidCurrencyPurchaser>();
             default:
                 return null;
         }

@@ -870,7 +870,7 @@ public class SP : MonoBehaviour//, IServiceCalls
         }));
     }
 
-    static public void GetCreditBundles(int platformID, Action<List<CreditBundleItem>> callback)
+    static public void GetCreditBundles(int platformID, Action<List<PaidCurrencyBundleItem>> callback)
     {
         string url = Url + "GetCreditBundles?Appid=" + AppID + "&Platform=" + platformID;
 
@@ -1084,7 +1084,7 @@ public class SP : MonoBehaviour//, IServiceCalls
         }
     }
 
-    IEnumerator ServiceGetCreditBundles(WWW www, Action<List<CreditBundleItem>> callback)
+    IEnumerator ServiceGetCreditBundles(WWW www, Action<List<PaidCurrencyBundleItem>> callback)
     {
         yield return www;
         Debug.Log(www.text);
