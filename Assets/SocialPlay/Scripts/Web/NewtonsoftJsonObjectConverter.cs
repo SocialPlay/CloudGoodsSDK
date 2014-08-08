@@ -57,8 +57,8 @@ public class NewtonsoftJsonObjectConverter : IServiceObjectConverter {
             storeItemInfo.ID = int.Parse(storeItemsJsonArray[i]["ID"].ToString());
             storeItemInfo.itemName = storeItemsJsonArray[i]["Name"].ToString();
             storeItemInfo.itemID = int.Parse(storeItemsJsonArray[i]["ItemID"].ToString());
-            storeItemInfo.creditValue = int.Parse(storeItemsJsonArray[i]["CreditValue"].ToString());
-            storeItemInfo.coinValue = int.Parse(storeItemsJsonArray[i]["CoinValue"].ToString());
+            storeItemInfo.paidCurrencyValue = int.Parse(storeItemsJsonArray[i]["CreditValue"].ToString());
+            storeItemInfo.freeCurrencyValue = int.Parse(storeItemsJsonArray[i]["CoinValue"].ToString());
 
             JArray storeItemDetailArray = JArray.Parse(storeItemsJsonArray[i]["Detail"].ToString());
 
@@ -199,26 +199,26 @@ public class NewtonsoftJsonObjectConverter : IServiceObjectConverter {
         return ItemBundles;
     }
 
-    public List<CreditBundleItem> ConvertToListCreditBundleItem(string dataString)
+    public List<CreditBundleItem> ConvertToListPaidCurrencyBundleItem(string dataString)
     {
-        List<CreditBundleItem> creditBundles = new List<CreditBundleItem>();
+        List<CreditBundleItem> PaidCurrencyBundles = new List<CreditBundleItem>();
 
-        JToken creditBundleParse = JToken.Parse(dataString);
-        JArray creditBundleObj = JArray.Parse(creditBundleParse.ToString());
+        JToken PaidCurrencyBundleParse = JToken.Parse(dataString);
+        JArray PaidCurrencyBundleObj = JArray.Parse(PaidCurrencyBundleParse.ToString());
 
-        for (int i = 0; i < creditBundleObj.Count; i++)
+        for (int i = 0; i < PaidCurrencyBundleObj.Count; i++)
         {
-            CreditBundleItem creditBundle = new CreditBundleItem();
-            creditBundle.Amount = int.Parse(creditBundleObj[i]["CreditAmount"].ToString());
-            creditBundle.Cost = creditBundleObj[i]["Cost"].ToString();
-            creditBundle.CurrencyIcon = creditBundleObj[i].ToString();
-            creditBundle.ID = int.Parse(creditBundleObj[i]["ID"].ToString());
-            creditBundle.CurrencyName = "$";
+            CreditBundleItem PaidCurrencyBundle = new CreditBundleItem();
+            PaidCurrencyBundle.Amount = int.Parse(PaidCurrencyBundleObj[i]["CreditAmount"].ToString());
+            PaidCurrencyBundle.Cost = PaidCurrencyBundleObj[i]["Cost"].ToString();
+            PaidCurrencyBundle.CurrencyIcon = PaidCurrencyBundleObj[i].ToString();
+            PaidCurrencyBundle.ID = int.Parse(PaidCurrencyBundleObj[i]["ID"].ToString());
+            PaidCurrencyBundle.CurrencyName = "$";
 
-            creditBundles.Add(creditBundle);
+            PaidCurrencyBundles.Add(PaidCurrencyBundle);
         }
 
-        return creditBundles;
+        return PaidCurrencyBundles;
     }
 
     public MoveMultipleItemsResponse ConvertToMoveMultipleItemsResponse(string dataString)

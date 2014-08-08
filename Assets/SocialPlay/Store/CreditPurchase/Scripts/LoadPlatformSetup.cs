@@ -8,7 +8,7 @@ public class LoadPlatformSetup : MonoBehaviour {
     public static event PlatformSetupLoaded platformSetupLoaded;
 
     public GameObject purchaseCreditsButton;
-    public GameObject creditsMessagePanel;
+    public GameObject PaidCurrencyMessagePanel;
 
     public int platformID;
 
@@ -32,7 +32,7 @@ public class LoadPlatformSetup : MonoBehaviour {
         //if (GatherGameInfo.allInfo.platformType == "Portal")
         //{
         //    purchaseCreditsButton.SetActive(false);
-        //    creditsMessagePanel.SetActive(false);
+        //    PaidCurrencyMessagePanel.SetActive(false);
         //}
     }
 
@@ -45,17 +45,17 @@ public class LoadPlatformSetup : MonoBehaviour {
             case 1:
                 platformSetupLoaded((GameObject)GameObject.Instantiate(socialPlayPlatformSetupPrefab));
                 purchaseCreditsButton.SetActive(true);
-                creditsMessagePanel.SetActive(false);
+                PaidCurrencyMessagePanel.SetActive(false);
                 break;
             case 4:
                 platformSetupLoaded((GameObject)GameObject.Instantiate(kongregatePlatformSetupPrefab));
                 purchaseCreditsButton.SetActive(true);
-                creditsMessagePanel.SetActive(false);
+                PaidCurrencyMessagePanel.SetActive(false);
                 break;
             default:
                 platformSetupLoaded((GameObject)GameObject.Instantiate(socialPlayPlatformSetupPrefab));
                 purchaseCreditsButton.SetActive(true);
-                creditsMessagePanel.SetActive(false);
+                PaidCurrencyMessagePanel.SetActive(false);
                 break;
         }
 

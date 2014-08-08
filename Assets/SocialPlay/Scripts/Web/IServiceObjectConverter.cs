@@ -21,7 +21,7 @@ public interface IServiceObjectConverter
 
     List<ItemBundle> ConvertToListItemBundle(string dataString);
 
-    List<CreditBundleItem> ConvertToListCreditBundleItem(string dataString);
+    List<CreditBundleItem> ConvertToListPaidCurrencyBundleItem(string dataString);
 
     MoveMultipleItemsResponse ConvertToMoveMultipleItemsResponse(string dataString);
 

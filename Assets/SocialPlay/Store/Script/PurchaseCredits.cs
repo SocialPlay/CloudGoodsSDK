@@ -3,7 +3,7 @@ using System.Collections;
 
 public class PurchaseCredits : MonoBehaviour {
 
-    public GameObject creditPanel;
+    public GameObject PaidCurrencyPanel;
 
     public GameObject closeCreditPanelButton;
 
@@ -22,11 +22,11 @@ public class PurchaseCredits : MonoBehaviour {
 
     void OnCloseCreditButton(GameObject button)
     {
-        creditPanel.SetActive(false);
+        PaidCurrencyPanel.SetActive(false);
     }
 
     void OnPurchaseButtonClick(GameObject button)
     {
-        creditPanel.SetActive(true);
+        PaidCurrencyPanel.SetActive(true);
     }
 }

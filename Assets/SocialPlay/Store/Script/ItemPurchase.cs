@@ -18,8 +18,8 @@ public class ItemPurchase : MonoBehaviour
     public GameObject increaseQuantityButton;
     public GameObject decreaseQuantityButton;
 
-    public PurchaseButtonDisplay creditPurchaseButton;
-    public PurchaseButtonDisplay coinPurchaseButton;
+    public PurchaseButtonDisplay PaidCurrencyPurchaseButton;
+    public PurchaseButtonDisplay FreeCurrencyPurchaseButton;
 
     public UITexture itemTexture;
 
@@ -27,8 +27,8 @@ public class ItemPurchase : MonoBehaviour
     {
         UIEventListener.Get(increaseQuantityButton).onClick += IncreaseQuantityAmount;
         UIEventListener.Get(decreaseQuantityButton).onClick += DecreaseQuantityAmount;
-        UIEventListener.Get(creditPurchaseButton.ActiveButton.gameObject).onClick += PurchaseItemWithCredits;
-        UIEventListener.Get(coinPurchaseButton.ActiveButton.gameObject).onClick += PurchaseItemWithCoins;
+        UIEventListener.Get(PaidCurrencyPurchaseButton.ActiveButton.gameObject).onClick += PurchaseItemWithCredits;
+        UIEventListener.Get(FreeCurrencyPurchaseButton.ActiveButton.gameObject).onClick += PurchaseItemWithCoins;
 
     }
 
@@ -36,8 +36,8 @@ public class ItemPurchase : MonoBehaviour
     {
         UIEventListener.Get(increaseQuantityButton).onClick -= IncreaseQuantityAmount;
         UIEventListener.Get(decreaseQuantityButton).onClick -= DecreaseQuantityAmount;
-        UIEventListener.Get(creditPurchaseButton.ActiveButton.gameObject).onClick -= PurchaseItemWithCredits;
-        UIEventListener.Get(coinPurchaseButton.ActiveButton.gameObject).onClick -= PurchaseItemWithCoins;
+        UIEventListener.Get(PaidCurrencyPurchaseButton.ActiveButton.gameObject).onClick -= PurchaseItemWithCredits;
+        UIEventListener.Get(FreeCurrencyPurchaseButton.ActiveButton.gameObject).onClick -= PurchaseItemWithCoins;
 
     }
 
@@ -100,21 +100,21 @@ public class ItemPurchase : MonoBehaviour
 
     private void ChangePurchaseButtonDisplay(int itemCreditCost, int itemCoinCost)
     {
-        coinPurchaseButton.SetState(itemCoinCost);
-        creditPurchaseButton.SetState(itemCreditCost);
+        FreeCurrencyPurchaseButton.SetState(itemCoinCost);
+        PaidCurrencyPurchaseButton.SetState(itemCreditCost);
     }
 
     public void DisplayItemPurchasePanel(UIStoreItem item)
     {
         itemInfo = item;
 		itemNameDisplay.text = item.storeItem.itemName;
-		itemCreditCostDisplay.text = item.storeItem.creditValue.ToString();
-        itemCoinCostDisplay.text = item.storeItem.coinValue.ToString();
+		itemCreditCostDisplay.text = item.storeItem.paidCurrencyValue.ToString();
+        itemCoinCostDisplay.text = item.storeItem.freeCurrencyValue.ToString();
         itemQuantityAmount.text = "1";
 
         itemTexture.mainTexture = item.gameObject.GetComponentInChildren<UITexture>().mainTexture;
 
-        ChangePurchaseButtonDisplay(item.storeItem.creditValue, item.storeItem.coinValue);
+        ChangePurchaseButtonDisplay(item.storeItem.paidCurrencyValue, item.storeItem.freeCurrencyValue);
     }
 
     void PurchaseItemWithCredits(GameObject button)

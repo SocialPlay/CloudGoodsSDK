@@ -983,7 +983,7 @@ public class SP : MonoBehaviour//, IServiceCalls
         yield return www;
         Debug.Log(www.text);
         if (www.error == null)
-            callback(serviceConverter.ConvertToListCreditBundleItem(www.text));
+            callback(serviceConverter.ConvertToListPaidCurrencyBundleItem(www.text));
         else
         {
             if (onErrorEvent != null) onErrorEvent("Error: " + www.error);

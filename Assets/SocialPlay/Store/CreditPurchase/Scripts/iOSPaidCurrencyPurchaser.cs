@@ -4,7 +4,8 @@ using System;
 using Newtonsoft.Json;
 using LitJson;
 
-public class iOSCreditPurchaser : MonoBehaviour, IPlatformPurchaser {
+public class iOSPaidCurrencyPurchaser : MonoBehaviour, IPlatformPurchaser
+{
 
 	public event Action<string> RecievedPurchaseResponse;
 	public int currentBundleID = 0;

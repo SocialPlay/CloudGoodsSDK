@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class DisplayCreditsPurchase : MonoBehaviour {
+public class DisplayPaidCurrencyPurchase : MonoBehaviour {
 
     public GameObject CreditsPurchasePanel;
 
@@ -15,9 +15,9 @@ public class DisplayCreditsPurchase : MonoBehaviour {
     {
         CreditsPurchasePanel.SetActive(true);
 
-        if (CreditsPurchasePanel.GetComponent<CreditBundleStore>().isInitialized == false)
+        if (CreditsPurchasePanel.GetComponent<PaidCurrencyBundleStore>().isInitialized == false)
         {
-            CreditsPurchasePanel.GetComponent<CreditBundleStore>().Initialize();
+            CreditsPurchasePanel.GetComponent<PaidCurrencyBundleStore>().Initialize();
         }
     }
 }

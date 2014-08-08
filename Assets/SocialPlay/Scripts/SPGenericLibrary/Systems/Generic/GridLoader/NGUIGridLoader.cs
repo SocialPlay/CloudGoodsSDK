@@ -12,13 +12,13 @@ class NGUIGridLoader : MonoBehaviour, SocialPlay.Generic.IGridLoader
 
     public event Action<CreditBundleItem, GameObject> ItemAdded;
 
-    public void LoadGrid(List<CreditBundleItem> creditBundles)
+    public void LoadGrid(List<CreditBundleItem> PaidCurrenyBundles)
     {
-        foreach (CreditBundleItem creditBundle in creditBundles)
+        foreach (CreditBundleItem PaidCurrencyBundle in PaidCurrenyBundles)
         {
             GameObject gItem = NGUITools.AddChild(grid, itemPrefab);
             if (ItemAdded != null)
-                ItemAdded(creditBundle, gItem);
+                ItemAdded(PaidCurrencyBundle, gItem);
         }
         grid.GetComponent<UIGrid>().Reposition();
     }

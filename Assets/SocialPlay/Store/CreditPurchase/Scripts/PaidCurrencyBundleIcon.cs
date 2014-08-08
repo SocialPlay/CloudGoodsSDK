@@ -2,7 +2,7 @@ using UnityEngine;
 using System;
 using System.Collections;
 
-public class CreditBundleIcon
+public class PaidCurrencyBundleIcon
 {
     public UISprite currentCurrencyIcon;
 

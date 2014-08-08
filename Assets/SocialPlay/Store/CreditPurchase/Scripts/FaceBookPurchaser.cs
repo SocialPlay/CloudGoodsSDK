@@ -37,7 +37,7 @@ public class FaceBookPurchaser : MonoBehaviour, IPlatformPurchaser
         bundlePurchaseRequest.UserID = SP.user.userID.ToString();
         bundlePurchaseRequest.ReceiptToken = parsedData["payment_id"].ToString();
 
-        //TODO implement platform check for platform credit bundle purchase
+        //TODO implement platform check for platform paid currency bundle purchase
         bundlePurchaseRequest.PaymentPlatform = 1;
 
         string bundleJsonString = JsonConvert.SerializeObject(bundlePurchaseRequest);

@@ -10,8 +10,8 @@ class GUIStorePlatform : MonoBehaviour
     }
 
     //public Texture2D CreditIcon = null;
-    public string CreditIconName = "creditB_1";
-    public string CreditName = "Credits";
+    public string PaidCurrencyIconName = "creditB_1";
+    public string PaidCurrencyName = "Credits";
     public Color MainColor = Color.gray;
     public Color MainColorFade = Color.gray;
     public Color SecondaryColor = Color.gray;

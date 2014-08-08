@@ -4,7 +4,7 @@
 // </copyright>
 // Owner: Alex Zanfir
 // Date: 11/2/2012
-// Description: This is a store that sells only credit bundles, to allow from native currency to our currency, if we choose not to support direct buy with platforms native currency.
+// Description: This is a store that sells only paid currency bundles, to allow from native currency to our currency, if we choose not to support direct buy with platforms native currency.
 // ------------------------------------------------------------------------
 using UnityEngine;
 using SocialPlay.Generic;
@@ -13,14 +13,14 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 
-public class CreditBundleStore : MonoBehaviour
+public class PaidCurrencyBundleStore : MonoBehaviour
 {
     public PlatformPurchase platformPurchase = PlatformPurchase.Facebook;
     public GameObject Grid;
 
     IGridLoader gridLoader;
     IPlatformPurchaser platformPurchasor;
-    CreditBundleIcon creditBundleIcon = new CreditBundleIcon();
+    PaidCurrencyBundleIcon PaidCurrencyBundleIcon = new PaidCurrencyBundleIcon();
 	bool isPurchaseRequest = false;
 
     public bool isInitialized = false;
@@ -93,7 +93,6 @@ public class CreditBundleStore : MonoBehaviour
         nguiItem.BundleID = item.ID.ToString();
 
         nguiItem.CurrencyName = item.CurrencyName;
-        //nguiItem.CurrencyIcon = creditBundleIcon.Get(nguiItem.Amount, nguiItem.CurrencyIcon);
 
         // This is temporal until its added on the portal
         if (SocialPlaySettings.CreditBundlesDescription.Count != 0)
@@ -141,11 +140,11 @@ public class CreditBundleStore : MonoBehaviour
         switch (platformPurchase)
         {
             case PlatformPurchase.Android:
-                return gameObject.AddComponent<AndroidCreditPurchaser>();
+                return gameObject.AddComponent<AndroidPaidCurrencyPurchaser>();
             case PlatformPurchase.Facebook:
                 return gameObject.AddComponent<FaceBookPurchaser>();
 			case PlatformPurchase.IOS:
-				return gameObject.AddComponent<iOSCreditPurchaser>();
+                return gameObject.AddComponent<iOSPaidCurrencyPurchaser>();
             default:
                 return null;
         }

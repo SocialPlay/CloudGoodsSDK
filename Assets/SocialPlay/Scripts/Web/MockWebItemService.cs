@@ -76,7 +76,7 @@ public class MockWebItemService : MonoBehaviour, IServiceCalls
 
     public void GetCreditBundles(SocialPlayPlatform platform, Action<List<CreditBundleItem>> callback)
     {
-        callback(ServiceConverter.ConvertToListCreditBundleItem("\"[{\"ID\":1,\"Name\":\"15 Credits\",\"Image\":null,\"Description\":null,\"Cost\":1.00,\"CreditAmount\":15},{\"ID\":2,\"Name\":\"30 Credits\",\"Image\":null,\"Description\":null,\"Cost\":2.00,\"CreditAmount\":30},{\"ID\":3,\"Name\":\"75 Credits\",\"Image\":null,\"Description\":null,\"Cost\":5.00,\"CreditAmount\":75},{\"ID\":4,\"Name\":\"150 Credits\",\"Image\":null,\"Description\":null,\"Cost\":10.00,\"CreditAmount\":150},{\"ID\":5,\"Name\":\"300 Credits\",\"Image\":null,\"Description\":null,\"Cost\":20.00,\"CreditAmount\":300},{\"ID\":6,\"Name\":\"750 Credits\",\"Image\":null,\"Description\":null,\"Cost\":50.00,\"CreditAmount\":750}]\""));
+        callback(ServiceConverter.ConvertToListPaidCurrencyBundleItem("\"[{\"ID\":1,\"Name\":\"15 Credits\",\"Image\":null,\"Description\":null,\"Cost\":1.00,\"CreditAmount\":15},{\"ID\":2,\"Name\":\"30 Credits\",\"Image\":null,\"Description\":null,\"Cost\":2.00,\"CreditAmount\":30},{\"ID\":3,\"Name\":\"75 Credits\",\"Image\":null,\"Description\":null,\"Cost\":5.00,\"CreditAmount\":75},{\"ID\":4,\"Name\":\"150 Credits\",\"Image\":null,\"Description\":null,\"Cost\":10.00,\"CreditAmount\":150},{\"ID\":5,\"Name\":\"300 Credits\",\"Image\":null,\"Description\":null,\"Cost\":20.00,\"CreditAmount\":300},{\"ID\":6,\"Name\":\"750 Credits\",\"Image\":null,\"Description\":null,\"Cost\":50.00,\"CreditAmount\":750}]\""));
     }
 
     public void PurchaseCreditBundles(string payload, Action<string> callback)

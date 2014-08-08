@@ -24,7 +24,7 @@ public class SocialPlaySettings : ScriptableObject
     public string bundlesUrl = "https://socialplay.blob.core.windows.net/unityassetbundles/";
 	public string androidKey = "";
 	public List<string> androidProductNames = new List<string>();
-    public List<string> creditBundlesDescription = new List<string>();
+    public List<string> PaidCurrencyBundlesDescription = new List<string>();
 
     static SocialPlaySettings mInst;
 
@@ -89,7 +89,7 @@ public class SocialPlaySettings : ScriptableObject
     {
         get
         {
-            return instance.creditBundlesDescription;
+            return instance.PaidCurrencyBundlesDescription;
         }
     }
 }

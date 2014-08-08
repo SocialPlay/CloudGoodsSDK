@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System;
 using Newtonsoft.Json;
 
-public class AndroidCreditPurchaser : MonoBehaviour, IPlatformPurchaser
+public class AndroidPaidCurrencyPurchaser : MonoBehaviour, IPlatformPurchaser
 {
     public int currentBundleID = 0;
 
@@ -71,7 +71,7 @@ public class AndroidCreditPurchaser : MonoBehaviour, IPlatformPurchaser
             bundlePurchaseRequest.UserID = SP.user.userID.ToString();
             bundlePurchaseRequest.ReceiptToken = message;
 
-            //TODO implement platform check for platform credit bundle purchase
+            //TODO implement platform check for platform paid currency bundle purchase
             bundlePurchaseRequest.PaymentPlatform = 3;
 
             string bundleJsonString = JsonConvert.SerializeObject(bundlePurchaseRequest);

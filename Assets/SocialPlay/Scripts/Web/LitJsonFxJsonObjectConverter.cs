@@ -190,8 +190,8 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter
             storeItemInfo.ID = int.Parse(storeItemsJsonArray[i]["ID"].ToString());
             storeItemInfo.itemName = storeItemsJsonArray[i]["Name"].ToString();
             storeItemInfo.itemID = int.Parse(storeItemsJsonArray[i]["ItemID"].ToString());
-            storeItemInfo.creditValue = int.Parse(storeItemsJsonArray[i]["CreditValue"].ToString());
-            storeItemInfo.coinValue = int.Parse(storeItemsJsonArray[i]["CoinValue"].ToString());
+            storeItemInfo.paidCurrencyValue = int.Parse(storeItemsJsonArray[i]["CreditValue"].ToString());
+            storeItemInfo.freeCurrencyValue = int.Parse(storeItemsJsonArray[i]["CoinValue"].ToString());
 
             JsonData storeItemDetailArray = LitJson.JsonMapper.ToObject(storeItemsJsonArray[i]["Detail"].ToString());
 
@@ -348,34 +348,34 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter
         return ItemBundles;
     }
 
-    public List<CreditBundleItem> ConvertToListCreditBundleItem(string dataString)
+    public List<CreditBundleItem> ConvertToListPaidCurrencyBundleItem(string dataString)
     {
-        List<CreditBundleItem> creditBundles = new List<CreditBundleItem>();
+        List<CreditBundleItem> PaidCurrencyBundles = new List<CreditBundleItem>();
 
         string parsedString = ParseString(dataString);
 
-        JsonData creditBundleObj = LitJson.JsonMapper.ToObject(parsedString);
+        JsonData PaidCurrencyBundleObj = LitJson.JsonMapper.ToObject(parsedString);
 
-        for (int i = 0; i < creditBundleObj.Count; i++)
+        for (int i = 0; i < PaidCurrencyBundleObj.Count; i++)
         {
-            CreditBundleItem creditBundle = new CreditBundleItem();
-            creditBundle.Amount = int.Parse(creditBundleObj[i]["CreditAmount"].ToString());
-            creditBundle.Cost = creditBundleObj[i]["Cost"].ToString();
-            creditBundle.CurrencyIcon = creditBundleObj[i]["Image"].ToString();
+            CreditBundleItem PaidCurrencyBundle = new CreditBundleItem();
+            PaidCurrencyBundle.Amount = int.Parse(PaidCurrencyBundleObj[i]["CreditAmount"].ToString());
+            PaidCurrencyBundle.Cost = PaidCurrencyBundleObj[i]["Cost"].ToString();
+            PaidCurrencyBundle.CurrencyIcon = PaidCurrencyBundleObj[i]["Image"].ToString();
             Debug.Log("Image");
-            creditBundle.ID = int.Parse(creditBundleObj[i]["ID"].ToString());
-            creditBundle.CurrencyName = "$";
+            PaidCurrencyBundle.ID = int.Parse(PaidCurrencyBundleObj[i]["ID"].ToString());
+            PaidCurrencyBundle.CurrencyName = "$";
 
-            for (int j = 0; j < creditBundleObj[i]["Data"].Count; j++)
+            for (int j = 0; j < PaidCurrencyBundleObj[i]["Data"].Count; j++)
             {
-                Debug.Log("Data info: " + creditBundleObj[i]["Data"][j]["Key"].ToString() + "  ,   " + creditBundleObj[i]["Data"][j]["Value"].ToString());
-                creditBundle.CreditPlatformIDs.Add(creditBundleObj[i]["Data"][j]["Key"].ToString(), creditBundleObj[i]["Data"][j]["Value"].ToString());
+                Debug.Log("Data info: " + PaidCurrencyBundleObj[i]["Data"][j]["Key"].ToString() + "  ,   " + PaidCurrencyBundleObj[i]["Data"][j]["Value"].ToString());
+                PaidCurrencyBundle.CreditPlatformIDs.Add(PaidCurrencyBundleObj[i]["Data"][j]["Key"].ToString(), PaidCurrencyBundleObj[i]["Data"][j]["Value"].ToString());
             }
 
-            creditBundles.Add(creditBundle);
+            PaidCurrencyBundles.Add(PaidCurrencyBundle);
         }
 
-        return creditBundles;
+        return PaidCurrencyBundles;
     }
 
     public MoveMultipleItemsResponse ConvertToMoveMultipleItemsResponse(string dataString)
