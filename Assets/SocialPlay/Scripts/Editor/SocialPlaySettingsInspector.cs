@@ -160,15 +160,20 @@ public class SocialPlaySettingsInspector : Editor
         string appSecret = EditorGUILayout.TextField("App Secret", mSettings.appSecret);
         Texture2D defaultTexture = EditorGUILayout.ObjectField("Default Texture", mSettings.defaultTexture, typeof(Texture2D)) as Texture2D;
 
+        GUILayout.Label("Android", "BoldLabel");
+        string androidKey = EditorGUILayout.TextField("Key", mSettings.androidKey);
+
         EditorGUILayout.Separator();
 
         if (mSettings.appID != appId ||
             mSettings.appSecret != appSecret ||
-            mSettings.defaultTexture != defaultTexture)
+            mSettings.defaultTexture != defaultTexture ||
+            mSettings.androidKey != androidKey)
         {
             mSettings.appID = appId;
             mSettings.appSecret = appSecret;
             mSettings.defaultTexture = defaultTexture;
+            mSettings.androidKey = androidKey;
             NGUIEditorTools.RegisterUndo("Social Play Settings", mSettings);
         }
 
