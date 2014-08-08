@@ -44,23 +44,23 @@ public class CreditBundleStore : MonoBehaviour
 
             int currentplatform = 0;
 
-            #if UNITY_EDITOR
-                currentplatform = 1;
-            #endif
+#if UNITY_EDITOR
+            currentplatform = 1;
+#endif
 
-            #if UNITY_ANDROID && !UNITY_EDITOR
+#if UNITY_ANDROID && !UNITY_EDITOR
                 currentplatform = 3;
-            #endif
+#endif
 
-            #if UNITY_IPHONE && !UNITY_EDITOR
+#if UNITY_IPHONE && !UNITY_EDITOR
                 currentplatform = 4;
-            #endif
+#endif
 
             SP.GetCreditBundles(currentplatform, OnPurchaseBundlesRecieved);
 
             isInitialized = true;
         }
-        catch (System.Exception ex )
+        catch (System.Exception ex)
         {
             Debug.LogError(ex.Message);
         }
@@ -88,7 +88,7 @@ public class CreditBundleStore : MonoBehaviour
             nguiItem.ProductID = item.CreditPlatformIDs["Android_Product_ID"];
 
         if (item.CreditPlatformIDs.ContainsKey("IOS_Product_ID"))
-            nguiItem.ProductID = item.CreditPlatformIDs ["IOS_Product_ID"].ToString ();
+            nguiItem.ProductID = item.CreditPlatformIDs["IOS_Product_ID"].ToString();
 
         nguiItem.BundleID = item.ID.ToString();
 
@@ -100,25 +100,29 @@ public class CreditBundleStore : MonoBehaviour
         if (SocialPlaySettings.CreditBundlesDescription.Count != 0)
             nguiItem.Description = (item.ID - 1) <= SocialPlaySettings.CreditBundlesDescription.Count ? SocialPlaySettings.CreditBundlesDescription[item.ID - 1] : "";
 
-        ItemTextureCache.instance.GetItemTexture(item.CurrencyIcon,delegate(ItemTextureCache.ImageStatus imageStatus, Texture2D texture)
-                {
-                    nguiItem.SetCredtiBundleIcon(texture);
-                } );
+        if (!string.IsNullOrEmpty(item.CurrencyIcon))
+        {
+            SP.GetItemTexture(item.CurrencyIcon, delegate(ImageStatus imageStatus, Texture2D texture)
+            {
+                nguiItem.SetCredtiBundleIcon(texture);
+            });
+        }
 
         nguiItem.OnPurchaseRequest = OnPurchaseRequest;
     }
 
     void OnPurchaseRequest(NGUIBundleItem item)
     {
-        if (!isPurchaseRequest) {
+        if (!isPurchaseRequest)
+        {
             isPurchaseRequest = true;
-                        platformPurchasor.Purchase (item, 1, SP.user.userID.ToString ());
-                }
+            platformPurchasor.Purchase(item, 1, SP.user.userID.ToString());
+        }
     }
 
     void OnRecievedPurchaseResponse(string data)
     {
-        Debug.Log ("Received purchase response");
+        Debug.Log("Received purchase response");
 
         isPurchaseRequest = false;
 

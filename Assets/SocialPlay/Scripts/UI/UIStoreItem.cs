@@ -32,8 +32,10 @@ public class UIStoreItem : MonoBehaviour
 		SetItemData(SP.GetStoreItem(itemID));
 	}
 
-    void OnReceivedItemTexture(ItemTextureCache.ImageStatus imageStatus, Texture2D texture)
+    void OnReceivedItemTexture(ImageStatus imageStatus, Texture2D texture)
     {
+        if (gameObject == null) return;
+
         UITexture uiTexture = gameObject.GetComponentInChildren<UITexture>();
         uiTexture.mainTexture = texture;
 		if (loader != null) NGUITools.SetActive(loader, false);
@@ -46,7 +48,7 @@ public class UIStoreItem : MonoBehaviour
 		if (nameLabel != null) nameLabel.text = item.itemName;
 		//if(descriptionLabel != null) descriptionLabel.text = item. <-- There is no description on StoreItems. This is a must have.
 		storeItem = item;
-        ItemTextureCache.instance.GetItemTexture(storeItem.imageURL, OnReceivedItemTexture);
+        SP.GetItemTexture(storeItem.imageURL, OnReceivedItemTexture);
 	}
 
 

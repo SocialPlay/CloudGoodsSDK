@@ -18,10 +18,10 @@ public class BundleItemInfo : MonoBehaviour {
         ItemName.text = bundleItem.Name;
         itemAmount.text = "Amount: " + bundleItem.Quantity;
 
-        ItemTextureCache.instance.GetItemTexture(bundleItem.Image, OnReceivedItemTexture);
+        SP.GetItemTexture(bundleItem.Image, OnReceivedItemTexture);
     }
 
-    void OnReceivedItemTexture(ItemTextureCache.ImageStatus imgStatus, Texture2D texture)
+    void OnReceivedItemTexture(ImageStatus imgStatus, Texture2D texture)
     {
         GetComponentInChildren<UITexture>().mainTexture = texture;
     }

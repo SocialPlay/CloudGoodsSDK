@@ -591,6 +591,68 @@ public class SP : MonoBehaviour//, IServiceCalls
 
     #endregion
 
+    #region Texture Cache
+
+    static public Dictionary<string, Texture2D> ItemTextures = new Dictionary<string, Texture2D>();
+
+    /// <summary>
+    /// Loads item image from URL.
+    /// </summary>
+    /// <param name="URL"></param>
+    /// <param name="callback"></param>
+
+    static public void GetItemTexture(string URL, Action<ImageStatus, Texture2D> callback)
+    {
+        try
+        {
+            if (ItemTextures.ContainsKey(URL))
+            {
+                callback(ImageStatus.Cache, ItemTextures[URL]);
+            }
+            else
+                GetItemTextureFromWeb(URL, callback);
+        }
+        catch (Exception ex)
+        {
+            Debug.Log(ex);
+            callback(ImageStatus.Error, null);
+        }
+    }
+
+    static void GetItemTextureFromWeb(string URL, Action<ImageStatus, Texture2D> callback)
+    {
+        WWW www = new WWW(URL);
+
+        Get().StartCoroutine(Get().OnReceivedItemTexture(www, callback, URL));
+    }
+
+    IEnumerator OnReceivedItemTexture(WWW www, Action<ImageStatus, Texture2D> callback, string imageURL)
+    {
+        yield return www;
+
+        if (www.error == null)
+        {
+            if (ItemTextures.ContainsKey(imageURL))
+            {
+                callback(ImageStatus.Cache, ItemTextures[imageURL]);
+            }
+            else
+            {
+                ItemTextures.Add(imageURL, www.texture);
+                callback(ImageStatus.Web, www.texture);
+            }
+        }
+        else
+        {
+            if (SocialPlaySettings.DefaultTexture != null)
+                callback(ImageStatus.Cache, SocialPlaySettings.DefaultTexture);
+            else
+                callback(ImageStatus.Error, null);
+        }
+    }
+
+    #endregion
+
     #region StoreCalls
 
     static public void GetFreeCurrencyBalance(int accessLocation, Action<int> callback)
@@ -633,22 +695,25 @@ public class SP : MonoBehaviour//, IServiceCalls
         {
             WorldCurrencyInfo worldCurrencyInfo = serviceConverter.ConvertToWorldCurrencyInfo(value);
 
-            if(callback != null)
-                callback(worldCurrencyInfo);
+            if (callback != null) callback(worldCurrencyInfo);
 
-            ItemTextureCache.instance.GetItemTexture(worldCurrencyInfo.PaidCurrencyImage, delegate(ItemTextureCache.ImageStatus imageStatus, Texture2D texture)
+            if (!string.IsNullOrEmpty(worldCurrencyInfo.PaidCurrencyImage))
             {
-                tPaid = texture;
-                if(OnPaidCurrencyTexture != null)
-                    OnPaidCurrencyTexture(texture);
-            });
+                SP.GetItemTexture(worldCurrencyInfo.PaidCurrencyImage, delegate(ImageStatus imageStatus, Texture2D texture)
+                {
+                    tPaid = texture;
+                    if (OnPaidCurrencyTexture != null) OnPaidCurrencyTexture(texture);
+                });
+            }
 
-            ItemTextureCache.instance.GetItemTexture(worldCurrencyInfo.FreeCurrencyImage, delegate(ItemTextureCache.ImageStatus imageStatus, Texture2D texture)
+            if (!string.IsNullOrEmpty(worldCurrencyInfo.FreeCurrencyImage))
             {
-                tFree = texture;
-                if(OnFreeCurrencyTexture != null)
-                    OnFreeCurrencyTexture(texture);
-            });
+                SP.GetItemTexture(worldCurrencyInfo.FreeCurrencyImage, delegate(ImageStatus imageStatus, Texture2D texture)
+                {
+                    tFree = texture;
+                    if (OnFreeCurrencyTexture != null) OnFreeCurrencyTexture(texture);
+                });
+            }
         }));
     }
 
@@ -666,7 +731,7 @@ public class SP : MonoBehaviour//, IServiceCalls
         Get().StartCoroutine(Get().ServiceGetStoreItems(www, (List<StoreItem> items) =>
         {
             storeItems = items;
-            OnStoreListLoaded(storeItems);
+            if (OnStoreListLoaded != null) OnStoreListLoaded(storeItems);
             if (callback != null) callback(storeItems);
         }));
     }

@@ -22,8 +22,9 @@ public class SocialPlaySettings : ScriptableObject
     public string url = "http://webservice.socialplay.com/cloudgoods/cloudgoodsservice.svc/";
     public string localurl = "http://192.168.0.197/webservice/cloudgoods/cloudgoodsservice.svc/";
     public string bundlesUrl = "https://socialplay.blob.core.windows.net/unityassetbundles/";
-	public string androidKey = "";
-	public List<string> androidProductNames = new List<string>();
+    public string androidKey = "";
+    public Texture2D defaultTexture;
+    public List<string> androidProductNames = new List<string>();
     public List<string> creditBundlesDescription = new List<string>();
 
     static SocialPlaySettings mInst;
@@ -61,6 +62,14 @@ public class SocialPlaySettings : ScriptableObject
         }
     }
 
+    static public Texture2D DefaultTexture
+    {
+        get
+        {
+            return instance.defaultTexture;
+        }
+    }
+
     static public string BundlesUrl
     {
         get
@@ -69,21 +78,21 @@ public class SocialPlaySettings : ScriptableObject
         }
     }
 
-	static public string AndroidKey
-	{
-		get
-		{
-			return instance.androidKey;
-		}
-	}
+    static public string AndroidKey
+    {
+        get
+        {
+            return instance.androidKey;
+        }
+    }
 
-	static public List<string> AndroidProductNames
-	{
-		get
-		{
-			return instance.androidProductNames;
-		}
-	}
+    static public List<string> AndroidProductNames
+    {
+        get
+        {
+            return instance.androidProductNames;
+        }
+    }
 
     static public List<string> CreditBundlesDescription
     {
