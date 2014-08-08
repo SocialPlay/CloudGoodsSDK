@@ -265,6 +265,21 @@ public class SP : MonoBehaviour//, IServiceCalls
     /// <summary>
     /// Loads item list from the specified owner.
     /// </summary>
+    /// <param name="callback"></param>
+
+    static public void GetItems(Action<List<ItemData>> callback)
+    {
+        if (user == null)
+        {
+            Debug.LogWarning("Need to login first to get items.");
+            return;
+        }
+        GetOwnerItems(user.userID.ToString(), "User", 0, callback);
+    }
+
+    /// <summary>
+    /// Loads item list from the specified owner.
+    /// </summary>
     /// <param name="ownerID"></param>
     /// <param name="ownerType"></param>
     /// <param name="location"></param>
@@ -280,13 +295,35 @@ public class SP : MonoBehaviour//, IServiceCalls
         string url = string.Format("{0}GetOwnerItems?ownerID={1}&ownerType={2}&location={3}&AppID={4}", Url, ownerID, ownerType, location, GuidAppID);
         WWW www = new WWW(url);
 
-        Debug.Log("GetOwnerItems " + ownerID);
-
         Get().StartCoroutine(Get().ServiceCallGetListItemDatas(www, (List<ItemData> ownerItems) =>
         {
             userItems = ownerItems;
             if (callback != null) callback(userItems);
         }));
+    }
+
+    /// <summary>
+    /// Returns true if the user have the specified item.
+    /// </summary>
+    /// <param name="name"></param>
+
+    static public bool HasItem(string name)
+    {
+        if (userItems == null)
+        {
+            Debug.LogWarning("User Item list has not been loaded yet.");
+            return false;
+        }
+
+        for (int i = 0, imax = userItems.Count; i < imax; i++)
+        {
+            if (userItems[i].itemName.StartsWith(name, StringComparison.InvariantCultureIgnoreCase))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /// <summary>
@@ -554,6 +591,68 @@ public class SP : MonoBehaviour//, IServiceCalls
 
     #endregion
 
+    #region Texture Cache
+
+    static public Dictionary<string, Texture2D> ItemTextures = new Dictionary<string, Texture2D>();
+
+    /// <summary>
+    /// Loads item image from URL.
+    /// </summary>
+    /// <param name="URL"></param>
+    /// <param name="callback"></param>
+
+    static public void GetItemTexture(string URL, Action<ImageStatus, Texture2D> callback)
+    {
+        try
+        {
+            if (ItemTextures.ContainsKey(URL))
+            {
+                callback(ImageStatus.Cache, ItemTextures[URL]);
+            }
+            else
+                GetItemTextureFromWeb(URL, callback);
+        }
+        catch (Exception ex)
+        {
+            Debug.Log(ex);
+            callback(ImageStatus.Error, null);
+        }
+    }
+
+    static void GetItemTextureFromWeb(string URL, Action<ImageStatus, Texture2D> callback)
+    {
+        WWW www = new WWW(URL);
+
+        Get().StartCoroutine(Get().OnReceivedItemTexture(www, callback, URL));
+    }
+
+    IEnumerator OnReceivedItemTexture(WWW www, Action<ImageStatus, Texture2D> callback, string imageURL)
+    {
+        yield return www;
+
+        if (www.error == null)
+        {
+            if (ItemTextures.ContainsKey(imageURL))
+            {
+                callback(ImageStatus.Cache, ItemTextures[imageURL]);
+            }
+            else
+            {
+                ItemTextures.Add(imageURL, www.texture);
+                callback(ImageStatus.Web, www.texture);
+            }
+        }
+        else
+        {
+            if (SocialPlaySettings.DefaultTexture != null)
+                callback(ImageStatus.Cache, SocialPlaySettings.DefaultTexture);
+            else
+                callback(ImageStatus.Error, null);
+        }
+    }
+
+    #endregion
+
     #region StoreCalls
 
     static public void GetFreeCurrencyBalance(int accessLocation, Action<int> callback)
@@ -596,20 +695,25 @@ public class SP : MonoBehaviour//, IServiceCalls
         {
             WorldCurrencyInfo worldCurrencyInfo = serviceConverter.ConvertToWorldCurrencyInfo(value);
 
-            if(callback != null)
-                callback(worldCurrencyInfo);
+            if (callback != null) callback(worldCurrencyInfo);
 
-            ItemTextureCache.instance.GetItemTexture(worldCurrencyInfo.PaidCurrencyImage, delegate(ItemTextureCache.ImageStatus imageStatus, Texture2D texture)
+            if (!string.IsNullOrEmpty(worldCurrencyInfo.PaidCurrencyImage))
             {
-                tPaid = texture;
-                OnPaidCurrencyTexture(texture);
-            });
+                SP.GetItemTexture(worldCurrencyInfo.PaidCurrencyImage, delegate(ImageStatus imageStatus, Texture2D texture)
+                {
+                    tPaid = texture;
+                    if (OnPaidCurrencyTexture != null) OnPaidCurrencyTexture(texture);
+                });
+            }
 
-            ItemTextureCache.instance.GetItemTexture(worldCurrencyInfo.FreeCurrencyImage, delegate(ItemTextureCache.ImageStatus imageStatus, Texture2D texture)
+            if (!string.IsNullOrEmpty(worldCurrencyInfo.FreeCurrencyImage))
             {
-                tFree = texture;
-                OnFreeCurrencyTexture(texture);
-            });
+                SP.GetItemTexture(worldCurrencyInfo.FreeCurrencyImage, delegate(ImageStatus imageStatus, Texture2D texture)
+                {
+                    tFree = texture;
+                    if (OnFreeCurrencyTexture != null) OnFreeCurrencyTexture(texture);
+                });
+            }
         }));
     }
 
@@ -627,7 +731,7 @@ public class SP : MonoBehaviour//, IServiceCalls
         Get().StartCoroutine(Get().ServiceGetStoreItems(www, (List<StoreItem> items) =>
         {
             storeItems = items;
-            OnStoreListLoaded(storeItems);
+            if (OnStoreListLoaded != null) OnStoreListLoaded(storeItems);
             if (callback != null) callback(storeItems);
         }));
     }
@@ -921,6 +1025,8 @@ public class SP : MonoBehaviour//, IServiceCalls
     IEnumerator ServiceCallGetListItemDatas(WWW www, Action<List<ItemData>> callback)
     {
         yield return www;
+
+        Debug.Log("Owner items: " + www.text);
 
         if (www.error == null)
             callback(serviceConverter.ConvertToItemDataList(www.text));

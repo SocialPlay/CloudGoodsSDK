@@ -46,23 +46,18 @@ public class NGUIContainerGameItem : MonoBehaviour
         newNGUITexture.transform.parent = transform;
         newNGUITexture.transform.localPosition = Vector3.zero;
         newNGUITexture.transform.localScale = new Vector3(1, 1, 1);
-        
-        //TODO: create better accessability for ItemTextureCache
-        if (socialplayObj == null)
-        {
-            socialplayObj = GameObject.Find("Socialplay");
-            socialplayObj.GetComponent<ItemTextureCache>().GetItemTexture(itemData.imageName, OnReceivedTexture);
-        }
-        else
-            socialplayObj.GetComponent<ItemTextureCache>().GetItemTexture(itemData.imageName, OnReceivedTexture);
+
+        SP.GetItemTexture(itemData.imageName, OnReceivedTexture);
     }
 
-    void OnReceivedTexture(ItemTextureCache.ImageStatus statusMsg, Texture2D texture)
+    void OnReceivedTexture(ImageStatus statusMsg, Texture2D texture)
     {
         UITexture uiTexture = gameObject.GetComponentInChildren<UITexture>();
         uiTexture.material = new Material(uiTexture.material.shader);
         uiTexture.mainTexture = texture;
         uiTexture.transform.localPosition -= Vector3.forward * 2;
+
+        TweenAlpha.Begin(uiTexture.cachedGameObject, 0.3f, 1).from = 0;
     }
 
     public void ItemClicked(GameObject go)

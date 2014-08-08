@@ -3,25 +3,23 @@ using System.Collections;
 
 public class HasReceivedItemTextureFromCacheTest : MonoBehaviour {
 
-    public ItemTextureCache itemTextureCache;
-
     void Start()
     {
-        ItemTextureCache.instance.ItemTextures.Clear();
-        ItemTextureCache.instance.GetItemTexture("http://www.desicomments.com/dc3/01/209982/209982.gif", OnReceivedItemTexture);
+        SP.ItemTextures.Clear();
+        SP.GetItemTexture("http://www.desicomments.com/dc3/01/209982/209982.gif", OnReceivedItemTexture);
     }
 
-    void OnReceivedItemTexture(ItemTextureCache.ImageStatus statusMsg, Texture2D texture)
+    void OnReceivedItemTexture(ImageStatus statusMsg, Texture2D texture)
     {
-        if (statusMsg == ItemTextureCache.ImageStatus.Web)
-            ItemTextureCache.instance.GetItemTexture("http://www.desicomments.com/dc3/01/209982/209982.gif", OnReceivedImageTextureTwo);
+        if (statusMsg == ImageStatus.Web)
+            SP.GetItemTexture("http://www.desicomments.com/dc3/01/209982/209982.gif", OnReceivedImageTextureTwo);
         else
             IntegrationTest.Fail(gameObject);
     }
 
-    void OnReceivedImageTextureTwo(ItemTextureCache.ImageStatus statusMsg, Texture2D texture)
+    void OnReceivedImageTextureTwo(ImageStatus statusMsg, Texture2D texture)
     {
-        if (statusMsg == ItemTextureCache.ImageStatus.Cache)
+        if (statusMsg == ImageStatus.Cache)
             IntegrationTest.Pass(gameObject);
         else
             IntegrationTest.Fail(gameObject);

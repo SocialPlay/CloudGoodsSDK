@@ -41,8 +41,8 @@ public class NGUIBundleItem : MonoBehaviour
 
 	public string Description
 	{
-		get { return description.text; }
-		set { description.text = value; }
+		get { return description == null ? "" : description.text; }
+		set { if(description != null) description.text = value; }
 	}
 
     public string ProductID { get; set; }
@@ -66,7 +66,10 @@ public class NGUIBundleItem : MonoBehaviour
     public void SetCredtiBundleIcon(Texture2D texture)
     {
         if (currencyIcon != null)
+        {
             currencyIcon.mainTexture = texture;
+            TweenAlpha.Begin(currencyIcon.cachedGameObject, 0.3f, 1).from = 0;
+        }
     }
 
 }

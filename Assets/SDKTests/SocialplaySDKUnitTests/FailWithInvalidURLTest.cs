@@ -3,17 +3,15 @@ using System.Collections;
 
 public class FailWithInvalidURLTest : MonoBehaviour {
 
-    public ItemTextureCache itemTextureCache;
-
     void Start()
     {
-        ItemTextureCache.instance.ItemTextures.Clear();
-        ItemTextureCache.instance.GetItemTexture("", OnReceivedItemTexture);
+        SP.ItemTextures.Clear();
+        SP.GetItemTexture("", OnReceivedItemTexture);
     }
 
-    void OnReceivedItemTexture(ItemTextureCache.ImageStatus statusMsg, Texture2D texture)
+    void OnReceivedItemTexture(ImageStatus statusMsg, Texture2D texture)
     {
-        if (statusMsg == ItemTextureCache.ImageStatus.Error)
+        if (statusMsg == ImageStatus.Error)
             IntegrationTest.Pass(gameObject);
         else
             IntegrationTest.Fail(gameObject);

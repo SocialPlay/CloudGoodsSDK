@@ -4,7 +4,7 @@
 // </copyright>
 // Owner: Alex Zanfir
 // Date: 11/2/2012
-// Description: This is a store that sells only paid currency bundles, to allow from native currency to our currency, if we choose not to support direct buy with platforms native currency.
+// Description: This is a store that sells only credit bundles, to allow from native currency to our currency, if we choose not to support direct buy with platforms native currency.
 // ------------------------------------------------------------------------
 using UnityEngine;
 using SocialPlay.Generic;
@@ -13,15 +13,15 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 
-public class PaidCurrencyBundleStore : MonoBehaviour
+public class CreditBundleStore : MonoBehaviour
 {
     public PlatformPurchase platformPurchase = PlatformPurchase.Facebook;
     public GameObject Grid;
 
     IGridLoader gridLoader;
     IPlatformPurchaser platformPurchasor;
-    PaidCurrencyBundleIcon PaidCurrencyBundleIcon = new PaidCurrencyBundleIcon();
-	bool isPurchaseRequest = false;
+    CreditBundleIcon creditBundleIcon = new CreditBundleIcon();
+    bool isPurchaseRequest = false;
 
     public bool isInitialized = false;
 
@@ -42,25 +42,25 @@ public class PaidCurrencyBundleStore : MonoBehaviour
             platformPurchasor = GetPlatformPurchaser();
             platformPurchasor.RecievedPurchaseResponse += OnRecievedPurchaseResponse;
 
-			int currentplatform = 0;
+            int currentplatform = 0;
 
-			#if UNITY_EDITOR
-				currentplatform = 1;
-			#endif
+#if UNITY_EDITOR
+            currentplatform = 1;
+#endif
 
-			#if UNITY_ANDROID && !UNITY_EDITOR
-				currentplatform = 3;
-			#endif
+#if UNITY_ANDROID && !UNITY_EDITOR
+                currentplatform = 3;
+#endif
 
-			#if UNITY_IPHONE && !UNITY_EDITOR
-				currentplatform = 4;
-			#endif
+#if UNITY_IPHONE && !UNITY_EDITOR
+                currentplatform = 4;
+#endif
 
             SP.GetCreditBundles(currentplatform, OnPurchaseBundlesRecieved);
 
             isInitialized = true;
         }
-        catch (System.Exception ex )
+        catch (System.Exception ex)
         {
             Debug.LogError(ex.Message);
         }
@@ -87,38 +87,44 @@ public class PaidCurrencyBundleStore : MonoBehaviour
         if (item.CreditPlatformIDs.ContainsKey("Android_Product_ID"))
             nguiItem.ProductID = item.CreditPlatformIDs["Android_Product_ID"];
 
-		if (item.CreditPlatformIDs.ContainsKey("IOS_Product_ID"))
-			nguiItem.ProductID = item.CreditPlatformIDs ["IOS_Product_ID"].ToString ();
+        if (item.CreditPlatformIDs.ContainsKey("IOS_Product_ID"))
+            nguiItem.ProductID = item.CreditPlatformIDs["IOS_Product_ID"].ToString();
 
         nguiItem.BundleID = item.ID.ToString();
 
         nguiItem.CurrencyName = item.CurrencyName;
+        nguiItem.Description = item.Description;
+        //nguiItem.CurrencyIcon = creditBundleIcon.Get(nguiItem.Amount, nguiItem.CurrencyIcon);
 
         // This is temporal until its added on the portal
         if (SocialPlaySettings.CreditBundlesDescription.Count != 0)
             nguiItem.Description = (item.ID - 1) <= SocialPlaySettings.CreditBundlesDescription.Count ? SocialPlaySettings.CreditBundlesDescription[item.ID - 1] : "";
 
-        ItemTextureCache.instance.GetItemTexture(item.CurrencyIcon,delegate(ItemTextureCache.ImageStatus imageStatus, Texture2D texture)
-                {
-                    nguiItem.SetCredtiBundleIcon(texture);
-                } );
+        if (!string.IsNullOrEmpty(item.CurrencyIcon))
+        {
+            SP.GetItemTexture(item.CurrencyIcon, delegate(ImageStatus imageStatus, Texture2D texture)
+            {
+                nguiItem.SetCredtiBundleIcon(texture);
+            });
+        }
 
         nguiItem.OnPurchaseRequest = OnPurchaseRequest;
     }
 
     void OnPurchaseRequest(NGUIBundleItem item)
     {
-		if (!isPurchaseRequest) {
-			isPurchaseRequest = true;
-						platformPurchasor.Purchase (item, 1, SP.user.userID.ToString ());
-				}
+        if (!isPurchaseRequest)
+        {
+            isPurchaseRequest = true;
+            platformPurchasor.Purchase(item, 1, SP.user.userID.ToString());
+        }
     }
 
     void OnRecievedPurchaseResponse(string data)
     {
-		Debug.Log ("Received purchase response");
+        Debug.Log("Received purchase response");
 
-		isPurchaseRequest = false;
+        isPurchaseRequest = false;
 
         /*JToken dataToken = JToken.Parse(data);
         JToken dataObj = JToken.Parse(dataToken.ToString());
@@ -130,7 +136,7 @@ public class PaidCurrencyBundleStore : MonoBehaviour
         }
         else
         {
-			NGUITools.Broadcast(SocialPlayMessage.OnPurchaseFail.ToString());
+            NGUITools.Broadcast(SocialPlayMessage.OnPurchaseFail.ToString());
         }*/
 
     }
@@ -140,11 +146,11 @@ public class PaidCurrencyBundleStore : MonoBehaviour
         switch (platformPurchase)
         {
             case PlatformPurchase.Android:
-                return gameObject.AddComponent<AndroidPaidCurrencyPurchaser>();
+                return gameObject.AddComponent<AndroidCreditPurchaser>();
             case PlatformPurchase.Facebook:
                 return gameObject.AddComponent<FaceBookPurchaser>();
-			case PlatformPurchase.IOS:
-                return gameObject.AddComponent<iOSPaidCurrencyPurchaser>();
+            case PlatformPurchase.IOS:
+                return gameObject.AddComponent<iOSCreditPurchaser>();
             default:
                 return null;
         }

@@ -43,3 +43,10 @@ public enum PlatformPurchase
     Facebook,
     Kongergate
 }
+
+public enum ImageStatus
+{
+    Web,
+    Cache,
+    Error
+}

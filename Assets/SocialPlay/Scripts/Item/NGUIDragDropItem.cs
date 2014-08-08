@@ -9,7 +9,7 @@ public class NGUIDragDropItem : MonoBehaviour
     Transform mTrans;
     bool mIsDragging = false;
     //bool mSticky = false;
-    Transform mParent;
+    Transform lastParent;
     Vector3 lastPosition = Vector3.zero;
 
 
@@ -37,7 +37,7 @@ public class NGUIDragDropItem : MonoBehaviour
         {
             if (myItemData.ownerContainer != container)
             {
-                ItemContainerManager.MoveItem(myItemData, container);
+                ItemContainerManager.MoveItem(myItemData, myItemData.ownerContainer, container);
             }
         }
         // Notify the table of this change
@@ -51,7 +51,7 @@ public class NGUIDragDropItem : MonoBehaviour
 
     void ReturnToPreviousPossition()
     {
-        mTrans.parent = mParent;
+        mTrans.parent = lastParent;
         mTrans.position = lastPosition;
     }
 
@@ -73,30 +73,33 @@ public class NGUIDragDropItem : MonoBehaviour
     {
         if (enabled && UICamera.currentTouchID > -2)
         {
-            if (!mIsDragging)
-            {
+            //if (!mIsDragging)
+            //{
                 mIsDragging = true;
-                mParent = mTrans.parent;
-                mTrans.parent = UIDragDropRoot.root;
+            //    mParent = mTrans.parent;
+            //    mTrans.parent = UIDragDropRoot.root;
 
-                Vector3 pos = mTrans.localPosition;
-                pos.z = 0f;
-                mTrans.localPosition = pos;
+            //    //Vector3 pos = mTrans.localPosition;
+            //    //pos.z = 0f;
+            //    //mTrans.localPosition = pos;
 
-                NGUITools.MarkParentAsChanged(gameObject);
-            }
-            else
-            {
+            //    NGUITools.MarkParentAsChanged(gameObject);
+
+            //    mTrans.localPosition += (Vector3)delta;
+
+            //}
+            //else
+            //{
                 mTrans.localPosition += (Vector3)delta;
-            }
+            //}
         }
     }
 
 
     void OnDragStart()
     {
-        Debug.Log("Test");
         collider.enabled = false;
+        lastParent = this.transform.parent;
         lastPosition = this.transform.position;
     }
 
@@ -105,6 +108,7 @@ public class NGUIDragDropItem : MonoBehaviour
         Collider col = collider;
         if (col != null) col.enabled = true;
         if ( mIsDragging) Drop();
+        mIsDragging = false;
     }
 
     ///// <summary>

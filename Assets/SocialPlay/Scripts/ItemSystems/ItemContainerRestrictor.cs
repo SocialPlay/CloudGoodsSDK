@@ -12,11 +12,6 @@ public class ItemContainerRestrictor : MonoBehaviour
         NoAction
     }
 
-    public enum ContainerAction{
-        add,
-        remove
-    }
-
     public RestrictorState restrictorState = RestrictorState.Normal;
 
     public ItemContainer restrictedContainer;

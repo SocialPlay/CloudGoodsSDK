@@ -74,6 +74,7 @@ public class CreditBundleItem
     public int ID = 0;
     public string CurrencyName = "";
     public string CurrencyIcon = "";
+    public string Description = "";
 
     public Dictionary<string, string> CreditPlatformIDs = new Dictionary<string, string>();
 }
