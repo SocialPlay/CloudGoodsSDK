@@ -63,6 +63,8 @@ public class NGUIContainerGameItem : MonoBehaviour
         uiTexture.material = new Material(uiTexture.material.shader);
         uiTexture.mainTexture = texture;
         uiTexture.transform.localPosition -= Vector3.forward * 2;
+
+        TweenAlpha.Begin(uiTexture.cachedGameObject, 0.3f, 1).from = 0;
     }
 
     public void ItemClicked(GameObject go)

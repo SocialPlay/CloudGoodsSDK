@@ -5,22 +5,34 @@ using System.Collections;
 public class UITextureCurrency : MonoBehaviour
 {
     public CurrencyType type = CurrencyType.Coins;
-    UITexture mLabel;
+    UITexture mTexture;
 
     void Awake()
     {
-        mLabel = GetComponent<UITexture>();
-        if (type == CurrencyType.Coins) SP.OnFreeCurrencyTexture += OnFreeCurrency;
-        else if (type == CurrencyType.Credits) SP.OnPaidCurrencyTexture += OnPaidCurrency;
+        mTexture = GetComponent<UITexture>();
+        if (type == CurrencyType.Coins)
+        {
+            SP.OnFreeCurrencyTexture += OnFreeCurrency;
+            mTexture.mainTexture = SP.freeCurrencyTexture;            
+        }
+        else if (type == CurrencyType.Credits)
+        {
+            SP.OnPaidCurrencyTexture += OnPaidCurrency;
+            mTexture.mainTexture = SP.paidCurrencyTexture;
+        }
+
+        if(mTexture.mainTexture != null) TweenAlpha.Begin(mTexture.cachedGameObject, 0.3f, 1).from = 0;
     }
 
     void OnFreeCurrency(Texture2D currencyTexture)
     {
-        mLabel.mainTexture = currencyTexture;
+        mTexture.mainTexture = currencyTexture;
+        if (mTexture.mainTexture != null) TweenAlpha.Begin(mTexture.cachedGameObject, 0.3f, 1).from = 0;
     }
 
     void OnPaidCurrency(Texture2D currencyTexture)
     {
-        mLabel.mainTexture = currencyTexture;
+        mTexture.mainTexture = currencyTexture;
+        if (mTexture.mainTexture != null) TweenAlpha.Begin(mTexture.cachedGameObject, 0.3f, 1).from = 0;
     }
 }

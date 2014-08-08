@@ -66,7 +66,10 @@ public class NGUIBundleItem : MonoBehaviour
     public void SetCredtiBundleIcon(Texture2D texture)
     {
         if (currencyIcon != null)
+        {
             currencyIcon.mainTexture = texture;
+            TweenAlpha.Begin(currencyIcon.cachedGameObject, 0.3f, 1).from = 0;
+        }
     }
 
 }

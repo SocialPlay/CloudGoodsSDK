@@ -15,6 +15,7 @@ public class PurchaseButtonDisplay : MonoBehaviour
             InsufficientFundsLabel.text = InsufficientFundsTextOverride;
         }
         ActiveButton.gameObject.SetActive(false);
+        InsufficientFundsLabel.text = "Insufficent Funds";
         InsufficientFundsLabel.gameObject.SetActive(true);
     }
 
@@ -28,13 +29,28 @@ public class PurchaseButtonDisplay : MonoBehaviour
         InsufficientFundsLabel.gameObject.SetActive(false);
     }
 
-    public void SetState(bool state)
+    public void SetNotApplicable()
     {
-        if (state)
+        if (!string.IsNullOrEmpty(InsufficientFundsTextOverride) && InsufficientFundsTextOverride != InsufficientFundsLabel.text)
+        {
+            InsufficientFundsLabel.text = InsufficientFundsTextOverride;
+        }
+        ActiveButton.gameObject.SetActive(false);
+        InsufficientFundsLabel.text = "N/A";
+        InsufficientFundsLabel.gameObject.SetActive(true);
+    }
+
+    public void SetState(int itemCost)
+    {
+        if (itemCost < 0)
+        {
+            SetNotApplicable();
+        }
+        else if (itemCost <= SP.freeCurrency)
         {
             SetActive();
         }
-        else
+        else if (itemCost > SP.freeCurrency) 
         {
             SetInactive();
         }
