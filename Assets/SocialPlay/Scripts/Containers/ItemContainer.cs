@@ -53,8 +53,6 @@ public class ItemContainer : MonoBehaviour
     /// </summary>
     public event Action<ItemData> ItemKeyBindingClicked;
 
-    private ItemContainerRestrictor restriction = null;
-
     public List<IContainerRestriction> containerAddRestrictions = new List<IContainerRestriction>();
     public List<IContainerRestriction> containerRemoveRestrictions = new List<IContainerRestriction>();
 
@@ -63,7 +61,7 @@ public class ItemContainer : MonoBehaviour
     void Awake()
     {
         if (GetComponent(typeof(IContainerAddAction)) == null)
-            containerAddAction = gameObject.AddComponent<BasicAddContainer>();
+            containerAddAction = gameObject.AddComponent<BasicAddAction>();
         else
             containerAddAction = (IContainerAddAction)GetComponent(typeof(IContainerAddAction));
     }
@@ -161,13 +159,6 @@ public class ItemContainer : MonoBehaviour
 
     public void Remove(ItemData itemData, bool isMoving, int amount = -1)
     {
-        if (ItemContainerStackRestrictor.Restrictor != null)
-        {
-            if (restriction.IsRestricted(ContainerAction.remove))
-            {
-                return;
-            }
-        }
         RemoveItem(itemData, isMoving, amount);
     }
 

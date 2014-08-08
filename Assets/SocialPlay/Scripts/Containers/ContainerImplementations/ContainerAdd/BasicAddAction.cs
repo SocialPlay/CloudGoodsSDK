@@ -2,7 +2,7 @@
 using System.Collections;
 
 [RequireComponent(typeof(ItemContainer))]
-public class BasicAddContainer : MonoBehaviour, IContainerAddAction {
+public class BasicAddAction : MonoBehaviour, IContainerAddAction {
 
     private ItemContainer itemContainer;
 

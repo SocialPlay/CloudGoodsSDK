@@ -12,8 +12,6 @@ public class AddItemToContainerDemo : MonoBehaviour {
     {
         ItemDataList itemDataList = new ItemDataList();
         itemDataList.Add(CreateNewTestItem());
-        itemDataList.Add(CreateNewTestItem());
-
         List<ItemData> items = ItemConversion.converter.ConvertItems(itemDataList);
 
         foreach (ItemData item in items)
