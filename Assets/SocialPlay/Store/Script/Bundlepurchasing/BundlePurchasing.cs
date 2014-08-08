@@ -71,18 +71,18 @@ public class BundlePurchasing : MonoBehaviour
         {
             case SocialPlayBundle.CreditPurchasable:
                 creditPurchaseButton.InsufficientFundsLabel.text = "Insufficent Funds";
-                creditPurchaseButton.SetState(itemCreditCost);
+                creditPurchaseButton.SetState(itemCreditCost <= SP.paidCurrency);
                 coinPurchaseButton.InsufficientFundsLabel.text = "Credit Purchase Only";
-                coinPurchaseButton.SetState(-1);
+                coinPurchaseButton.SetState(false);
 
                 CreditAmount.text = itemCreditCost.ToString();
                 CoinAmount.text = "N/A";
                 break;
             case SocialPlayBundle.CoinPurchasable:
                 coinPurchaseButton.InsufficientFundsLabel.text = "Insufficent Funds";
-				coinPurchaseButton.SetState(itemCoinCost);
+				coinPurchaseButton.SetState(itemCoinCost <= SP.freeCurrency);
                 creditPurchaseButton.InsufficientFundsLabel.text = "Coin Purchase Only";
-                creditPurchaseButton.SetState(-1);
+                creditPurchaseButton.SetState(false);
 
                 CreditAmount.text = "N/A";
                 CoinAmount.text = itemCoinCost.ToString();
@@ -90,14 +90,14 @@ public class BundlePurchasing : MonoBehaviour
             case SocialPlayBundle.Free:
                 CreditAmount.text = "Free";
                 CoinAmount.text = "Free";
-                coinPurchaseButton.SetState(0);
-                creditPurchaseButton.SetState(0);
+                coinPurchaseButton.SetState(true);
+                creditPurchaseButton.SetState(true);
                 break;
             default:
                 coinPurchaseButton.InsufficientFundsLabel.text = "Insufficent Funds";
                 creditPurchaseButton.InsufficientFundsLabel.text = "Insufficent Funds";
-                coinPurchaseButton.SetState(itemCoinCost);
-                creditPurchaseButton.SetState(itemCreditCost);
+                coinPurchaseButton.SetState(itemCoinCost <= SP.freeCurrency);
+                creditPurchaseButton.SetState(itemCreditCost <= SP.paidCurrency);
                 CreditAmount.text = itemCreditCost.ToString();
                 CoinAmount.text = itemCoinCost.ToString();
                 break;

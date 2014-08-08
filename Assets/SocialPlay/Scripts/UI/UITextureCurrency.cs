@@ -10,17 +10,8 @@ public class UITextureCurrency : MonoBehaviour
     void Awake()
     {
         mLabel = GetComponent<UITexture>();
-        if (type == CurrencyType.Coins)
-        {
-            SP.OnFreeCurrencyTexture += OnFreeCurrency;
-            mLabel.mainTexture = SP.freeCurrencyTexture;
-        }
-        else if (type == CurrencyType.Credits)
-        {
-            SP.OnPaidCurrencyTexture += OnPaidCurrency;
-            mLabel.mainTexture = SP.paidCurrencyTexture;
-        }
-
+        if (type == CurrencyType.Coins) SP.OnFreeCurrencyTexture += OnFreeCurrency;
+        else if (type == CurrencyType.Credits) SP.OnPaidCurrencyTexture += OnPaidCurrency;
     }
 
     void OnFreeCurrency(Texture2D currencyTexture)

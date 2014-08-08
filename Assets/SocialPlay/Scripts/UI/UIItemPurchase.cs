@@ -78,6 +78,10 @@ public class UIItemPurchase : UIStoreItem
 		mStoreItem = SP.GetStoreItem(itemID);
 		if (nameLabel != null) nameLabel.text = mStoreItem.itemName;
 		if (amountLabel != null) amountLabel.text = mItem == null ? string.Format(amountFormat, 0) : string.Format(amountFormat, mItem.stackSize);
+		Debug.Log("StoreItem " + mStoreItem.itemName + " / coin val " + mStoreItem.coinValue + " / credit val " + mStoreItem.creditValue);
+		//mStoreItem.creditValue
+		//SetItemData(SP.GetStoreItem(itemID));
+		GetItemTexture(mStoreItem.imageURL);
 	}
 
 	public void BuyOrUse()

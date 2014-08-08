@@ -21,7 +21,7 @@ public class CreditBundleStore : MonoBehaviour
     IGridLoader gridLoader;
     IPlatformPurchaser platformPurchasor;
     CreditBundleIcon creditBundleIcon = new CreditBundleIcon();
-	bool isPurchaseRequest = false;
+    bool isPurchaseRequest = false;
 
     public bool isInitialized = false;
 
@@ -42,19 +42,19 @@ public class CreditBundleStore : MonoBehaviour
             platformPurchasor = GetPlatformPurchaser();
             platformPurchasor.RecievedPurchaseResponse += OnRecievedPurchaseResponse;
 
-			int currentplatform = 0;
+            int currentplatform = 0;
 
-			#if UNITY_EDITOR
-				currentplatform = 1;
-			#endif
+            #if UNITY_EDITOR
+                currentplatform = 1;
+            #endif
 
-			#if UNITY_ANDROID && !UNITY_EDITOR
-				currentplatform = 3;
-			#endif
+            #if UNITY_ANDROID && !UNITY_EDITOR
+                currentplatform = 3;
+            #endif
 
-			#if UNITY_IPHONE && !UNITY_EDITOR
-				currentplatform = 4;
-			#endif
+            #if UNITY_IPHONE && !UNITY_EDITOR
+                currentplatform = 4;
+            #endif
 
             SP.GetCreditBundles(currentplatform, OnPurchaseBundlesRecieved);
 
@@ -87,8 +87,8 @@ public class CreditBundleStore : MonoBehaviour
         if (item.CreditPlatformIDs.ContainsKey("Android_Product_ID"))
             nguiItem.ProductID = item.CreditPlatformIDs["Android_Product_ID"];
 
-		if (item.CreditPlatformIDs.ContainsKey("IOS_Product_ID"))
-			nguiItem.ProductID = item.CreditPlatformIDs ["IOS_Product_ID"].ToString ();
+        if (item.CreditPlatformIDs.ContainsKey("IOS_Product_ID"))
+            nguiItem.ProductID = item.CreditPlatformIDs ["IOS_Product_ID"].ToString ();
 
         nguiItem.BundleID = item.ID.ToString();
 
@@ -110,17 +110,17 @@ public class CreditBundleStore : MonoBehaviour
 
     void OnPurchaseRequest(NGUIBundleItem item)
     {
-		if (!isPurchaseRequest) {
-			isPurchaseRequest = true;
-						platformPurchasor.Purchase (item, 1, SP.user.userID.ToString ());
-				}
+        if (!isPurchaseRequest) {
+            isPurchaseRequest = true;
+                        platformPurchasor.Purchase (item, 1, SP.user.userID.ToString ());
+                }
     }
 
     void OnRecievedPurchaseResponse(string data)
     {
-		Debug.Log ("Received purchase response");
+        Debug.Log ("Received purchase response");
 
-		isPurchaseRequest = false;
+        isPurchaseRequest = false;
 
         /*JToken dataToken = JToken.Parse(data);
         JToken dataObj = JToken.Parse(dataToken.ToString());
@@ -132,7 +132,7 @@ public class CreditBundleStore : MonoBehaviour
         }
         else
         {
-			NGUITools.Broadcast(SocialPlayMessage.OnPurchaseFail.ToString());
+            NGUITools.Broadcast(SocialPlayMessage.OnPurchaseFail.ToString());
         }*/
 
     }
@@ -145,8 +145,8 @@ public class CreditBundleStore : MonoBehaviour
                 return gameObject.AddComponent<AndroidCreditPurchaser>();
             case PlatformPurchase.Facebook:
                 return gameObject.AddComponent<FaceBookPurchaser>();
-			case PlatformPurchase.IOS:
-				return gameObject.AddComponent<iOSCreditPurchaser>();
+            case PlatformPurchase.IOS:
+                return gameObject.AddComponent<iOSCreditPurchaser>();
             default:
                 return null;
         }
