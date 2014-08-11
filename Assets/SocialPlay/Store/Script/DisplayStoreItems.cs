@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 
-public class DisplayNewestItems : MonoBehaviour
+public class DisplayStoretItems : MonoBehaviour
 {
     public NGUIStoreLoader storeLoader;
 
@@ -14,7 +14,7 @@ public class DisplayNewestItems : MonoBehaviour
     FilterNewestItems newestItemFilter = new FilterNewestItems();
     List<StoreItem> items = new List<StoreItem>();
 
-    void Start()
+    public void DisplayItems()
     {
         if (!storeLoader)
             storeLoader = this.gameObject.GetComponent<NGUIStoreLoader>();
