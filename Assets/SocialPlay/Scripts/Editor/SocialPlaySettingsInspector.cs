@@ -158,6 +158,12 @@ public class SocialPlaySettingsInspector : Editor
 
         string appId = EditorGUILayout.TextField("App ID", mSettings.appID);
         string appSecret = EditorGUILayout.TextField("App Secret", mSettings.appSecret);
+
+        if (string.IsNullOrEmpty(appId) || string.IsNullOrEmpty(appSecret))
+        {
+            GUILayout.Label("Go To http://developer.socialplay.com to get your AppID and AppSecret", "BoldLabel");
+        }
+
         Texture2D defaultTexture = EditorGUILayout.ObjectField("Default Texture", mSettings.defaultTexture, typeof(Texture2D)) as Texture2D;
 
         GUILayout.Label("Android", "BoldLabel");

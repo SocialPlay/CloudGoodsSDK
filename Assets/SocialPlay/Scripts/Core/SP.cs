@@ -558,11 +558,10 @@ public class SP : MonoBehaviour//, IServiceCalls
         string url = string.Format("{0}SPLoginForgotPassword?gameID={1}&userEMail={2}", Url, GuidAppID, WWW.EscapeURL(userEmail));
         WWW www = new WWW(url);
 
-        Get().StartCoroutine(Get().ServiceSpLoginResponse(www, (UserResponse response) =>
+        Get().StartCoroutine(Get().ServiceGetString(www, (string response) =>
         {
-            if (response.code == 7) if (onErrorEvent != null) onErrorEvent("ServerRelatedError");
-            if (OnForgotPassword != null) OnForgotPassword(response);
-            if (onSuccess != null) onSuccess(response);
+            if (response.Contains("Password reset E-mail has been sent"))
+                onSuccess(null);
         }));
     }
 

@@ -253,8 +253,13 @@ public class NGUI_SPLogin : MonoBehaviour
             confirmationButton.onClick.Clear();
             confirmationButton.onClick.Add(new EventDelegate(this, "SwitchToLogin"));
             confirmationButton.GetComponentInChildren<UILabel>().text = "Back";
-            SP.ForgotPassword(loginUserEmail.value, null);
+            SP.ForgotPassword(loginUserEmail.value, OnSentPassword);
         }
+    }
+
+    void OnSentPassword(UserResponse userResponse)
+    {
+        confirmationStatus.text = "Password has been sent";
     }
 
     public void ResendVerificationEmail()
