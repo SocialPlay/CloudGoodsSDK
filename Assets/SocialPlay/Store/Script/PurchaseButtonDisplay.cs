@@ -3,6 +3,7 @@ using System.Collections;
 
 public class PurchaseButtonDisplay : MonoBehaviour
 {
+    public CurrencyType currencyType;
     public UIButton ActiveButton;
     public UILabel InsufficientFundsLabel;
     public string InsufficientFundsTextOverride = "";
@@ -10,6 +11,7 @@ public class PurchaseButtonDisplay : MonoBehaviour
 
     public void SetInactive()
     {
+        ActiveButton.transform.parent.gameObject.SetActive(true);
         if (!string.IsNullOrEmpty(InsufficientFundsTextOverride) && InsufficientFundsTextOverride != InsufficientFundsLabel.text)
         {
             InsufficientFundsLabel.text = InsufficientFundsTextOverride;
@@ -21,6 +23,7 @@ public class PurchaseButtonDisplay : MonoBehaviour
 
     public void SetActive()
     {
+        ActiveButton.transform.parent.gameObject.SetActive(true);
         if (!string.IsNullOrEmpty(InsufficientFundsTextOverride) && InsufficientFundsTextOverride != InsufficientFundsLabel.text)
         {
             InsufficientFundsLabel.text = InsufficientFundsTextOverride;
@@ -31,13 +34,7 @@ public class PurchaseButtonDisplay : MonoBehaviour
 
     public void SetNotApplicable()
     {
-        if (!string.IsNullOrEmpty(InsufficientFundsTextOverride) && InsufficientFundsTextOverride != InsufficientFundsLabel.text)
-        {
-            InsufficientFundsLabel.text = InsufficientFundsTextOverride;
-        }
-        ActiveButton.gameObject.SetActive(false);
-        InsufficientFundsLabel.text = "N/A";
-        InsufficientFundsLabel.gameObject.SetActive(true);
+        ActiveButton.transform.parent.gameObject.SetActive(false);
     }
 
     public void SetState(int itemCost)
@@ -46,13 +43,19 @@ public class PurchaseButtonDisplay : MonoBehaviour
         {
             SetNotApplicable();
         }
-        else if (itemCost <= SP.freeCurrency)
+        else if (currencyType == CurrencyType.Coins)
         {
-            SetActive();
+            if (itemCost <= SP.freeCurrency)
+                SetActive();
+            else
+                SetInactive();
         }
-        else if (itemCost > SP.freeCurrency) 
+        else if (currencyType == CurrencyType.Credits) 
         {
-            SetInactive();
+            if (itemCost <= SP.paidCurrency)
+                SetActive();
+            else
+                SetInactive();
         }
     }
 }

@@ -64,7 +64,7 @@ public class SP : MonoBehaviour//, IServiceCalls
         {
             if (string.IsNullOrEmpty(SocialPlaySettings.AppID))
             {
-                Debug.LogError("AppID has not been defined. Open Cloud Goods Settings from the menu.");
+                Debug.LogError("AppID has not been defined. Open Cloud Goods Settings from the menu. Go To http://developer.socialplay.com");
                 onErrorEvent("AppID has not been defined. Open Cloud Goods Settings from the menu.");
             }
 
