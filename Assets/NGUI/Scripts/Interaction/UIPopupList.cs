@@ -108,6 +108,12 @@ public class UIPopupList : UIWidgetContainer
 	public Position position = Position.Auto;
 
 	/// <summary>
+	/// Label alignment to use.
+	/// </summary>
+
+	public NGUIText.Alignment alignment = NGUIText.Alignment.Left;
+
+	/// <summary>
 	/// New line-delimited list of items.
 	/// </summary>
 
@@ -437,7 +443,7 @@ public class UIPopupList : UIWidgetContainer
 
 	Vector3 GetHighlightPosition ()
 	{
-		if (mHighlightedLabel == null) return Vector3.zero;
+		if (mHighlightedLabel == null || mHighlight == null) return Vector3.zero;
 		UISpriteData sp = mHighlight.GetAtlasSprite();
 		if (sp == null) return Vector3.zero;
 
@@ -726,6 +732,7 @@ public class UIPopupList : UIWidgetContainer
 				lbl.color = textColor;
 				lbl.cachedTransform.localPosition = new Vector3(bgPadding.x + padding.x, y, -1f);
 				lbl.overflowMethod = UILabel.Overflow.ResizeFreely;
+				lbl.alignment = alignment;
 				lbl.MakePixelPerfect();
 				if (dynScale != 1f) lbl.cachedTransform.localScale = Vector3.one * dynScale;
 				labels.Add(lbl);
@@ -761,6 +768,7 @@ public class UIPopupList : UIWidgetContainer
 			{
 				UILabel lbl = labels[i];
 				NGUITools.AddWidgetCollider(lbl.gameObject);
+				lbl.autoResizeBoxCollider = false;
 				BoxCollider bc = lbl.GetComponent<BoxCollider>();
 
 				if (bc != null)
@@ -769,22 +777,29 @@ public class UIPopupList : UIWidgetContainer
 					bc.center = bcCenter;
 					bc.size = bcSize;
 				}
-#if !UNITY_4_0 && !UNITY_4_1 && !UNITY_4_2
 				else
 				{
 					BoxCollider2D b2d = lbl.GetComponent<BoxCollider2D>();
 					b2d.center = bcCenter;
 					b2d.size = bcSize;
 				}
-#endif
 			}
 
+			int lblWidth = Mathf.RoundToInt(x);
 			x += (bgPadding.x + padding.x) * 2f;
 			y -= bgPadding.y;
 
 			// Scale the background sprite to envelop the entire set of items
 			mBackground.width = Mathf.RoundToInt(x);
 			mBackground.height = Mathf.RoundToInt(-y + bgPadding.y);
+
+			// Set the label width to make alignment work
+			for (int i = 0, imax = labels.Count; i < imax; ++i)
+			{
+				UILabel lbl = labels[i];
+				lbl.overflowMethod = UILabel.Overflow.ShrinkContent;
+				lbl.width = lblWidth;
+			}
 
 			// Scale the highlight sprite to envelop a single item
 			float scaleFactor = 2f * atlas.pixelSize;

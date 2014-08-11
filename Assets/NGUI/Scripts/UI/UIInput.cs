@@ -3,7 +3,7 @@
 // Copyright © 2011-2014 Tasharen Entertainment
 //----------------------------------------------
 
-#if !UNITY_EDITOR && (UNITY_IPHONE || UNITY_ANDROID || UNITY_WP8 || UNITY_BLACKBERRY)
+#if !UNITY_EDITOR && (UNITY_IPHONE || UNITY_ANDROID || UNITY_WP8 || UNITY_BLACKBERRY || UNITY_WINRT)
 #define MOBILE
 #endif
 
@@ -45,7 +45,6 @@ public class UIInput : MonoBehaviour
 		PhonePad = 5,
 		NamePhonePad = 6,
 		EmailAddress = 7,
-		HiddenInput = 8,
 	}
 
 	public enum OnReturnKey
@@ -92,6 +91,12 @@ public class UIInput : MonoBehaviour
 	/// </summary>
 
 	public KeyboardType keyboardType = KeyboardType.Default;
+
+	/// <summary>
+	/// Whether the input will be hidden on mobile platforms.
+	/// </summary>
+
+	public bool hideInput = false;
 
 	/// <summary>
 	/// What kind of validation to use with the input field's data.
@@ -172,6 +177,7 @@ public class UIInput : MonoBehaviour
 #if MOBILE
 	// Unity fails to compile if the touch screen keyboard is used on a non-mobile device
 	static protected TouchScreenKeyboard mKeyboard;
+	static bool mWaitForKeyboard = false;
 #endif
 	[System.NonSerialized] protected int mSelectionStart = 0;
 	[System.NonSerialized] protected int mSelectionEnd = 0;
@@ -201,6 +207,22 @@ public class UIInput : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Should the input be hidden?
+	/// </summary>
+
+	public bool inputShouldBeHidden
+	{
+		get
+		{
+#if UNITY_METRO
+			return true;
+#else
+			return hideInput && label != null && !label.multiLine && inputType != InputType.Password;
+#endif
+		}
+	}
+
 	[System.Obsolete("Use UIInput.value instead")]
 	public string text { get { return this.value; } set { this.value = value; } }
 
@@ -227,7 +249,7 @@ public class UIInput : MonoBehaviour
 			mDrawStart = 0;
 
 			// BB10's implementation has a bug in Unity
- #if UNITY_4_0 || UNITY_4_2 || UNITY_4_3
+ #if UNITY_4_3
 			if (Application.platform == RuntimePlatform.BB10Player)
  #else
 			if (Application.platform == RuntimePlatform.BlackBerryPlayer)
@@ -236,7 +258,6 @@ public class UIInput : MonoBehaviour
 
 			// Validate all input
 			value = Validate(value);
-
 #if MOBILE
 			if (isSelected && mKeyboard != null && mCached != value)
 			{
@@ -299,7 +320,7 @@ public class UIInput : MonoBehaviour
 		get
 		{
 #if MOBILE
-			if (mKeyboard != null && !TouchScreenKeyboard.hideInput) return value.Length;
+			if (mKeyboard != null && !inputShouldBeHidden) return value.Length;
 #endif
 			return isSelected ? mSelectionEnd : value.Length;
 		}
@@ -308,7 +329,7 @@ public class UIInput : MonoBehaviour
 			if (isSelected)
 			{
 #if MOBILE
-				if (mKeyboard != null && !TouchScreenKeyboard.hideInput) return;
+				if (mKeyboard != null && !inputShouldBeHidden) return;
 #endif
 				mSelectionEnd = value;
 				UpdateLabel();
@@ -325,7 +346,7 @@ public class UIInput : MonoBehaviour
 		get
 		{
 #if MOBILE
-			if (mKeyboard != null && !TouchScreenKeyboard.hideInput) return 0;
+			if (mKeyboard != null && !inputShouldBeHidden) return 0;
 #endif
 			return isSelected ? mSelectionStart : value.Length;
 		}
@@ -334,7 +355,7 @@ public class UIInput : MonoBehaviour
 			if (isSelected)
 			{
 #if MOBILE
-				if (mKeyboard != null && !TouchScreenKeyboard.hideInput) return;
+				if (mKeyboard != null && !inputShouldBeHidden) return;
 #endif
 				mSelectionStart = value;
 				UpdateLabel();
@@ -351,7 +372,7 @@ public class UIInput : MonoBehaviour
 		get
 		{
 #if MOBILE
-			if (mKeyboard != null && !TouchScreenKeyboard.hideInput) return value.Length;
+			if (mKeyboard != null && !inputShouldBeHidden) return value.Length;
 #endif
 			return isSelected ? mSelectionEnd : value.Length;
 		}
@@ -360,7 +381,7 @@ public class UIInput : MonoBehaviour
 			if (isSelected)
 			{
 #if MOBILE
-				if (mKeyboard != null && !TouchScreenKeyboard.hideInput) return;
+				if (mKeyboard != null && !inputShouldBeHidden) return;
 #endif
 				mSelectionEnd = value;
 				UpdateLabel();
@@ -483,6 +504,7 @@ public class UIInput : MonoBehaviour
 #if MOBILE
 			if (mKeyboard != null)
 			{
+				mWaitForKeyboard = false;
 				mKeyboard.active = false;
 				mKeyboard = null;
 			}
@@ -514,53 +536,76 @@ public class UIInput : MonoBehaviour
 		if (isSelected)
 		{
 			if (mDoInit) Init();
-
+#if MOBILE
+			// Wait for the keyboard to open. Apparently mKeyboard.active will return 'false' for a while in some cases.
+			if (mWaitForKeyboard)
+			{
+				if (mKeyboard != null && !mKeyboard.active) return;
+				mWaitForKeyboard = false;
+			}
+#endif
 			// Unity has issues bringing up the keyboard properly if it's in "hideInput" mode and you happen
 			// to select one input in the same Update as de-selecting another.
 			if (mSelectMe != -1 && mSelectMe != Time.frameCount)
 			{
 				mSelectMe = -1;
-
+				mSelectionStart = 0;
+				mSelectionEnd = string.IsNullOrEmpty(mValue) ? 0 : mValue.Length;
+				mDrawStart = 0;
 				label.color = activeTextColor;
 #if MOBILE
 				if (Application.platform == RuntimePlatform.IPhonePlayer
 					|| Application.platform == RuntimePlatform.Android
-					|| Application.platform == RuntimePlatform.WP8Player
-#if UNITY_4_0 || UNITY_4_2 || UNITY_4_3
+				    || Application.platform == RuntimePlatform.WP8Player
+ #if UNITY_4_3
 					|| Application.platform == RuntimePlatform.BB10Player
-#else
+ #else
 					|| Application.platform == RuntimePlatform.BlackBerryPlayer
-#endif
+					|| Application.platform == RuntimePlatform.MetroPlayerARM
+					|| Application.platform == RuntimePlatform.MetroPlayerX64
+					|| Application.platform == RuntimePlatform.MetroPlayerX86
+ #endif
 				)
 				{
 					string val;
 					TouchScreenKeyboardType kt;
 
-					if (keyboardType == KeyboardType.HiddenInput)
+					if (inputShouldBeHidden)
 					{
 						TouchScreenKeyboard.hideInput = true;
-						kt = TouchScreenKeyboardType.Default;
+						kt = (TouchScreenKeyboardType)((int)keyboardType);
+ #if UNITY_METRO
+						val = "";
+ #else
 						val = "|";
+ #endif
 					}
 					else if (inputType == InputType.Password)
 					{
 						TouchScreenKeyboard.hideInput = false;
 						kt = TouchScreenKeyboardType.Default;
 						val = mValue;
+						mSelectionStart = mSelectionEnd;
 					}
 					else
 					{
 						TouchScreenKeyboard.hideInput = false;
 						kt = (TouchScreenKeyboardType)((int)keyboardType);
 						val = mValue;
+						mSelectionStart = mSelectionEnd;
 					}
 
+					mWaitForKeyboard = true;
 					mKeyboard = (inputType == InputType.Password) ?
 						TouchScreenKeyboard.Open(val, kt, false, false, true) :
-						TouchScreenKeyboard.Open(val, kt, inputType == InputType.AutoCorrect, label.multiLine, false, false, defaultText);
+						TouchScreenKeyboard.Open(val, kt, !inputShouldBeHidden && inputType == InputType.AutoCorrect,
+							label.multiLine && !hideInput, false, false, defaultText);
+ #if UNITY_METRO
+					mKeyboard.active = true;
+ #endif
 				}
 				else
-#endif
+#endif // MOBILE
 				{
 					Vector2 pos = (UICamera.current != null && UICamera.current.cachedCamera != null) ?
 						UICamera.current.cachedCamera.WorldToScreenPoint(label.worldCorners[0]) :
@@ -568,19 +613,21 @@ public class UIInput : MonoBehaviour
 					pos.y = Screen.height - pos.y;
 					Input.imeCompositionMode = IMECompositionMode.On;
 					Input.compositionCursorPos = pos;
-
-					mSelectionStart = 0;
-					mSelectionEnd = string.IsNullOrEmpty(mValue) ? 0 : mValue.Length;
-					mDrawStart = 0;
 				}
+
 				UpdateLabel();
+				return;
 			}
 #if MOBILE
 			if (mKeyboard != null)
 			{
+ #if UNITY_METRO
+				string text = Input.inputString;
+				if (!string.IsNullOrEmpty(text)) Insert(text);
+ #else
 				string text = mKeyboard.text;
-
-				if (TouchScreenKeyboard.hideInput)
+ 
+				if (inputShouldBeHidden)
 				{
 					if (text != "|")
 					{
@@ -598,7 +645,7 @@ public class UIInput : MonoBehaviour
 					mCached = text;
 					value = text;
 				}
-
+ #endif // UNITY_METRO
 				if (mKeyboard.done || !mKeyboard.active)
 				{
 					if (!mKeyboard.wasCanceled) Submit();
@@ -608,7 +655,7 @@ public class UIInput : MonoBehaviour
 				}
 			}
 			else
-#endif
+#endif // MOBILE
 			{
 				if (selectOnTab != null && Input.GetKeyDown(KeyCode.Tab))
 				{
@@ -947,11 +994,18 @@ public class UIInput : MonoBehaviour
 		// Append the new text
 		for (int i = 0, imax = text.Length; i < imax; ++i)
 		{
+			// If we have an input validator, validate the input first
+			char c = text[i];
+
+			if (c == '\b')
+			{
+				DoBackspace();
+				continue;
+			}
+
 			// Can't go past the character limit
 			if (characterLimit > 0 && sb.Length + rl >= characterLimit) break;
 
-			// If we have an input validator, validate the input first
-			char c = text[i];
 			if (onValidate != null) c = onValidate(sb.ToString(), sb.Length, c);
 			else if (validation != Validation.None) c = Validate(sb.ToString(), sb.Length, c);
 
@@ -1025,7 +1079,7 @@ public class UIInput : MonoBehaviour
 		Ray ray = UICamera.currentRay;
 		Plane p = new Plane(corners[0], corners[1], corners[2]);
 		float dist;
-		return p.Raycast(ray, out dist) ? mDrawStart + label.GetCharacterIndexAtPosition(ray.GetPoint(dist)) : 0;
+		return p.Raycast(ray, out dist) ? mDrawStart + label.GetCharacterIndexAtPosition(ray.GetPoint(dist), false) : 0;
 	}
 
 	/// <summary>
@@ -1190,7 +1244,7 @@ public class UIInput : MonoBehaviour
 
 			label.text = processed;
 #if MOBILE
-			if (selected && (mKeyboard == null || TouchScreenKeyboard.hideInput))
+			if (selected && (mKeyboard == null || inputShouldBeHidden))
 #else
 			if (selected)
 #endif
@@ -1397,7 +1451,11 @@ public class UIInput : MonoBehaviour
 
 	public void LoadValue ()
 	{
-		if (!string.IsNullOrEmpty(savedAs) && PlayerPrefs.HasKey(savedAs))
-			value = PlayerPrefs.GetString(savedAs);
+		if (!string.IsNullOrEmpty(savedAs))
+		{
+			string val = mValue.Replace("\\n", "\n");
+			mValue = "";
+			value = PlayerPrefs.HasKey(savedAs) ? PlayerPrefs.GetString(savedAs) : val;
+		}
 	}
 }

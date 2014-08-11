@@ -62,27 +62,36 @@ public class NGUITransformInspector : Editor
 			
 			if (UIWidgetInspector.instance != null)
 			{
+				UIWidgetInspector.instance.serializedObject.Update();
 				UIWidgetInspector.instance.DrawWidgetTransform();
 				if (NGUISettings.minimalisticLook) GUILayout.Space(-4f);
+				UIWidgetInspector.instance.serializedObject.ApplyModifiedProperties();
 			}
+
 			if (UIRectEditor.instance != null)
+			{
+				UIRectEditor.instance.serializedObject.Update();
 				UIRectEditor.instance.DrawAnchorTransform();
+				UIRectEditor.instance.serializedObject.ApplyModifiedProperties();
+			}
 		}
 	}
 
 	void DrawPosition ()
 	{
 		GUILayout.BeginHorizontal();
-		{
-			bool reset = GUILayout.Button("P", GUILayout.Width(20f));
-
-			EditorGUILayout.PropertyField(mPos.FindPropertyRelative("x"));
-			EditorGUILayout.PropertyField(mPos.FindPropertyRelative("y"));
-			EditorGUILayout.PropertyField(mPos.FindPropertyRelative("z"));
-
-			if (reset) mPos.vector3Value = Vector3.zero;
-		}
+		bool reset = GUILayout.Button("P", GUILayout.Width(20f));
+		EditorGUILayout.PropertyField(mPos.FindPropertyRelative("x"));
+		EditorGUILayout.PropertyField(mPos.FindPropertyRelative("y"));
+		EditorGUILayout.PropertyField(mPos.FindPropertyRelative("z"));
 		GUILayout.EndHorizontal();
+
+		//GUILayout.BeginHorizontal();
+		//reset = GUILayout.Button("W", GUILayout.Width(20f));
+		//EditorGUILayout.Vector3Field("", (target as Transform).position);
+
+		if (reset) mPos.vector3Value = Vector3.zero;
+		//GUILayout.EndHorizontal();
 	}
 
 	void DrawScale (bool isWidget)

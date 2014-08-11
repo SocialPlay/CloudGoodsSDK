@@ -121,36 +121,36 @@ static public class NGUITools
 	/// New WWW call can fail if the crossdomain policy doesn't check out. Exceptions suck. It's much more elegant to check for null instead.
 	/// </summary>
 
-	static public WWW OpenURL (string url)
-	{
-#if UNITY_FLASH
-		Debug.LogError("WWW is not yet implemented in Flash");
-		return null;
-#else
-		WWW www = null;
-		try { www = new WWW(url); }
-		catch (System.Exception ex) { Debug.LogError(ex.Message); }
-		return www;
-#endif
-	}
+//    static public WWW OpenURL (string url)
+//    {
+//#if UNITY_FLASH
+//        Debug.LogError("WWW is not yet implemented in Flash");
+//        return null;
+//#else
+//        WWW www = null;
+//        try { www = new WWW(url); }
+//        catch (System.Exception ex) { Debug.LogError(ex.Message); }
+//        return www;
+//#endif
+//    }
 
-	/// <summary>
-	/// New WWW call can fail if the crossdomain policy doesn't check out. Exceptions suck. It's much more elegant to check for null instead.
-	/// </summary>
+//    /// <summary>
+//    /// New WWW call can fail if the crossdomain policy doesn't check out. Exceptions suck. It's much more elegant to check for null instead.
+//    /// </summary>
 
-	static public WWW OpenURL (string url, WWWForm form)
-	{
-		if (form == null) return OpenURL(url);
-#if UNITY_FLASH
-		Debug.LogError("WWW is not yet implemented in Flash");
-		return null;
-#else
-		WWW www = null;
-		try { www = new WWW(url, form); }
-		catch (System.Exception ex) { Debug.LogError(ex != null ? ex.Message : "<null>"); }
-		return www;
-#endif
-	}
+//    static public WWW OpenURL (string url, WWWForm form)
+//    {
+//        if (form == null) return OpenURL(url);
+//#if UNITY_FLASH
+//        Debug.LogError("WWW is not yet implemented in Flash");
+//        return null;
+//#else
+//        WWW www = null;
+//        try { www = new WWW(url, form); }
+//        catch (System.Exception ex) { Debug.LogError(ex != null ? ex.Message : "<null>"); }
+//        return www;
+//#endif
+//    }
 
 	/// <summary>
 	/// Same as Random.Range, but the returned value is between min and max, inclusive.
@@ -187,11 +187,7 @@ static public class NGUITools
 
 	static public T[] FindActive<T> () where T : Component
 	{
-//#if UNITY_3_5 || UNITY_4_0
-//        return GameObject.FindSceneObjectsOfType(typeof(T)) as T[];
-//#else
 		return GameObject.FindObjectsOfType(typeof(T)) as T[];
-//#endif
 	}
 
 	/// <summary>
@@ -214,12 +210,17 @@ static public class NGUITools
 		cam = Camera.main;
 		if (cam && (cam.cullingMask & layerMask) != 0) return cam;
 
+#if UNITY_4_3
 		Camera[] cameras = NGUITools.FindActive<Camera>();
-
 		for (int i = 0, imax = cameras.Length; i < imax; ++i)
+#else
+		Camera[] cameras = new Camera[Camera.allCamerasCount];
+		int camerasFound = Camera.GetAllCameras(cameras);
+		for (int i = 0; i < camerasFound; ++i)
+#endif
 		{
 			cam = cameras[i];
-			if (cam && (cam.cullingMask & layerMask) != 0)
+			if (cam && cam.enabled && (cam.cullingMask & layerMask) != 0)
 				return cam;
 		}
 		return null;
@@ -252,7 +253,6 @@ static public class NGUITools
 			// Is there already another collider present? If so, do nothing.
 			if (col != null) return;
 
-#if !UNITY_4_0 && !UNITY_4_1 && !UNITY_4_2
 			// 2D collider
 			BoxCollider2D box2 = go.GetComponent<BoxCollider2D>();
 
@@ -277,10 +277,9 @@ static public class NGUITools
 				return;
 			}
 			else
-#endif
 			{
 				box = go.AddComponent<BoxCollider>();
-#if !UNITY_3_5 && UNITY_EDITOR
+#if UNITY_EDITOR
 				UnityEditor.Undo.RegisterCreatedObjectUndo(box, "Add Collider");
 #endif
 				box.isTrigger = true;
@@ -317,10 +316,8 @@ static public class NGUITools
 				UpdateWidgetCollider(bc, considerInactive);
 				return;
 			}
-#if !UNITY_4_0 && !UNITY_4_1 && !UNITY_4_2
 			BoxCollider2D box2 = go.GetComponent<BoxCollider2D>();
 			if (box2 != null) UpdateWidgetCollider(box2, considerInactive);
-#endif
 		}
 	}
 
@@ -337,9 +334,20 @@ static public class NGUITools
 
 			if (w != null)
 			{
-				Vector3[] corners = w.localCorners;
-				box.center = Vector3.Lerp(corners[0], corners[2], 0.5f);
-				box.size = corners[2] - corners[0];
+				Vector4 dr = w.drawRegion;
+
+				if (dr.x != 0f || dr.y != 0f || dr.z != 1f || dr.w != 1f)
+				{
+					Vector4 region = w.drawingDimensions;
+					box.center = new Vector3((region.x + region.z) * 0.5f, (region.y + region.w) * 0.5f);
+					box.size = new Vector3(region.z - region.x, region.w - region.y);
+				}
+				else
+				{
+					Vector3[] corners = w.localCorners;
+					box.center = Vector3.Lerp(corners[0], corners[2], 0.5f);
+					box.size = corners[2] - corners[0];
+				}
 			}
 			else
 			{
@@ -353,7 +361,6 @@ static public class NGUITools
 		}
 	}
 
-#if !UNITY_4_0 && !UNITY_4_1 && !UNITY_4_2
 	/// <summary>
 	/// Adjust the widget's collider based on the depth of the widgets, as well as the widget's dimensions.
 	/// </summary>
@@ -382,7 +389,6 @@ static public class NGUITools
 #endif
 		}
 	}
-#endif
 
 	/// <summary>
 	/// Helper function that returns the string name of the type.
@@ -416,11 +422,7 @@ static public class NGUITools
 	static public void RegisterUndo (UnityEngine.Object obj, string name)
 	{
 #if UNITY_EDITOR
- #if UNITY_3_5 || UNITY_4_0 || UNITY_4_1 || UNITY_4_2
-		UnityEditor.Undo.RegisterUndo(obj, name);
- #else
 		UnityEditor.Undo.RecordObject(obj, name);
- #endif
 		NGUITools.SetDirty(obj);
 #endif
 	}
@@ -477,11 +479,9 @@ static public class NGUITools
 	static public GameObject AddChild (GameObject parent, GameObject prefab)
 	{
 		GameObject go = GameObject.Instantiate(prefab) as GameObject;
-
-#if UNITY_EDITOR && !UNITY_3_5 && !UNITY_4_0 && !UNITY_4_1 && !UNITY_4_2
+#if UNITY_EDITOR
 		UnityEditor.Undo.RegisterCreatedObjectUndo(go, "Create Object");
 #endif
-
 		if (go != null && parent != null)
 		{
 			Transform t = go.transform;
@@ -578,11 +578,15 @@ static public class NGUITools
 			}
 			else
 			{
+				panel = FindInParents<UIPanel>(go);
+				if (panel == null) return 0;
+
 				UIWidget[] widgets = go.GetComponentsInChildren<UIWidget>(true);
 
 				for (int i = 0, imax = widgets.Length; i < imax; ++i)
 				{
 					UIWidget w = widgets[i];
+					if (w.panel != panel) continue;
 #if UNITY_EDITOR
 					RegisterUndo(w, "Depth Change");
 #endif
@@ -712,8 +716,30 @@ static public class NGUITools
 	{
 		// Find the existing UI Root
 		UIRoot root = (trans != null) ? NGUITools.FindInParents<UIRoot>(trans.gameObject) : null;
+
 		if (root == null && UIRoot.list.Count > 0)
-			root = UIRoot.list[0];
+		{
+			foreach (UIRoot r in UIRoot.list)
+			{
+				if (r.gameObject.layer == layer)
+				{
+					root = r;
+					break;
+				}
+			}
+		}
+
+		// If we are working with a different UI type, we need to treat it as a brand-new one instead
+		if (root != null)
+		{
+			UICamera cam = root.GetComponentInChildren<UICamera>();
+
+			if (cam != null && cam.camera.isOrthoGraphic == advanced3D)
+			{
+				trans = null;
+				root = null;
+			}
+		}
 
 		// If no root found, create one
 		if (root == null)
@@ -914,11 +940,12 @@ static public class NGUITools
 	static public T FindInParents<T> (GameObject go) where T : Component
 	{
 		if (go == null) return null;
-#if UNITY_FLASH
+#if UNITY_4_3
+ #if UNITY_FLASH
 		object comp = go.GetComponent<T>();
-#else
+ #else
 		T comp = go.GetComponent<T>();
-#endif
+ #endif
 		if (comp == null)
 		{
 			Transform t = go.transform.parent;
@@ -929,10 +956,13 @@ static public class NGUITools
 				t = t.parent;
 			}
 		}
-#if UNITY_FLASH
+ #if UNITY_FLASH
 		return (T)comp;
-#else
+ #else
 		return comp;
+ #endif
+#else
+		return go.GetComponentInParent<T>();
 #endif
 	}
 
@@ -943,11 +973,12 @@ static public class NGUITools
 	static public T FindInParents<T> (Transform trans) where T : Component
 	{
 		if (trans == null) return null;
-#if UNITY_FLASH
+#if UNITY_4_3
+ #if UNITY_FLASH
 		object comp = trans.GetComponent<T>();
-#else
+ #else
 		T comp = trans.GetComponent<T>();
-#endif
+ #endif
 		if (comp == null)
 		{
 			Transform t = trans.transform.parent;
@@ -958,10 +989,13 @@ static public class NGUITools
 				t = t.parent;
 			}
 		}
-#if UNITY_FLASH
+ #if UNITY_FLASH
 		return (T)comp;
-#else
+ #else
 		return comp;
+ #endif
+#else
+		return trans.GetComponentInParent<T>();
 #endif
 	}
 
@@ -1040,7 +1074,7 @@ static public class NGUITools
 	/// Activate the specified object and all of its children.
 	/// </summary>
 
-	static void Activate (Transform t) { Activate(t, true); }
+	static void Activate (Transform t) { Activate(t, false); }
 
 	/// <summary>
 	/// Activate the specified object and all of its children.
@@ -1050,15 +1084,6 @@ static public class NGUITools
 	{
 		SetActiveSelf(t.gameObject, true);
 
-		// Prior to Unity 4, active state was not nested. It was possible to have an enabled child of a disabled object.
-		// Unity 4 onwards made it so that the state is nested, and a disabled parent results in a disabled child.
-#if UNITY_3_5
-		for (int i = 0, imax = t.GetChildCount(); i < imax; ++i)
-		{
-			Transform child = t.GetChild(i);
-			Activate(child);
-		}
-#else
 		if (compatibilityMode)
 		{
 			// If there is even a single enabled child, then we're using a Unity 4.0-based nested active state scheme.
@@ -1075,24 +1100,13 @@ static public class NGUITools
 				Activate(child, true);
 			}
 		}
-#endif
 	}
 
 	/// <summary>
 	/// Deactivate the specified object and all of its children.
 	/// </summary>
 
-	static void Deactivate (Transform t)
-	{
-#if UNITY_3_5
-		for (int i = 0, imax = t.GetChildCount(); i < imax; ++i)
-		{
-			Transform child = t.GetChild(i);
-			Deactivate(child);
-		}
-#endif
-		SetActiveSelf(t.gameObject, false);
-	}
+	static void Deactivate (Transform t) { SetActiveSelf(t.gameObject, false); }
 
 	/// <summary>
 	/// SetActiveRecursively enables children before parents. This is a problem when a widget gets re-enabled
@@ -1169,11 +1183,7 @@ static public class NGUITools
 	[System.Obsolete("Use NGUITools.GetActive instead")]
 	static public bool IsActive (Behaviour mb)
 	{
-#if UNITY_3_5
-		return mb != null && mb.enabled && mb.gameObject.active;
-#else
 		return mb != null && mb.enabled && mb.gameObject.activeInHierarchy;
-#endif
 	}
 
 	/// <summary>
@@ -1184,11 +1194,7 @@ static public class NGUITools
 	[System.Diagnostics.DebuggerStepThrough]
 	static public bool GetActive (Behaviour mb)
 	{
-#if UNITY_3_5
-		return mb && mb.enabled && mb.gameObject.active;
-#else
 		return mb && mb.enabled && mb.gameObject.activeInHierarchy;
-#endif
 	}
 
 	/// <summary>
@@ -1199,11 +1205,7 @@ static public class NGUITools
 	[System.Diagnostics.DebuggerStepThrough]
 	static public bool GetActive (GameObject go)
 	{
-#if UNITY_3_5
-		return go && go.active;
-#else
 		return go && go.activeInHierarchy;
-#endif
 	}
 
 	/// <summary>
@@ -1214,11 +1216,7 @@ static public class NGUITools
 	[System.Diagnostics.DebuggerStepThrough]
 	static public void SetActiveSelf (GameObject go, bool state)
 	{
-#if UNITY_3_5
-		go.active = state;
-#else
 		go.SetActive(state);
-#endif
 	}
 
 	/// <summary>
@@ -1394,7 +1392,11 @@ static public class NGUITools
 
 	static public T AddMissingComponent<T> (this GameObject go) where T : Component
 	{
+#if UNITY_FLASH
+		object comp = go.GetComponent<T>();
+#else
 		T comp = go.GetComponent<T>();
+#endif
 		if (comp == null)
 		{
 #if UNITY_EDITOR
@@ -1403,7 +1405,11 @@ static public class NGUITools
 #endif
 			comp = go.AddComponent<T>();
 		}
+#if UNITY_FLASH
+		return (T)comp;
+#else
 		return comp;
+#endif
 	}
 
 	// Temporary variable to avoid GC allocation
@@ -1442,11 +1448,39 @@ static public class NGUITools
 
 	static public Vector3[] GetSides (this Camera cam, float depth, Transform relativeTo)
 	{
-		mSides[0] = cam.ViewportToWorldPoint(new Vector3(0f, 0.5f, depth));
-		mSides[1] = cam.ViewportToWorldPoint(new Vector3(0.5f, 1f, depth));
-		mSides[2] = cam.ViewportToWorldPoint(new Vector3(1f, 0.5f, depth));
-		mSides[3] = cam.ViewportToWorldPoint(new Vector3(0.5f, 0f, depth));
+		if (cam.isOrthoGraphic)
+		{
+			float os = cam.orthographicSize;
+			float x0 = -os;
+			float x1 = os;
+			float y0 = -os;
+			float y1 = os;
 
+			Rect rect = cam.rect;
+			Vector2 size = screenSize;
+			float aspect = size.x / size.y;
+			aspect *= rect.width / rect.height;
+			x0 *= aspect;
+			x1 *= aspect;
+
+			// We want to ignore the scale, as scale doesn't affect the camera's view region in Unity
+			Transform t = cam.transform;
+			Quaternion rot = t.rotation;
+			Vector3 pos = t.position;
+
+			mSides[0] = rot * (new Vector3(x0, 0f, depth)) + pos;
+			mSides[1] = rot * (new Vector3(0f, y1, depth)) + pos;
+			mSides[2] = rot * (new Vector3(x1, 0f, depth)) + pos;
+			mSides[3] = rot * (new Vector3(0f, y0, depth)) + pos;
+		}
+		else
+		{
+			mSides[0] = cam.ViewportToWorldPoint(new Vector3(0f, 0.5f, depth));
+			mSides[1] = cam.ViewportToWorldPoint(new Vector3(0.5f, 1f, depth));
+			mSides[2] = cam.ViewportToWorldPoint(new Vector3(1f, 0.5f, depth));
+			mSides[3] = cam.ViewportToWorldPoint(new Vector3(0.5f, 0f, depth));
+		}
+		
 		if (relativeTo != null)
 		{
 			for (int i = 0; i < 4; ++i)
@@ -1461,7 +1495,8 @@ static public class NGUITools
 
 	static public Vector3[] GetWorldCorners (this Camera cam)
 	{
-		return cam.GetWorldCorners(Mathf.Lerp(cam.nearClipPlane, cam.farClipPlane, 0.5f), null);
+		float depth = Mathf.Lerp(cam.nearClipPlane, cam.farClipPlane, 0.5f);
+		return cam.GetWorldCorners(depth, null);
 	}
 
 	/// <summary>
@@ -1488,10 +1523,38 @@ static public class NGUITools
 
 	static public Vector3[] GetWorldCorners (this Camera cam, float depth, Transform relativeTo)
 	{
-		mSides[0] = cam.ViewportToWorldPoint(new Vector3(0f, 0f, depth));
-		mSides[1] = cam.ViewportToWorldPoint(new Vector3(0f, 1f, depth));
-		mSides[2] = cam.ViewportToWorldPoint(new Vector3(1f, 1f, depth));
-		mSides[3] = cam.ViewportToWorldPoint(new Vector3(1f, 0f, depth));
+		if (cam.isOrthoGraphic)
+		{
+			float os = cam.orthographicSize;
+			float x0 = -os;
+			float x1 = os;
+			float y0 = -os;
+			float y1 = os;
+
+			Rect rect = cam.rect;
+			Vector2 size = screenSize;
+			float aspect = size.x / size.y;
+			aspect *= rect.width / rect.height;
+			x0 *= aspect;
+			x1 *= aspect;
+
+			// We want to ignore the scale, as scale doesn't affect the camera's view region in Unity
+			Transform t = cam.transform;
+			Quaternion rot = t.rotation;
+			Vector3 pos = t.position;
+
+			mSides[0] = rot * (new Vector3(x0, y0, depth)) + pos;
+			mSides[1] = rot * (new Vector3(x0, y1, depth)) + pos;
+			mSides[2] = rot * (new Vector3(x1, y1, depth)) + pos;
+			mSides[3] = rot * (new Vector3(x1, y0, depth)) + pos;
+		}
+		else
+		{
+			mSides[0] = cam.ViewportToWorldPoint(new Vector3(0f, 0f, depth));
+			mSides[1] = cam.ViewportToWorldPoint(new Vector3(0f, 1f, depth));
+			mSides[2] = cam.ViewportToWorldPoint(new Vector3(1f, 1f, depth));
+			mSides[3] = cam.ViewportToWorldPoint(new Vector3(1f, 0f, depth));
+		}
 
 		if (relativeTo != null)
 		{
@@ -1513,4 +1576,89 @@ static public class NGUITools
 		if (period > 0) type = type.Substring(period + 1);
 		return string.IsNullOrEmpty(method) ? type : type + "/" + method;
 	}
+
+#if UNITY_EDITOR || !UNITY_FLASH
+	/// <summary>
+	/// Execute the specified function on the target game object.
+	/// </summary>
+
+	static public void Execute<T> (GameObject go, string funcName) where T : Component
+	{
+		T[] comps = go.GetComponents<T>();
+
+		foreach (T comp in comps)
+		{
+#if !UNITY_EDITOR && (UNITY_WEBPLAYER || UNITY_FLASH || UNITY_METRO || UNITY_WP8)
+			comp.SendMessage(funcName, SendMessageOptions.DontRequireReceiver);
+#else
+			MethodInfo method = comp.GetType().GetMethod(funcName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+			if (method != null) method.Invoke(comp, null);
+#endif
+		}
+	}
+
+	/// <summary>
+	/// Execute the specified function on the target game object and all of its children.
+	/// </summary>
+
+	static public void ExecuteAll<T> (GameObject root, string funcName) where T : Component
+	{
+		Execute<T>(root, funcName);
+		Transform t = root.transform;
+		for (int i = 0, imax = t.childCount; i < imax; ++i)
+			ExecuteAll<T>(t.GetChild(i).gameObject, funcName);
+	}
+
+	/// <summary>
+	/// Immediately start, update, and create all the draw calls from newly instantiated UI.
+	/// This is useful if you plan on doing something like immediately taking a screenshot then destroying the UI.
+	/// </summary>
+
+	static public void ImmediatelyCreateDrawCalls (GameObject root)
+	{
+		ExecuteAll<UIWidget>(root, "Start");
+		ExecuteAll<UIPanel>(root, "Start");
+		ExecuteAll<UIWidget>(root, "Update");
+		ExecuteAll<UIPanel>(root, "Update");
+		ExecuteAll<UIPanel>(root, "LateUpdate");
+	}
+#endif
+
+#if UNITY_EDITOR
+	static int mSizeFrame = -1;
+	static System.Reflection.MethodInfo s_GetSizeOfMainGameView;
+	static Vector2 mGameSize = Vector2.one;
+
+	/// <summary>
+	/// Size of the game view cannot be retrieved from Screen.width and Screen.height when the game view is hidden.
+	/// </summary>
+
+	static public Vector2 screenSize
+	{
+		get
+		{
+			int frame = Time.frameCount;
+
+			if (mSizeFrame != frame || !Application.isPlaying)
+			{
+				mSizeFrame = frame;
+
+				if (s_GetSizeOfMainGameView == null)
+				{
+					System.Type type = System.Type.GetType("UnityEditor.GameView,UnityEditor");
+					s_GetSizeOfMainGameView = type.GetMethod("GetSizeOfMainGameView",
+						System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
+				}
+				mGameSize = (Vector2)s_GetSizeOfMainGameView.Invoke(null, null);
+			}
+			return mGameSize;
+		}
+	}
+#else
+	/// <summary>
+	/// Size of the game view cannot be retrieved from Screen.width and Screen.height when the game view is hidden.
+	/// </summary>
+
+	static public Vector2 screenSize { get { return new Vector2(Screen.width, Screen.height); } }
+#endif
 }
