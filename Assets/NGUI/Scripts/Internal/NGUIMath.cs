@@ -367,6 +367,7 @@ static public class NGUIMath
 
 			Vector3 vMin = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
 			Vector3 vMax = new Vector3(float.MinValue, float.MinValue, float.MinValue);
+			Vector3 v;
 
 			for (int i = 0, imax = widgets.Length; i < imax; ++i)
 			{
@@ -377,8 +378,15 @@ static public class NGUIMath
 
 				for (int j = 0; j < 4; ++j)
 				{
-					vMax = Vector3.Max(corners[j], vMax);
-					vMin = Vector3.Min(corners[j], vMin);
+					v = corners[j];
+
+					if (v.x > vMax.x) vMax.x = v.x;
+ 					if (v.y > vMax.y) vMax.y = v.y;
+ 					if (v.z > vMax.z) vMax.z = v.z;
+ 
+ 					if (v.x < vMin.x) vMin.x = v.x;
+ 					if (v.y < vMin.y) vMin.y = v.y;
+ 					if (v.z < vMin.z) vMin.z = v.z;
 				}
 			}
 
@@ -422,16 +430,22 @@ static public class NGUIMath
 
 	static public Bounds CalculateRelativeWidgetBounds (Transform relativeTo, Transform content, bool considerInactive)
 	{
-		Bounds b = new Bounds(Vector3.zero, Vector3.zero);
-
-		if (content != null)
+		if (content != null && relativeTo != null)
 		{
 			bool isSet = false;
 			Matrix4x4 toLocal = relativeTo.worldToLocalMatrix;
-			CalculateRelativeWidgetBounds(content, considerInactive, true, ref toLocal, ref b, ref isSet);
-			if (isSet) return b;
+			Vector3 min = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
+			Vector3 max = new Vector3(float.MinValue, float.MinValue, float.MinValue);
+			CalculateRelativeWidgetBounds(content, considerInactive, true, ref toLocal, ref min, ref max, ref isSet);
+
+			if (isSet)
+			{
+				Bounds b = new Bounds(min, Vector3.zero);
+				b.Encapsulate(max);
+				return b;
+			}
 		}
-		return b;
+		return new Bounds(Vector3.zero, Vector3.zero);
 	}
 
 	/// <summary>
@@ -440,7 +454,8 @@ static public class NGUIMath
 
 	[System.Diagnostics.DebuggerHidden]
 	[System.Diagnostics.DebuggerStepThrough]
-	static void CalculateRelativeWidgetBounds (Transform content, bool considerInactive, bool isRoot, ref Matrix4x4 toLocal, ref Bounds b, ref bool isSet)
+	static void CalculateRelativeWidgetBounds (Transform content, bool considerInactive, bool isRoot,
+		ref Matrix4x4 toLocal, ref Vector3 vMin, ref Vector3 vMax, ref bool isSet)
 	{
 		if (content == null) return;
 		if (!considerInactive && !NGUITools.GetActive(content.gameObject)) return;
@@ -460,15 +475,15 @@ static public class NGUIMath
 			{
 				Vector3 v = toLocal.MultiplyPoint3x4(corners[j]);
 
-				if (isSet)
-				{
-					b.Encapsulate(v);
-				}
-				else
-				{
-					b = new Bounds(v, Vector3.zero);
-					isSet = true;
-				}
+				if (v.x > vMax.x) vMax.x = v.x;
+ 				if (v.y > vMax.y) vMax.y = v.y;
+ 				if (v.z > vMax.z) vMax.z = v.z;
+ 
+ 				if (v.x < vMin.x) vMin.x = v.x;
+ 				if (v.y < vMin.y) vMin.y = v.y;
+ 				if (v.z < vMin.z) vMin.z = v.z;
+
+				isSet = true;
 			}
 		}
 		else // No panel present
@@ -484,21 +499,21 @@ static public class NGUIMath
 				{
 					Vector3 v = toLocal.MultiplyPoint3x4(corners[j]);
 
-					if (isSet)
-					{
-						b.Encapsulate(v);
-					}
-					else
-					{
-						b = new Bounds(v, Vector3.zero);
-						isSet = true;
-					}
+					if (v.x > vMax.x) vMax.x = v.x;
+					if (v.y > vMax.y) vMax.y = v.y;
+					if (v.z > vMax.z) vMax.z = v.z;
+
+					if (v.x < vMin.x) vMin.x = v.x;
+					if (v.y < vMin.y) vMin.y = v.y;
+					if (v.z < vMin.z) vMin.z = v.z;
+
+					isSet = true;
 				}
 			}
 
 			// Iterate through children including their bounds in turn
 			for (int i = 0, imax = content.childCount; i < imax; ++i)
-				CalculateRelativeWidgetBounds(content.GetChild(i), considerInactive, false, ref toLocal, ref b, ref isSet);
+				CalculateRelativeWidgetBounds(content.GetChild(i), considerInactive, false, ref toLocal, ref vMin, ref vMax, ref isSet);
 		}
 	}
 
@@ -1072,5 +1087,64 @@ static public class NGUIMath
 
 		Vector3 wp = cam.ScreenToWorldPoint(pos);
 		return (relativeTo != null) ? relativeTo.InverseTransformPoint(wp) : wp;
+	}
+
+	/// <summary>
+	/// Convert the specified world point from one camera's world space to another, then make it relative to the specified transform.
+	/// You should use this function if you want to position a widget using some 3D point in space.
+	/// Pass your main camera for the "worldCam", and your UI camera for "uiCam", then the widget's transform for "relativeTo".
+	/// You can then assign the widget's localPosition to the returned value.
+	/// </summary>
+
+	static public Vector3 WorldToLocalPoint (Vector3 worldPos, Camera worldCam, Camera uiCam, Transform relativeTo)
+	{
+		worldPos = worldCam.WorldToViewportPoint(worldPos);
+		worldPos = uiCam.ViewportToWorldPoint(worldPos);
+		if (relativeTo == null) return worldPos;
+		relativeTo = relativeTo.parent;
+		if (relativeTo == null) return worldPos;
+		return relativeTo.InverseTransformPoint(worldPos);
+	}
+
+	/// <summary>
+	/// Helper function that can set the transform's position to be at the specified world position.
+	/// Ideal usage: positioning a UI element to be directly over a 3D point in space.
+	/// </summary>
+	/// <param name="worldPos">World position, visible by the worldCam</param>
+	/// <param name="worldCam">Camera that is able to see the worldPos</param>
+	/// <param name="myCam">Camera that is able to see the transform this function is called on</param>
+
+	static public void OverlayPosition (this Transform trans, Vector3 worldPos, Camera worldCam, Camera myCam)
+	{
+		worldPos = worldCam.WorldToViewportPoint(worldPos);
+		worldPos = myCam.ViewportToWorldPoint(worldPos);
+		Transform parent = trans.parent;
+		trans.localPosition = (parent != null) ? parent.InverseTransformPoint(worldPos) : worldPos;
+	}
+
+	/// <summary>
+	/// Helper function that can set the transform's position to be at the specified world position.
+	/// Ideal usage: positioning a UI element to be directly over a 3D point in space.
+	/// </summary>
+	/// <param name="worldPos">World position, visible by the worldCam</param>
+	/// <param name="worldCam">Camera that is able to see the worldPos</param>
+
+	static public void OverlayPosition (this Transform trans, Vector3 worldPos, Camera worldCam)
+	{
+		Camera myCam = NGUITools.FindCameraForLayer(trans.gameObject.layer);
+		if (myCam != null) trans.OverlayPosition(worldPos, worldCam, myCam);
+	}
+
+	/// <summary>
+	/// Helper function that can set the transform's position to be over the specified target transform.
+	/// Ideal usage: positioning a UI element to be directly over a 3D object in space.
+	/// </summary>
+	/// <param name="target">Target over which the transform should be positioned</param>
+
+	static public void OverlayPosition (this Transform trans, Transform target)
+	{
+		Camera myCam = NGUITools.FindCameraForLayer(trans.gameObject.layer);
+		Camera worldCam = NGUITools.FindCameraForLayer(target.gameObject.layer);
+		if (myCam != null && worldCam != null) trans.OverlayPosition(target.position, worldCam, myCam);
 	}
 }

@@ -6,6 +6,10 @@
 using UnityEngine;
 using System.Collections.Generic;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 /// <summary>
 /// This script should be attached to each camera that's used to draw the objects with
 /// UI components on them. This may mean only one camera (main camera or your UI camera),
@@ -14,8 +18,8 @@ using System.Collections.Generic;
 /// 
 /// * OnHover (isOver) is sent when the mouse hovers over a collider or moves away.
 /// * OnPress (isDown) is sent when a mouse button gets pressed on the collider.
-/// * OnSelect (selected) is sent when a mouse button is released on the same object as it was pressed on.
-/// * OnClick () is sent with the same conditions as OnSelect, with the added check to see if the mouse has not moved much.
+/// * OnSelect (selected) is sent when a mouse button is first pressed on an object. Repeated presses won't result in an OnSelect(true).
+/// * OnClick () is sent when a mouse is pressed and released on the same object.
 ///   UICamera.currentTouchID tells you which button was clicked.
 /// * OnDoubleClick () is sent when the click happens twice within a fourth of a second.
 ///   UICamera.currentTouchID tells you which button was clicked.
@@ -88,10 +92,8 @@ public class UICamera : MonoBehaviour
 	{
 		World_3D,	// Perform a Physics.Raycast and sort by distance to the point that was hit.
 		UI_3D,		// Perform a Physics.Raycast and sort by widget depth.
-#if !UNITY_3_5 && !UNITY_4_0 && !UNITY_4_1 && !UNITY_4_2
 		World_2D,	// Perform a Physics2D.OverlapPoint
 		UI_2D,		// Physics2D.OverlapPoint then sort by widget depth
-#endif
 	}
 
 	/// <summary>
@@ -99,6 +101,33 @@ public class UICamera : MonoBehaviour
 	/// </summary>
 
 	static public BetterList<UICamera> list = new BetterList<UICamera>();
+
+	public delegate bool GetKeyStateFunc (KeyCode key);
+	public delegate float GetAxisFunc (string name);
+
+	/// <summary>
+	/// GetKeyDown function -- return whether the specified key was pressed this Update().
+	/// </summary>
+
+	static public GetKeyStateFunc GetKeyDown = Input.GetKeyDown;
+
+	/// <summary>
+	/// GetKeyDown function -- return whether the specified key was released this Update().
+	/// </summary>
+
+	static public GetKeyStateFunc GetKeyUp = Input.GetKeyUp;
+
+	/// <summary>
+	/// GetKey function -- return whether the specified key is currently held.
+	/// </summary>
+
+	static public GetKeyStateFunc GetKey = Input.GetKey;
+
+	/// <summary>
+	/// GetAxis function -- return the state of the specified axis.
+	/// </summary>
+
+	static public GetAxisFunc GetAxis = Input.GetAxis;
 
 	public delegate void OnScreenResize ();
 
@@ -561,6 +590,7 @@ public class UICamera : MonoBehaviour
 	{
 		public int depth;
 		public RaycastHit hit;
+		public Vector3 point;
 		public GameObject go;
 	}
 
@@ -599,6 +629,7 @@ public class UICamera : MonoBehaviour
 			{
 				if (Physics.Raycast(ray, out lastHit, dist, mask))
 				{
+					lastWorldPosition = lastHit.point;
 					hoveredObject = lastHit.collider.gameObject;
 					return true;
 				}
@@ -631,6 +662,7 @@ public class UICamera : MonoBehaviour
 						if (mHit.depth != int.MaxValue)
 						{
 							mHit.hit = hits[b];
+							mHit.point = hits[b].point;
 							mHit.go = hits[b].collider.gameObject;
 							mHits.Add(mHit);
 						}
@@ -648,7 +680,7 @@ public class UICamera : MonoBehaviour
 						{
 							lastHit = mHits[b].hit;
 							hoveredObject = mHits[b].go;
-							lastWorldPosition = hits[b].point;
+							lastWorldPosition = mHits[b].point;
 							mHits.Clear();
 							return true;
 						}
@@ -681,7 +713,6 @@ public class UICamera : MonoBehaviour
 				}
 				continue;
 			}
-#if !UNITY_3_5 && !UNITY_4_0 && !UNITY_4_1 && !UNITY_4_2
 			else if (cam.eventType == EventType.World_2D)
 			{
 				if (m2DPlane.Raycast(ray, out dist))
@@ -728,6 +759,7 @@ public class UICamera : MonoBehaviour
 							if (mHit.depth != int.MaxValue)
 							{
 								mHit.go = go;
+								mHit.point = lastWorldPosition;
 								mHits.Add(mHit);
 							}
 						}
@@ -774,14 +806,11 @@ public class UICamera : MonoBehaviour
 				}
 				continue;
 			}
-#endif
 		}
 		return false;
 	}
 
-#if !UNITY_3_5 && !UNITY_4_0 && !UNITY_4_1 && !UNITY_4_2
 	static Plane m2DPlane = new Plane(Vector3.back, 0f);
-#endif
 
 	/// <summary>
 	/// Helper function to check if the specified hit is visible by the panel.
@@ -813,7 +842,7 @@ public class UICamera : MonoBehaviour
 
 		while (panel != null)
 		{
-			if (!panel.IsVisible(de.hit.point)) return false;
+			if (!panel.IsVisible(de.point)) return false;
 			panel = panel.parentPanel;
 		}
 		return true;
@@ -857,8 +886,8 @@ public class UICamera : MonoBehaviour
 
 	static int GetDirection (KeyCode up, KeyCode down)
 	{
-		if (Input.GetKeyDown(up)) return 1;
-		if (Input.GetKeyDown(down)) return -1;
+		if (GetKeyDown(up)) return 1;
+		if (GetKeyDown(down)) return -1;
 		return 0;
 	}
 
@@ -868,8 +897,8 @@ public class UICamera : MonoBehaviour
 
 	static int GetDirection (KeyCode up0, KeyCode up1, KeyCode down0, KeyCode down1)
 	{
-		if (Input.GetKeyDown(up0) || Input.GetKeyDown(up1)) return 1;
-		if (Input.GetKeyDown(down0) || Input.GetKeyDown(down1)) return -1;
+		if (GetKeyDown(up0) || GetKeyDown(up1)) return 1;
+		if (GetKeyDown(down0) || GetKeyDown(down1)) return -1;
 		return 0;
 	}
 
@@ -883,7 +912,7 @@ public class UICamera : MonoBehaviour
 
 		if (mNextEvent < time && !string.IsNullOrEmpty(axis))
 		{
-			float val = Input.GetAxis(axis);
+			float val = GetAxis(axis);
 
 			if (val > 0.75f)
 			{
@@ -965,13 +994,11 @@ public class UICamera : MonoBehaviour
 
 		if (Application.platform == RuntimePlatform.Android ||
 			Application.platform == RuntimePlatform.IPhonePlayer
-#if !UNITY_3_5 && !UNITY_4_0 && !UNITY_4_1
 			|| Application.platform == RuntimePlatform.WP8Player
-#if UNITY_4_0 || UNITY_4_1 || UNITY_4_2 || UNITY_4_3
+#if UNITY_4_3
 			|| Application.platform == RuntimePlatform.BB10Player
 #else
 			|| Application.platform == RuntimePlatform.BlackBerryPlayer
-#endif
 #endif
 			)
 		{
@@ -994,8 +1021,7 @@ public class UICamera : MonoBehaviour
 		}
 
 		// Save the starting mouse position
-		mMouse[0].pos.x = Input.mousePosition.x;
-		mMouse[0].pos.y = Input.mousePosition.y;
+		mMouse[0].pos = Input.mousePosition;
 
 		for (int i = 1; i < 3; ++i)
 		{
@@ -1009,7 +1035,11 @@ public class UICamera : MonoBehaviour
 	/// Sort the list when enabled.
 	/// </summary>
 
-	void OnEnable () { list.Add(this); list.Sort(CompareFunc); }
+	void OnEnable ()
+	{
+		list.Add(this);
+		list.Sort(CompareFunc);
+	}
 
 	/// <summary>
 	/// Remove this camera from the list.
@@ -1062,13 +1092,13 @@ public class UICamera : MonoBehaviour
 		// Clear the selection on the cancel key, but only if mouse input is allowed
 		if (useMouse && mCurrentSelection != null)
 		{
-			if (cancelKey0 != KeyCode.None && Input.GetKeyDown(cancelKey0))
+			if (cancelKey0 != KeyCode.None && GetKeyDown(cancelKey0))
 			{
 				currentScheme = ControlScheme.Controller;
 				currentKey = cancelKey0;
 				selectedObject = null;
 			}
-			else if (cancelKey1 != KeyCode.None && Input.GetKeyDown(cancelKey1))
+			else if (cancelKey1 != KeyCode.None && GetKeyDown(cancelKey1))
 			{
 				currentScheme = ControlScheme.Controller;
 				currentKey = cancelKey1;
@@ -1085,11 +1115,11 @@ public class UICamera : MonoBehaviour
 		// If it's time to show a tooltip, inform the object we're hovering over
 		if (useMouse && mHover != null)
 		{
-			float scroll = !string.IsNullOrEmpty(scrollAxisName) ? Input.GetAxis(scrollAxisName) : 0f;
+			float scroll = !string.IsNullOrEmpty(scrollAxisName) ? GetAxis(scrollAxisName) : 0f;
 			if (scroll != 0f) Notify(mHover, "OnScroll", scroll);
 
 			if (showTooltips && mTooltipTime != 0f && (mTooltipTime < RealTime.time ||
-				Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)))
+				GetKey(KeyCode.LeftShift) || GetKey(KeyCode.RightShift)))
 			{
 				mTooltip = mHover;
 				ShowTooltip(true);
@@ -1350,25 +1380,25 @@ public class UICamera : MonoBehaviour
 		bool submitKeyDown = false;
 		bool submitKeyUp = false;
 
-		if (submitKey0 != KeyCode.None && Input.GetKeyDown(submitKey0))
+		if (submitKey0 != KeyCode.None && GetKeyDown(submitKey0))
 		{
 			currentKey = submitKey0;
 			submitKeyDown = true;
 		}
 
-		if (submitKey1 != KeyCode.None && Input.GetKeyDown(submitKey1))
+		if (submitKey1 != KeyCode.None && GetKeyDown(submitKey1))
 		{
 			currentKey = submitKey1;
 			submitKeyDown = true;
 		}
 
-		if (submitKey0 != KeyCode.None && Input.GetKeyUp(submitKey0))
+		if (submitKey0 != KeyCode.None && GetKeyUp(submitKey0))
 		{
 			currentKey = submitKey0;
 			submitKeyUp = true;
 		}
 
-		if (submitKey1 != KeyCode.None && Input.GetKeyUp(submitKey1))
+		if (submitKey1 != KeyCode.None && GetKeyUp(submitKey1))
 		{
 			currentKey = submitKey1;
 			submitKeyUp = true;
@@ -1419,7 +1449,7 @@ public class UICamera : MonoBehaviour
 			Notify(mCurrentSelection, "OnKey", horizontal > 0 ? KeyCode.RightArrow : KeyCode.LeftArrow);
 		}
 		
-		if (useKeyboard && Input.GetKeyDown(KeyCode.Tab))
+		if (useKeyboard && GetKeyDown(KeyCode.Tab))
 		{
 			currentKey = KeyCode.Tab;
 			currentScheme = ControlScheme.Controller;
@@ -1427,14 +1457,14 @@ public class UICamera : MonoBehaviour
 		}
 
 		// Send out the cancel key notification
-		if (cancelKey0 != KeyCode.None && Input.GetKeyDown(cancelKey0))
+		if (cancelKey0 != KeyCode.None && GetKeyDown(cancelKey0))
 		{
 			currentKey = cancelKey0;
 			currentScheme = ControlScheme.Controller;
 			Notify(mCurrentSelection, "OnKey", KeyCode.Escape);
 		}
 
-		if (cancelKey1 != KeyCode.None && Input.GetKeyDown(cancelKey1))
+		if (cancelKey1 != KeyCode.None && GetKeyDown(cancelKey1))
 		{
 			currentKey = cancelKey1;
 			currentScheme = ControlScheme.Controller;

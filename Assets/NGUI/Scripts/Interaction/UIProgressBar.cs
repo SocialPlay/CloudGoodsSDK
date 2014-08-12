@@ -336,8 +336,12 @@ public class UIProgressBar : UIWidgetContainer
 			{
 				if (sprite != null && sprite.type == UIBasicSprite.Type.Filled)
 				{
-					sprite.fillDirection = UIBasicSprite.FillDirection.Horizontal;
-					sprite.invert = isInverted;
+					if (sprite.fillDirection == UIBasicSprite.FillDirection.Horizontal ||
+						sprite.fillDirection == UIBasicSprite.FillDirection.Vertical)
+					{
+						sprite.fillDirection = UIBasicSprite.FillDirection.Horizontal;
+						sprite.invert = isInverted;
+					}
 					sprite.fillAmount = value;
 				}
 				else
@@ -345,12 +349,17 @@ public class UIProgressBar : UIWidgetContainer
 					mFG.drawRegion = isInverted ?
 						new Vector4(1f - value, 0f, 1f, 1f) :
 						new Vector4(0f, 0f, value, 1f);
+					mFG.enabled = value > 0.001f;
 				}
 			}
 			else if (sprite != null && sprite.type == UIBasicSprite.Type.Filled)
 			{
-				sprite.fillDirection = UIBasicSprite.FillDirection.Vertical;
-				sprite.invert = isInverted;
+				if (sprite.fillDirection == UIBasicSprite.FillDirection.Horizontal ||
+					sprite.fillDirection == UIBasicSprite.FillDirection.Vertical)
+				{
+					sprite.fillDirection = UIBasicSprite.FillDirection.Vertical;
+					sprite.invert = isInverted;
+				}
 				sprite.fillAmount = value;
 			}
 			else
@@ -358,6 +367,7 @@ public class UIProgressBar : UIWidgetContainer
 				mFG.drawRegion = isInverted ?
 					new Vector4(0f, 1f - value, 1f, 1f) :
 					new Vector4(0f, 0f, 1f, value);
+				mFG.enabled = value > 0.001f;
 			}
 		}
 

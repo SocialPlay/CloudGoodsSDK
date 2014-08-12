@@ -35,12 +35,19 @@ public class UIWidget : UIRect
 	[HideInInspector][SerializeField] protected int mDepth = 0;
 
 	public delegate void OnDimensionsChanged ();
+	public delegate void OnPostFillCallback (UIWidget widget, int bufferOffset, BetterList<Vector3> verts, BetterList<Vector2> uvs, BetterList<Color32> cols);
 
 	/// <summary>
 	/// Notification triggered when the widget's dimensions or position changes.
 	/// </summary>
 
 	public OnDimensionsChanged onChange;
+
+	/// <summary>
+	/// Notification triggered after the widget's buffer has been filled.
+	/// </summary>
+
+	public OnPostFillCallback onPostFill;
 
 	/// <summary>
 	/// If set to 'true', the box collider's dimensions will be adjusted to always match the widget whenever it resizes.
@@ -571,11 +578,7 @@ public class UIWidget : UIRect
 		{
 			BoxCollider box = collider as BoxCollider;
 			if (box != null) return true;
-#if !UNITY_4_0 && !UNITY_4_1 && !UNITY_4_2
 			return GetComponent<BoxCollider2D>() != null;
-#else
-            return false;
-#endif
 		}
 	}
 
@@ -1424,7 +1427,7 @@ public class UIWidget : UIRect
 				if (geometry.hasVertices)
 				{
 					// Want to see what's being filled? Uncomment this line.
-					//Debug.Log("Fill " + name + " (" + Time.time + ")");
+					//Debug.Log("Fill " + name + " (" + Time.frameCount + ")");
 
 					if (mMatrixFrame != frame)
 					{
@@ -1506,5 +1509,10 @@ public class UIWidget : UIRect
 	/// Virtual function called by the UIPanel that fills the buffers.
 	/// </summary>
 
-	virtual public void OnFill(BetterList<Vector3> verts, BetterList<Vector2> uvs, BetterList<Color32> cols) { }
+	virtual public void OnFill(BetterList<Vector3> verts, BetterList<Vector2> uvs, BetterList<Color32> cols)
+	{
+		// Call this in your derived classes:
+		//if (onPostFill != null)
+		//	onPostFill(this, verts.size, verts, uvs, cols);
+	}
 }

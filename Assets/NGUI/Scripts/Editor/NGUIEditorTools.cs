@@ -441,18 +441,12 @@ public static class NGUIEditorTools
 		TextureImporterSettings settings = new TextureImporterSettings();
 		ti.ReadTextureSettings(settings);
 
-		if (force || !settings.readable || settings.npotScale != TextureImporterNPOTScale.None
-#if !UNITY_3_5 && !UNITY_4_0 && !UNITY_4_1
-			|| settings.alphaIsTransparency
-#endif
-			)
+		if (force || !settings.readable || settings.npotScale != TextureImporterNPOTScale.None || settings.alphaIsTransparency)
 		{
 			settings.readable = true;
-			settings.textureFormat = TextureImporterFormat.ARGB32;
+			if (NGUISettings.trueColorAtlas) settings.textureFormat = TextureImporterFormat.ARGB32;
 			settings.npotScale = TextureImporterNPOTScale.None;
-#if !UNITY_3_5 && !UNITY_4_0 && !UNITY_4_1
 			settings.alphaIsTransparency = false;
-#endif
 			ti.SetTextureSettings(settings);
 			AssetDatabase.ImportAsset(path, ImportAssetOptions.ForceUpdate | ImportAssetOptions.ForceSynchronousImport);
 		}
@@ -482,12 +476,15 @@ public static class NGUIEditorTools
 			settings.maxTextureSize = 4096;
 			settings.wrapMode = TextureWrapMode.Clamp;
 			settings.npotScale = TextureImporterNPOTScale.ToNearest;
-			settings.textureFormat = TextureImporterFormat.ARGB32;
-			settings.filterMode = FilterMode.Trilinear;
+
+			if (NGUISettings.trueColorAtlas)
+			{
+				settings.textureFormat = TextureImporterFormat.ARGB32;
+				settings.filterMode = FilterMode.Trilinear;
+			}
+
 			settings.aniso = 4;
-#if !UNITY_3_5 && !UNITY_4_0 && !UNITY_4_1
 			settings.alphaIsTransparency = alphaTransparency;
-#endif
 			ti.SetTextureSettings(settings);
 			AssetDatabase.ImportAsset(path, ImportAssetOptions.ForceUpdate | ImportAssetOptions.ForceSynchronousImport);
 		}
@@ -1592,17 +1589,17 @@ public static class NGUIEditorTools
 	/// Just like NGUIMath.Raycast, but doesn't rely on having a camera.
 	/// </summary>
 
-	static public BetterList<UIWidget> SceneViewRaycast (Vector2 mousePos)
+	static public List<UIWidget> SceneViewRaycast (Vector2 mousePos)
 	{
-		BetterList<UIWidget> list = new BetterList<UIWidget>();
+		List<UIWidget> list = new List<UIWidget>();
 
-		for (int i = 0; i < UIPanel.list.size; ++i)
+		for (int i = 0; i < UIPanel.list.Count; ++i)
 		{
-			UIPanel p = UIPanel.list.buffer[i];
+			UIPanel p = UIPanel.list[i];
 
-			for (int b = 0; b < p.widgets.size; ++b)
+			for (int b = 0; b < p.widgets.Count; ++b)
 			{
-				UIWidget w = p.widgets.buffer[b];
+				UIWidget w = p.widgets[b];
 				Vector3[] corners = w.worldCorners;
 				if (SceneViewDistanceToRectangle(corners, mousePos) == 0f)
 					list.Add(w);
@@ -1625,15 +1622,15 @@ public static class NGUIEditorTools
 	static public bool SelectWidget (GameObject start, Vector2 pos, bool inFront)
 	{
 		GameObject go = null;
-		BetterList<UIWidget> widgets = SceneViewRaycast(pos);
-		if (widgets == null || widgets.size == 0) return false;
+		List<UIWidget> widgets = SceneViewRaycast(pos);
+		if (widgets == null || widgets.Count == 0) return false;
 		bool found = false;
 
 		if (!inFront)
 		{
 			if (start != null)
 			{
-				for (int i = 0; i < widgets.size; ++i)
+				for (int i = 0; i < widgets.Count; ++i)
 				{
 					UIWidget w = widgets[i];
 
@@ -1651,7 +1648,7 @@ public static class NGUIEditorTools
 		{
 			if (start != null)
 			{
-				for (int i = widgets.size; i > 0; )
+				for (int i = widgets.Count; i > 0; )
 				{
 					UIWidget w = widgets[--i];
 
@@ -1663,7 +1660,7 @@ public static class NGUIEditorTools
 					go = w.cachedGameObject;
 				}
 			}
-			if (!found) go = widgets[widgets.size - 1].cachedGameObject;
+			if (!found) go = widgets[widgets.Count - 1].cachedGameObject;
 		}
 
 		if (go != null && go != start)
@@ -1680,11 +1677,7 @@ public static class NGUIEditorTools
 
 	static public void SetLabelWidth (float width)
 	{
-#if UNITY_3_5 || UNITY_4_0 || UNITY_4_1 || UNITY_4_2
-		EditorGUIUtility.LookLikeControls(width);
-#else
 		EditorGUIUtility.labelWidth = width;
-#endif
 	}
 
 	/// <summary>
@@ -1695,11 +1688,8 @@ public static class NGUIEditorTools
 	{
 		if (objects != null && objects.Length > 0)
 		{
-#if UNITY_3_5 || UNITY_4_0 || UNITY_4_1 || UNITY_4_2
-			UnityEditor.Undo.RegisterUndo(objects, name);
-#else
 			UnityEditor.Undo.RecordObjects(objects, name);
-#endif
+
 			foreach (Object obj in objects)
 			{
 				if (obj == null) continue;
@@ -1714,8 +1704,9 @@ public static class NGUIEditorTools
 
 	static public void HideMoveTool (bool hide)
 	{
-#if !UNITY_3_5 && !UNITY_4_0 && !UNITY_4_1 && !UNITY_4_2 && !UNITY_4_3
-		UnityEditor.Tools.hidden = hide && (UnityEditor.Tools.current == UnityEditor.Tool.Move) && UIWidget.showHandlesWithMoveTool;
+#if !UNITY_4_3
+		UnityEditor.Tools.hidden = hide && (UnityEditor.Tools.current == UnityEditor.Tool.Move) &&
+			UIWidget.showHandlesWithMoveTool && !NGUISettings.showTransformHandles;
 #endif
 	}
 
@@ -1855,17 +1846,17 @@ public static class NGUIEditorTools
 
 	static public void ShowSpriteSelectionMenu (Vector2 screenPos)
 	{
-		BetterList<UIWidget> widgets = NGUIEditorTools.SceneViewRaycast(screenPos);
-		BetterList<UIWidgetContainer> containers = new BetterList<UIWidgetContainer>();
-		BetterList<MenuEntry> entries = new BetterList<MenuEntry>();
-		BetterList<UIPanel> panels = new BetterList<UIPanel>();
+		List<UIWidget> widgets = NGUIEditorTools.SceneViewRaycast(screenPos);
+		List<UIWidgetContainer> containers = new List<UIWidgetContainer>();
+		List<MenuEntry> entries = new List<MenuEntry>();
+		List<UIPanel> panels = new List<UIPanel>();
 
 		bool divider = false;
 		UIWidget topWidget = null;
 		UIPanel topPanel = null;
 
 		// Process widgets and their containers in the raycast order
-		for (int i = 0; i < widgets.size; ++i)
+		for (int i = 0; i < widgets.Count; ++i)
 		{
 			UIWidget w = widgets[i];
 			if (topWidget == null) topWidget = w;
@@ -1904,7 +1895,7 @@ public static class NGUIEditorTools
 				}
 			}
 
-			string name = (i + 1 == widgets.size) ? (w.name + " (top-most)") : w.name;
+			string name = (i + 1 == widgets.Count) ? (w.name + " (top-most)") : w.name;
 			entries.Add(new MenuEntry(name, w.gameObject));
 			divider = false;
 		}
@@ -1913,7 +1904,7 @@ public static class NGUIEditorTools
 		NGUIContextMenu.AddCommonItems(Selection.activeGameObject);
 
 		// Add widgets to the menu in the reverse order so that they are shown with the top-most widget first (on top)
-		for (int i = entries.size; i > 0; )
+		for (int i = entries.Count; i > 0; )
 		{
 			MenuEntry ent = entries[--i];
 
@@ -1973,9 +1964,7 @@ public static class NGUIEditorTools
 		return (!string.IsNullOrEmpty(path)) ? AssetDatabase.AssetPathToGUID(path) : null;
 	}
 
-#if !UNITY_3_5
 	static MethodInfo s_GetInstanceIDFromGUID;
-#endif
 
 	/// <summary>
 	/// Convert the specified GUID to an object reference.
@@ -1984,13 +1973,12 @@ public static class NGUIEditorTools
 	static public Object GUIDToObject (string guid)
 	{
 		if (string.IsNullOrEmpty(guid)) return null;
-#if !UNITY_3_5
-		// This method is not going to be available in Unity 3.5
+		
 		if (s_GetInstanceIDFromGUID == null)
 			s_GetInstanceIDFromGUID = typeof(AssetDatabase).GetMethod("GetInstanceIDFromGUID", BindingFlags.Static | BindingFlags.NonPublic);
+
 		int id = (int)s_GetInstanceIDFromGUID.Invoke(null, new object[] { guid });
 		if (id != 0) return EditorUtility.InstanceIDToObject(id);
-#endif
 		string path = AssetDatabase.GUIDToAssetPath(guid);
 		if (string.IsNullOrEmpty(path)) return null;
 		return AssetDatabase.LoadAssetAtPath(path, typeof(Object));

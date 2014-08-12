@@ -15,7 +15,7 @@ using System.Collections.Generic;
 
 public class PaidCurrencyBundleStore : MonoBehaviour
 {
-    public PlatformPurchase platformPurchase = PlatformPurchase.Facebook;
+    //public PlatformPurchase platformPurchase = PlatformPurchase.Facebook;
     public GameObject Grid;
 
     IGridLoader gridLoader;
@@ -38,24 +38,26 @@ public class PaidCurrencyBundleStore : MonoBehaviour
     public void Initialize()
     {
         try
-        {
-            platformPurchasor = GetPlatformPurchaser();
-            platformPurchasor.RecievedPurchaseResponse += OnRecievedPurchaseResponse;
-
+        {      
             int currentplatform = 0;
+
+            platformPurchasor = gameObject.AddComponent<FaceBookPurchaser>();
 
 #if UNITY_EDITOR
             currentplatform = 1;
 #endif
 
 #if UNITY_ANDROID && !UNITY_EDITOR
-                currentplatform = 3;
+            platformPurchasor = gameObject.AddComponent<AndroidPaidCurrencyPurchaser>();
+            currentplatform = 3;
 #endif
 
 #if UNITY_IPHONE && !UNITY_EDITOR
-                currentplatform = 4;
+            platformPurchasor = gameObject.AddComponent<iOSPaidCurrencyPurchaser>();
+            currentplatform = 4;
 #endif
 
+            platformPurchasor.RecievedPurchaseResponse += OnRecievedPurchaseResponse;
             SP.GetCreditBundles(currentplatform, OnPurchaseBundlesRecieved);
 
             isInitialized = true;
@@ -127,7 +129,7 @@ public class PaidCurrencyBundleStore : MonoBehaviour
         isPurchaseRequest = false;
     }
 
-    IPlatformPurchaser GetPlatformPurchaser()
+    /*IPlatformPurchaser GetPlatformPurchaser()
     {
         switch (platformPurchase)
         {
@@ -140,6 +142,6 @@ public class PaidCurrencyBundleStore : MonoBehaviour
             default:
                 return null;
         }
-    }
+    }*/
 
 }

@@ -64,6 +64,8 @@ static public class NGUIText
 
 	static public int rectWidth = 1000000;
 	static public int rectHeight = 1000000;
+	static public int regionWidth = 1000000;
+	static public int regionHeight = 1000000;
 	static public int maxLines = 0;
 
 	static public bool gradient = false;
@@ -677,10 +679,40 @@ static public class NGUIText
 
 	/// <summary>
 	/// Get the index of the closest character within the provided list of values.
-	/// This function first sorts by Y, and only then by X.
+	/// Meant to be used with the arrays created by PrintExactCharacterPositions().
 	/// </summary>
 
-	static public int GetClosestCharacter (BetterList<Vector3> verts, Vector2 pos)
+	static public int GetExactCharacterIndex (BetterList<Vector3> verts, BetterList<int> indices, Vector2 pos)
+	{
+		for (int i = 0; i < indices.size; ++i)
+		{
+			int i0 = (i << 1);
+			int i1 = i0 + 1;
+
+			float x0 = verts[i0].x;
+			if (pos.x < x0) continue;
+
+			float x1 = verts[i1].x;
+			if (pos.x > x1) continue;
+
+			float y0 = verts[i0].y;
+			if (pos.y < y0) continue;
+
+			float y1 = verts[i1].y;
+			if (pos.y > y1) continue;
+
+			return indices[i];
+		}
+		return 0;
+	}
+
+	/// <summary>
+	/// Get the index of the closest vertex within the provided list of values.
+	/// This function first sorts by Y, and only then by X.
+	/// Meant to be used with the arrays created by PrintApproximateCharacterPositions().
+	/// </summary>
+
+	static public int GetApproximateCharacterIndex (BetterList<Vector3> verts, BetterList<int> indices, Vector2 pos)
 	{
 		// First sort by Y, and only then by X
 		float bestX = float.MaxValue;
@@ -706,7 +738,7 @@ static public class NGUIText
 				bestIndex = i;
 			}
 		}
-		return bestIndex;
+		return indices[bestIndex];
 	}
 
 	/// <summary>
@@ -788,7 +820,7 @@ static public class NGUIText
 					{
 						w += finalSpacingX;
 
-						if (Mathf.RoundToInt(x + w) > rectWidth)
+						if (Mathf.RoundToInt(x + w) > regionWidth)
 						{
 							if (x > maxX) maxX = x - finalSpacingX;
 							x = w;
@@ -803,7 +835,7 @@ static public class NGUIText
 				{
 					float w = finalSpacingX + symbol.advance * fontScale;
 
-					if (Mathf.RoundToInt(x + w) > rectWidth)
+					if (Mathf.RoundToInt(x + w) > regionWidth)
 					{
 						if (x > maxX) maxX = x - finalSpacingX;
 						x = w;
@@ -830,7 +862,7 @@ static public class NGUIText
 
 	static public int CalculateOffsetToFit (string text)
 	{
-		if (string.IsNullOrEmpty(text) || rectWidth < 1) return 0;
+		if (string.IsNullOrEmpty(text) || regionWidth < 1) return 0;
 
 		Prepare(text);
 
@@ -857,7 +889,7 @@ static public class NGUIText
 			}
 		}
 
-		float remainingWidth = rectWidth;
+		float remainingWidth = regionWidth;
 		int currentCharacterIndex = mSizes.size;
 
 		while (currentCharacterIndex > 0 && remainingWidth > 0)
@@ -895,13 +927,13 @@ static public class NGUIText
 
 	static public bool WrapText (string text, out string finalText, bool keepCharCount)
 	{
-		if (rectWidth < 1 || rectHeight < 1 || finalLineHeight < 1f)
+		if (regionWidth < 1 || regionHeight < 1 || finalLineHeight < 1f)
 		{
 			finalText = "";
 			return false;
 		}
 
-		float height = (maxLines > 0) ? Mathf.Min(rectHeight, finalLineHeight * maxLines) : rectHeight;
+		float height = (maxLines > 0) ? Mathf.Min(regionHeight, finalLineHeight * maxLines) : regionHeight;
 		int maxLineCount = (maxLines > 0) ? maxLines : 1000000;
 		maxLineCount = Mathf.FloorToInt(Mathf.Min(maxLineCount, height / finalLineHeight) + 0.01f);
 
@@ -916,7 +948,7 @@ static public class NGUIText
 
 		StringBuilder sb = new StringBuilder();
 		int textLength = text.Length;
-		float remainingWidth = rectWidth;
+		float remainingWidth = regionWidth;
 		int start = 0, offset = 0, lineCount = 1, prev = 0;
 		bool lineIsEmpty = true;
 		bool fits = true;
@@ -932,7 +964,7 @@ static public class NGUIText
 			if (ch == '\n')
 			{
 				if (lineCount == maxLineCount) break;
-				remainingWidth = rectWidth;
+				remainingWidth = regionWidth;
 
 				// Add the previous word to the final string
 				if (start < offset) sb.Append(text.Substring(start, offset - start + 1));
@@ -1010,12 +1042,12 @@ static public class NGUIText
 					if (space)
 					{
 						start = offset + 1;
-						remainingWidth = rectWidth;
+						remainingWidth = regionWidth;
 					}
 					else
 					{
 						start = offset;
-						remainingWidth = rectWidth - glyphWidth;
+						remainingWidth = regionWidth - glyphWidth;
 					}
 					prev = 0;
 				}
@@ -1023,7 +1055,7 @@ static public class NGUIText
 				{
 					// Revert the position to the beginning of the word and reset the line
 					lineIsEmpty = true;
-					remainingWidth = rectWidth;
+					remainingWidth = regionWidth;
 					offset = start - 1;
 					prev = 0;
 
@@ -1160,7 +1192,7 @@ static public class NGUIText
 				v0y = v1y - symbol.height * fontScale;
 
 				// Doesn't fit? Move down to the next line
-				if (Mathf.RoundToInt(x + symbol.advance * fontScale) > rectWidth)
+				if (Mathf.RoundToInt(x + symbol.advance * fontScale) > regionWidth)
 				{
 					if (x == 0f) return;
 
@@ -1243,9 +1275,6 @@ static public class NGUIText
 					}
 				}
 
-				float y0 = glyph.v0.y;
-				float y1 = glyph.v1.y;
-
 				v0x = glyph.v0.x + x;
 				v0y = glyph.v0.y - y;
 				v1x = glyph.v1.x + x;
@@ -1255,7 +1284,7 @@ static public class NGUIText
 				if (finalSpacingX < 0f) w += finalSpacingX;
 
 				// Doesn't fit? Move down to the next line
-				if (Mathf.RoundToInt(x + w) > rectWidth)
+				if (Mathf.RoundToInt(x + w) > regionWidth)
 				{
 					if (x == 0f) return;
 
@@ -1331,8 +1360,8 @@ static public class NGUIText
 					{
 						if (gradient)
 						{
-							float min = sizePD + y0 / fontScale;
-							float max = sizePD + y1 / fontScale;
+							float min = sizePD + glyph.v0.y / fontScale;
+							float max = sizePD + glyph.v1.y / fontScale;
 
 							min /= sizePD;
 							max /= sizePD;
@@ -1408,11 +1437,11 @@ static public class NGUIText
 						float a = mBoldOffset[j * 2];
 						float b = mBoldOffset[j * 2 + 1];
 
-						float slant = a + (italic ? fontSize * 0.1f * ((v1y - v0y) / fontSize) : 0f);
-						verts.Add(new Vector3(v0x - slant, v0y + b));
-						verts.Add(new Vector3(v0x + slant, v1y + b));
-						verts.Add(new Vector3(v1x + slant, v1y + b));
-						verts.Add(new Vector3(v1x - slant, v0y + b));
+						float slant = (italic ? fontSize * 0.1f * ((v1y - v0y) / fontSize) : 0f);
+						verts.Add(new Vector3(v0x + a - slant, v0y + b));
+						verts.Add(new Vector3(v0x + a + slant, v1y + b));
+						verts.Add(new Vector3(v1x + a + slant, v1y + b));
+						verts.Add(new Vector3(v1x + a - slant, v0y + b));
 					}
 				}
 
@@ -1433,12 +1462,14 @@ static public class NGUIText
 						}
 
 						float cx = (dash.u0.x + dash.u1.x) * 0.5f;
-						float cy = (dash.u0.y + dash.u1.y) * 0.5f;
 
-						uvs.Add(new Vector2(cx, cy));
-						uvs.Add(new Vector2(cx, cy));
-						uvs.Add(new Vector2(cx, cy));
-						uvs.Add(new Vector2(cx, cy));
+						for (int j = 0, jmax = (bold ? 4 : 1); j < jmax; ++j)
+						{
+							uvs.Add(new Vector2(cx, dash.u0.y));
+							uvs.Add(new Vector2(cx, dash.u1.y));
+							uvs.Add(new Vector2(cx, dash.u1.y));
+							uvs.Add(new Vector2(cx, dash.u0.y));
+						}
 					}
 
 					if (subscript && strikethrough)
@@ -1452,26 +1483,51 @@ static public class NGUIText
 						v1y = (-y + dash.v1.y);
 					}
 
-					verts.Add(new Vector3(prevX, v0y));
-					verts.Add(new Vector3(prevX, v1y));
-					verts.Add(new Vector3(x, v1y));
-					verts.Add(new Vector3(x, v0y));
-
-					Color tint2 = uc;
-
-					if (strikethrough)
+					if (bold)
 					{
-						tint2.r *= 0.5f;
-						tint2.g *= 0.5f;
-						tint2.b *= 0.5f;
-					}
-					tint2.a *= 0.75f;
-					Color32 uc2 = tint2;
+						for (int j = 0; j < 4; ++j)
+						{
+							float a = mBoldOffset[j * 2];
+							float b = mBoldOffset[j * 2 + 1];
 
-					cols.Add(uc2);
-					cols.Add(uc);
-					cols.Add(uc);
-					cols.Add(uc2);
+							verts.Add(new Vector3(prevX + a, v0y + b));
+							verts.Add(new Vector3(prevX + a, v1y + b));
+							verts.Add(new Vector3(x + a, v1y + b));
+							verts.Add(new Vector3(x + a, v0y + b));
+						}
+					}
+					else
+					{
+						verts.Add(new Vector3(prevX, v0y));
+						verts.Add(new Vector3(prevX, v1y));
+						verts.Add(new Vector3(x, v1y));
+						verts.Add(new Vector3(x, v0y));
+					}
+
+					if (gradient)
+					{
+						float min = sizePD + dash.v0.y / fontScale;
+						float max = sizePD + dash.v1.y / fontScale;
+
+						min /= sizePD;
+						max /= sizePD;
+
+						s_c0 = Color.Lerp(gb, gt, min);
+						s_c1 = Color.Lerp(gb, gt, max);
+
+						for (int j = 0, jmax = (bold ? 4 : 1); j < jmax; ++j)
+						{
+							cols.Add(s_c0);
+							cols.Add(s_c1);
+							cols.Add(s_c1);
+							cols.Add(s_c0);
+						}
+					}
+					else
+					{
+						for (int j = 0, jmax = (bold ? 16 : 4); j < jmax; ++j)
+							cols.Add(uc);
+					}
 				}
 			}
 		}
@@ -1494,7 +1550,7 @@ static public class NGUIText
 	/// Print character positions and indices into the specified buffer. Meant to be used with the "find closest vertex" calculations.
 	/// </summary>
 
-	static public void PrintCharacterPositions (string text, BetterList<Vector3> verts, BetterList<int> indices)
+	static public void PrintApproximateCharacterPositions (string text, BetterList<Vector3> verts, BetterList<int> indices)
 	{
 		if (string.IsNullOrEmpty(text)) text = " ";
 
@@ -1548,7 +1604,7 @@ static public class NGUIText
 				{
 					w += finalSpacingX;
 
-					if (Mathf.RoundToInt(x + w) > rectWidth)
+					if (Mathf.RoundToInt(x + w) > regionWidth)
 					{
 						if (x == 0f) return;
 
@@ -1572,7 +1628,7 @@ static public class NGUIText
 			{
 				float w = symbol.advance * fontScale + finalSpacingX;
 
-				if (Mathf.RoundToInt(x + w) > rectWidth)
+				if (Mathf.RoundToInt(x + w) > regionWidth)
 				{
 					if (x == 0f) return;
 
@@ -1590,6 +1646,122 @@ static public class NGUIText
 				verts.Add(new Vector3(x, -y - halfSize));
 				indices.Add(i + 1);
 				i += symbol.sequence.Length - 1;
+				prev = 0;
+			}
+		}
+
+		if (alignment != Alignment.Left && indexOffset < verts.size)
+			Align(verts, indexOffset, x - finalSpacingX);
+	}
+
+	/// <summary>
+	/// Print character positions and indices into the specified buffer.
+	/// This function's data is meant to be used for precise character selection, such as clicking on a link.
+	/// There are 2 vertices for every index: Bottom Left + Top Right.
+	/// </summary>
+
+	static public void PrintExactCharacterPositions (string text, BetterList<Vector3> verts, BetterList<int> indices)
+	{
+		if (string.IsNullOrEmpty(text)) text = " ";
+
+		Prepare(text);
+
+		float fullSize = fontSize * fontScale;
+		float x = 0f, y = 0f, maxX = 0f;
+		int textLength = text.Length, indexOffset = verts.size, ch = 0, prev = 0;
+
+		for (int i = 0; i < textLength; ++i)
+		{
+			ch = text[i];
+
+			if (ch == '\n')
+			{
+				if (x > maxX) maxX = x;
+
+				if (alignment != Alignment.Left)
+				{
+					Align(verts, indexOffset, x - finalSpacingX);
+					indexOffset = verts.size;
+				}
+
+				x = 0;
+				y += finalLineHeight;
+				prev = 0;
+				continue;
+			}
+			else if (ch < ' ')
+			{
+				prev = 0;
+				continue;
+			}
+
+			if (encoding && ParseSymbol(text, ref i))
+			{
+				--i;
+				continue;
+			}
+
+			// See if there is a symbol matching this text
+			BMSymbol symbol = useSymbols ? GetSymbol(text, i, textLength) : null;
+
+			if (symbol == null)
+			{
+				float gw = GetGlyphWidth(ch, prev);
+
+				if (gw != 0f)
+				{
+					float w = gw + finalSpacingX;
+
+					if (Mathf.RoundToInt(x + w) > regionWidth)
+					{
+						if (x == 0f) return;
+
+						if (alignment != Alignment.Left && indexOffset < verts.size)
+						{
+							Align(verts, indexOffset, x - finalSpacingX);
+							indexOffset = verts.size;
+						}
+
+						x = 0f;
+						y += finalLineHeight;
+						prev = 0;
+						--i;
+						continue;
+					}
+
+					indices.Add(i);
+					verts.Add(new Vector3(x, -y - fullSize));
+					verts.Add(new Vector3(x + w, -y));
+					prev = ch;
+					x += w;
+				}
+			}
+			else
+			{
+				float w = symbol.advance * fontScale + finalSpacingX;
+
+				if (Mathf.RoundToInt(x + w) > regionWidth)
+				{
+					if (x == 0f) return;
+
+					if (alignment != Alignment.Left && indexOffset < verts.size)
+					{
+						Align(verts, indexOffset, x - finalSpacingX);
+						indexOffset = verts.size;
+					}
+
+					x = 0f;
+					y += finalLineHeight;
+					prev = 0;
+					--i;
+					continue;
+				}
+
+				indices.Add(i);
+				verts.Add(new Vector3(x, -y - fullSize));
+				verts.Add(new Vector3(x + w, -y));
+				i += symbol.sequence.Length - 1;
+				x += w;
 				prev = 0;
 			}
 		}
@@ -1705,7 +1877,7 @@ static public class NGUIText
 				float v0y = -y - fs;
 				float v1y = -y;
 
-				if (Mathf.RoundToInt(v1x + finalSpacingX) > rectWidth)
+				if (Mathf.RoundToInt(v1x + finalSpacingX) > regionWidth)
 				{
 					if (x == 0f) return;
 

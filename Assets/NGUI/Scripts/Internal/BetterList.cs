@@ -8,7 +8,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 
 /// <summary>
-/// This improved version of the System.Collections.Generic.List that doesn't release the buffer on Clear(), resulting in better performance and less garbage collection.
+/// This improved version of the System.Collections.Generic.List that doesn't release the buffer on Clear(),
+/// resulting in better performance and less garbage collection.
+/// PRO: BetterList performs faster than List when you Add and Remove items (although slower if you remove from the beginning).
+/// CON: BetterList performs worse when sorting the list. If your operations involve sorting, use the standard List instead.
 /// </summary>
 
 public class BetterList<T>
@@ -67,7 +70,11 @@ public class BetterList<T>
 	/// Insert an item at the specified index, pushing the entries back.
 	/// </summary>
 
-	public void Insert (int index, T item) { mList.Insert(index, item); }
+	public void Insert (int index, T item)
+	{
+		if (index > -1 && index < mList.Count) mList.Insert(index, item);
+		else mList.Add(item);
+	}
 
 	/// <summary>
 	/// Returns 'true' if the specified item is within the list.

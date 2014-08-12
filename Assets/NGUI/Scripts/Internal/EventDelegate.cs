@@ -32,13 +32,13 @@ public class EventDelegate
 		public Object obj;
 		public string field;
 
-		[System.NonSerialized]
-		public System.Type expectedType = typeof(void);
-
 		public Parameter () { }
 		public Parameter (Object obj, string field) { this.obj = obj; this.field = field; }
 
 #if REFLECTION_SUPPORT
+		[System.NonSerialized]
+		public System.Type expectedType = typeof(void);
+
 		// Cached values
 		[System.NonSerialized] public bool cached = false;
 		[System.NonSerialized] public PropertyInfo propInfo;
@@ -72,7 +72,9 @@ public class EventDelegate
 				}
 				if (propInfo != null) return propInfo.GetValue(obj, null);
 				if (fieldInfo != null) return fieldInfo.GetValue(obj);
-				return obj;
+				if (obj != null) return obj;
+				if (expectedType.IsValueType) return null;
+				return System.Convert.ChangeType(null, expectedType);
 			}
 		}
 
@@ -88,9 +90,13 @@ public class EventDelegate
 				return obj.GetType();
 			}
 		}
-#else
+#else // REFLECTION_SUPPORT
 		public object value { get { return obj; } }
+ #if UNITY_EDITOR || !UNITY_FLASH
 		public System.Type type { get { return typeof(void); } }
+ #else
+		public System.Type type { get { return null; } }
+ #endif
 #endif
 	}
 
@@ -338,10 +344,9 @@ public class EventDelegate
 			if (mTarget != null && !string.IsNullOrEmpty(mMethodName))
 			{
 				System.Type type = mTarget.GetType();
-
+ #if NETFX_CORE
 				try
 				{
-#if NETFX_CORE
 					IEnumerable<MethodInfo> methods = type.GetRuntimeMethods();
 
 					foreach (MethodInfo mi in methods)
@@ -352,25 +357,33 @@ public class EventDelegate
 							break;
 						}
 					}
-#else
-					for (mMethod = null; ; )
-					{
-#if UNITY_WP8
-						mMethod = type.GetMethod(mMethodName);
-#else
-						mMethod = type.GetMethod(mMethodName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
-#endif
-						if (mMethod != null) break;
-						type = type.BaseType;
-						if (type == null) break;
-					}
-#endif
 				}
 				catch (System.Exception ex)
 				{
 					Debug.LogError("Failed to bind " + type + "." + mMethodName + "\n" +  ex.Message);
 					return;
 				}
+ #else // NETFX_CORE
+				for (mMethod = null; type != null; )
+				{
+					try
+					{
+						mMethod = type.GetMethod(mMethodName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+						if (mMethod != null) break;
+					}
+					catch (System.Exception) { }
+  #if UNITY_WP8
+					// For some odd reason Type.GetMethod(name, bindingFlags) doesn't seem to work on WP8...
+					try
+					{
+						mMethod = type.GetMethod(mMethodName);
+						if (mMethod != null) break;
+					}
+					catch (System.Exception) { }
+  #endif
+					type = type.BaseType;
+				}
+ #endif // NETFX_CORE
 
 				if (mMethod == null)
 				{
@@ -390,11 +403,11 @@ public class EventDelegate
 				if (info.Length == 0)
 				{
 					// No parameters means we can create a simple delegate for it, optimizing the call
-#if NETFX_CORE
+ #if NETFX_CORE
 					mCachedCallback = (Callback)mMethod.CreateDelegate(typeof(Callback), mTarget);
-#else
+ #else
 					mCachedCallback = (Callback)System.Delegate.CreateDelegate(typeof(Callback), mTarget, mMethodName);
-#endif
+ #endif
 
 					mArgs = null;
 					mParameters = null;
@@ -415,7 +428,7 @@ public class EventDelegate
 					mParameters[i].expectedType = info[i].ParameterType;
 			}
 		}
-#endif
+#endif // REFLECTION_SUPPORT
 	}
 
 	/// <summary>
@@ -626,13 +639,16 @@ public class EventDelegate
 	/// Assign a new event delegate.
 	/// </summary>
 
-	static public void Set (List<EventDelegate> list, Callback callback)
+	static public EventDelegate Set (List<EventDelegate> list, Callback callback)
 	{
 		if (list != null)
 		{
+			EventDelegate del = new EventDelegate(callback);
 			list.Clear();
-			list.Add(new EventDelegate(callback));
+			list.Add(del);
+			return del;
 		}
+		return null;
 	}
 
 	/// <summary>
@@ -652,13 +668,13 @@ public class EventDelegate
 	/// Append a new event delegate to the list.
 	/// </summary>
 
-	static public void Add (List<EventDelegate> list, Callback callback) { Add(list, callback, false); }
+	static public EventDelegate Add (List<EventDelegate> list, Callback callback) { return Add(list, callback, false); }
 
 	/// <summary>
 	/// Append a new event delegate to the list.
 	/// </summary>
 
-	static public void Add (List<EventDelegate> list, Callback callback, bool oneShot)
+	static public EventDelegate Add (List<EventDelegate> list, Callback callback, bool oneShot)
 	{
 		if (list != null)
 		{
@@ -666,17 +682,16 @@ public class EventDelegate
 			{
 				EventDelegate del = list[i];
 				if (del != null && del.Equals(callback))
-					return;
+					return del;
 			}
 
 			EventDelegate ed = new EventDelegate(callback);
 			ed.oneShot = oneShot;
 			list.Add(ed);
+			return ed;
 		}
-		else
-		{
-			Debug.LogWarning("Attempting to add a callback to a list that's null");
-		}
+		Debug.LogWarning("Attempting to add a callback to a list that's null");
+		return null;
 	}
 
 	/// <summary>
