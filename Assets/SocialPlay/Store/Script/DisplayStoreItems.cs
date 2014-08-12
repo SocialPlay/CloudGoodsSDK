@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 
-public class DisplayStoretItems : MonoBehaviour
+public class DisplayStoreItems : MonoBehaviour
 {
     public NGUIStoreLoader storeLoader;
 

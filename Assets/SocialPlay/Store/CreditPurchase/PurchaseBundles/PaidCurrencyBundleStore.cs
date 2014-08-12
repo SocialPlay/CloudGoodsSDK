@@ -125,20 +125,6 @@ public class PaidCurrencyBundleStore : MonoBehaviour
         Debug.Log("Received purchase response");
 
         isPurchaseRequest = false;
-
-        /*JToken dataToken = JToken.Parse(data);
-        JToken dataObj = JToken.Parse(dataToken.ToString());
-
-
-        if (dataObj["StatusCode"].ToString() == "1")
-        {
-            NGUITools.Broadcast(SocialPlayMessage.OnPurchaseSuccess.ToString());
-        }
-        else
-        {
-            NGUITools.Broadcast(SocialPlayMessage.OnPurchaseFail.ToString());
-        }*/
-
     }
 
     IPlatformPurchaser GetPlatformPurchaser()

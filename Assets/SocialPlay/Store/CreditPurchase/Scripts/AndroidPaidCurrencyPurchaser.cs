@@ -34,8 +34,6 @@ public class AndroidPaidCurrencyPurchaser : MonoBehaviour, IPlatformPurchaser
 		}
 	}
 
-
-
     public void Purchase(NGUIBundleItem bundleItem, int amount, string userID)
     {
         currentBundleID = int.Parse(bundleItem.BundleID);

@@ -166,7 +166,12 @@ public class SP : MonoBehaviour//, IServiceCalls
                 return tFree;
             else
             {
-                GetWorldCurrencyInfo(null);
+                if (isGettingWorldInfo == false)
+                {
+                    GetWorldCurrencyInfo(null);
+                    isGettingWorldInfo = true;
+                }
+         
                 return null;
             }
         }
@@ -179,7 +184,12 @@ public class SP : MonoBehaviour//, IServiceCalls
                 return tPaid;
             else
             {
-                GetWorldCurrencyInfo(null);
+                if (isGettingWorldInfo == false)
+                {
+                    GetWorldCurrencyInfo(null);
+                    isGettingWorldInfo = true;
+                }
+         
                 return null;
             }
         }
@@ -204,6 +214,7 @@ public class SP : MonoBehaviour//, IServiceCalls
 
     static IServiceObjectConverter mService;
 
+    static bool isGettingWorldInfo = false;
     static int mFree = 0;
     static int mPaid = 0;
     static Texture2D tFree;
