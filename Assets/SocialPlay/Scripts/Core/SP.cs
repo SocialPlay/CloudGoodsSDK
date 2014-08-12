@@ -47,7 +47,9 @@ public class SP : MonoBehaviour//, IServiceCalls
             if (string.IsNullOrEmpty(SocialPlaySettings.AppSecret))
             {
                 Debug.LogError("AppSecret has not been defined. Open Social Play Settings from the menu.");
-                onErrorEvent("AppSecret has not been defined. Open Social Play Settings from the menu.");
+
+                if(onErrorEvent != null)
+                    onErrorEvent("AppSecret has not been defined. Open Social Play Settings from the menu.");
             }
 
             return SocialPlaySettings.AppSecret;
@@ -64,8 +66,10 @@ public class SP : MonoBehaviour//, IServiceCalls
         {
             if (string.IsNullOrEmpty(SocialPlaySettings.AppID))
             {
-                Debug.LogError("AppID has not been defined. Open Cloud Goods Settings from the menu. Go To http://developer.socialplay.com");
-                onErrorEvent("AppID has not been defined. Open Cloud Goods Settings from the menu.");
+                Debug.LogError("AppID has not been defined. Open Social Play Settings from the menu.");
+
+                if (onErrorEvent != null)
+                    onErrorEvent("AppID has not been defined. Open Cloud Goods Settings from the menu.");
             }
 
             return SocialPlaySettings.AppID;
@@ -695,6 +699,9 @@ public class SP : MonoBehaviour//, IServiceCalls
 
     static public void GetWorldCurrencyInfo(Action<WorldCurrencyInfo> callback)
     {
+        if (string.IsNullOrEmpty(AppID))
+            return;
+
         string url = Url + "GetCurrencyInfo?AppID=" + AppID;
 
         WWW www = new WWW(url);
