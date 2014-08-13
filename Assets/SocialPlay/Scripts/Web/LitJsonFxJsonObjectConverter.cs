@@ -144,7 +144,7 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter
             }
         }
 
-        List<ItemData> items = ItemConversion.converter.ConvertItems(itemDataList);
+        List<ItemData> items = SP.itemDataConverter.ConvertItems(itemDataList);
 
         return items;
     }

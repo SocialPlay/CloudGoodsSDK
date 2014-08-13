@@ -10,8 +10,6 @@ public class ItemDropperParentingTest : MonoBehaviour {
 
 	void Start () {
 
-        ItemConversion.converter = new GameObjectItemDataConverter();
-
         ItemDataList droppedItems = new ItemDataList();
 
         for (int i = 0; i < 3; i++)
@@ -38,7 +36,7 @@ public class ItemDropperParentingTest : MonoBehaviour {
             droppedItems.Add(newItem);
         }
 
-        List<ItemData> items = ItemConversion.converter.ConvertItems(droppedItems);
+        List<ItemData> items = SP.itemDataConverter.ConvertItems(droppedItems);
         
         itemGetter.OnReceivedGeneratedItems(items);
 	}

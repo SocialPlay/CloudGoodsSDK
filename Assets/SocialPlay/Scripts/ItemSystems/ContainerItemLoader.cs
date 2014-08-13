@@ -38,7 +38,7 @@ public abstract class ContainerItemLoader : MonoBehaviour
 
     protected void RecivedItems(List<ItemData> receivedItems)
     {
-        if (ItemConversion.converter == null)
+        if (SP.itemDataConverter == null)
         {
             throw new Exception("Item conversion is not setup correctly!");
         }

@@ -23,11 +23,6 @@ public class EnviromentContainerLoader : MonoBehaviour
         LoadAllContainerItems();
     }
 
-    void Awake()
-    {
-        ItemConversion.converter = new GameObjectItemDataConverter();
-    }
-
     public void Start()
     {
         if (SP.isLogged)

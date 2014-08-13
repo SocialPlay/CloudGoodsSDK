@@ -36,6 +36,8 @@ public class SP : MonoBehaviour//, IServiceCalls
 
     static public IServiceObjectConverter serviceConverter { get { if (mService == null) mService = new LitJsonFxJsonObjectConverter(); return mService; } }
 
+    static public ItemDataConverter itemDataConverter { get { if (mDataConverter == null) mDataConverter = new GameObjectItemDataConverter(); return mDataConverter; } }
+
     /// <summary>
     /// Returns the AppSecret saved on settings.
     /// </summary>
@@ -217,6 +219,7 @@ public class SP : MonoBehaviour//, IServiceCalls
     #region Private Members
 
     static IServiceObjectConverter mService;
+    static ItemDataConverter mDataConverter;
 
     static bool isGettingWorldInfo = false;
     static int mFree = 0;

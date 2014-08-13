@@ -22,7 +22,7 @@ public class NewtonsoftJsonObjectConverter : IServiceObjectConverter {
 
         itemDataList = Newtonsoft.Json.JsonConvert.DeserializeObject<ItemDataList>(data);
 
-        List<ItemData> items = ItemConversion.converter.ConvertItems(itemDataList);
+        List<ItemData> items = SP.itemDataConverter.ConvertItems(itemDataList);
 
         return items;
     }
