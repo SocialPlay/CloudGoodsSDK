@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System;
 using Newtonsoft.Json;
 
-public class AndroidPaidCurrencyPurchaser : MonoBehaviour, IPlatformPurchaser
+public class AndroidPremiumCurrencyPurchaser : MonoBehaviour, IPlatformPurchaser
 {
     public int currentBundleID = 0;
 
@@ -54,7 +54,7 @@ public class AndroidPaidCurrencyPurchaser : MonoBehaviour, IPlatformPurchaser
 		{
 			using (AndroidJavaObject obj_Activity = cls.GetStatic<AndroidJavaObject>("currentActivity"))
 			{
-				string javaReturn = cls_StorePurchaser.CallStatic<string>("retrieveDebugValue");
+				string javaReturn = cls_StorePurchaser.Call<string>("retrieveDebugValue");
 			}
 		}
 

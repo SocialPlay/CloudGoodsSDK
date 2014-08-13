@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class NGUIPaidCurrencyDisplay: MonoBehaviour {
+public class NGUIPremiumCurrencyDisplay: MonoBehaviour {
 
     public UILabel PaidCurrencyLabel;
 	

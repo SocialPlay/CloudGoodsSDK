@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class ClosePaidCurrencyPurchase : MonoBehaviour
+public class ClosePremiumCurrencyPurchase : MonoBehaviour
 {
 
     public GameObject PaidCurrencyPurchasePanel;

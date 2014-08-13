@@ -8,7 +8,6 @@ public class LoadItemsForContainer : ContainerItemLoader
 
     public override void LoadItems()
     {
-		Debug.Log("LoadItems " + GetOwnerID() + " / " + SourceOwnerType.ToString() + " / " + sourceLocation);
         SP.GetOwnerItems(GetOwnerID(), SourceOwnerType.ToString(), sourceLocation, RecivedItems);
     }
 }

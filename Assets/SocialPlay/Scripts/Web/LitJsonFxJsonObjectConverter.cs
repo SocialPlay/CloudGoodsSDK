@@ -18,7 +18,6 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter
             return new List<ItemData>();
 
         JsonReader reader = new JsonReader(parsedString);
-        Debug.Log(parsedString);
         reader.Read();
 
         if (reader.Token.ToString() == "ArrayStart")
@@ -408,8 +407,6 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter
 
     public WorldCurrencyInfo ConvertToWorldCurrencyInfo(string dataString)
     {
-        Debug.Log(dataString);
-
         JsonData worldCurrencyInfoObj = LitJson.JsonMapper.ToObject(dataString);
 
         WorldCurrencyInfo worldCurrencyInfo = new WorldCurrencyInfo();

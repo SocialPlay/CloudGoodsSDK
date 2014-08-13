@@ -677,7 +677,6 @@ public class SP : MonoBehaviour//, IServiceCalls
 
         Get().StartCoroutine(Get().ServiceGetString(www, (string value) =>
         {
-            Debug.Log("GetFreeCurrencyBalance " + value);
             freeCurrency = System.Convert.ToInt16(value);
             if (callback != null) callback(freeCurrency);
         }));
@@ -691,7 +690,6 @@ public class SP : MonoBehaviour//, IServiceCalls
 
         Get().StartCoroutine(Get().ServiceGetString(www, (string value) =>
         {
-            Debug.Log("GetPaidCurrencyBalance " + value);
             paidCurrency = System.Convert.ToInt16(value);
             if (callback != null) callback(paidCurrency);
         }));
@@ -705,8 +703,6 @@ public class SP : MonoBehaviour//, IServiceCalls
         string url = Url + "GetCurrencyInfo?AppID=" + AppID;
 
         WWW www = new WWW(url);
-
-        Debug.Log("get currency info");
 
         Get().StartCoroutine(Get().ServiceGetString(www, (string value) =>
         {
@@ -1028,7 +1024,6 @@ public class SP : MonoBehaviour//, IServiceCalls
         // check for errors
         if (www.error == null)
         {
-            Debug.Log(www.text);
             callback(serviceConverter.ConvertToUserInfo(www.text));
         }
         else
@@ -1042,8 +1037,6 @@ public class SP : MonoBehaviour//, IServiceCalls
     IEnumerator ServiceCallGetListItemDatas(WWW www, Action<List<ItemData>> callback)
     {
         yield return www;
-
-        Debug.Log("Owner items: " + www.text);
 
         if (www.error == null)
             callback(serviceConverter.ConvertToItemDataList(www.text));

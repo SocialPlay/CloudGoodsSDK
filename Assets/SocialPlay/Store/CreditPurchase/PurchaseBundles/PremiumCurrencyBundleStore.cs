@@ -13,14 +13,14 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 
-public class PaidCurrencyBundleStore : MonoBehaviour
+public class PremiumCurrencyBundleStore : MonoBehaviour
 {
     //public PlatformPurchase platformPurchase = PlatformPurchase.Facebook;
     public GameObject Grid;
 
     IGridLoader gridLoader;
     IPlatformPurchaser platformPurchasor;
-    PaidCurrencyBundleIcon PaidCurrencyBundleIcon = new PaidCurrencyBundleIcon();
+    PremiumCurrencyBundleIcon PaidCurrencyBundleIcon = new PremiumCurrencyBundleIcon();
     bool isPurchaseRequest = false;
 
     public bool isInitialized = false;
