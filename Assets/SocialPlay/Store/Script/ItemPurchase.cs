@@ -108,13 +108,13 @@ public class ItemPurchase : MonoBehaviour
     {
         itemInfo = item;
 		itemNameDisplay.text = item.storeItem.itemName;
-		itemCreditCostDisplay.text = item.storeItem.paidCurrencyValue.ToString();
-        itemCoinCostDisplay.text = item.storeItem.freeCurrencyValue.ToString();
+		itemCreditCostDisplay.text = item.storeItem.premiumCurrencyValue.ToString();
+        itemCoinCostDisplay.text = item.storeItem.standardCurrencyValue.ToString();
         itemQuantityAmount.text = "1";
 
         itemTexture.mainTexture = item.gameObject.GetComponentInChildren<UITexture>().mainTexture;
 
-        ChangePurchaseButtonDisplay(item.storeItem.paidCurrencyValue, item.storeItem.freeCurrencyValue);
+        ChangePurchaseButtonDisplay(item.storeItem.premiumCurrencyValue, item.storeItem.standardCurrencyValue);
     }
 
     void PurchaseItemWithCredits(GameObject button)

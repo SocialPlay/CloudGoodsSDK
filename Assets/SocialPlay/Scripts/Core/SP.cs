@@ -131,10 +131,10 @@ public class SP : MonoBehaviour//, IServiceCalls
     static public List<ItemData> userItems { get; private set; }
 
     /// <summary>
-    /// Current amount of free currency. You can listen to the event OnFreeCurrency which will be triggered everytime this value changes.
+    /// Current amount of standard currency. You can listen to the event OnFreeCurrency which will be triggered everytime this value changes.
     /// </summary>
 
-    static public int freeCurrency
+    static public int standardCurrency
     {
         get { return mFree; }
         private set
@@ -148,10 +148,10 @@ public class SP : MonoBehaviour//, IServiceCalls
     }
 
     /// <summary>
-    /// Current amount of paid currency. You can listen to the event OnPaidCurrency which will be triggered everytime this value changes.
+    /// Current amount of premium currency. You can listen to the event OnPaidCurrency which will be triggered everytime this value changes.
     /// </summary>
 
-    static public int paidCurrency
+    static public int premiumCurrency
     {
         get { return mPaid; }
         private set
@@ -164,7 +164,7 @@ public class SP : MonoBehaviour//, IServiceCalls
         }
     }
 
-    static public Texture2D freeCurrencyTexture
+    static public Texture2D standardCurrencyTexture
     {
         get
         {
@@ -182,7 +182,7 @@ public class SP : MonoBehaviour//, IServiceCalls
             }
         }
     }
-    static public Texture2D paidCurrencyTexture
+    static public Texture2D premiumCurrencyTexture
     {
         get
         {
@@ -680,8 +680,8 @@ public class SP : MonoBehaviour//, IServiceCalls
 
         Get().StartCoroutine(Get().ServiceGetString(www, (string value) =>
         {
-            freeCurrency = System.Convert.ToInt16(value);
-            if (callback != null) callback(freeCurrency);
+            standardCurrency = System.Convert.ToInt16(value);
+            if (callback != null) callback(standardCurrency);
         }));
     }
 
@@ -693,8 +693,8 @@ public class SP : MonoBehaviour//, IServiceCalls
 
         Get().StartCoroutine(Get().ServiceGetString(www, (string value) =>
         {
-            paidCurrency = System.Convert.ToInt16(value);
-            if (callback != null) callback(paidCurrency);
+            premiumCurrency = System.Convert.ToInt16(value);
+            if (callback != null) callback(premiumCurrency);
         }));
     }
 
