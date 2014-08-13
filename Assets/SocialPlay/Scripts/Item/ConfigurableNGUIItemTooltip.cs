@@ -37,7 +37,7 @@ public class ConfigurableNGUIItemTooltip : MonoBehaviour, ITooltipSetup
                     {
                         formated += "[" + NGUIText.EncodeColor(Color.white) + "]";
                     }
-                    formated += item.name;
+                    formated += item.itemName;
                     break;
                 case DisaplyOption.stats:
                     foreach (KeyValuePair<string, float> pair in item.stats)

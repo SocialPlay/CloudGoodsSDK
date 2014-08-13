@@ -39,9 +39,6 @@ public class ItemGetter : MonoBehaviour
     {
         transform.parent = null;
 
-        //todo why are we passing in a new guid for owner each call?
-
-        //todo 2nd parameter that sets owner type, needs to be an enum.
         string andTagsString = "";
         if (AndTags.Count > 0)
         {
@@ -53,8 +50,6 @@ public class ItemGetter : MonoBehaviour
             andTagsString = andTagsString.Remove(andTagsString.Length - 1);
 
         }
-
-        Debug.Log("andtags: " + andTagsString);
 
         SP.GenerateItemsAtLocation("Session", 0, minEnergy, MaxEnergy, OnReceivedGeneratedItems, andTagsString);
     }
