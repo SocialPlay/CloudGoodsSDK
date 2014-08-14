@@ -188,8 +188,8 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter
             storeItemInfo.ID = int.Parse(storeItemsJsonArray[i]["ID"].ToString());
             storeItemInfo.itemName = storeItemsJsonArray[i]["Name"].ToString();
             storeItemInfo.itemID = int.Parse(storeItemsJsonArray[i]["ItemID"].ToString());
-            storeItemInfo.paidCurrencyValue = int.Parse(storeItemsJsonArray[i]["CreditValue"].ToString());
-            storeItemInfo.freeCurrencyValue = int.Parse(storeItemsJsonArray[i]["CoinValue"].ToString());
+            storeItemInfo.premiumCurrencyValue = int.Parse(storeItemsJsonArray[i]["CreditValue"].ToString());
+            storeItemInfo.standardCurrencyValue = int.Parse(storeItemsJsonArray[i]["CoinValue"].ToString());
 
             JsonData storeItemDetailArray = LitJson.JsonMapper.ToObject(storeItemsJsonArray[i]["Detail"].ToString());
 

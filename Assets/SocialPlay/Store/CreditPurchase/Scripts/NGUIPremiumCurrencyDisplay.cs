@@ -8,6 +8,6 @@ public class NGUIPremiumCurrencyDisplay: MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         if (PaidCurrencyLabel != null)
-            PaidCurrencyLabel.text = SP.paidCurrency.ToString();
+            PaidCurrencyLabel.text = SP.premiumCurrency.ToString();
 	}
 }

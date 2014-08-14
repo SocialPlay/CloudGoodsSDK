@@ -57,8 +57,8 @@ public class NewtonsoftJsonObjectConverter : IServiceObjectConverter {
             storeItemInfo.ID = int.Parse(storeItemsJsonArray[i]["ID"].ToString());
             storeItemInfo.itemName = storeItemsJsonArray[i]["Name"].ToString();
             storeItemInfo.itemID = int.Parse(storeItemsJsonArray[i]["ItemID"].ToString());
-            storeItemInfo.paidCurrencyValue = int.Parse(storeItemsJsonArray[i]["CreditValue"].ToString());
-            storeItemInfo.freeCurrencyValue = int.Parse(storeItemsJsonArray[i]["CoinValue"].ToString());
+            storeItemInfo.premiumCurrencyValue = int.Parse(storeItemsJsonArray[i]["CreditValue"].ToString());
+            storeItemInfo.standardCurrencyValue = int.Parse(storeItemsJsonArray[i]["CoinValue"].ToString());
 
             JArray storeItemDetailArray = JArray.Parse(storeItemsJsonArray[i]["Detail"].ToString());
 

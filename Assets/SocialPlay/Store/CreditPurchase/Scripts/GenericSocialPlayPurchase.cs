@@ -17,7 +17,7 @@ public class GenericSocialPlayPurchase : IPlatformPurchaser
     {
         //if (GatherGameInfo.allInfo.platformID == 4)
         //{
-        //         //MessagePop.Instance.PopMessage("Unable to purchase items with paid currency during beta");
+        //         //MessagePop.Instance.PopMessage("Unable to purchase items with premium currency during beta");
         //    return;
         //}
 

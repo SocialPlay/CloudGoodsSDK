@@ -13,12 +13,12 @@ public class UITextureCurrency : MonoBehaviour
         if (type == CurrencyType.Coins)
         {
             SP.OnFreeCurrencyTexture += OnFreeCurrency;
-            mTexture.mainTexture = SP.freeCurrencyTexture;            
+            mTexture.mainTexture = SP.standardCurrencyTexture;            
         }
         else if (type == CurrencyType.Credits)
         {
             SP.OnPaidCurrencyTexture += OnPaidCurrency;
-            mTexture.mainTexture = SP.paidCurrencyTexture;
+            mTexture.mainTexture = SP.premiumCurrencyTexture;
         }
 
         if(mTexture.mainTexture != null) TweenAlpha.Begin(mTexture.cachedGameObject, 0.3f, 1).from = 0;

@@ -146,8 +146,8 @@ public class StoreItem
     public string behaviours;
     public List<string> tags;
     public int itemID = 0;
-    public int paidCurrencyValue = 0;
-    public int freeCurrencyValue = 0;
+    public int premiumCurrencyValue = 0;
+    public int standardCurrencyValue = 0;
     public string imageURL = "";
 }
 

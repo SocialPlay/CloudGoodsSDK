@@ -131,10 +131,10 @@ public class SP : MonoBehaviour//, IServiceCalls
     static public List<ItemData> userItems { get; private set; }
 
     /// <summary>
-    /// Current amount of free currency. You can listen to the event OnFreeCurrency which will be triggered everytime this value changes.
+    /// Current amount of standard currency. You can listen to the event OnFreeCurrency which will be triggered everytime this value changes.
     /// </summary>
 
-    static public int freeCurrency
+    static public int standardCurrency
     {
         get { return mFree; }
         private set
@@ -148,10 +148,10 @@ public class SP : MonoBehaviour//, IServiceCalls
     }
 
     /// <summary>
-    /// Current amount of paid currency. You can listen to the event OnPaidCurrency which will be triggered everytime this value changes.
+    /// Current amount of premium currency. You can listen to the event OnPaidCurrency which will be triggered everytime this value changes.
     /// </summary>
 
-    static public int paidCurrency
+    static public int premiumCurrency
     {
         get { return mPaid; }
         private set
@@ -164,7 +164,7 @@ public class SP : MonoBehaviour//, IServiceCalls
         }
     }
 
-    static public Texture2D freeCurrencyTexture
+    static public Texture2D standardCurrencyTexture
     {
         get
         {
@@ -182,7 +182,7 @@ public class SP : MonoBehaviour//, IServiceCalls
             }
         }
     }
-    static public Texture2D paidCurrencyTexture
+    static public Texture2D premiumCurrencyTexture
     {
         get
         {
@@ -273,8 +273,6 @@ public class SP : MonoBehaviour//, IServiceCalls
     static public void GenerateItemsAtLocation(string OwnerType, int Location, int MinimumEnergyOfItem, int TotalEnergyToGenerate, Action<List<ItemData>> callback, string ANDTags = "", string ORTags = "")
     {
         string url = string.Format("{0}GenerateItemsAtLocation?OwnerID={1}&OwnerType={2}&Location={3}&AppID={4}&MinimumEnergyOfItem={5}&TotalEnergyToGenerate={6}&ANDTags={7}&ORTags={8}", Url, user.sessionID, OwnerType, Location, GuidAppID, MinimumEnergyOfItem, TotalEnergyToGenerate, ANDTags, ORTags);
-
-        Debug.Log("GenerateItemsAtLocation " + OwnerType);
 
         WWW www = new WWW(url);
         Get().StartCoroutine(Get().ServiceCallGetListItemDatas(www, callback));
@@ -413,8 +411,6 @@ public class SP : MonoBehaviour//, IServiceCalls
 
     static public void MoveItemStack(Guid StackToMove, int MoveAmount, string DestinationOwnerID, string DestinationOwnerType, int DestinationLocation, Action<Guid> callback)
     {
-        Debug.Log(StackToMove.ToString());
-
         string url = string.Format("{0}MoveItemStack?StackToMove={1}&MoveAmount={2}&DestinationOwnerID={3}&DestinationOwnerType={4}&AppID={5}&DestinationLocation={6}", Url, StackToMove, MoveAmount, DestinationOwnerID, DestinationOwnerType, GuidAppID, DestinationLocation);
         WWW www = new WWW(url);
 
@@ -680,8 +676,8 @@ public class SP : MonoBehaviour//, IServiceCalls
 
         Get().StartCoroutine(Get().ServiceGetString(www, (string value) =>
         {
-            freeCurrency = System.Convert.ToInt32(value);
-            if (callback != null) callback(freeCurrency);
+            standardCurrency = System.Convert.ToInt32(value);
+            if (callback != null) callback(standardCurrency);
         }));
     }
 
@@ -693,8 +689,8 @@ public class SP : MonoBehaviour//, IServiceCalls
 
         Get().StartCoroutine(Get().ServiceGetString(www, (string value) =>
         {
-            paidCurrency = System.Convert.ToInt32(value);
-            if (callback != null) callback(paidCurrency);
+            premiumCurrency = System.Convert.ToInt32(value);
+            if (callback != null) callback(premiumCurrency);
         }));
     }
 

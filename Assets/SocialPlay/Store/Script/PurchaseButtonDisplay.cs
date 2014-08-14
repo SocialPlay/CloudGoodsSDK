@@ -45,14 +45,14 @@ public class PurchaseButtonDisplay : MonoBehaviour
         }
         else if (currencyType == CurrencyType.Coins)
         {
-            if (itemCost <= SP.freeCurrency)
+            if (itemCost <= SP.standardCurrency)
                 SetActive();
             else
                 SetInactive();
         }
         else if (currencyType == CurrencyType.Credits) 
         {
-            if (itemCost <= SP.paidCurrency)
+            if (itemCost <= SP.premiumCurrency)
                 SetActive();
             else
                 SetInactive();
