@@ -164,7 +164,7 @@ public class SocialPlaySettingsInspector : Editor
             GUILayout.Label("Go To http://developer.socialplay.com to get your AppID and AppSecret", "BoldLabel");
         }
 
-        Texture2D defaultTexture = EditorGUILayout.ObjectField("Default Texture", mSettings.defaultTexture, typeof(Texture2D)) as Texture2D;
+        Texture2D defaultTexture = EditorGUILayout.ObjectField("Default Texture", mSettings.defaultTexture, typeof(Texture2D), false) as Texture2D;
 
         GUILayout.Label("Android", "BoldLabel");
         string androidKey = EditorGUILayout.TextField("Key", mSettings.androidKey);

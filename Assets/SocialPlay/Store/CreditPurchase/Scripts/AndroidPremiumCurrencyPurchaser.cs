@@ -54,7 +54,7 @@ public class AndroidPremiumCurrencyPurchaser : MonoBehaviour, IPlatformPurchaser
 		{
 			using (AndroidJavaObject obj_Activity = cls.GetStatic<AndroidJavaObject>("currentActivity"))
 			{
-				string javaReturn = cls_StorePurchaser.Call<string>("retrieveDebugValue");
+				cls_StorePurchaser.Call<string>("retrieveDebugValue");
 			}
 		}
 

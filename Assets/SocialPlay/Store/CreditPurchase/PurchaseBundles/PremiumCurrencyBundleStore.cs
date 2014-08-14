@@ -20,7 +20,7 @@ public class PremiumCurrencyBundleStore : MonoBehaviour
 
     IGridLoader gridLoader;
     IPlatformPurchaser platformPurchasor;
-    PremiumCurrencyBundleIcon PaidCurrencyBundleIcon = new PremiumCurrencyBundleIcon();
+    //PremiumCurrencyBundleIcon PaidCurrencyBundleIcon = new PremiumCurrencyBundleIcon();
     bool isPurchaseRequest = false;
 
     public bool isInitialized = false;
