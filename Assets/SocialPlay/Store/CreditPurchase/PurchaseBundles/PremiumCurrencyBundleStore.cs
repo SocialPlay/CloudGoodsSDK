@@ -48,12 +48,12 @@ public class PremiumCurrencyBundleStore : MonoBehaviour
 #endif
 
 #if UNITY_ANDROID && !UNITY_EDITOR
-            platformPurchasor = gameObject.AddComponent<AndroidPaidCurrencyPurchaser>();
+            platformPurchasor = gameObject.AddComponent<AndroidPremiumCurrencyPurchaser>();
             currentplatform = 3;
 #endif
 
 #if UNITY_IPHONE && !UNITY_EDITOR
-            platformPurchasor = gameObject.AddComponent<iOSPaidCurrencyPurchaser>();
+            platformPurchasor = gameObject.AddComponent<iOSPremiumCurrencyPurchaser>();
             currentplatform = 4;
 #endif
 

@@ -28,8 +28,6 @@ public class AndroidPremiumCurrencyPurchaser : MonoBehaviour, IPlatformPurchaser
 			{
                 cls.CallStatic("UnitySendMessage", "CreditStore", "RecieveFromJava", "whoowhoo"); 
 				cls_StorePurchaser.CallStatic("initStore", obj_Activity, SocialPlaySettings.AndroidKey);
-
-                outputDebugStringValue();
 			}
 		}
 	}
@@ -43,18 +41,6 @@ public class AndroidPremiumCurrencyPurchaser : MonoBehaviour, IPlatformPurchaser
 			using (AndroidJavaObject obj_Activity = cls.GetStatic<AndroidJavaObject>("currentActivity"))
 			{
 				cls_StorePurchaser.CallStatic("makePurchase", obj_Activity, bundleItem.ProductID);
-			}
-		}
-
-    }
-
-    void outputDebugStringValue()
-    {
-		using (AndroidJavaClass cls = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
-		{
-			using (AndroidJavaObject obj_Activity = cls.GetStatic<AndroidJavaObject>("currentActivity"))
-			{
-				string javaReturn = cls_StorePurchaser.Call<string>("retrieveDebugValue");
 			}
 		}
 

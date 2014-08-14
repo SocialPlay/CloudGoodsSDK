@@ -17,8 +17,6 @@ public class GameObjectItemDataConverter : ItemDataConverter
             GameObject go = new GameObject();
             ItemData itemData = go.AddComponent<ItemData>();
 
-            Debug.Log(item.Name);
-
             go.name = item.Name;
             itemData.baseEnergy = item.BaseItemEnergy;
 
