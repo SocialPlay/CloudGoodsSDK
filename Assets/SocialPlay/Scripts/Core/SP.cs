@@ -676,7 +676,7 @@ public class SP : MonoBehaviour//, IServiceCalls
 
         Get().StartCoroutine(Get().ServiceGetString(www, (string value) =>
         {
-            standardCurrency = System.Convert.ToInt16(value);
+            standardCurrency = System.Convert.ToInt32(value);
             if (callback != null) callback(standardCurrency);
         }));
     }
@@ -689,7 +689,7 @@ public class SP : MonoBehaviour//, IServiceCalls
 
         Get().StartCoroutine(Get().ServiceGetString(www, (string value) =>
         {
-            premiumCurrency = System.Convert.ToInt16(value);
+            premiumCurrency = System.Convert.ToInt32(value);
             if (callback != null) callback(premiumCurrency);
         }));
     }
