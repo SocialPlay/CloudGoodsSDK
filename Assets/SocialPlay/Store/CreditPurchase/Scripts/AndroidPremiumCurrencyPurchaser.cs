@@ -10,13 +10,13 @@ public class AndroidPremiumCurrencyPurchaser : MonoBehaviour, IPlatformPurchaser
 	public AndroidJavaObject cls_StorePurchaser;
 
     public event Action<string> RecievedPurchaseResponse;
+    public event Action<string> ReceivedConsumeResponse;
 
     void Start()
     {
         gameObject.name = "AndroidCreditPurchaser";
         initStore();
     }
-
 
 	void initStore()
 	{
@@ -32,7 +32,6 @@ public class AndroidPremiumCurrencyPurchaser : MonoBehaviour, IPlatformPurchaser
 		{
 			using (AndroidJavaObject obj_Activity = cls.GetStatic<AndroidJavaObject>("currentActivity"))
 			{
-                cls.CallStatic("UnitySendMessage", "CreditStore", "RecieveFromJava", "whoowhoo"); 
 				cls_StorePurchaser.CallStatic("initStore", obj_Activity, SocialPlaySettings.AndroidKey);
 			}
 		}
@@ -56,6 +55,11 @@ public class AndroidPremiumCurrencyPurchaser : MonoBehaviour, IPlatformPurchaser
 			}
 		}
 
+    }
+
+    void OnErrorCodeFromAndroidPurchase(string responseCode)
+    {
+        OnReceivedPurchaseResponse(responseCode);
     }
 
     void RecieveFromJava(string message)

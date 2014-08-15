@@ -124,24 +124,9 @@ public class PremiumCurrencyBundleStore : MonoBehaviour
 
     void OnRecievedPurchaseResponse(string data)
     {
-        Debug.Log("Received purchase response");
+        Debug.Log("Received purchase response:  " + data);
 
         isPurchaseRequest = false;
     }
-
-    /*IPlatformPurchaser GetPlatformPurchaser()
-    {
-        switch (platformPurchase)
-        {
-            case PlatformPurchase.Android:
-                return gameObject.AddComponent<AndroidPaidCurrencyPurchaser>();
-            case PlatformPurchase.Facebook:
-                return gameObject.AddComponent<FaceBookPurchaser>();
-            case PlatformPurchase.IOS:
-                return gameObject.AddComponent<iOSPaidCurrencyPurchaser>();
-            default:
-                return null;
-        }
-    }*/
 
 }
