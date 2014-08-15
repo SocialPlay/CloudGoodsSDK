@@ -20,6 +20,12 @@ public class AndroidPremiumCurrencyPurchaser : MonoBehaviour, IPlatformPurchaser
 
 	void initStore()
 	{
+        if (string.IsNullOrEmpty(SocialPlaySettings.AndroidKey))
+        {
+            Debug.LogError("No Android key has been set, cannot initialize premium bundle store");
+            return;
+        }
+
 		cls_StorePurchaser = new AndroidJavaClass("com.storetest.StorePurchaser");
 
 		using (AndroidJavaClass cls = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
@@ -34,6 +40,12 @@ public class AndroidPremiumCurrencyPurchaser : MonoBehaviour, IPlatformPurchaser
 
     public void Purchase(NGUIBundleItem bundleItem, int amount, string userID)
     {
+        if (string.IsNullOrEmpty(SocialPlaySettings.AndroidKey))
+        {
+            Debug.LogError("No Android key has been set, cannot purchase from premium store");
+            return;
+        }
+
         currentBundleID = int.Parse(bundleItem.BundleID);
 
 		using (AndroidJavaClass cls = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
