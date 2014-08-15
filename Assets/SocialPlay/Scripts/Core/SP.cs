@@ -916,7 +916,7 @@ public class SP : MonoBehaviour//, IServiceCalls
 
         Get().StartCoroutine(Get().ServiceGetString(www, (x) =>
         {
-            SecureCall(DecryptString(AppSecret, x.Replace("\\", "")), "", items, callback);
+            SecureCall(DecryptString(AppSecret, x.Replace("\\", "")), ownerID, items, callback);
         }));
     }
 
@@ -947,7 +947,7 @@ public class SP : MonoBehaviour//, IServiceCalls
     {
         GiveOwnerItemWebserviceRequest request = new GiveOwnerItemWebserviceRequest();
         request.listOfItems = items;
-        request.ownerID = "ef595214-369f-4313-9ac7-b0036e5ac25c";
+        request.ownerID = ownerID;
         request.appID = AppID;
         request.OwnerType = WebModels.OwnerTypes.User;
 
@@ -964,6 +964,8 @@ public class SP : MonoBehaviour//, IServiceCalls
         string url = Url + "SecureAction?appID=" + AppID + "&payload=" + WWW.EscapeURL(EncryptStringUnity(securePayloadString));
 
         WWW www = new WWW(url);
+
+
 
         Get().StartCoroutine(Get().ServiceGetString(www, callback));
     }
