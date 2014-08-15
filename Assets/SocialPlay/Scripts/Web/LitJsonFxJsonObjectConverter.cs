@@ -165,12 +165,13 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter
 
     public List<StoreItem> ConvertToStoreItems(string dataString)
     {
+        Debug.Log("Store call: " + dataString);
+
         string storeString = ParseString(dataString);
 
         List<StoreItem> storeItems = new List<StoreItem>();
 
         JsonData storeItemsJsonArray = LitJson.JsonMapper.ToObject(storeString);
-
 
         for (int i = 0; i < storeItemsJsonArray.Count; i++)
         {
@@ -185,6 +186,8 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter
                 }
             }
             StoreItem storeItemInfo = new StoreItem();
+            storeItemInfo.addedDate = DateTime.Parse(storeItemsJsonArray[i]["AddDate"].ToString());
+            Debug.Log("Added date: " + storeItemInfo.addedDate.ToString());
             storeItemInfo.ID = int.Parse(storeItemsJsonArray[i]["ID"].ToString());
             storeItemInfo.itemName = storeItemsJsonArray[i]["Name"].ToString();
             storeItemInfo.itemID = int.Parse(storeItemsJsonArray[i]["ItemID"].ToString());
