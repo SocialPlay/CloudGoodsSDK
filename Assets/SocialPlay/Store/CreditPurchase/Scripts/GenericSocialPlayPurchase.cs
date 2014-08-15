@@ -8,6 +8,7 @@ public class GenericSocialPlayPurchase : IPlatformPurchaser
     public event Action<GameObject> OKCallBack;
     public event Action<GameObject> CancelCallBack;
     public event Action<string> RecievedPurchaseResponse;
+    public event Action<string> OnPurchaseErrorEvent;
 
     string currentitemID = "";
     int currentAmount = 0;

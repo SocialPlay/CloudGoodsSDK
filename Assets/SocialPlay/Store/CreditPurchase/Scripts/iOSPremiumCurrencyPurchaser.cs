@@ -8,6 +8,8 @@ public class iOSPPremiumCurrencyPurchaser : MonoBehaviour, IPlatformPurchaser
 {
 
 	public event Action<string> RecievedPurchaseResponse;
+    public event Action<string> OnPurchaseErrorEvent;
+
 	public int currentBundleID = 0;
 
 	void Start()

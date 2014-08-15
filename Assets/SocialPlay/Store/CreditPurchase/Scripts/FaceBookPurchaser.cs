@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 public class FaceBookPurchaser : MonoBehaviour, IPlatformPurchaser
 {
     public event Action<string> RecievedPurchaseResponse;
+    public event Action<string> OnPurchaseErrorEvent;
     public int currentBundleID = 0;
 
     public void Purchase(NGUIBundleItem bundleItem, int amount, string userID)

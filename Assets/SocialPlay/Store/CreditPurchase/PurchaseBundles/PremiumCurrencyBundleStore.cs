@@ -58,6 +58,7 @@ public class PremiumCurrencyBundleStore : MonoBehaviour
 #endif
 
             platformPurchasor.RecievedPurchaseResponse += OnRecievedPurchaseResponse;
+            platformPurchasor.OnPurchaseErrorEvent += platformPurchasor_OnPurchaseErrorEvent;
             SP.GetCreditBundles(currentplatform, OnPurchaseBundlesRecieved);
 
             isInitialized = true;
@@ -127,6 +128,11 @@ public class PremiumCurrencyBundleStore : MonoBehaviour
         Debug.Log("Received purchase response:  " + data);
 
         isPurchaseRequest = false;
+    }
+
+    void platformPurchasor_OnPurchaseErrorEvent(string obj)
+    {
+        Debug.LogError("Purchase Platform Error: " + obj);
     }
 
 }

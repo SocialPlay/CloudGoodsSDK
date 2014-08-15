@@ -10,7 +10,7 @@ public class AndroidPremiumCurrencyPurchaser : MonoBehaviour, IPlatformPurchaser
 	public AndroidJavaObject cls_StorePurchaser;
 
     public event Action<string> RecievedPurchaseResponse;
-    public event Action<string> ReceivedConsumeResponse;
+    public event Action<string> OnPurchaseErrorEvent;
 
     void Start()
     {
@@ -59,7 +59,8 @@ public class AndroidPremiumCurrencyPurchaser : MonoBehaviour, IPlatformPurchaser
 
     void OnErrorCodeFromAndroidPurchase(string responseCode)
     {
-        OnReceivedPurchaseResponse(responseCode);
+        if (OnPurchaseErrorEvent != null)
+            OnPurchaseErrorEvent(responseCode);
     }
 
     void RecieveFromJava(string message)

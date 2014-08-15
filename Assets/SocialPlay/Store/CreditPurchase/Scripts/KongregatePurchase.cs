@@ -12,6 +12,7 @@ using UnityEngine;
 public class KongregatePurchase : IPlatformPurchaser
 {
     public event Action<string> RecievedPurchaseResponse;
+    public event Action<string> OnPurchaseErrorEvent;
 
     public void Purchase(NGUIBundleItem bundleItem, int amount, string appID)
     {
