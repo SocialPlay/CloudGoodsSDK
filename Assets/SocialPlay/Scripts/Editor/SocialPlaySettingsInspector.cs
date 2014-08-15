@@ -48,7 +48,7 @@ public class SocialPlaySettingsInspector : Editor
 
         if (mSettings == null)
         {
-            string path = SocialPlaySettings.mainPath + "Resources/";
+            string path = "Assets/Resources/";
             if (!System.IO.Directory.Exists(path))
             {
                 System.IO.Directory.CreateDirectory(path);
@@ -161,7 +161,7 @@ public class SocialPlaySettingsInspector : Editor
 
         if (string.IsNullOrEmpty(appId) || string.IsNullOrEmpty(appSecret))
         {
-            GUILayout.Label("Go To http://developer.socialplay.com to get your AppID and AppSecret", "BoldLabel");
+            EditorGUILayout.HelpBox("Go To http://developer.socialplay.com to get your AppID and AppSecret", MessageType.Warning);
         }
 
         Texture2D defaultTexture = EditorGUILayout.ObjectField("Default Texture", mSettings.defaultTexture, typeof(Texture2D), false) as Texture2D;
