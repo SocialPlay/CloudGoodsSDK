@@ -33,6 +33,12 @@ public class NGUIDragDropItem : MonoBehaviour
         Debug.Log(col);
         ItemContainer container = (col != null) ? col.gameObject.GetComponent<ItemContainer>() : null;
         ReturnToPreviousPossition();
+
+        if (container == null)
+        {
+            container = (col != null) ? col.transform.parent.parent.gameObject.GetComponent<ItemContainer>() : null;
+        }
+
         if (container != null)
         {
             if (myItemData.ownerContainer != container)
