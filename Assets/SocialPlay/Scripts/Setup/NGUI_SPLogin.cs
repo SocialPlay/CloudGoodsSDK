@@ -259,7 +259,7 @@ public class NGUI_SPLogin : MonoBehaviour
 
     void OnSentPassword(UserResponse userResponse)
     {
-        confirmationStatus.text = "Password has been sent";
+        confirmationStatus.text = "Password reset has been sent";
     }
 
     public void ResendVerificationEmail()
