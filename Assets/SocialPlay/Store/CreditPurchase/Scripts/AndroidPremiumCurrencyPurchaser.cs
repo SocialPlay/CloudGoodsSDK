@@ -51,6 +51,7 @@ public class AndroidPremiumCurrencyPurchaser : MonoBehaviour, IPlatformPurchaser
 		{
 			using (AndroidJavaObject obj_Activity = cls.GetStatic<AndroidJavaObject>("currentActivity"))
 			{
+                Debug.Log("Attempting to purchase Bundle Item: " + bundleItem.ProductID);
 				cls_StorePurchaser.CallStatic("makePurchase", obj_Activity, bundleItem.ProductID);
 			}
 		}
