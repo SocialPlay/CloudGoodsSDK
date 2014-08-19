@@ -132,7 +132,7 @@ public class PremiumCurrencyBundleStore : MonoBehaviour
 
     void platformPurchasor_OnPurchaseErrorEvent(string obj)
     {
-        Debug.LogError("Purchase Platform Error: " + obj);
+        Debug.Log("Purchase Platform Error: " + obj);
     }
 
 }
