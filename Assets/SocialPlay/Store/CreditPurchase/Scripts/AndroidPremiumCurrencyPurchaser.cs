@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 public class AndroidPremiumCurrencyPurchaser : MonoBehaviour, IPlatformPurchaser
 {
     public int currentBundleID = 0;
+    public string currentProductID = "";
 
 	public AndroidJavaObject cls_StorePurchaser;
 
@@ -46,6 +47,7 @@ public class AndroidPremiumCurrencyPurchaser : MonoBehaviour, IPlatformPurchaser
         }
 
         currentBundleID = int.Parse(bundleItem.BundleID);
+        currentProductID = bundleItem.ProductID;
 
 		using (AndroidJavaClass cls = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
 		{
@@ -62,6 +64,22 @@ public class AndroidPremiumCurrencyPurchaser : MonoBehaviour, IPlatformPurchaser
     {
         if (OnPurchaseErrorEvent != null)
             OnPurchaseErrorEvent(responseCode);
+
+        if (responseCode.Remove(1,responseCode.Length - 1) == "7")
+        {
+            ConsumeAlreadyOwneditem();
+        }
+    }
+
+    private void ConsumeAlreadyOwneditem()
+    {
+        using (AndroidJavaClass cls = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
+        {
+            using (AndroidJavaObject obj_Activity = cls.GetStatic<AndroidJavaObject>("currentActivity"))
+            {
+                cls_StorePurchaser.CallStatic("consumeitem", obj_Activity, currentProductID);
+            }
+        }
     }
 
     void RecieveFromJava(string message)
