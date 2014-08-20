@@ -88,7 +88,9 @@ public class PremiumCurrencyBundleStore : MonoBehaviour
         nguiItem.Cost = item.Cost.ToString();
 
         if (item.CreditPlatformIDs.ContainsKey("Android_Product_ID"))
+        {
             nguiItem.ProductID = item.CreditPlatformIDs["Android_Product_ID"];
+        }
 
         if (item.CreditPlatformIDs.ContainsKey("IOS_Product_ID"))
             nguiItem.ProductID = item.CreditPlatformIDs["IOS_Product_ID"].ToString();
