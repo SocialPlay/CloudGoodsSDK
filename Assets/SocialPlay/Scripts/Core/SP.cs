@@ -50,7 +50,7 @@ public class SP : MonoBehaviour//, IServiceCalls
             {
                 Debug.LogError("AppSecret has not been defined. Open Social Play Settings from the menu.");
 
-                if(onErrorEvent != null)
+                if (onErrorEvent != null)
                     onErrorEvent("AppSecret has not been defined. Open Social Play Settings from the menu.");
             }
 
@@ -177,7 +177,7 @@ public class SP : MonoBehaviour//, IServiceCalls
                     GetWorldCurrencyInfo(null);
                     isGettingWorldInfo = true;
                 }
-         
+
                 return null;
             }
         }
@@ -195,7 +195,7 @@ public class SP : MonoBehaviour//, IServiceCalls
                     GetWorldCurrencyInfo(null);
                     isGettingWorldInfo = true;
                 }
-         
+
                 return null;
             }
         }
@@ -872,7 +872,10 @@ public class SP : MonoBehaviour//, IServiceCalls
 
         Get().StartCoroutine(Get().ServiceGetString(www, (string message) =>
         {
-            if (message == "NSF") NGUITools.Broadcast(SocialPlayMessage.OnNotEnoughFunds.ToString());
+            JsonData response = LitJson.JsonMapper.ToObject(message);
+
+            if (response != null && (int)response["StatusCode"] == 2) NGUITools.Broadcast(SocialPlayMessage.OnPurchaseFail.ToString());
+            else if (message == "NSF") NGUITools.Broadcast(SocialPlayMessage.OnNotEnoughFunds.ToString());
             else NGUITools.Broadcast(SocialPlayMessage.OnPurchaseSuccess.ToString());
 
             GetOwnerItems(user.userID.ToString(), "User", 0, OnItemsLoaded);
@@ -899,7 +902,10 @@ public class SP : MonoBehaviour//, IServiceCalls
 
         Get().StartCoroutine(Get().ServiceGetString(www, (string message) =>
         {
-            if (message == "NSF") NGUITools.Broadcast(SocialPlayMessage.OnNotEnoughFunds.ToString());
+            JsonData response = LitJson.JsonMapper.ToObject(message);
+
+            if (response != null && (int)response["StatusCode"] == 2) NGUITools.Broadcast(SocialPlayMessage.OnPurchaseFail.ToString());
+            else if (message == "NSF") NGUITools.Broadcast(SocialPlayMessage.OnNotEnoughFunds.ToString());
             else NGUITools.Broadcast(SocialPlayMessage.OnPurchaseSuccess.ToString());
 
             GetFreeCurrencyBalance(0, null);
