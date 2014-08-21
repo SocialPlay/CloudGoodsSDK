@@ -11,7 +11,7 @@ public interface IPlatformPurchaser
     event Action<string> RecievedPurchaseResponse;
     event Action<string> OnPurchaseErrorEvent;
 
-    void Purchase(NGUIBundleItem id, int amount, string userID);
+    void Purchase(UICreditBundle id, int amount, string userID);
     void OnReceivedPurchaseResponse(string data);
 }
 

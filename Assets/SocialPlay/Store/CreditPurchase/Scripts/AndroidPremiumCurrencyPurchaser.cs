@@ -38,7 +38,7 @@ public class AndroidPremiumCurrencyPurchaser : MonoBehaviour, IPlatformPurchaser
 		}
 	}
 
-    public void Purchase(NGUIBundleItem bundleItem, int amount, string userID)
+    public void Purchase(UICreditBundle bundleItem, int amount, string userID)
     {
         if (string.IsNullOrEmpty(SocialPlaySettings.AndroidKey))
         {

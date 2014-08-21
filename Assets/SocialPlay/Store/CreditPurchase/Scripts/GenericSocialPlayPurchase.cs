@@ -14,7 +14,7 @@ public class GenericSocialPlayPurchase : IPlatformPurchaser
     int currentAmount = 0;
     string currentUserID = "";
 
-    public void Purchase(NGUIBundleItem bundleItem, int amount, string userID)
+    public void Purchase(UICreditBundle bundleItem, int amount, string userID)
     {
         //if (GatherGameInfo.allInfo.platformID == 4)
         //{

@@ -83,7 +83,7 @@ public class PremiumCurrencyBundleStore : MonoBehaviour
 
     void OnItemInGrid(PaidCurrencyBundleItem item, GameObject obj)
     {
-        NGUIBundleItem nguiItem = obj.GetComponent<NGUIBundleItem>();
+        UICreditBundle nguiItem = obj.GetComponent<UICreditBundle>();
         nguiItem.Amount = item.Amount.ToString();
         nguiItem.Cost = item.Cost.ToString();
 
@@ -109,14 +109,14 @@ public class PremiumCurrencyBundleStore : MonoBehaviour
         {
             SP.GetItemTexture(item.CurrencyIcon, delegate(ImageStatus imageStatus, Texture2D texture)
             {
-                nguiItem.SetCredtiBundleIcon(texture);
+                nguiItem.SetIcon(texture);
             });
         }
 
         nguiItem.OnPurchaseRequest = OnPurchaseRequest;
     }
 
-    void OnPurchaseRequest(NGUIBundleItem item)
+    void OnPurchaseRequest(UICreditBundle item)
     {
         if (!isPurchaseRequest)
         {

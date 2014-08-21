@@ -14,7 +14,7 @@ public class KongregatePurchase : IPlatformPurchaser
     public event Action<string> RecievedPurchaseResponse;
     public event Action<string> OnPurchaseErrorEvent;
 
-    public void Purchase(NGUIBundleItem bundleItem, int amount, string appID)
+    public void Purchase(UICreditBundle bundleItem, int amount, string appID)
     {
         CallBackBrowserHook.CreateExternalCall(OnReceivedPurchaseResponse, "KongregatePurchaseBrowserHook", "KongregatePurchase", bundleItem.BundleID, amount, appID);
 
