@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class ItemContainer : MonoBehaviour
 {
+    public LoadItemsForContainer itemLoader;
+
     public List<ItemData> containerItems = new List<ItemData>();
 
     /// <summary>
@@ -254,6 +256,15 @@ public class ItemContainer : MonoBehaviour
     public void FinishActionCycle()
     {
         isPerformingAction = false;
+    }
+
+    public void RefreshContainer()
+    {
+        if (itemLoader != null)
+        {
+            Clear();
+            itemLoader.LoadItems();
+        }
     }
 }
 
