@@ -3,86 +3,96 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-public class UIItemPurchase : UIStoreItem 
+public class UIItemPurchase : UIStoreItem
 {
-	public UILabel amountLabel;
-	public UILabel valueLabel;
-	public int amount = 1;
-	public int location = 0;
-	public CurrencyType currency = CurrencyType.Credits;	
-	public string amountFormat = "X {0}";
-	public bool localize = true;
-	public UILabel buttonLabel;
-	public string useString = "Use";
-	public string buyString = "Buy";
+    public UILabel amountLabel;
+    public UILabel valueLabel;
+    public int amount = 1;
+    public int location = 0;
+    public CurrencyType currency = CurrencyType.Credits;
+    public string amountFormat = "X {0}";
+    public bool localize = true;
+    public UILabel buttonLabel;
+    public string useString = "Use";
+    public string buyString = "Buy";
 
-	int mAmount = 0;
-	ItemData mItem;
-	StoreItem mStoreItem;
-	UILocalize mLoc;
+    int mAmount = 0;
+    ItemData mItem;
+    StoreItem mStoreItem;
+    UILocalize mLoc;
+    bool mInitiated;
 
-	void Awake()
-	{
-		if (localize)
-		{
-			mLoc = buttonLabel.cachedGameObject.GetComponent<UILocalize>();
-			if (mLoc == null)
-				mLoc = buttonLabel.cachedGameObject.AddComponent<UILocalize>();
+    void Awake()
+    {
+        if (localize && buttonLabel != null)
+        {
+            mLoc = buttonLabel.cachedGameObject.GetComponent<UILocalize>();
+            if (mLoc == null)
+                mLoc = buttonLabel.cachedGameObject.AddComponent<UILocalize>();
 
-			mLoc.key = buyString;
-		}
-	}
+            mLoc.key = buyString;
+        }
+    }
 
-	protected override void OnEnable()
-	{
-		base.OnEnable();
+    void Start()
+    {
+        if (!mInitiated)
+        {
+            mInitiated = true;
+            SP.GetItems(null);
+        }
+    }
 
-		if (itemID != 0) SP.OnItemsLoaded += OnItemsLoaded;
-	}
+    protected override void OnEnable()
+    {
+        base.OnEnable();
 
-	protected override void OnDisable()
-	{
-		base.OnDisable();
+        if (itemID != 0) SP.OnItemsLoaded += OnItemsLoaded;
+    }
 
-		if (itemID != 0) SP.OnItemsLoaded -= OnItemsLoaded;
-	}
+    protected override void OnDisable()
+    {
+        base.OnDisable();
 
-	void OnItemsLoaded(List<ItemData> items)
-	{
-		Debug.Log("OnItemsLoaded " + items.Count);
+        if (itemID != 0) SP.OnItemsLoaded -= OnItemsLoaded;
+    }
 
-		mItem = SP.GetItem(itemID);
+    void OnItemsLoaded(List<ItemData> items)
+    {
+        Debug.Log("OnItemsLoaded " + items.Count);
 
-		Debug.Log("Item found: " + mItem != null);
+        mItem = SP.GetItem(itemID);
 
-		if (mItem != null)
-		{
-			Debug.Log("Item " + mItem.itemName);
-			if (nameLabel != null) nameLabel.text = mItem.itemName;
-			if (amountLabel != null) amountLabel.text = string.Format(amountFormat, mItem.stackSize);
+        Debug.Log("Item found: " + mItem != null);
 
-			mAmount = mItem.stackSize;
-			if(localize) mLoc.key = useString;
-			else buttonLabel.text = useString;
-		}
-		else
-		{
-			if (amountLabel != null) amountLabel.text = string.Format(amountFormat, 0);
-			if (localize) mLoc.key = buyString;
-			else buttonLabel.text = buyString;
-		}
-	}
+        if (mItem != null)
+        {
+            Debug.Log("Item " + mItem.itemName);
+            if (nameLabel != null) nameLabel.text = mItem.itemName;
+            if (amountLabel != null) amountLabel.text = string.Format(amountFormat, mItem.stackSize);
 
-	protected override void OnStoreListLoaded(List<StoreItem> storeList)
-	{
-		mStoreItem = SP.GetStoreItem(itemID);
-		if (nameLabel != null) nameLabel.text = mStoreItem.itemName;
-		if (amountLabel != null) amountLabel.text = mItem == null ? string.Format(amountFormat, 0) : string.Format(amountFormat, mItem.stackSize);
-	}
+            mAmount = mItem.stackSize;
+            if (localize) mLoc.key = useString;
+            else buttonLabel.text = useString;
+        }
+        else
+        {
+            if (amountLabel != null) amountLabel.text = string.Format(amountFormat, 0);
+            if (localize) mLoc.key = buyString;
+            else buttonLabel.text = buyString;
+        }
+    }
 
-	public void BuyOrUse()
-	{
-		if (mAmount > 0) SP.UseItem(mItem, (string message) => { Debug.Log("Use Item: " + message); });
-		else SP.StoreItemPurchase(itemID, amount, currency, location);
-	}
+    protected override void OnStoreListLoaded(List<StoreItem> storeList)
+    {
+        mStoreItem = SP.GetStoreItem(itemID);
+        if (nameLabel != null) nameLabel.text = mStoreItem.itemName;
+        if (amountLabel != null) amountLabel.text = mItem == null ? string.Format(amountFormat, 0) : string.Format(amountFormat, mItem.stackSize);
+    }
+
+    public void BuyOrUse()
+    {
+        if (mAmount > 0) SP.UseItem(mItem, (string message) => { Debug.Log("Use Item: " + message); });
+        else SP.StoreItemPurchase(itemID, amount, currency, location);
+    }
 }
