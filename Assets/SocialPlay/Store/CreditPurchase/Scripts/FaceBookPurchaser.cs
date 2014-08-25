@@ -2,6 +2,7 @@
 using UnityEngine;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
+using LitJson;
 
 public class FaceBookPurchaser : MonoBehaviour, IPlatformPurchaser
 {
@@ -29,9 +30,24 @@ public class FaceBookPurchaser : MonoBehaviour, IPlatformPurchaser
 
     public void OnReceivedPurchaseResponse(string data)
     {
+        Debug.Log("data: "+data);
+        JsonMapper.ToObject(data);
+        
+        //JsonData parsedData = JsonMapper.ToObject(data);
         Newtonsoft.Json.Linq.JToken parsedData = Newtonsoft.Json.Linq.JToken.Parse(data);
 
-        Debug.Log(parsedData.ToString());
+        /*for(int i = 0, imax = parsedData.Count; i<imax; i++)
+        {
+            parsedData[i].
+        }*/
+
+        if (parsedData["error_message"] != null)
+        {
+            if (OnPurchaseErrorEvent != null) OnPurchaseErrorEvent(parsedData["error_message"].ToString());
+            return;
+        }
+
+        Debug.Log("parsedData: " + parsedData.ToString());
 
         BundlePurchaseRequest bundlePurchaseRequest = new BundlePurchaseRequest();
         bundlePurchaseRequest.BundleID = currentBundleID;

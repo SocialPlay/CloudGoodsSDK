@@ -1216,4 +1216,56 @@ public class SP : MonoBehaviour//, IServiceCalls
     }
 
     #endregion
+
+    #region Utils
+
+    /// <summary>
+    /// Returns domain from string.
+    /// </summary>
+    /// <param name="url"></param>
+    /// <returns></returns>
+
+    static public string GetDomain(string url)
+    {
+        if (url.StartsWith("file://"))
+            return "localhost";
+
+        if (!url.StartsWith("http://") && !url.StartsWith("https://"))
+            return "unknown";
+
+        // convert to lower-case
+        url = url.ToLower();
+
+        // a) remove http:// or https://
+        if (url.StartsWith("http://"))
+            url = url.Remove(0, 7);
+        else if (url.StartsWith("https://"))
+            url = url.Remove(0, 8);
+
+        // b) remove path
+        int pos = url.IndexOf("/");
+        if (pos != -1)
+            url = url.Remove(pos, url.Length - pos);
+
+        // c) remove port if present
+        pos = url.IndexOf(":");
+        if (pos != -1)
+            url = url.Remove(pos, url.Length - pos);
+
+        // d) remove sub-domain if present
+        pos = url.IndexOf(".");
+        while (pos != -1)
+        {
+            string tempUrl = url.Remove(0, pos + 1);
+            pos = tempUrl.IndexOf(".");
+            if (pos != -1)
+            {
+                url = tempUrl;
+            }
+        }
+
+        return url;
+    }
+
+    #endregion
 }

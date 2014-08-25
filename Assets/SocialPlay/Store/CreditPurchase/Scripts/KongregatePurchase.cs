@@ -9,7 +9,7 @@ using System;
 using UnityEngine;
 
 
-public class KongregatePurchase : IPlatformPurchaser
+public class KongregatePurchase : MonoBehaviour, IPlatformPurchaser
 {
     public event Action<string> RecievedPurchaseResponse;
     public event Action<string> OnPurchaseErrorEvent;
@@ -24,7 +24,8 @@ public class KongregatePurchase : IPlatformPurchaser
 
     public void OnReceivedPurchaseResponse(string data)
     {
-        Console.WriteLine("OnRecievedPurchaseResponse");
+        Console.WriteLine("OnRecievedPurchaseResponse " + data);
+        Debug.Log("OnRecievedPurchaseResponse " + data);
 
         if (RecievedPurchaseResponse != null)
             RecievedPurchaseResponse(data);
