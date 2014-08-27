@@ -237,7 +237,6 @@ public class SP : MonoBehaviour//, IServiceCalls
         }
         return mInst;
     }
-    static string buyUrl = "http://socialplaywebservice.azurewebsites.net/publicservice.svc/";
 
     #endregion
 
@@ -848,7 +847,7 @@ public class SP : MonoBehaviour//, IServiceCalls
 
     static public void StoreItemPurchase(int itemID, int amount, CurrencyType paymentType, int saveLocation, Action<string> callback)
     {
-        string url = buyUrl + "StoreItemPurchase?UserID=" + user.userID + "&ItemID=" + itemID + "&Amount=" + amount + "&PaymentType=" + paymentType + "&AppID=" + GuidAppID + "&saveLocation=" + saveLocation;
+        string url = Url + "StoreItemPurchase?UserID=" + user.userID + "&ItemID=" + itemID + "&Amount=" + amount + "&PaymentType=" + paymentType + "&AppID=" + GuidAppID + "&saveLocation=" + saveLocation;
 
         WWW www = new WWW(url);
 
