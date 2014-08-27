@@ -874,7 +874,7 @@ public class SP : MonoBehaviour//, IServiceCalls
 
     static public void PurchaseItemBundles(int bundleID, CurrencyType paymentType, int location, Action<string> callback)
     {
-        string url = buyUrl + "PurchaseItemBundle?AppID=" + GuidAppID + "&UserID=" + user.userID + "&BundleID=" + bundleID + "&PaymentType=" + paymentType + "&Location=" + location;
+        string url = Url + "PurchaseItemBundle?AppID=" + GuidAppID + "&UserID=" + user.userID + "&BundleID=" + bundleID + "&PaymentType=" + paymentType + "&Location=" + location;
 
         WWW www = new WWW(url);
 
@@ -1102,7 +1102,10 @@ public class SP : MonoBehaviour//, IServiceCalls
         yield return www;
 
         if (www.error == null)
+        {
+            Debug.Log(www.text);
             callback(serviceConverter.ConvertToListItemBundle(www.text));
+        }
         else
         {
             if (onErrorEvent != null) onErrorEvent("Error: " + www.error);
