@@ -8,7 +8,9 @@ public class AndroidPremiumCurrencyPurchaser : MonoBehaviour, IPlatformPurchaser
     public int currentBundleID = 0;
     public string currentProductID = "";
 
-	public AndroidJavaObject cls_StorePurchaser;
+#if UNITY_ANDROID
+    public AndroidJavaObject cls_StorePurchaser;
+#endif
 
     public event Action<string> RecievedPurchaseResponse;
     public event Action<string> OnPurchaseErrorEvent;
@@ -19,27 +21,30 @@ public class AndroidPremiumCurrencyPurchaser : MonoBehaviour, IPlatformPurchaser
         initStore();
     }
 
-	void initStore()
-	{
+    void initStore()
+    {
+#if UNITY_ANDROID
         if (string.IsNullOrEmpty(SocialPlaySettings.AndroidKey))
         {
             Debug.LogError("No Android key has been set, cannot initialize premium bundle store");
             return;
         }
 
-		cls_StorePurchaser = new AndroidJavaClass("com.storetest.StorePurchaser");
+        cls_StorePurchaser = new AndroidJavaClass("com.storetest.StorePurchaser");
 
-		using (AndroidJavaClass cls = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
-		{
-			using (AndroidJavaObject obj_Activity = cls.GetStatic<AndroidJavaObject>("currentActivity"))
-			{
-				cls_StorePurchaser.CallStatic("initStore", obj_Activity, SocialPlaySettings.AndroidKey);
-			}
-		}
-	}
+        using (AndroidJavaClass cls = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
+        {
+            using (AndroidJavaObject obj_Activity = cls.GetStatic<AndroidJavaObject>("currentActivity"))
+            {
+                cls_StorePurchaser.CallStatic("initStore", obj_Activity, SocialPlaySettings.AndroidKey);
+            }
+        }
+#endif
+    }
 
-    public void Purchase(NGUIBundleItem bundleItem, int amount, string userID)
+    public void Purchase(UICreditBundle bundleItem, int amount, string userID)
     {
+#if UNITY_ANDROID
         if (string.IsNullOrEmpty(SocialPlaySettings.AndroidKey))
         {
             Debug.LogError("No Android key has been set, cannot purchase from premium store");
@@ -49,23 +54,23 @@ public class AndroidPremiumCurrencyPurchaser : MonoBehaviour, IPlatformPurchaser
         currentBundleID = int.Parse(bundleItem.BundleID);
         currentProductID = bundleItem.ProductID;
 
-		using (AndroidJavaClass cls = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
-		{
-			using (AndroidJavaObject obj_Activity = cls.GetStatic<AndroidJavaObject>("currentActivity"))
-			{
+        using (AndroidJavaClass cls = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
+        {
+            using (AndroidJavaObject obj_Activity = cls.GetStatic<AndroidJavaObject>("currentActivity"))
+            {
                 Debug.Log("Attempting to purchase Bundle Item: " + bundleItem.ProductID);
-				cls_StorePurchaser.CallStatic("makePurchase", obj_Activity, bundleItem.ProductID);
-			}
-		}
-
+                cls_StorePurchaser.CallStatic("makePurchase", obj_Activity, bundleItem.ProductID);
+            }
+        }
+#endif
     }
-
+#if UNITY_ANDROID
     void OnErrorCodeFromAndroidPurchase(string responseCode)
     {
         if (OnPurchaseErrorEvent != null)
             OnPurchaseErrorEvent(responseCode);
 
-        if (responseCode.Remove(1,responseCode.Length - 1) == "7")
+        if (responseCode.Remove(1, responseCode.Length - 1) == "7")
         {
             ConsumeAlreadyOwneditem();
         }
@@ -108,7 +113,7 @@ public class AndroidPremiumCurrencyPurchaser : MonoBehaviour, IPlatformPurchaser
     {
         Debug.Log("Debug from Java: " + message);
     }
-
+#endif
     public void OnReceivedPurchaseResponse(string data)
     {
         if (RecievedPurchaseResponse != null)

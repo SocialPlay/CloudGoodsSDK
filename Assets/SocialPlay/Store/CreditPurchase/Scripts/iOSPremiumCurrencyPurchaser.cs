@@ -4,7 +4,7 @@ using System;
 using Newtonsoft.Json;
 using LitJson;
 
-public class iOSPPremiumCurrencyPurchaser : MonoBehaviour, IPlatformPurchaser
+public class iOSPremiumCurrencyPurchaser : MonoBehaviour, IPlatformPurchaser
 {
 
 	public event Action<string> RecievedPurchaseResponse;
@@ -17,7 +17,7 @@ public class iOSPPremiumCurrencyPurchaser : MonoBehaviour, IPlatformPurchaser
 		iOSConnect.onReceivedMessage += OnReceivedPurchaseResponse;
 	}
 	
-	public void Purchase(NGUIBundleItem bundleItem, int amount, string userID)
+	public void Purchase(UICreditBundle bundleItem, int amount, string userID)
 	{
 		currentBundleID = int.Parse (bundleItem.BundleID);
 		iOSConnect.RequestInAppPurchase (bundleItem.ProductID);

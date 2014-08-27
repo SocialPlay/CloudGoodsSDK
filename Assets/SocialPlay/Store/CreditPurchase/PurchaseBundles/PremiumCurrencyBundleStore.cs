@@ -6,6 +6,7 @@
 // Date: 11/2/2012
 // Description: This is a store that sells only credit bundles, to allow from native currency to our currency, if we choose not to support direct buy with platforms native currency.
 // ------------------------------------------------------------------------
+
 using UnityEngine;
 using SocialPlay.Generic;
 using Newtonsoft.Json.Linq;
@@ -15,63 +16,109 @@ using System.Collections.Generic;
 
 public class PremiumCurrencyBundleStore : MonoBehaviour
 {
-    //public PlatformPurchase platformPurchase = PlatformPurchase.Facebook;
+    public PlatformPurchase platformPurchase = PlatformPurchase.Facebook;
     public GameObject Grid;
+    [HideInInspector]
+    public bool isInitialized = false;
 
     IGridLoader gridLoader;
     IPlatformPurchaser platformPurchasor;
-    //PremiumCurrencyBundleIcon PaidCurrencyBundleIcon = new PremiumCurrencyBundleIcon();
     bool isPurchaseRequest = false;
-
-    public bool isInitialized = false;
+    
+    string domain;
 
     void Awake()
     {
         SP.OnRegisteredUserToSession += OnRegisteredUserToSession;
+
     }
+
+#if UNITY_WEBPLAYER
+    void Start()
+    {
+        Application.ExternalEval("UnityObject2.instances[0].getUnity().SendMessage(\"" + name + "\", \"ReceiveURL\", document.URL);");
+        //Application.ExternalEval("kongregateUnitySupport.getUnityObject().SendMessage(\"" + name + "\", \"ReceiveURL\", document.URL);");
+    }
+
+    public void ReceiveURL(string url)
+    {
+        // this will include the full URL, including url parameters etc.
+        Debug.Log("ReceiveURL " + SP.GetDomain(url) + " / full url: " + url);
+        domain = SP.GetDomain(url);
+        if (SP.isLogged && !isInitialized) Initialize();
+    }
+#endif
 
     void OnRegisteredUserToSession(string obj)
     {
-        Initialize();
+        if(!isInitialized) Initialize();
     }
 
     public void Initialize()
     {
-        try
-        {      
-            int currentplatform = 0;
+        int currentplatform = 1;
 
-            platformPurchasor = gameObject.AddComponent<FaceBookPurchaser>();
+        if (platformPurchase == PlatformPurchase.Automatic)
+        {
 
-#if UNITY_EDITOR
-            currentplatform = 1;
+#if UNITY_WEBPLAYER
+            if(!string.IsNullOrEmpty(domain) && (domain.StartsWith("fbsbx") || domain.StartsWith("facebook")))
+            {
+                currentplatform = 1;
+                platformPurchasor = gameObject.AddComponent<FaceBookPurchaser>();
+            }
+            else// if(domain.StartsWith("kongregate"))
+            {
+                currentplatform = 2;
+                platformPurchasor = gameObject.AddComponent<KongregatePurchase>();
+            }
 #endif
 
-#if UNITY_ANDROID && !UNITY_EDITOR
+#if UNITY_ANDROID
             platformPurchasor = gameObject.AddComponent<AndroidPremiumCurrencyPurchaser>();
             currentplatform = 3;
 #endif
 
-#if UNITY_IPHONE && !UNITY_EDITOR
+#if UNITY_IPHONE
             platformPurchasor = gameObject.AddComponent<iOSPremiumCurrencyPurchaser>();
+            GameObject o = new GameObject("iOSConnect");
+            o.AddComponent<iOSConnect>();
             currentplatform = 4;
 #endif
-
-            platformPurchasor.RecievedPurchaseResponse += OnRecievedPurchaseResponse;
-            platformPurchasor.OnPurchaseErrorEvent += platformPurchasor_OnPurchaseErrorEvent;
-            SP.GetCreditBundles(currentplatform, OnPurchaseBundlesRecieved);
-
-            isInitialized = true;
         }
-        catch (System.Exception ex)
+        else
         {
-            Debug.LogError(ex.Message);
+            switch (platformPurchase)
+            {
+                case PlatformPurchase.Facebook:
+                    currentplatform = 1;
+                    platformPurchasor = gameObject.AddComponent<FaceBookPurchaser>();
+                    break;
+                case PlatformPurchase.Kongergate:
+                    currentplatform = 2;
+                    platformPurchasor = gameObject.AddComponent<KongregatePurchase>();
+                    break;
+                case PlatformPurchase.Android:
+                    currentplatform = 3;
+                    platformPurchasor = gameObject.AddComponent<AndroidPremiumCurrencyPurchaser>();
+                    break;
+                case PlatformPurchase.IOS:
+                    currentplatform = 4;
+                    platformPurchasor = gameObject.AddComponent<iOSPremiumCurrencyPurchaser>();
+                    break;
+            }
         }
+
+        platformPurchasor.RecievedPurchaseResponse += OnRecievedPurchaseResponse;
+        platformPurchasor.OnPurchaseErrorEvent += platformPurchasor_OnPurchaseErrorEvent;
+        SP.GetCreditBundles(currentplatform, OnPurchaseBundlesRecieved);
+
+        isInitialized = true;
     }
 
     void OnDisable()
     {
-        platformPurchasor.RecievedPurchaseResponse -= OnRecievedPurchaseResponse;
+        if(platformPurchasor != null) platformPurchasor.RecievedPurchaseResponse -= OnRecievedPurchaseResponse;
     }
 
     void OnPurchaseBundlesRecieved(List<PaidCurrencyBundleItem> data)
@@ -83,7 +130,7 @@ public class PremiumCurrencyBundleStore : MonoBehaviour
 
     void OnItemInGrid(PaidCurrencyBundleItem item, GameObject obj)
     {
-        NGUIBundleItem nguiItem = obj.GetComponent<NGUIBundleItem>();
+        UICreditBundle nguiItem = obj.GetComponent<UICreditBundle>();
         nguiItem.Amount = item.Amount.ToString();
         nguiItem.Cost = item.Cost.ToString();
 
@@ -109,14 +156,14 @@ public class PremiumCurrencyBundleStore : MonoBehaviour
         {
             SP.GetItemTexture(item.CurrencyIcon, delegate(ImageStatus imageStatus, Texture2D texture)
             {
-                nguiItem.SetCredtiBundleIcon(texture);
+                nguiItem.SetIcon(texture);
             });
         }
 
         nguiItem.OnPurchaseRequest = OnPurchaseRequest;
     }
 
-    void OnPurchaseRequest(NGUIBundleItem item)
+    void OnPurchaseRequest(UICreditBundle item)
     {
         if (!isPurchaseRequest)
         {

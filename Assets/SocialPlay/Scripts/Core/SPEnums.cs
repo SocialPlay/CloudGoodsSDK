@@ -38,10 +38,11 @@ public enum CurrencyType
 
 public enum PlatformPurchase
 {
-    Android,
-    IOS,
+    Automatic,
     Facebook,
-    Kongergate
+    Kongergate,
+    Android,
+    IOS    
 }
 
 public enum ImageStatus
