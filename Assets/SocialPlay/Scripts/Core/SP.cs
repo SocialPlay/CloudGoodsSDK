@@ -539,7 +539,15 @@ public class SP : MonoBehaviour//, IServiceCalls
             {
                 if (OnUserInfo != null)
                 {
-                    LoginUserInfo userInfo = Newtonsoft.Json.JsonConvert.DeserializeObject<LoginUserInfo>(response.message);
+
+                    Debug.Log(response.message);
+
+                    JsonData data = LitJson.JsonMapper.ToObject(response.message);
+
+                    LoginUserInfo userInfo = new LoginUserInfo(new Guid(data["ID"].ToString()), data["name"].ToString(), data["email"].ToString());
+
+                    //UserResponse responce = new UserResponse(int.Parse(data["code"].ToString()), data["message"].ToString(), userInfo);
+
                     SocialPlayUser ui = new SocialPlayUser(userInfo.ID.ToString(), userInfo.name, userInfo.email);
                     AuthorizeUser(ui);
                     OnUserInfo(ui);
