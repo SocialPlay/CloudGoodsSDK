@@ -38,16 +38,16 @@ public class ItemContainerManager
                     }
                     targetContainer.Add(ItemConverter.ConvertItemDataToNGUIItemDataObject(movingItemData), targetAddState.possibleAddAmount);
                     break;
-                case ContainerAddState.ActionState.Swap:
-                    if (movingItemData.ownerContainer != null)
-                    {
-                        CheckSwapability(ItemConverter.ConvertItemDataToNGUIItemDataObject(movingItemData), targetContainer, targetAddState);
-                    }
-                    else
-                    {
-                        return ContainerAddState.ActionState.No;
-                    }
-                    break;
+                //case ContainerAddState.ActionState.Swap:
+                //    if (movingItemData.ownerContainer != null)
+                //    {
+                //        CheckSwapability(ItemConverter.ConvertItemDataToNGUIItemDataObject(movingItemData), targetContainer, targetAddState);
+                //    }
+                //    else
+                //    {
+                //        return ContainerAddState.ActionState.No;
+                //    }
+                //    break;
                 case ContainerAddState.ActionState.No:
                     break;
                 default:
@@ -64,27 +64,27 @@ public class ItemContainerManager
         }
     }
 
-    private static void CheckSwapability(ItemData movingItemData, ItemContainer targetContainer, ContainerAddState possibleSwapState)
-    {
-        if (possibleSwapState.possibleSwapItem == null)
-            return;
+    //private static void CheckSwapability(ItemData movingItemData, ItemContainer targetContainer, ContainerAddState possibleSwapState)
+    //{
+    //    if (possibleSwapState.possibleSwapItem == null)
+    //        return;
 
-        movingItemData.ownerContainer.Remove(movingItemData, true, possibleSwapState.possibleAddAmount);
-        ContainerAddState sourceAddState = movingItemData.ownerContainer.GetContainerAddState(possibleSwapState.possibleSwapItem);
-        ItemContainer SourceContainer = movingItemData.ownerContainer;
+    //    movingItemData.ownerContainer.Remove(movingItemData, true, possibleSwapState.possibleAddAmount);
+    //    ContainerAddState sourceAddState = movingItemData.ownerContainer.GetContainerAddState(possibleSwapState.possibleSwapItem);
+    //    ItemContainer SourceContainer = movingItemData.ownerContainer;
 
-        if (sourceAddState.actionState == ContainerAddState.ActionState.Add)
-        {
-            SourceContainer.Add(possibleSwapState.possibleSwapItem, -1);
-            targetContainer.Remove(possibleSwapState.possibleSwapItem, true);
-            targetContainer.Add(movingItemData, -1);
-            return;
-        }
-        else
-        {
-            movingItemData.ownerContainer.Add(movingItemData, possibleSwapState.possibleAddAmount);
-        }
+    //    if (sourceAddState.actionState == ContainerAddState.ActionState.Add)
+    //    {
+    //        SourceContainer.Add(possibleSwapState.possibleSwapItem, -1);
+    //        targetContainer.Remove(possibleSwapState.possibleSwapItem, true);
+    //        targetContainer.Add(movingItemData, -1);
+    //        return;
+    //    }
+    //    else
+    //    {
+    //        movingItemData.ownerContainer.Add(movingItemData, possibleSwapState.possibleAddAmount);
+    //    }
 
-    }
+    //}
 }
 

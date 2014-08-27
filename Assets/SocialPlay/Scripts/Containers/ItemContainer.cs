@@ -6,6 +6,10 @@ using UnityEngine;
 
 public class ItemContainer : MonoBehaviour
 {
+    public int ItemQuantityLimit = 1;
+
+    public bool IsItemQuantityLimited = false;
+
     public LoadItemsForContainer itemLoader;
 
     public List<ItemData> containerItems = new List<ItemData>();
@@ -143,15 +147,13 @@ public class ItemContainer : MonoBehaviour
     protected ContainerAddState MyContainerAddState(ItemData modified)
     {
         int addAbleAmount = modified.stackSize;
-        if (ItemContainerStackRestrictor.Restrictor != null)
-        {
-            int restrictionAmount = ItemContainerStackRestrictor.Restrictor.GetRestrictedAmount(modified, this);
 
-            if (restrictionAmount != -1 && restrictionAmount > modified.stackSize)
-            {
-                addAbleAmount = restrictionAmount;
-            }
+        if (IsItemQuantityLimited == true)
+        {
+            if (addAbleAmount > ItemQuantityLimit)
+                addAbleAmount = ItemQuantityLimit;
         }
+
         return new ContainerAddState(ContainerAddState.ActionState.Add, addAbleAmount);
     }
 
