@@ -45,6 +45,7 @@ public class SwapItemAddAction : MonoBehaviour, IContainerAddAction
         }
         else
         {
+            addItem.stackSize = amount;
             addItem.ownerContainer = itemContainer;
 
             itemContainer.containerItems.Add(addItem);

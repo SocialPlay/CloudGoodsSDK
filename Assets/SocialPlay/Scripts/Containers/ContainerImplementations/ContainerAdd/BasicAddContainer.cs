@@ -28,6 +28,8 @@ public class BasicAddContainer : MonoBehaviour, IContainerAddAction {
             addItem.ownerContainer = itemContainer;
             if (!AddToExistingStack(addItem, amount, isSave))
             {
+                Debug.Log("Add item amount: " + amount);
+                addItem.stackSize = amount;
                 itemContainer.containerItems.Add(addItem);
                 itemContainer.AddItemEvent(addItem, isSave);
             }

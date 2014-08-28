@@ -150,7 +150,7 @@ public class ItemContainer : MonoBehaviour
 
         if (IsItemQuantityLimited == true)
         {
-            if (addAbleAmount > ItemQuantityLimit)
+            if (addAbleAmount >= ItemQuantityLimit)
                 addAbleAmount = ItemQuantityLimit;
         }
 
