@@ -9,6 +9,8 @@ public class ItemContainerManager
 {
     public static ContainerAddState.ActionState MoveItem(ItemData movingItemData, ItemContainer lastContainer, ItemContainer targetContainer)
     {
+        Debug.Log("move item");
+
         try
         {
             if (movingItemData == null)
@@ -19,7 +21,6 @@ public class ItemContainerManager
 
             if (lastContainer != null)
             {
-                Debug.Log("last container found");
                 Debug.Log(lastContainer.GetContainerRemoveState(movingItemData));
                 if (lastContainer.GetContainerRemoveState(movingItemData) == false)
                 {
@@ -32,22 +33,16 @@ public class ItemContainerManager
             switch (targetAddState.actionState)
             {
                 case ContainerAddState.ActionState.Add:
+
+                    ItemData newItemData = ItemConverter.ConvertItemDataToNGUIItemDataObject(movingItemData);
+
                     if (movingItemData.ownerContainer != null)
                     {
                         movingItemData.ownerContainer.Remove(movingItemData, true, targetAddState.possibleAddAmount);
                     }
-                    targetContainer.Add(ItemConverter.ConvertItemDataToNGUIItemDataObject(movingItemData), targetAddState.possibleAddAmount);
+
+                    targetContainer.Add(newItemData, targetAddState.possibleAddAmount);
                     break;
-                //case ContainerAddState.ActionState.Swap:
-                //    if (movingItemData.ownerContainer != null)
-                //    {
-                //        CheckSwapability(ItemConverter.ConvertItemDataToNGUIItemDataObject(movingItemData), targetContainer, targetAddState);
-                //    }
-                //    else
-                //    {
-                //        return ContainerAddState.ActionState.No;
-                //    }
-                //    break;
                 case ContainerAddState.ActionState.No:
                     break;
                 default:

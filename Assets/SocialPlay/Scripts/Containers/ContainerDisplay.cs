@@ -66,15 +66,18 @@ public class ContainerDisplay : MonoBehaviour
 
     protected void RemovedItem(ItemData itemData, int amount, bool isBeingMoved)
     {
+        Debug.Log("removed item: " + itemData.stackSize + "  amoutn: " + amount);
+
         if (!isBeingMoved)
         {
-            if (itemData.stackSize - amount < 0)
+            if (itemData.stackSize - amount <= 0)
             {
                 Destroy(itemData.gameObject);
                 viewArea.repositionNow = true;
             }
         }
-        else if (amount == -1 || itemData.stackSize == amount)
+
+        if (amount == -1 || itemData.stackSize <= 0)
         {
             Destroy(itemData.gameObject);
             viewArea.repositionNow = true;
@@ -85,7 +88,7 @@ public class ContainerDisplay : MonoBehaviour
     {
         isActive = StartWindowActive;
         ContainerDisplayObject.SetActive(true);
-        viewArea = ContainerDisplayObject.GetComponentInChildren<UIGrid>();  
+        viewArea = ContainerDisplayObject.GetComponentInChildren<UIGrid>();
     }
 
     private void GetDisplayActions()

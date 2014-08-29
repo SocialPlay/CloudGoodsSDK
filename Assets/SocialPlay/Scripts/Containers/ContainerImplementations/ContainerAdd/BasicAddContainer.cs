@@ -2,7 +2,8 @@
 using System.Collections;
 
 [RequireComponent(typeof(ItemContainer))]
-public class BasicAddContainer : MonoBehaviour, IContainerAddAction {
+public class BasicAddContainer : MonoBehaviour, IContainerAddAction
+{
 
     private ItemContainer itemContainer;
 
@@ -28,7 +29,6 @@ public class BasicAddContainer : MonoBehaviour, IContainerAddAction {
             addItem.ownerContainer = itemContainer;
             if (!AddToExistingStack(addItem, amount, isSave))
             {
-                Debug.Log("Add item amount: " + amount);
                 addItem.stackSize = amount;
                 itemContainer.containerItems.Add(addItem);
                 itemContainer.AddItemEvent(addItem, isSave);
@@ -47,6 +47,8 @@ public class BasicAddContainer : MonoBehaviour, IContainerAddAction {
                 itemContainer.ModifiedItemEvent(data, isSave);
 
                 data.stackSize -= amount;
+
+                Debug.Log("data stack: " + data.stackSize);
 
                 if (data.stackSize <= 0)
                     Destroy(data.gameObject);

@@ -38,7 +38,7 @@ public class ItemContainer : MonoBehaviour
     /// Called when the Container is cleared.
     /// </summary>
     public event Action ClearItems;
-   
+
     /// <summary>
     /// Called After the user clicks an item
     /// </summary>
@@ -159,6 +159,7 @@ public class ItemContainer : MonoBehaviour
 
     public void Add(ItemData itemData, int amount = -1, bool isSave = true)
     {
+
         containerAddAction.AddItem(itemData, amount, isSave);
     }
 
@@ -172,6 +173,7 @@ public class ItemContainer : MonoBehaviour
                 return;
             }
         }
+
         RemoveItem(itemData, isMoving, amount);
     }
 
@@ -182,13 +184,10 @@ public class ItemContainer : MonoBehaviour
             if (item.itemName.Equals(modified.itemName))
             {
                 if (amount == -1 || item.stackSize <= amount)
-                {
                     containerItems.Remove(item);
-                }
-                else
-                {
-                    item.stackSize -= amount;
-                }
+
+                modified.stackSize -= amount;
+
                 RemoveItemEvent(item, amount, isMoving);
                 return;
             }
