@@ -12,17 +12,17 @@ public class NGUIContainerGameItem : MonoBehaviour
     public GameObject NGUITexture;
     public UISprite Image;
 
-    void OnEnable()
-    {
-        UIEventListener.Get(gameObject).onClick += ItemClicked;
-        UIEventListener.Get(gameObject).onDoubleClick += ItemDoubleClicked;
-    }
+    //void OnEnable()
+    //{
+    //    UIEventListener.Get(gameObject).onClick += ItemClicked;
+    //    UIEventListener.Get(gameObject).onDoubleClick += ItemDoubleClicked;
+    //}
 
-    void OnDisable()
-    {
-        UIEventListener.Get(gameObject).onClick -= ItemClicked;
-        UIEventListener.Get(gameObject).onDoubleClick -= ItemDoubleClicked;
-    }
+    //void OnDisable()
+    //{
+    //    UIEventListener.Get(gameObject).onClick -= ItemClicked;
+    //    UIEventListener.Get(gameObject).onDoubleClick -= ItemDoubleClicked;
+    //}
 
     void Start()
     {
@@ -60,20 +60,20 @@ public class NGUIContainerGameItem : MonoBehaviour
         TweenAlpha.Begin(uiTexture.cachedGameObject, 0.3f, 1).from = 0;
     }
 
-    public void ItemClicked(GameObject go)
-    {
-        itemData.ownerContainer.OnItemSingleClick(itemData);
-    }
+    //public void ItemClicked(GameObject go)
+    //{
+    //    itemData.ownerContainer.OnItemSingleClick(itemData);
+    //}
 
-    public void ItemDoubleClicked(GameObject go)
-    {
-        itemData.ownerContainer.OnItemDoubleCliked(itemData);
-    }
+    //public void ItemDoubleClicked(GameObject go)
+    //{
+    //    itemData.ownerContainer.OnItemDoubleCliked(itemData);
+    //}
 
     void Update()
     {
         if (itemData == null)
-            itemData = GetComponent<ItemData>();
+            itemData = GetComponent<ItemDataComponent>().itemData;
 
         itemAmountLabel.text = itemData.stackSize.ToString();
     }

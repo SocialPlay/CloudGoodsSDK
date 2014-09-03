@@ -12,8 +12,9 @@ public class ContainerMoveAllItemsAction : ContainerActions
     public ItemContainer DestinationContainer;
     public int DestinationLocation;
 
-    public override void DoAction(ItemData itemData)
+    public override void DoAction(GameObject itemObject)
     {
+        ItemData itemData = itemObject.GetComponent<ItemDataComponent>().itemData;
         ///Tmp moves all to vault on backend
         MoveMultipleStacks stacks = new MoveMultipleStacks();
         stacks.StackInfos = new List<MoveItemStackInfo>();

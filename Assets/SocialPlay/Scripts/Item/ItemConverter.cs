@@ -5,15 +5,15 @@ using System.Collections.Generic;
 
 public class ItemConverter  {
 
-    public static ItemData ConvertItemDataToNGUIItemDataObject(ItemData item)
-    {
-        UnityEngine.Object obj = Resources.Load("NGUIContainerItem");
-        GameObject go = GameObject.Instantiate(obj) as GameObject;
-        ItemData itemData = go.GetComponent<ItemData>();
+    //public static ItemData ConvertItemDataToNGUIItemDataObject(ItemData item)
+    //{
+    //    UnityEngine.Object obj = Resources.Load("NGUIContainerItem");
+    //    GameObject go = GameObject.Instantiate(obj) as GameObject;
+    //    ItemData itemData = go.GetComponent<ItemData>();
 
-        itemData.SetItemData(item);
-        return itemData;
-    }
+    //    itemData.SetItemData(item);
+    //    return itemData;
+    //}
 
     public static List<GameObject> ConvertToItemDropObject(List<ItemData> items, bool isPerItemDrop)
     {
@@ -23,7 +23,7 @@ public class ItemConverter  {
         {
             UnityEngine.Object obj = Resources.Load("ItemDrop");
             GameObject go = GameObject.Instantiate(obj) as GameObject;
-            ItemData gameItemData = go.GetComponent<ItemData>();
+            ItemData gameItemData = go.GetComponent<ItemDataComponent>().itemData;
             gameItemData.SetItemData(item);
             ItemDrops.Add(go);
         }

@@ -68,7 +68,7 @@ public class NGUIDragDropItem : MonoBehaviour
     void Awake()
     {
         mTrans = transform;
-        myItemData = this.GetComponent<ItemData>();
+        myItemData = this.GetComponent<ItemDataComponent>().itemData;
     }
 
     /// <summary>

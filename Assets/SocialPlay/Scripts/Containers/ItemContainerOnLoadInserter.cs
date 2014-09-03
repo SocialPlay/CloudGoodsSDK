@@ -15,13 +15,13 @@ public class ItemContainerOnLoadInserter : MonoBehaviour {
     {
         foreach (ItemData item in items)
         {
-            ItemData itemData = ItemConverter.ConvertItemDataToNGUIItemDataObject(item);
+            ItemData itemData = item;//ItemConverter.ConvertItemDataToNGUIItemDataObject(item);
 
             List<ItemData> componentInitailizerList = new List<ItemData>();
 
             componentInitailizerList.Add(itemData);
             container.Add(itemData, -1, false);
-            Destroy(item.gameObject);
+           // Destroy(item.gameObject);
         }
     }
 }

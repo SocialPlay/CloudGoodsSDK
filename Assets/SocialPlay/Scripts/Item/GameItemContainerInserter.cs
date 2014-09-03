@@ -26,8 +26,7 @@ public class GameItemContainerInserter : MonoBehaviour, IItemPutter
 
             foreach (ItemData item in items)
             {
-                ItemContainerManager.MoveItem(item, null, container);
-                Destroy(item.gameObject);
+                ItemContainerManager.MoveItem(item, null, container);               
             }
         }
     }

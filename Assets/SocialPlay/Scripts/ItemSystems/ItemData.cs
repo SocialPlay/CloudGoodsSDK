@@ -4,13 +4,12 @@ using UnityEngine;
 using Newtonsoft.Json.Linq;
 
 [System.Serializable]
-public class ItemData : MonoBehaviour
+public class ItemData
 {
     internal ItemContainer ownerContainer = null;
     internal int stackSize = 0;
 
-
-    internal string itemName = "";
+    public string itemName = "";
     internal Guid stackID = Guid.Empty;
     internal int classID = 0;
     internal int itemID = 0;
@@ -31,6 +30,8 @@ public class ItemData : MonoBehaviour
 
     public bool isLocked = false;
 
+
+
     public void AssetBundle(Action<UnityEngine.Object> callBack)
     {
         try
@@ -46,8 +47,7 @@ public class ItemData : MonoBehaviour
 
     public virtual void CreatNew(out ItemData newItem, int amount, ItemContainer ownerContainer)
     {
-		Debug.Log("CreatNew " + itemName);
-        newItem = NewItem();
+        newItem = new ItemData();
         newItem.stackSize = amount;
         newItem.ownerContainer = ownerContainer;
         newItem.itemName = itemName;
@@ -70,17 +70,17 @@ public class ItemData : MonoBehaviour
         newItem.isLocked = isLocked;
     }
 
-    /// <summary>
-    /// Used to create new version of this item
-    /// </summary>
-    /// <returns>new ItemData(); (Overrider for each derived class)</returns>
-    protected virtual ItemData NewItem()
-    {
+    ///// <summary>
+    ///// Used to create new version of this item
+    ///// </summary>
+    ///// <returns>new ItemData(); (Overrider for each derived class)</returns>
+    //protected virtual ItemData NewItem()
+    //{
 
-        GameObject tmp = Instantiate(this.gameObject) as GameObject;
-        tmp.name = "(" + itemID + "," + quality + ")" + itemName;		
-        return tmp.GetComponent<ItemData>();
-    }
+    //    GameObject tmp = Instantiate(this.gameObject) as GameObject;
+    //    tmp.name = "(" + itemID + "," + quality + ")" + itemName;		
+    //    return tmp.GetComponent<ItemData>();
+    //}
 
     public virtual bool UseItem()
     {
