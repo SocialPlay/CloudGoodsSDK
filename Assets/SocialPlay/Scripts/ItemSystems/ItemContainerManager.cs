@@ -34,14 +34,14 @@ public class ItemContainerManager
             {
                 case ContainerAddState.ActionState.Add:
 
-                    ItemData newItemData = ItemConverter.ConvertItemDataToNGUIItemDataObject(movingItemData);
+                   // ItemData newItemData = ItemConverter.ConvertItemDataToNGUIItemDataObject(movingItemData);
 
                     if (movingItemData.ownerContainer != null)
                     {
                         movingItemData.ownerContainer.Remove(movingItemData, true, targetAddState.possibleAddAmount);
                     }
 
-                    targetContainer.Add(newItemData, targetAddState.possibleAddAmount);
+                    targetContainer.Add(movingItemData, targetAddState.possibleAddAmount);
                     break;
                 case ContainerAddState.ActionState.No:
                     break;

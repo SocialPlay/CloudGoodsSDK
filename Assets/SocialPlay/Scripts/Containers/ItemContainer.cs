@@ -39,25 +39,25 @@ public class ItemContainer : MonoBehaviour
     /// </summary>
     public event Action ClearItems;
 
-    /// <summary>
-    /// Called After the user clicks an item
-    /// </summary>
-    public event Action<ItemData> ItemSingleClicked;
+    ///// <summary>
+    ///// Called After the user clicks an item
+    ///// </summary>
+    //public event Action<ItemData> ItemSingleClicked;
 
-    /// <summary>
-    /// Called after the user double clicks an item
-    /// </summary>
-    public event Action<ItemData> ItemDoubleClicked;
+    ///// <summary>
+    ///// Called after the user double clicks an item
+    ///// </summary>
+    //public event Action<ItemData> ItemDoubleClicked;
 
-    /// <summary>
-    /// Called after the user right clicks an item
-    /// </summary>
-    public event Action<ItemData> ItemRightClicked;
+    ///// <summary>
+    ///// Called after the user right clicks an item
+    ///// </summary>
+    //public event Action<ItemData> ItemRightClicked;
 
-    /// <summary>
-    /// Called after a user presses a key that is linked to the Container(only for slotted containers)
-    /// </summary>
-    public event Action<ItemData> ItemKeyBindingClicked;
+    ///// <summary>
+    ///// Called after a user presses a key that is linked to the Container(only for slotted containers)
+    ///// </summary>
+    //public event Action<ItemData> ItemKeyBindingClicked;
 
     private ItemContainerRestrictor restriction = null;
 
@@ -159,7 +159,6 @@ public class ItemContainer : MonoBehaviour
 
     public void Add(ItemData itemData, int amount = -1, bool isSave = true)
     {
-
         containerAddAction.AddItem(itemData, amount, isSave);
     }
 
@@ -209,50 +208,50 @@ public class ItemContainer : MonoBehaviour
 
     public void Clear()
     {
-        foreach (ItemData item in containerItems)
-        {
-            Destroy(item.gameObject);
-        }
+        //foreach (ItemData item in containerItems)
+        //{
+        //    Destroy(item.gameObject);
+        //}
 
         containerItems.Clear();
         ClearItemEvent();
     }
 
-    public void OnItemSingleClick(ItemData item)
-    {
-        if (!isPerformingAction && ItemSingleClicked != null)
-        {
-            isPerformingAction = true;
-            ItemSingleClicked(item);
-        }
-    }
+    //public void OnItemSingleClick(ItemData item)
+    //{
+    //    if (!isPerformingAction && ItemSingleClicked != null)
+    //    {
+    //        isPerformingAction = true;
+    //        ItemSingleClicked(item);
+    //    }
+    //}
 
-    public void OnItemDoubleCliked(ItemData item)
-    {
-        if (!isPerformingAction && ItemDoubleClicked != null)
-        {
-            isPerformingAction = true;
-            ItemDoubleClicked(item);
-        }
-    }
+    //public void OnItemDoubleCliked(ItemData item)
+    //{
+    //    if (!isPerformingAction && ItemDoubleClicked != null)
+    //    {
+    //        isPerformingAction = true;
+    //        ItemDoubleClicked(item);
+    //    }
+    //}
 
-    public void OnItemRightCliked(ItemData item)
-    {
-        if (!isPerformingAction && ItemRightClicked != null)
-        {
-            isPerformingAction = true;
-            ItemRightClicked(item);
-        }
-    }
+    //public void OnItemRightCliked(ItemData item)
+    //{
+    //    if (!isPerformingAction && ItemRightClicked != null)
+    //    {
+    //        isPerformingAction = true;
+    //        ItemRightClicked(item);
+    //    }
+    //}
 
-    public void OnItemKeybindClick(ItemData item)
-    {
-        if (!isPerformingAction && ItemKeyBindingClicked != null)
-        {
-            isPerformingAction = true;
-            ItemKeyBindingClicked(item);
-        }
-    }
+    //public void OnItemKeybindClick(ItemData item)
+    //{
+    //    if (!isPerformingAction && ItemKeyBindingClicked != null)
+    //    {
+    //        isPerformingAction = true;
+    //        ItemKeyBindingClicked(item);
+    //    }
+    //}
 
     public void FinishActionCycle()
     {

@@ -18,11 +18,12 @@ public class ContainerDropItemAction : ContainerActions
         gameItemDrop = gameObject.AddComponent<ItemDrop>();
     }
 
-    public override void DoAction(ItemData item)
+    public override void DoAction(GameObject itemObject)
     {
-        string itemStacks = ConvertContainerItemToSerializedJsonObject(item);
+        ItemData itemData = itemObject.GetComponent<ItemDataComponent>().itemData;
+        string itemStacks = ConvertContainerItemToSerializedJsonObject(itemData);
 
-        SP.MoveItemStacks(itemStacks, SP.user.userID.ToString(), "Session", 0, OnItemMoved(item));
+        SP.MoveItemStacks(itemStacks, SP.user.userID.ToString(), "Session", 0, OnItemMoved(itemData));
     }
 
     private System.Action<MoveMultipleItemsResponse> OnItemMoved(ItemData item)

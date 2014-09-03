@@ -4,5 +4,5 @@ using System.Collections;
 
 public abstract class ContainerActions : MonoBehaviour
 {
-    public virtual void DoAction(ItemData item) { }
+    public virtual void DoAction(GameObject item) { }
 }

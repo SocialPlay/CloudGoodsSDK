@@ -33,11 +33,11 @@ public class ItemDrop : MonoBehaviour
                         else
                             dropObject = GameObjectInitilizer.initilizer.InitilizeGameObject(dropModelDefault);
 
-                        ItemData itemData = dropObject.AddComponent<ItemData>();
+                        ItemData itemData = dropObject.AddComponent<ItemDataComponent>().itemData;
 
                         itemData.SetItemData(item);
 
-                        ItemComponentInitalizer.InitializeItemWithComponents(dropObject.GetComponent<ItemData>(), AddComponetTo.prefab);
+                        ItemComponentInitalizer.InitializeItemWithComponents(dropObject.GetComponent<ItemDataComponent>().itemData, AddComponetTo.prefab);
 
                         dropObject.transform.position = dropPosition;
                         dropObject.transform.parent = dropParentObject.transform;
