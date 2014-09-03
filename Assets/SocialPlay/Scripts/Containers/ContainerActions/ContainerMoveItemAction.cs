@@ -6,8 +6,9 @@ public class ContainerMoveItemAction : ContainerActions {
 
     public ItemContainer MoveToContainer;
 
-    public override void DoAction(ItemData item)
+    public override void DoAction(GameObject itemObject)
     {
-        ItemContainerManager.MoveItem(item, null, MoveToContainer);
+        ItemData itemData = itemObject.GetComponent<ItemDataComponent>().itemData;
+        ItemContainerManager.MoveItem(itemData, null, MoveToContainer);
     } 
 }

@@ -14,10 +14,10 @@ public class GameObjectItemDataConverter : ItemDataConverter
         for (int i = 0, imax = generatedItems.Count; i < imax; i++ )
         {
             SocialPlay.Data.ItemData item = generatedItems[i];
-            GameObject go = new GameObject();
-            ItemData itemData = go.AddComponent<ItemData>();
-
-            go.name = item.Name;
+            //GameObject go = new GameObject();
+            ItemData itemData = new ItemData(); //go.AddComponent<ItemData>();
+            Debug.Log(itemData);
+            //go.name = item.Name;
             itemData.baseEnergy = item.BaseItemEnergy;
 
             //TODO fix behaviour conversion
@@ -38,6 +38,7 @@ public class GameObjectItemDataConverter : ItemDataConverter
             itemData.assetURL = item.AssetBundleName;
             itemData.tags = ConvertTags(item);
             itemData.persistantLocation = item.Location;
+            Debug.Log(itemData);
             convertedItems.Add(itemData);
         }
 

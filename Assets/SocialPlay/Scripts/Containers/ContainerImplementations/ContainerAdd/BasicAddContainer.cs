@@ -48,11 +48,6 @@ public class BasicAddContainer : MonoBehaviour, IContainerAddAction
 
                 data.stackSize -= amount;
 
-                Debug.Log("data stack: " + data.stackSize);
-
-                if (data.stackSize <= 0)
-                    Destroy(data.gameObject);
-
                 return true;
             }
         }

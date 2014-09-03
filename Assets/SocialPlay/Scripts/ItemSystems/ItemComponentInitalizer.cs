@@ -53,7 +53,7 @@ public class ItemComponentInitalizer : MonoBehaviour
                         if (pair.destination == sourceToAddTo || pair.destination == AddComponetTo.both)
                         {
                             Type type = pair.component.GetType();
-                            item.gameObject.AddComponent(type.ToString());
+                            //item.gameObject.AddComponent(type.ToString());
                         }
                         else
                         {

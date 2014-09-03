@@ -4,11 +4,12 @@ using System;
 
 public class ContainerItemComponentUseAction : ContainerActions {
 
-    public override void DoAction(ItemData item)
+    public override void DoAction(GameObject itemObject)
     {
+        ItemData item = itemObject.GetComponent<ItemDataComponent>().itemData;
         try
         {
-            IItemComponent itemComponent = item.gameObject.GetComponent(typeof(IItemComponent)) as IItemComponent;
+            IItemComponent itemComponent = itemObject.GetComponent(typeof(IItemComponent)) as IItemComponent;
             itemComponent.UseItem(item);
         }
         catch (Exception ex)

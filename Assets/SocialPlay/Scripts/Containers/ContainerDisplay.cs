@@ -15,18 +15,18 @@ public class ContainerDisplay : MonoBehaviour
     private List<ContainerDisplayAction> disaplyActions = new List<ContainerDisplayAction>();
 
 
-    protected void OnEnable()
-    {
-        itemContainer.AddedItem += AddedItem;
-        itemContainer.RemovedItem += RemovedItem;
-    }
+    //protected void OnEnable()
+    //{
+    //    itemContainer.AddedItem += AddedItem;
+    //    itemContainer.RemovedItem += RemovedItem;
+    //}
 
 
-    protected void OnDisable()
-    {
-        itemContainer.AddedItem -= AddedItem;
-        itemContainer.RemovedItem -= RemovedItem;
-    }
+    //protected void OnDisable()
+    //{
+    //    itemContainer.AddedItem -= AddedItem;
+    //    itemContainer.RemovedItem -= RemovedItem;
+    //}
 
     protected void Start()
     {
@@ -45,44 +45,44 @@ public class ContainerDisplay : MonoBehaviour
         }
     }
 
-    protected void AddedItem(ItemData itemData, bool isSave)
-    {
-        itemData.transform.parent = viewArea.transform;
-        itemData.transform.localPosition = new Vector3(0, 0, -1);
-        itemData.transform.localScale = Vector3.one;
-        foreach (UIWidget item in itemData.GetComponentsInChildren<UIWidget>())
-        {
-            item.enabled = true;
-        }
-        foreach (MonoBehaviour item in itemData.GetComponentsInChildren<MonoBehaviour>())
-        {
-            if (item != null)
-            {
-                item.enabled = true;
-            }
-        }
-        viewArea.repositionNow = true;
-    }
+    //protected void AddedItem(ItemData itemData, bool isSave)
+    //{
+    //    itemData.transform.parent = viewArea.transform;
+    //    itemData.transform.localPosition = new Vector3(0, 0, -1);
+    //    itemData.transform.localScale = Vector3.one;
+    //    foreach (UIWidget item in itemData.GetComponentsInChildren<UIWidget>())
+    //    {
+    //        item.enabled = true;
+    //    }
+    //    foreach (MonoBehaviour item in itemData.GetComponentsInChildren<MonoBehaviour>())
+    //    {
+    //        if (item != null)
+    //        {
+    //            item.enabled = true;
+    //        }
+    //    }
+    //    viewArea.repositionNow = true;
+    //}
 
-    protected void RemovedItem(ItemData itemData, int amount, bool isBeingMoved)
-    {
-        Debug.Log("removed item: " + itemData.stackSize + "  amoutn: " + amount);
+    //protected void RemovedItem(ItemData itemData, int amount, bool isBeingMoved)
+    //{
+    //    Debug.Log("removed item: " + itemData.stackSize + "  amoutn: " + amount);
 
-        if (!isBeingMoved)
-        {
-            if (itemData.stackSize - amount <= 0)
-            {
-                Destroy(itemData.gameObject);
-                viewArea.repositionNow = true;
-            }
-        }
+    //    if (!isBeingMoved)
+    //    {
+    //        if (itemData.stackSize - amount <= 0)
+    //        {
+    //            Destroy(itemData.gameObject);
+    //            viewArea.repositionNow = true;
+    //        }
+    //    }
 
-        if (amount == -1 || itemData.stackSize <= 0)
-        {
-            Destroy(itemData.gameObject);
-            viewArea.repositionNow = true;
-        }
-    }
+    //    if (amount == -1 || itemData.stackSize <= 0)
+    //    {
+    //        Destroy(itemData.gameObject);
+    //        viewArea.repositionNow = true;
+    //    }
+    //}
 
     protected virtual void SetupWindow()
     {

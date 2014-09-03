@@ -20,7 +20,7 @@ public class ConfigurableNGUIItemTooltip : MonoBehaviour, ITooltipSetup
 
     public string Setup()
     {
-        item = GetComponent<ItemData>();
+        item = GetComponent<ItemDataComponent>().itemData;
         string formated = "";
 
 

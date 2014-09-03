@@ -30,7 +30,7 @@ public class ItemPutterDropper : MonoBehaviour, IItemPutter
     {
         foreach (ItemData dropItem in dropItems)
         {
-            ItemData data = dropItem.GetComponent<ItemData>();
+            ItemData data = dropItem;
 
             GameObject model;
             if (prefabinitilizer != null)
@@ -45,10 +45,7 @@ public class ItemPutterDropper : MonoBehaviour, IItemPutter
             {
                 model = defaultDropModelPrefab;
             }
-
-            gameItemDrop.DropItemIntoWorld(data, dropTransform.position, model);
-
-            DestroyObject(dropItem.gameObject);
+            gameItemDrop.DropItemIntoWorld(data, dropTransform.position, model);     
         }
     }
 }
