@@ -48,6 +48,7 @@ public class UnityUISPLogin : MonoBehaviour
         SP.OnUserRegister += RegisterMessageResponce;
         SP.OnForgotPassword += ForgotPasswordResponce;
         SP.OnVerificationSent += ResentVerificationResponce;
+        SPLogout.SPUserLogout += OnLogout;
     }
 
     void OnDisable()
@@ -57,6 +58,7 @@ public class UnityUISPLogin : MonoBehaviour
         SP.OnUserRegister -= RegisterMessageResponce;
         SP.OnForgotPassword -= ForgotPasswordResponce;
         SP.OnVerificationSent -= ResentVerificationResponce;
+        SPLogout.SPUserLogout -= OnLogout;
     }
 
     void Start()
@@ -117,9 +119,6 @@ public class UnityUISPLogin : MonoBehaviour
 
     void ForgotPasswordResponce(UserResponse responce)
     {
-        //resendVerificationTextObject.SetActive(false);
-        //loginErrorLabel.text = responce.message;
-
         confirmationStatus.text = responce.message;
     }
 
@@ -209,11 +208,6 @@ public class UnityUISPLogin : MonoBehaviour
     {
 
         string ErrorMsg = "";
-        //if (!registerUserNameValidator.IsValidCheck())
-        //{
-        //    if (!string.IsNullOrEmpty(ErrorMsg)) ErrorMsg += "\n";
-        //    ErrorMsg += "-Invalid User Name";
-        //}
         if (!registerUserEmailValidator.IsValidCheck())
         {
             if (!string.IsNullOrEmpty(ErrorMsg)) ErrorMsg += "\n";
@@ -243,10 +237,10 @@ public class UnityUISPLogin : MonoBehaviour
     {
 
         string ErrorMsg = "";
-        //if (!loginUserEmailValidator.IsValidCheck())
-        //{
-        //    ErrorMsg = "Password reset requires valid E-mail";
-        //}
+        if (!loginUserEmailValidator.IsValidCheck())
+        {
+            ErrorMsg = "Password reset requires valid E-mail";
+        }
         loginErrorLabel.text = ErrorMsg;
         if (string.IsNullOrEmpty(ErrorMsg))
         {
@@ -274,6 +268,11 @@ public class UnityUISPLogin : MonoBehaviour
             SP.ResendVerificationEmail(loginUserEmail.value, null);
         }
 
+    }
+
+    void OnLogout()
+    {
+        loginTab.SetActive(true);
     }
 
     #endregion
