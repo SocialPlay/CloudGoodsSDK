@@ -9,8 +9,6 @@ public class ItemContainerManager
 {
     public static ContainerAddState.ActionState MoveItem(ItemData movingItemData, ItemContainer lastContainer, ItemContainer targetContainer)
     {
-        Debug.Log("move item");
-
         try
         {
             if (movingItemData == null)

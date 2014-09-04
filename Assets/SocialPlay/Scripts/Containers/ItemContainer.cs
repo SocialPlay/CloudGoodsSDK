@@ -14,6 +14,8 @@ public class ItemContainer : MonoBehaviour
 
     public List<ItemData> containerItems = new List<ItemData>();
 
+ 
+
     /// <summary>
     /// Called after the contaienr added an item.
     /// </summary>
@@ -39,32 +41,14 @@ public class ItemContainer : MonoBehaviour
     /// </summary>
     public event Action ClearItems;
 
-    ///// <summary>
-    ///// Called After the user clicks an item
-    ///// </summary>
-    //public event Action<ItemData> ItemSingleClicked;
-
-    ///// <summary>
-    ///// Called after the user double clicks an item
-    ///// </summary>
-    //public event Action<ItemData> ItemDoubleClicked;
-
-    ///// <summary>
-    ///// Called after the user right clicks an item
-    ///// </summary>
-    //public event Action<ItemData> ItemRightClicked;
-
-    ///// <summary>
-    ///// Called after a user presses a key that is linked to the Container(only for slotted containers)
-    ///// </summary>
-    //public event Action<ItemData> ItemKeyBindingClicked;
+    
 
     private ItemContainerRestrictor restriction = null;
 
     public List<IContainerRestriction> containerAddRestrictions = new List<IContainerRestriction>();
     public List<IContainerRestriction> containerRemoveRestrictions = new List<IContainerRestriction>();
 
-    private bool isPerformingAction = false;
+
 
     void Awake()
     {
@@ -217,46 +201,8 @@ public class ItemContainer : MonoBehaviour
         ClearItemEvent();
     }
 
-    //public void OnItemSingleClick(ItemData item)
-    //{
-    //    if (!isPerformingAction && ItemSingleClicked != null)
-    //    {
-    //        isPerformingAction = true;
-    //        ItemSingleClicked(item);
-    //    }
-    //}
 
-    //public void OnItemDoubleCliked(ItemData item)
-    //{
-    //    if (!isPerformingAction && ItemDoubleClicked != null)
-    //    {
-    //        isPerformingAction = true;
-    //        ItemDoubleClicked(item);
-    //    }
-    //}
-
-    //public void OnItemRightCliked(ItemData item)
-    //{
-    //    if (!isPerformingAction && ItemRightClicked != null)
-    //    {
-    //        isPerformingAction = true;
-    //        ItemRightClicked(item);
-    //    }
-    //}
-
-    //public void OnItemKeybindClick(ItemData item)
-    //{
-    //    if (!isPerformingAction && ItemKeyBindingClicked != null)
-    //    {
-    //        isPerformingAction = true;
-    //        ItemKeyBindingClicked(item);
-    //    }
-    //}
-
-    public void FinishActionCycle()
-    {
-        isPerformingAction = false;
-    }
+  
 
     public void RefreshContainer()
     {
