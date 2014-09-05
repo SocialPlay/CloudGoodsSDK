@@ -9,9 +9,17 @@ public class ItemDataDisplay : MonoBehaviour
     public Text amountText;
     public Image itemImage;
 
-    public void OnMouseUpAsButton()//Click
+     void OnMouseUpAsButton()//Click
     {
-        holdingContainer.PerformSingleClick(itemObject);
+         holdingContainer.PerformSingleClick(itemObject);
+    }
+
+     void  OnMouseOver()
+    {
+        if (Input.GetMouseButton(1))
+        {
+            holdingContainer.PerformRightClick(itemObject);
+        }
     }
 
     public void Start()
