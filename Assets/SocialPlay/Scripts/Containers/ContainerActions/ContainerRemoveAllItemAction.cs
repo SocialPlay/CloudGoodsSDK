@@ -8,7 +8,7 @@ public class ContainerRemoveAllItemAction : ContainerActions
 {
     public ItemContainer SourceContainer;
 
-    public override void DoAction(GameObject itemData)
+    public override void DoAction(ItemDataComponent itemData)
     {
         ItemData[] itemsFromContainer = new ItemData[SourceContainer.containerItems.Count];
         SourceContainer.containerItems.CopyTo(itemsFromContainer);

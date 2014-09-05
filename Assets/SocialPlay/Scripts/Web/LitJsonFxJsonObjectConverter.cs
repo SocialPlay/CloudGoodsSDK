@@ -19,7 +19,6 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter
 
         JsonReader reader = new JsonReader(parsedString);
         reader.Read();
-
         if (reader.Token.ToString() == "ArrayStart")
         {
             while (reader.Token.ToString() != "ArrayEnd")
@@ -28,8 +27,7 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter
 
                 if (reader.Token.ToString() == "ObjectStart")
                 {
-                    SocialPlay.Data.ItemData itemData = new SocialPlay.Data.ItemData();
-
+                    SocialPlay.Data.ItemData itemData = new SocialPlay.Data.ItemData();                  
                     while (reader.Token.ToString() != "ObjectEnd")
                     {
                         reader.Read();

@@ -18,7 +18,7 @@ public class ContainerDropAllContainerItemsAction : ContainerActions
         itemDrop = gameObject.AddComponent<ItemDrop>();
     }
 
-    public override void DoAction(GameObject itemObject)
+    public override void DoAction(ItemDataComponent itemObject)
     {
         string convertedDropItems = ConvertContainerItemsToSerializedJsonObject();
 

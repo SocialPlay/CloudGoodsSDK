@@ -4,7 +4,7 @@ using System;
 
 public class ContainerItemComponentUseAction : ContainerActions {
 
-    public override void DoAction(GameObject itemObject)
+    public override void DoAction(ItemDataComponent itemObject)
     {
         ItemData item = itemObject.GetComponent<ItemDataComponent>().itemData;
         try

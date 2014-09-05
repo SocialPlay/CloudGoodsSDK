@@ -16,7 +16,6 @@ public class GameObjectItemDataConverter : ItemDataConverter
             SocialPlay.Data.ItemData item = generatedItems[i];
             //GameObject go = new GameObject();
             ItemData itemData = new ItemData(); //go.AddComponent<ItemData>();
-            Debug.Log(itemData);
             //go.name = item.Name;
             itemData.baseEnergy = item.BaseItemEnergy;
 
@@ -38,7 +37,6 @@ public class GameObjectItemDataConverter : ItemDataConverter
             itemData.assetURL = item.AssetBundleName;
             itemData.tags = ConvertTags(item);
             itemData.persistantLocation = item.Location;
-            Debug.Log(itemData);
             convertedItems.Add(itemData);
         }
 
