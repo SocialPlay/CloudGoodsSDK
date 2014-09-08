@@ -6,12 +6,11 @@ using System.Collections.Generic;
 
 public class ItemContainerDisplay : MonoBehaviour
 {
-
-
     public ItemContainer myContainer;
     public GameObject displayObject;
+    public Transform childTarget;
 
-    public List<ItemDataDisplay> currentDisplayObjects = new List<ItemDataDisplay>();
+    private List<ItemDataDisplay> currentDisplayObjects = new List<ItemDataDisplay>();
 
     /// <summary>
     /// Called After the user clicks an item
@@ -64,7 +63,7 @@ public class ItemContainerDisplay : MonoBehaviour
         ItemDataDisplay newDisplay = newItem.GetComponent<ItemDataDisplay>();
         newItem.GetComponent<ItemDataComponent>().itemData = itemData;
         newItem.name = itemData.itemName;
-        newItem.transform.parent = this.transform;
+        newItem.transform.parent = childTarget;
         newItem.transform.localPosition = Vector3.zero;
         newItem.transform.localScale = Vector3.one;
         currentDisplayObjects.Add(newDisplay);
