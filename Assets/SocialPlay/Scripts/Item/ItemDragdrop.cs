@@ -37,10 +37,18 @@ public class ItemDragdrop : MonoBehaviour {
     {
         if (isDragging)
         {
+            Collider col = collider;
+            if (col != null) col.enabled = true;
+
             transform.parent = lastParent;
             transform.localPosition = lastPosition;
             Debug.Log("Item Dropped");
             isDragging = false;
         }
+    }
+
+    void OnTriggerEnter(Collider collider)
+    {
+        Debug.Log("collided with: " + collider.gameObject.name);
     }
 }
