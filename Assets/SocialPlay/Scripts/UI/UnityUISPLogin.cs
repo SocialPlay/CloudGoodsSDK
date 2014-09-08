@@ -183,8 +183,6 @@ public class UnityUISPLogin : MonoBehaviour
 
     public void Login()
     {
-        Debug.Log("Test: " + loginUserEmailValidator);
-
         string ErrorMsg = "";
         if (!loginUserEmailValidator.IsValidCheck())
         {

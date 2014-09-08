@@ -12,7 +12,6 @@ public class NGUIDragDropItem : MonoBehaviour
     Transform lastParent;
     Vector3 lastPosition = Vector3.zero;
 
-
     /// <summary>
     /// Update the table, if there is one.
     /// </summary>
