@@ -36,20 +36,7 @@ public class ItemContainerDisplay : MonoBehaviour
     void OnEnable()
     {
         myContainer.AddedItem += myContainer_AddedItem;
-        myContainer.RemovedItem += myContainer_RemovedItem;
-
-        //extra items per for debugging
-        myContainer.AddedItem += myContainer_AddedItem;
-        myContainer.RemovedItem += myContainer_RemovedItem;
-
-        myContainer.AddedItem += myContainer_AddedItem;
-        myContainer.RemovedItem += myContainer_RemovedItem;
-
-        myContainer.AddedItem += myContainer_AddedItem;
-        myContainer.RemovedItem += myContainer_RemovedItem;
-
-        myContainer.AddedItem += myContainer_AddedItem;
-        myContainer.RemovedItem += myContainer_RemovedItem;
+        myContainer.RemovedItem += myContainer_RemovedItem; 
     }
 
     void OnDisable()
