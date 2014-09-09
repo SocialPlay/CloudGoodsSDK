@@ -202,6 +202,21 @@ public class SP : MonoBehaviour//, IServiceCalls
     }
 
     /// <summary>
+    /// Returns the default item drop game object.
+    /// </summary>
+
+    static public GameObject DefaultItemDrop
+    {
+        get
+        {
+            if (SocialPlaySettings.DefaultItemDrop == null)
+                Debug.LogError("DefaultItemDrop has not been defined. Open Social Play Settings from the menu.");
+
+            return SocialPlaySettings.DefaultItemDrop;
+        }
+    }
+
+    /// <summary>
     /// True if the user is logged in.
     /// </summary>
 

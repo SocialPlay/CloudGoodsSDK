@@ -26,6 +26,7 @@ public class SocialPlaySettings : ScriptableObject
     public Texture2D defaultTexture;
     public List<string> androidProductNames = new List<string>();
     public List<string> creditBundlesDescription = new List<string>();
+    public GameObject defaultItemDrop;
 
     static SocialPlaySettings mInst;
 
@@ -35,6 +36,14 @@ public class SocialPlaySettings : ScriptableObject
         {
             if (mInst == null) mInst = (SocialPlaySettings)Resources.Load("SocialPlaySettings", typeof(SocialPlaySettings));
             return mInst;
+        }
+    }
+
+    static public GameObject DefaultItemDrop
+    {
+        get
+        {
+            return instance.defaultItemDrop;
         }
     }
 

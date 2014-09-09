@@ -14,28 +14,28 @@ public class ItemDrop : MonoBehaviour
         if (item != null)
         {
        
-            List<ItemData> items = new List<ItemData>();
-            items.Add(item);
-            List<GameObject> dropItems = ItemConverter.ConvertToItemDropObject(items, true);
+            //List<ItemData> items = new List<ItemData>();
+            //items.Add(item);
+            //List<GameObject> dropItems = ItemConverter.ConvertToItemDropObject(items, true);
 
             if(dropParentObject == null)
                 dropParentObject = new GameObject("DroppedItems");
 
-            foreach (GameObject dropItem in dropItems)
-            {
-                item.AssetBundle(
-                    (UnityEngine.Object bundleObj) =>
+            //foreach (GameObject dropItem in dropItems)
+            //{
+                item.AssetBundle((UnityEngine.Object bundleObj) =>
                     {
-                        GameObject dropObject;
+                        GameObject dropObject = GameObjectInitilizer.initilizer.InitilizeGameObject(bundleObj != null ? bundleObj : dropModelDefault);
 
-                        if (bundleObj != null)
+                        /*if (bundleObj != null)
                             dropObject = GameObjectInitilizer.initilizer.InitilizeGameObject(bundleObj);
                         else
-                            dropObject = GameObjectInitilizer.initilizer.InitilizeGameObject(dropModelDefault);
+                            dropObject = GameObjectInitilizer.initilizer.InitilizeGameObject(dropModelDefault);*/
 
                         ItemData itemData = dropObject.AddComponent<ItemDataComponent>().itemData;
-
                         itemData.SetItemData(item);
+
+                        dropObject.name = item.itemName + " (ID: " + item.itemID + ")";
 
                         ItemComponentInitalizer.InitializeItemWithComponents(dropObject.GetComponent<ItemDataComponent>().itemData, AddComponetTo.prefab);
 
@@ -47,8 +47,8 @@ public class ItemDrop : MonoBehaviour
                     }
                 );
 
-                Destroy(dropItem);
-            }
+                //Destroy(dropItem);
+            //}
 
         }
     }
