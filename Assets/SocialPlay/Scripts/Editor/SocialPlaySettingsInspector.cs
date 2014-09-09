@@ -162,23 +162,27 @@ public class SocialPlaySettingsInspector : Editor
         if (string.IsNullOrEmpty(appId) || string.IsNullOrEmpty(appSecret))
         {
             EditorGUILayout.HelpBox("Go To http://developer.socialplay.com to get your AppID and AppSecret", MessageType.Warning);
-        }
-
-        Texture2D defaultTexture = EditorGUILayout.ObjectField("Default Texture", mSettings.defaultTexture, typeof(Texture2D), false) as Texture2D;
+        }        
 
         GUILayout.Label("Android", "BoldLabel");
         string androidKey = EditorGUILayout.TextField("Key", mSettings.androidKey);
+
+        GUILayout.Label("Defaults", "BoldLabel");
+        Texture2D defaultTexture = EditorGUILayout.ObjectField("Default Texture", mSettings.defaultTexture, typeof(Texture2D), false) as Texture2D;
+        GameObject defaultItemDrop = EditorGUILayout.ObjectField("Default Item Drop", mSettings.defaultItemDrop, typeof(GameObject), false) as GameObject;
 
         EditorGUILayout.Separator();
 
         if (mSettings.appID != appId ||
             mSettings.appSecret != appSecret ||
             mSettings.defaultTexture != defaultTexture ||
+            mSettings.defaultItemDrop != defaultItemDrop ||
             mSettings.androidKey != androidKey)
         {
             mSettings.appID = appId;
             mSettings.appSecret = appSecret;
             mSettings.defaultTexture = defaultTexture;
+            mSettings.defaultItemDrop = defaultItemDrop;
             mSettings.androidKey = androidKey;
             NGUIEditorTools.RegisterUndo("Social Play Settings", mSettings);
         }

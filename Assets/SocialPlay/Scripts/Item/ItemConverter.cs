@@ -19,12 +19,13 @@ public class ItemConverter  {
     {
         List<GameObject> ItemDrops = new List<GameObject>();
 
-        foreach (ItemData item in items)
+        for (int i = 0, imax = items.Count; i < imax; i++ )
         {
-            UnityEngine.Object obj = Resources.Load("ItemDrop");
-            GameObject go = GameObject.Instantiate(obj) as GameObject;
-            ItemData gameItemData = go.GetComponent<ItemDataComponent>().itemData;
-            gameItemData.SetItemData(item);
+            ItemData item = items[i];
+            Debug.Log("item " + item);
+            GameObject go = new GameObject(item.itemName+" (ID: "+item.itemID+")");
+            ItemDataComponent comp = go.AddComponent<ItemDataComponent>();
+            comp.itemData.SetItemData(item);
             ItemDrops.Add(go);
         }
 
