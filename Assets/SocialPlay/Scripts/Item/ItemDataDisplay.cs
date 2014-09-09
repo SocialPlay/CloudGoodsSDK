@@ -42,12 +42,10 @@ public class ItemDataDisplay : MonoBehaviour
                 }
             }
         }
-
         if (first_click)
         {
             running_timer += Time.deltaTime;
         }
-
     }
 
     void OnMouseExit()

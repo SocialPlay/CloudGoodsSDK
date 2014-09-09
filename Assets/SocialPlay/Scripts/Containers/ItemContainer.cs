@@ -12,9 +12,7 @@ public class ItemContainer : MonoBehaviour
 
     public LoadItemsForContainer itemLoader;
 
-    public List<ItemData> containerItems = new List<ItemData>();
-
- 
+    internal List<ItemData> containerItems = new List<ItemData>(); 
 
     /// <summary>
     /// Called after the contaienr added an item.
