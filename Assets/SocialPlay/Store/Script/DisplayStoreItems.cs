@@ -5,7 +5,7 @@ using Newtonsoft.Json.Linq;
 
 public class DisplayStoreItems : MonoBehaviour
 {
-    public NGUIStoreLoader storeLoader;
+    public UnityUIStoreLoader storeLoader;
 
     public FilterNewestItems.SortTimeType timeFilterType = FilterNewestItems.SortTimeType.hours;
     public int itemDisplayCount = 0;
@@ -17,26 +17,17 @@ public class DisplayStoreItems : MonoBehaviour
     public void DisplayItems()
     {
         if (!storeLoader)
-            storeLoader = this.gameObject.GetComponent<NGUIStoreLoader>();
+            storeLoader = this.gameObject.GetComponent<UnityUIStoreLoader>();
 
         SP.GetStoreItems(OnReceivedStoreItems);
     }
 
     void OnReceivedStoreItems(List<StoreItem> storeItems)
     {
-            for (int i = 0; i < storeItems.Count; i++)
-            {
-                items.Add(storeItems[i]);
-            }
-      
-
-        FilterItemsByDateTime();
+        for (int i = 0; i < storeItems.Count; i++)
+        {
+            items.Add(storeItems[i]);
+        }
     }
 
-    void FilterItemsByDateTime()
-    {
-        List<StoreItem> newestItems = newestItemFilter.FilterItems(items, timeFilterType, itemDisplayCount, timeDifference);
-
-        storeLoader.LoadStoreWithPaging(newestItems, 0);
-    }
 }

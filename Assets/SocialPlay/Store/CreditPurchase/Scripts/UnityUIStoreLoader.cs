@@ -5,7 +5,6 @@ using System.Collections.Generic;
 
 public class UnityUIStoreLoader : MonoBehaviour
 {
-    public UIGrid grid;
     public GameObject itemPurchasePanel;
 
     public GameObject pageButtonPrefab;
@@ -49,16 +48,17 @@ public class UnityUIStoreLoader : MonoBehaviour
 
         for (int i = pageNum * maxGridAmount; i < (pageNum * maxGridAmount + PageMax); i++)
         {
-            GameObject newItem = NGUITools.AddChild(grid.gameObject, itemButtonPrefab);
+            GameObject newItem = (GameObject)GameObject.Instantiate(itemButtonPrefab);
+            newItem.transform.parent = transform;
+            newItem.transform.localPosition = Vector3.zero;
+            newItem.transform.localScale = Vector3.one;
             currentPageItems.Add(newItem);
 
-            UIStoreItem itemInfo = newItem.GetComponent<UIStoreItem>();
+            UnityUIStoreItem itemInfo = newItem.GetComponent<UnityUIStoreItem>();
             itemInfo.SetItemData(listItems[i]);
 
-            UIEventListener.Get(itemInfo.gameObject).onClick += DisplayItemPurchasePanel;
+            //UIEventListener.Get(itemInfo.gameObject).onClick += DisplayItemPurchasePanel;
         }
-
-        grid.repositionNow = true;
 
         SetPageButtons(GetPageAmount(listItems.Count));
     }
@@ -81,16 +81,16 @@ public class UnityUIStoreLoader : MonoBehaviour
 
     private void ClearCurrentGrid()
     {
-        grid.transform.DetachChildren();
+        //grid.transform.DetachChildren();
 
-        foreach (GameObject gridItemObj in currentPageItems)
-        {
-            Destroy(gridItemObj);
-        }
+        //foreach (GameObject gridItemObj in currentPageItems)
+        //{
+        //    Destroy(gridItemObj);
+        //}
 
-        currentPageItems.Clear();
+        //currentPageItems.Clear();
 
-        grid.Reposition();
+        //grid.Reposition();
     }
 
     int GetPageAmount(int itemCount)
@@ -115,13 +115,10 @@ public class UnityUIStoreLoader : MonoBehaviour
             newPage.transform.parent = pageGridObject.transform;
             newPage.transform.localScale = new Vector3(1, 1, 1);
 
-            PageInfo pageInfo = newPage.GetComponent<PageInfo>();
+            UnityUIPageInfo pageInfo = newPage.GetComponent<UnityUIPageInfo>();
             pageInfo.SetPage(i);
 
-            UIEventListener.Get(newPage).onClick += SetPage;
         }
-
-        pageGrid.repositionNow = true;
     }
 
     void ClearPageButtons()
@@ -138,8 +135,6 @@ public class UnityUIStoreLoader : MonoBehaviour
         {
             Destroy(gridItemObj.gameObject);
         }
-
-        pageGrid.repositionNow = true;
     }
 
     void SetPage(GameObject pageButton)
