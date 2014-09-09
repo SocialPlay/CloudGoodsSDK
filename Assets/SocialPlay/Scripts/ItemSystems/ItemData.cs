@@ -30,7 +30,10 @@ public class ItemData
 
     public bool isLocked = false;
 
-
+    public override string ToString()
+    {
+        return "ItemData {itemName: " + itemName + " itemID: " + itemID + " totalEnergy:" + totalEnergy + " salePrice: " + salePrice + " quality: " + quality + " isOwned: " + isOwned + " imageName: " + imageName+"}";
+    }
 
     public void AssetBundle(Action<UnityEngine.Object> callBack)
     {
@@ -85,6 +88,11 @@ public class ItemData
     public virtual bool UseItem()
     {
         return false;
+    }
+
+    public bool IsOwned()
+    {
+        return isOwned;
     }
 
 

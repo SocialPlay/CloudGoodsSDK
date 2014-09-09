@@ -8,7 +8,6 @@ using SocialPlay.Data;
 
 public class ItemPutterDropper : MonoBehaviour, IItemPutter
 {
-    public GameObject defaultDropModelPrefab;
     public Transform dropTransform;
     public ItemPrefabInitilizer prefabinitilizer;
     ItemDrop gameItemDrop;
@@ -35,15 +34,15 @@ public class ItemPutterDropper : MonoBehaviour, IItemPutter
             GameObject model;
             if (prefabinitilizer != null)
             {
-                model = prefabinitilizer.GetPrefabToInstantiate(data, defaultDropModelPrefab);
+                model = prefabinitilizer.GetPrefabToInstantiate(data, SP.DefaultItemDrop);
             }
             else if (GlobalPrefabInitilizer.prefabInit != null)
             {
-                model = GlobalPrefabInitilizer.prefabInit.GetPrefabToInstantiate(data, defaultDropModelPrefab);
+                model = GlobalPrefabInitilizer.prefabInit.GetPrefabToInstantiate(data, SP.DefaultItemDrop);
             }
             else
             {
-                model = defaultDropModelPrefab;
+                model = SP.DefaultItemDrop;
             }
             gameItemDrop.DropItemIntoWorld(data, dropTransform.position, model);     
         }
