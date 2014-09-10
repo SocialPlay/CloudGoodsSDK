@@ -170,6 +170,7 @@ public class SocialPlaySettingsInspector : Editor
         GUILayout.Label("Defaults", "BoldLabel");
         Texture2D defaultTexture = EditorGUILayout.ObjectField("Default Texture", mSettings.defaultTexture, typeof(Texture2D), false) as Texture2D;
         GameObject defaultItemDrop = EditorGUILayout.ObjectField("Default Item Drop", mSettings.defaultItemDrop, typeof(GameObject), false) as GameObject;
+        GameObject defaultUIItem = EditorGUILayout.ObjectField("Default UI Item", mSettings.defaultUIItem, typeof(GameObject), false) as GameObject;
 
         EditorGUILayout.Separator();
 
@@ -177,12 +178,14 @@ public class SocialPlaySettingsInspector : Editor
             mSettings.appSecret != appSecret ||
             mSettings.defaultTexture != defaultTexture ||
             mSettings.defaultItemDrop != defaultItemDrop ||
+            mSettings.defaultUIItem != defaultUIItem ||
             mSettings.androidKey != androidKey)
         {
             mSettings.appID = appId;
             mSettings.appSecret = appSecret;
             mSettings.defaultTexture = defaultTexture;
             mSettings.defaultItemDrop = defaultItemDrop;
+            mSettings.defaultUIItem = defaultUIItem;
             mSettings.androidKey = androidKey;
             NGUIEditorTools.RegisterUndo("Social Play Settings", mSettings);
         }

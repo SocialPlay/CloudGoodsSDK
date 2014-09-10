@@ -2,79 +2,50 @@ using UnityEngine;
 using System.Collections;
 
 
-public class NGUIContainerGameItem : MonoBehaviour
+public class NGUIContainerGameItem : ItemDataComponent
 {
-
-    GameObject socialplayObj;
-
-    public ItemData itemData;
     public UILabel itemAmountLabel;
-    public GameObject NGUITexture;
-    public UISprite Image;
+    public UITexture uiTexture;
+    public UISprite frameSprite;
+    public UISprite updateSprite;
 
-    //void OnEnable()
-    //{
-    //    UIEventListener.Get(gameObject).onClick += ItemClicked;
-    //    UIEventListener.Get(gameObject).onDoubleClick += ItemDoubleClicked;
-    //}
-
-    //void OnDisable()
-    //{
-    //    UIEventListener.Get(gameObject).onClick -= ItemClicked;
-    //    UIEventListener.Get(gameObject).onDoubleClick -= ItemDoubleClicked;
-    //}
+    int mLastStack;
 
     void Start()
     {
-        if (Image != null)
+        /*if (Image != null)
         {
-            if (Image.atlas.GetSprite(itemData.itemID.ToString()) != null)
+            if (Image.atlas.GetSprite(item.itemData.itemID.ToString()) != null)
             {
-                Image.spriteName = itemData.itemID.ToString();
+                Image.spriteName = item.itemData.itemID.ToString();
             }
             else
             {
                 Destroy(Image.gameObject);
                 SetImageTexture();
             }
-        }
+        }*/
     }
 
-    private void SetImageTexture()
+    public override void SetData(ItemData item)
     {
-        GameObject newNGUITexture = GameObject.Instantiate(NGUITexture) as GameObject;
-        newNGUITexture.transform.parent = transform;
-        newNGUITexture.transform.localPosition = Vector3.zero;
-        newNGUITexture.transform.localScale = new Vector3(1, 1, 1);
+        frameSprite.color = ItemQuailityColorSelector.GetColorForItem(item);
+        itemAmountLabel.text = item.stackSize.ToString();
+        SP.GetItemTexture(item.imageName, OnReceivedTexture);
 
-        SP.GetItemTexture(itemData.imageName, OnReceivedTexture);
+        if (mLastStack != item.stackSize)
+        {
+            mLastStack = item.stackSize;
+            TweenAlpha.Begin(updateSprite.cachedGameObject, 1, 0).from = 1;
+        }
     }
 
     void OnReceivedTexture(ImageStatus statusMsg, Texture2D texture)
     {
-        UITexture uiTexture = gameObject.GetComponentInChildren<UITexture>();
-        uiTexture.material = new Material(uiTexture.material.shader);
-        uiTexture.mainTexture = texture;
-        uiTexture.transform.localPosition -= Vector3.forward * 2;
-
-        TweenAlpha.Begin(uiTexture.cachedGameObject, 0.3f, 1).from = 0;
-    }
-
-    //public void ItemClicked(GameObject go)
-    //{
-    //    itemData.ownerContainer.OnItemSingleClick(itemData);
-    //}
-
-    //public void ItemDoubleClicked(GameObject go)
-    //{
-    //    itemData.ownerContainer.OnItemDoubleCliked(itemData);
-    //}
-
-    void Update()
-    {
-        if (itemData == null)
-            itemData = GetComponent<ItemDataComponent>().itemData;
-
-        itemAmountLabel.text = itemData.stackSize.ToString();
+        if (uiTexture.mainTexture != texture)
+        {
+            uiTexture.mainTexture = texture;
+            TweenAlpha.Begin(uiTexture.cachedGameObject, 0.3f, 1).from = 0;
+        }
     }
 }

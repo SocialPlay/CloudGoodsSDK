@@ -68,9 +68,7 @@ public class ItemGetter : MonoBehaviour
             transform.parent = previousParent;
             transform.localPosition = Vector3.zero;
         }
-        else
-            Destroy(gameObject);
-
+        //else Destroy(gameObject);
     }
 
 }

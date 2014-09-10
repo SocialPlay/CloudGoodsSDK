@@ -1,23 +1,21 @@
 using UnityEngine;
-using System.Collections;
-
 using System.Collections.Generic;
-using System;
-using Newtonsoft.Json.Linq;
-using SocialPlay.Data;
 
 public class ItemPutterDropper : MonoBehaviour, IItemPutter
 {
+    static public GameObject dropParent { get { if (mDrop == null) mDrop = new GameObject("DroppedItems"); return mDrop; } }
+    static GameObject mDrop;
+
     public Transform dropTransform;
-    public ItemPrefabInitilizer prefabinitilizer;
+    public ItemPrefabInitilizer prefabinitilizer;   
+    public IGameObjectAction postDropObjectAction;
+
     ItemDrop gameItemDrop;
 
     void Awake()
     {
-        if (GetComponent<ItemDrop>())
-            gameItemDrop = GetComponent<ItemDrop>();
-        else
-            gameItemDrop = gameObject.AddComponent<ItemDrop>();
+        gameItemDrop = GetComponent<ItemDrop>();
+        if (gameItemDrop == null) gameItemDrop = gameObject.AddComponent<ItemDrop>();
     }
 
     public void PutGameItem(List<ItemData> items)

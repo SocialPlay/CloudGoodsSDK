@@ -30,6 +30,12 @@ public class ItemData
 
     public bool isLocked = false;
 
+    /// <summary>
+    /// Visual UI item reference.
+    /// </summary>
+
+    public ItemDataComponent uiReference;
+
     public override string ToString()
     {
         return "ItemData {itemName: " + itemName + " itemID: " + itemID + " totalEnergy:" + totalEnergy + " salePrice: " + salePrice + " quality: " + quality + " isOwned: " + isOwned + " imageName: " + imageName+"}";

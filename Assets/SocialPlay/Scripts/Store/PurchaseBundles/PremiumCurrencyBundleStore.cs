@@ -148,10 +148,6 @@ public class PremiumCurrencyBundleStore : MonoBehaviour
         nguiItem.Description = item.Description;
         //nguiItem.CurrencyIcon = creditBundleIcon.Get(nguiItem.Amount, nguiItem.CurrencyIcon);
 
-        // This is temporal until its added on the portal
-        if (SocialPlaySettings.CreditBundlesDescription.Count != 0)
-            nguiItem.Description = (item.ID - 1) <= SocialPlaySettings.CreditBundlesDescription.Count ? SocialPlaySettings.CreditBundlesDescription[item.ID - 1] : "";
-
         if (!string.IsNullOrEmpty(item.CurrencyIcon))
         {
             SP.GetItemTexture(item.CurrencyIcon, delegate(ImageStatus imageStatus, Texture2D texture)

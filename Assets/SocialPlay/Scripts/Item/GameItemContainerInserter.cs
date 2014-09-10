@@ -8,9 +8,17 @@ using SocialPlay.Data;
 
 public class GameItemContainerInserter : MonoBehaviour, IItemPutter
 {
+
+    static public GameItemContainerInserter instance;
+
     public ItemContainer container;
 
     public event Action<List<ItemData>> onReciveItems;
+
+    void Awake()
+    {
+        instance = this;
+    }
 
     public void PutGameItem(List<ItemData> items)
     {

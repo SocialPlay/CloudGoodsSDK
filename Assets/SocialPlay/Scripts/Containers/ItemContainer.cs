@@ -50,10 +50,24 @@ public class ItemContainer : MonoBehaviour
 
     void Awake()
     {
+        if (itemLoader == null) itemLoader = GetComponentInChildren<LoadItemsForContainer>();
+
         if (GetComponent(typeof(IContainerAddAction)) == null)
             containerAddAction = gameObject.AddComponent<BasicAddContainer>();
         else
             containerAddAction = (IContainerAddAction)GetComponent(typeof(IContainerAddAction));
+
+        SP.OnRegisteredUserToSession += OnRegisteredSession;
+    }
+
+    void OnDestroy()
+    {
+        SP.OnRegisteredUserToSession -= OnRegisteredSession;
+    }
+
+    void OnRegisteredSession(string user)
+    {
+        RefreshContainer();
     }
 
     public void ModifiedItemEvent(ItemData item, bool isSave)

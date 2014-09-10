@@ -6,50 +6,33 @@ using System;
 
 public class ItemDrop : MonoBehaviour
 {
-    public GameObject dropParentObject;
+    static public GameObject dropParentObject { get { if (mDrop == null) mDrop = new GameObject("DroppedItems"); return mDrop; } }
+    static GameObject mDrop;
+
     public IGameObjectAction postDropObjectAction;
 
     public void DropItemIntoWorld(ItemData item, Vector3 dropPosition, GameObject dropModelDefault)
     {
         if (item != null)
         {
-       
-            //List<ItemData> items = new List<ItemData>();
-            //items.Add(item);
-            //List<GameObject> dropItems = ItemConverter.ConvertToItemDropObject(items, true);
+            item.AssetBundle((UnityEngine.Object bundleObj) =>
+                {
+                    GameObject dropObject = GameObjectInitilizer.initilizer.InitilizeGameObject(bundleObj != null ? bundleObj : dropModelDefault);
 
-            if(dropParentObject == null)
-                dropParentObject = new GameObject("DroppedItems");
+                    ItemData itemData = dropObject.AddComponent<ItemDataComponent>().itemData;
+                    itemData.SetItemData(item);
 
-            //foreach (GameObject dropItem in dropItems)
-            //{
-                item.AssetBundle((UnityEngine.Object bundleObj) =>
-                    {
-                        GameObject dropObject = GameObjectInitilizer.initilizer.InitilizeGameObject(bundleObj != null ? bundleObj : dropModelDefault);
+                    dropObject.name = item.itemName + " (ID: " + item.itemID + ")";
 
-                        /*if (bundleObj != null)
-                            dropObject = GameObjectInitilizer.initilizer.InitilizeGameObject(bundleObj);
-                        else
-                            dropObject = GameObjectInitilizer.initilizer.InitilizeGameObject(dropModelDefault);*/
+                    ItemComponentInitalizer.InitializeItemWithComponents(dropObject.GetComponent<ItemDataComponent>().itemData, AddComponetTo.prefab);
 
-                        ItemData itemData = dropObject.AddComponent<ItemDataComponent>().itemData;
-                        itemData.SetItemData(item);
-
-                        dropObject.name = item.itemName + " (ID: " + item.itemID + ")";
-
-                        ItemComponentInitalizer.InitializeItemWithComponents(dropObject.GetComponent<ItemDataComponent>().itemData, AddComponetTo.prefab);
-
-                        dropObject.transform.position = dropPosition;
-                        dropObject.transform.parent = dropParentObject.transform;
+                    dropObject.transform.position = dropPosition;
+                    dropObject.transform.parent = dropParentObject.transform;
       
-                        if (postDropObjectAction != null)
-                            postDropObjectAction.DoGameObjectAction(dropObject);
-                    }
-                );
-
-                //Destroy(dropItem);
-            //}
-
+                    if (postDropObjectAction != null)
+                        postDropObjectAction.DoGameObjectAction(dropObject);
+                }
+            );
         }
     }
 }
