@@ -42,7 +42,6 @@ public class UICreditBundle : MonoBehaviour
     public RawImage currencyIcon;
     public Text cost;
     public Text description;
-    public Button PurchaseButton;
     public Action<UICreditBundle> OnPurchaseRequest;
 
     Action<GameObject> purchaseRequestCallback;

@@ -153,9 +153,9 @@ public class PremiumCurrencyBundleStore : MonoBehaviour
         creditBundle.CurrencyName = "";
         creditBundle.Description = item.Description;
 
-        // This is temporal until its added on the portal
-        if (SocialPlaySettings.CreditBundlesDescription.Count != 0)
-            creditBundle.Description = (item.ID - 1) <= SocialPlaySettings.CreditBundlesDescription.Count ? SocialPlaySettings.CreditBundlesDescription[item.ID - 1] : "";
+        //// This is temporal until its added on the portal
+        //if (SocialPlaySettings.CreditBundlesDescription.Count != 0)
+        //    creditBundle.Description = (item.ID - 1) <= SocialPlaySettings.CreditBundlesDescription.Count ? SocialPlaySettings.CreditBundlesDescription[item.ID - 1] : "";
 
         if (!string.IsNullOrEmpty(item.CurrencyIcon))
         {
