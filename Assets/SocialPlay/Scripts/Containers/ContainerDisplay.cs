@@ -3,33 +3,46 @@ using System.Collections;
 
 using System.Collections.Generic;
 
+[RequireComponent(typeof(ItemContainer))]
 public class ContainerDisplay : MonoBehaviour
 {
-    internal UIGrid viewArea;
-    public GameObject ContainerDisplayObject;
-    public ItemContainer itemContainer = null;
+    internal UIGrid itemGrid;
+
+    public GameObject itemPrefab;
     public bool StartWindowActive = true;
 
     protected bool isActive = true;
 
-    private List<ContainerDisplayAction> disaplyActions = new List<ContainerDisplayAction>();
+    List<ContainerDisplayAction> disaplyActions = new List<ContainerDisplayAction>();
+    ItemContainer itemContainer;
+
+    // List of all instantiated rows
+    List<ItemDataComponent> mList = new List<ItemDataComponent>();
+    List<ItemDataComponent> mUnused = new List<ItemDataComponent>();
+
+    protected void Awake()
+    {
+        itemContainer = GetComponent<ItemContainer>();
+    }
+
+    protected void OnEnable()
+    {
+        itemContainer.AddedItem += AddedItem;
+        itemContainer.RemovedItem += RemovedItem;
+        itemContainer.ClearItems += ClearItems;
+    }
 
 
-    //protected void OnEnable()
-    //{
-    //    itemContainer.AddedItem += AddedItem;
-    //    itemContainer.RemovedItem += RemovedItem;
-    //}
-
-
-    //protected void OnDisable()
-    //{
-    //    itemContainer.AddedItem -= AddedItem;
-    //    itemContainer.RemovedItem -= RemovedItem;
-    //}
+    protected void OnDisable()
+    {
+        itemContainer.AddedItem -= AddedItem;
+        itemContainer.RemovedItem -= RemovedItem;
+        itemContainer.ClearItems -= ClearItems;
+    }
 
     protected void Start()
     {
+        if (itemPrefab == null) itemPrefab = SP.DefaultUIItem;
         SetupWindow();
     }
 
@@ -45,50 +58,108 @@ public class ContainerDisplay : MonoBehaviour
         }
     }
 
-    //protected void AddedItem(ItemData itemData, bool isSave)
-    //{
-    //    itemData.transform.parent = viewArea.transform;
-    //    itemData.transform.localPosition = new Vector3(0, 0, -1);
-    //    itemData.transform.localScale = Vector3.one;
-    //    foreach (UIWidget item in itemData.GetComponentsInChildren<UIWidget>())
-    //    {
-    //        item.enabled = true;
-    //    }
-    //    foreach (MonoBehaviour item in itemData.GetComponentsInChildren<MonoBehaviour>())
-    //    {
-    //        if (item != null)
-    //        {
-    //            item.enabled = true;
-    //        }
-    //    }
-    //    viewArea.repositionNow = true;
-    //}
+    /// <summary>
+    /// Create a new entry, reusing an old entry if necessary.
+    /// </summary>
 
-    //protected void RemovedItem(ItemData itemData, int amount, bool isBeingMoved)
-    //{
-    //    Debug.Log("removed item: " + itemData.stackSize + "  amoutn: " + amount);
+    ItemDataComponent Create(ItemData item)
+    {
+        for (int i = 0; i < mList.Count; ++i)
+        {
+            ItemDataComponent ch = mList[i];
 
-    //    if (!isBeingMoved)
-    //    {
-    //        if (itemData.stackSize - amount <= 0)
-    //        {
-    //            Destroy(itemData.gameObject);
-    //            viewArea.repositionNow = true;
-    //        }
-    //    }
+            if (ch.itemData.itemID == item.itemID)
+            {
+                ch.itemData = item;
+                ch.SetData(item);
+                return ch;
+            }
+        }
 
-    //    if (amount == -1 || itemData.stackSize <= 0)
-    //    {
-    //        Destroy(itemData.gameObject);
-    //        viewArea.repositionNow = true;
-    //    }
-    //}
+        if (mUnused.Count > 0)
+        {
+            ItemDataComponent idc = mUnused[mUnused.Count - 1];
+            mUnused.RemoveAt(mUnused.Count - 1);
+            NGUITools.SetActive(idc.gameObject, true);
+            mList.Add(idc);
+            idc.itemData = item;
+            idc.SetData(item);
+            return idc;
+        }
+
+        GameObject go = NGUITools.AddChild(itemGrid.gameObject, itemPrefab);
+        ItemDataComponent ent = go.GetComponent<ItemDataComponent>();
+        if (ent == null) ent = go.AddComponent<ItemDataComponent>();
+        ent.itemData = item;
+        ent.SetData(item);
+        mList.Add(ent);
+        return ent;
+    }
+
+    /// <summary>
+    /// Delete the specified entry, adding it to the unused list.
+    /// </summary>
+
+    void Delete(ItemDataComponent ent)
+    {
+        mList.Remove(ent);
+        mUnused.Add(ent);
+        NGUITools.SetActive(ent.gameObject, false);
+    }
+
+    void ClearItems()
+    {
+        for (int i = 0; i < mList.Count; ++i)
+        {
+            //Delete(mList[i]);
+        }
+    }
+
+    protected void AddedItem(ItemData itemData, bool isSave)
+    {
+        Create(itemData);
+
+        /*foreach (UIWidget item in go.GetComponentsInChildren<UIWidget>())
+        {
+            item.enabled = true;
+        }
+        foreach (MonoBehaviour item in go.GetComponentsInChildren<MonoBehaviour>())
+        {
+            if (item != null)
+            {
+                item.enabled = true;
+            }
+        }*/
+        itemGrid.repositionNow = true;
+    }
+
+    protected void RemovedItem(ItemData itemData, int amount, bool isBeingMoved)
+    {
+        Debug.Log("removed item: " + itemData.stackSize + "  amoutn: " + amount);       
+
+        if (!isBeingMoved)
+        {
+            if (itemData.stackSize - amount <= 0)
+            {
+                Delete(itemData.uiReference);
+                //Destroy(itemData.uiReference.gameObject);
+                itemGrid.repositionNow = true;
+            }
+        }
+
+        if (amount == -1 || itemData.stackSize <= 0)
+        {
+            Delete(itemData.uiReference);
+            //Destroy(itemData.uiReference.gameObject);
+            itemGrid.repositionNow = true;
+        }
+    }
 
     protected virtual void SetupWindow()
     {
         isActive = StartWindowActive;
-        ContainerDisplayObject.SetActive(true);
-        viewArea = ContainerDisplayObject.GetComponentInChildren<UIGrid>();
+        gameObject.SetActive(true);
+        itemGrid = GetComponentInChildren<UIGrid>();
     }
 
     private void GetDisplayActions()

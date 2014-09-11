@@ -260,6 +260,21 @@ public class SP : MonoBehaviour//, IServiceCalls
     }
 
     /// <summary>
+    /// Returns the default ui item game object.
+    /// </summary>
+
+    static public GameObject DefaultUIItem
+    {
+        get
+        {
+            if (SocialPlaySettings.DefaultUIItem == null)
+                Debug.LogError("DefaultUIItem has not been defined. Open Social Play Settings from the menu.");
+
+            return SocialPlaySettings.DefaultUIItem;
+        }
+    }
+
+    /// <summary>
     /// True if the user is logged in.
     /// </summary>
 
@@ -331,6 +346,11 @@ public class SP : MonoBehaviour//, IServiceCalls
 
     static public void GenerateItemsAtLocation(string OwnerType, int Location, int MinimumEnergyOfItem, int TotalEnergyToGenerate, Action<List<ItemData>> callback, string ANDTags = "", string ORTags = "")
     {
+        if (!isLogged)
+        {
+            Debug.LogWarning("Need to login first to get items.");
+            return;
+        }
         string url = string.Format("{0}GenerateItemsAtLocation?OwnerID={1}&OwnerType={2}&Location={3}&AppID={4}&MinimumEnergyOfItem={5}&TotalEnergyToGenerate={6}&ANDTags={7}&ORTags={8}", Url, user.sessionID, OwnerType, Location, GuidAppID, MinimumEnergyOfItem, TotalEnergyToGenerate, ANDTags, ORTags);
 
         WWW www = new WWW(url);
@@ -344,7 +364,7 @@ public class SP : MonoBehaviour//, IServiceCalls
 
     static public void GetItems(Action<List<ItemData>> callback)
     {
-        if (user == null)
+        if (!isLogged)
         {
             Debug.LogWarning("Need to login first to get items.");
             return;
@@ -362,6 +382,11 @@ public class SP : MonoBehaviour//, IServiceCalls
 
     static public void GetOwnerItems(string ownerID, string ownerType, int location, Action<List<ItemData>> callback)
     {
+        if (!isLogged)
+        {
+            Debug.LogWarning("Need to login first to get items.");
+            return;
+        }
         if (string.IsNullOrEmpty(ownerID))
         {
             Debug.LogWarning("OwnerID cannot be empty");
@@ -384,6 +409,11 @@ public class SP : MonoBehaviour//, IServiceCalls
 
     static public bool HasItem(string name)
     {
+        if (!isLogged)
+        {
+            Debug.LogWarning("Need to login first to get items.");
+            return false;
+        }
         if (userItems == null)
         {
             Debug.LogWarning("User Item list has not been loaded yet.");
@@ -408,6 +438,12 @@ public class SP : MonoBehaviour//, IServiceCalls
 
     static public ItemData GetItem(int id)
     {
+        if (!isLogged)
+        {
+            Debug.LogWarning("Need to login first to get items.");
+            return null;
+        }
+
         if (userItems == null)
         {
             Debug.LogWarning("User Item list has not been loaded yet.");
@@ -442,6 +478,12 @@ public class SP : MonoBehaviour//, IServiceCalls
 
     static public ItemData GetItem(string name)
     {
+        if (!isLogged)
+        {
+            Debug.LogWarning("Need to login first to get items.");
+            return null;
+        }
+
         if (userItems == null)
         {
             Debug.LogWarning("User Item list has not been loaded yet.");
@@ -491,7 +533,7 @@ public class SP : MonoBehaviour//, IServiceCalls
 
         WWW www = new WWW(url);
 
-        Get().StartCoroutine(Get().ServiceGetString(www, (string message) => { GetOwnerItems(user.userID.ToString(), "User", 0, OnItemsLoaded); if (callback != null) callback(message); }));
+        Get().StartCoroutine(Get().ServiceGetString(www, (string message) => { GetOwnerItems(user.userID.ToString(), "User", 0, OnItemsLoaded); GetFreeCurrencyBalance(0, null); if (callback != null) callback(message); }));
     }
 
     /// <summary>
@@ -518,7 +560,7 @@ public class SP : MonoBehaviour//, IServiceCalls
         string url = string.Format("{0}DeductStackAmount?stackID={1}&amount={2}", Url, StackRemove, amount);
         WWW www = new WWW(url);
 
-        Get().StartCoroutine(Get().ServiceGetString(www, (string message) => { GetOwnerItems(user.userID.ToString(), "User", 0, OnItemsLoaded); if (callback != null) callback(message); }));
+        Get().StartCoroutine(Get().ServiceGetString(www, (string message) => { GetOwnerItems(user.userID.ToString(), "User", 0, OnItemsLoaded); GetFreeCurrencyBalance(0, null); if (callback != null) callback(message); }));
     }
 
     static public void RemoveItemStacks(List<Guid> StacksToRemove, Action<string> callback)
@@ -529,7 +571,7 @@ public class SP : MonoBehaviour//, IServiceCalls
         string url = string.Format("{0}RemoveStackItems?stacks={1}", Url, stacksInfo);
         WWW www = new WWW(url);
 
-        Get().StartCoroutine(Get().ServiceGetString(www, (string message) => { GetOwnerItems(user.userID.ToString(), "User", 0, OnItemsLoaded); if (callback != null) callback(message); }));
+        Get().StartCoroutine(Get().ServiceGetString(www, (string message) => { GetOwnerItems(user.userID.ToString(), "User", 0, OnItemsLoaded); GetFreeCurrencyBalance(0, null); if (callback != null) callback(message); }));
     }
 
     static public void GiveOwnerItems(string ownerID, WebModels.OwnerTypes OwnerType, List<WebModels.ItemsInfo> listOfItems, Action<string> callback)
@@ -1154,6 +1196,8 @@ public class SP : MonoBehaviour//, IServiceCalls
         {
             if (onErrorEvent != null) onErrorEvent("Error: " + www.error);
         }
+
+        GetFreeCurrencyBalance(0, null);
     }
 
     IEnumerator ServiceGetRecipeInfos(WWW www, Action<List<RecipeInfo>> callback)
@@ -1208,6 +1252,8 @@ public class SP : MonoBehaviour//, IServiceCalls
         {
             if (onErrorEvent != null) onErrorEvent("Error: " + www.error);
         }
+
+        GetFreeCurrencyBalance(0, null);
     }
 
     IEnumerator ServiceSpLoginResponse(WWW www, Action<UserResponse> callback)
