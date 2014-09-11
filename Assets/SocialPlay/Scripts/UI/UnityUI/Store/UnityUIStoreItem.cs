@@ -5,26 +5,27 @@ using System.Collections.Generic;
 
 public class UnityUIStoreItem : MonoBehaviour {
 
-    public int itemID = 0;
     public StoreItem storeItem { get; private set; }
+
+    UnityUIStoreLoader storeLoader;
 
     //public UISprite itemImageSprite;
 
 
-    protected virtual void OnEnable()
-    {
-        if (itemID != 0) SP.OnStoreListLoaded += OnStoreListLoaded;
-    }
+    //protected virtual void OnEnable()
+    //{
+    //    if (itemID != 0) SP.OnStoreListLoaded += OnStoreListLoaded;
+    //}
 
-    protected virtual void OnDisable()
-    {
-        if (itemID != 0) SP.OnStoreListLoaded -= OnStoreListLoaded;
-    }
+    //protected virtual void OnDisable()
+    //{
+    //    if (itemID != 0) SP.OnStoreListLoaded -= OnStoreListLoaded;
+    //}
 
-    protected virtual void OnStoreListLoaded(List<StoreItem> storeList)
-    {
-        SetItemData(SP.GetStoreItem(itemID));
-    }
+    //protected virtual void OnStoreListLoaded(List<StoreItem> storeList)
+    //{
+    //    SetItemData(SP.GetStoreItem(itemID));
+    //}
 
     void OnReceivedItemTexture(ImageStatus imageStatus, Texture2D texture)
     {
@@ -37,11 +38,17 @@ public class UnityUIStoreItem : MonoBehaviour {
         //TweenAlpha.Begin(uiTexture.cachedGameObject, 0.3f, 1).from = 0;
     }
 
-    public virtual void SetItemData(StoreItem item)
+    public virtual void Init(StoreItem item, UnityUIStoreLoader unityStoreLoader)
     {
         //if (nameLabel != null) nameLabel.text = item.itemName;
         //if(descriptionLabel != null) descriptionLabel.text = item. <-- There is no description on StoreItems. This is a must have.
         storeItem = item;
+        storeLoader = unityStoreLoader;
         SP.GetItemTexture(storeItem.imageURL, OnReceivedItemTexture);
+    }
+
+    public void OnStoreItemClicked()
+    {
+        storeLoader.DisplayItemPurchasePanel(gameObject);
     }
 }
