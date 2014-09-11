@@ -120,13 +120,13 @@ public class BundlePurchasing : MonoBehaviour
 
     public void PurchaseBundleWithCoin()
     {
-        SP.PurchaseItemBundles(currentItemBundle.ID, CurrencyType.Coins, purchaseContainerLocation, OnReceivedPurchaseCallback);
+        SP.PurchaseItemBundles(currentItemBundle.ID, CurrencyType.Standard, purchaseContainerLocation, OnReceivedPurchaseCallback);
         ClosePurchaseWindow();
     }
 
     public void PurchaseBundleWithCredit()
     {
-		SP.PurchaseItemBundles(currentItemBundle.ID, CurrencyType.Credits, purchaseContainerLocation, OnReceivedPurchaseCallback);
+		SP.PurchaseItemBundles(currentItemBundle.ID, CurrencyType.Premium, purchaseContainerLocation, OnReceivedPurchaseCallback);
         ClosePurchaseWindow();
     }
 

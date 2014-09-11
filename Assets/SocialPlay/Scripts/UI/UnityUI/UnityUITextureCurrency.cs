@@ -2,22 +2,23 @@
 using UnityEngine.UI;
 using System.Collections;
 
+[RequireComponent(typeof(RawImage))]
 public class UnityUITextureCurrency : MonoBehaviour {
 
-    public CurrencyType type = CurrencyType.Coins;
+    public CurrencyType type = CurrencyType.Standard;
     RawImage mTexture;
 
     void Awake()
     {
         mTexture = GetComponent<RawImage>();
-        if (type == CurrencyType.Coins)
+        if (type == CurrencyType.Standard)
         {
-            SP.OnFreeCurrencyTexture += OnFreeCurrency;
+            SP.OnStandardCurrencyTexture += OnFreeCurrency;
             mTexture.texture = SP.standardCurrencyTexture;
         }
-        else if (type == CurrencyType.Credits)
+        else if (type == CurrencyType.Premium)
         {
-            SP.OnPaidCurrencyTexture += OnPaidCurrency;
+            SP.OnPremiumCurrencyTexture += OnPaidCurrency;
             mTexture.texture = SP.premiumCurrencyTexture;
         }
     }
