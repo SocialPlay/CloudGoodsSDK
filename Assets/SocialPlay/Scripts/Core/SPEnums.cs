@@ -32,8 +32,8 @@ public enum SocialPlayMessage
 
 public enum CurrencyType
 {
-	Coins,
-	Credits
+	Standard,
+	Premium
 }
 
 public enum PlatformPurchase

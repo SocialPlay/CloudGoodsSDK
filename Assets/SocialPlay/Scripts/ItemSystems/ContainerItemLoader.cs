@@ -8,18 +8,20 @@ public abstract class ContainerItemLoader : MonoBehaviour
 {
     public Action<List<ItemData>, ItemContainer> LoadedItemsForContainerEvent;
 
-    public ItemContainer Container;
+    public ItemContainer container;
     public ItemOwnerTypes SourceOwnerType;
 
     public abstract void LoadItems();
 
 
-    void Awake()
+    void Start()
     {
-        if (Container == null)
+        if (container == null)
         {
-            Container = this.GetComponent<ItemContainer>();
+            container = this.GetComponent<ItemContainer>();
         }
+
+        if (container == null) NGUITools.FindInParents<ItemContainer>(gameObject);
     }
 
     protected string GetOwnerID()
@@ -47,9 +49,14 @@ public abstract class ContainerItemLoader : MonoBehaviour
 
         AddItemComponentToNewlyConvertedItem(receivedItems);
 
+        foreach (ItemData item in receivedItems)
+        {
+            container.Add(item, -1, false);
+        }
+
         if (LoadedItemsForContainerEvent != null)
         {
-            LoadedItemsForContainerEvent(receivedItems, Container);
+            LoadedItemsForContainerEvent(receivedItems, container);
         }
     }
 

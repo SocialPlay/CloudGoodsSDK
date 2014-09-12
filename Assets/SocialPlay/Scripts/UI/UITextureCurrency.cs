@@ -4,20 +4,20 @@ using System.Collections;
 [RequireComponent(typeof(UITexture))]
 public class UITextureCurrency : MonoBehaviour
 {
-    public CurrencyType type = CurrencyType.Coins;
+    public CurrencyType type = CurrencyType.Standard;
     UITexture mTexture;
 
     void Awake()
     {
         mTexture = GetComponent<UITexture>();
-        if (type == CurrencyType.Coins)
+        if (type == CurrencyType.Standard)
         {
-            SP.OnFreeCurrencyTexture += OnFreeCurrency;
+            SP.OnStandardCurrencyTexture += OnFreeCurrency;
             mTexture.mainTexture = SP.standardCurrencyTexture;            
         }
-        else if (type == CurrencyType.Credits)
+        else if (type == CurrencyType.Premium)
         {
-            SP.OnPaidCurrencyTexture += OnPaidCurrency;
+            SP.OnPremiumCurrencyTexture += OnPaidCurrency;
             mTexture.mainTexture = SP.premiumCurrencyTexture;
         }
 

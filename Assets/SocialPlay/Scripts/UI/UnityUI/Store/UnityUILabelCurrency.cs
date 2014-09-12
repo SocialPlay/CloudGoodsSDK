@@ -2,16 +2,17 @@
 using UnityEngine.UI;
 using System.Collections;
 
+[RequireComponent(typeof(Text))]
 public class UnityUILabelCurrency : MonoBehaviour {
 
-    public CurrencyType type = CurrencyType.Coins;
+    public CurrencyType type = CurrencyType.Standard;
     Text mLabel;
 
     void Awake()
     {
         mLabel = GetComponent<Text>();
-        if (type == CurrencyType.Coins) SP.OnFreeCurrency += OnFreeCurrency;
-        else if (type == CurrencyType.Credits) SP.OnPaidCurrency += OnPaidCurrency;
+        if (type == CurrencyType.Standard) SP.OnStandardCurrency += OnFreeCurrency;
+        else if (type == CurrencyType.Premium) SP.OnPremiumCurrency += OnPaidCurrency;
     }
 
     void OnFreeCurrency(int currency)
