@@ -106,15 +106,15 @@ public class UnityUIBundlePurchasing : MonoBehaviour {
         bundleObjects.Clear();
     }
 
-    public void PurchaseBundleWithCoin()
+    public void PurchaseBundleWithStandardCurrency()
     {
-        SP.PurchaseItemBundles(currentItemBundle.ID, CurrencyType.Coins, purchaseContainerLocation, OnReceivedPurchaseCallback);
+        SP.PurchaseItemBundles(currentItemBundle.ID, CurrencyType.Standard, purchaseContainerLocation, OnReceivedPurchaseCallback);
         ClosePurchaseWindow();
     }
 
-    public void PurchaseBundleWithCredit()
+    public void PurchaseBundleWithPremiumCurrency()
     {
-        SP.PurchaseItemBundles(currentItemBundle.ID, CurrencyType.Credits, purchaseContainerLocation, OnReceivedPurchaseCallback);
+        SP.PurchaseItemBundles(currentItemBundle.ID, CurrencyType.Premium, purchaseContainerLocation, OnReceivedPurchaseCallback);
         ClosePurchaseWindow();
     }
 
