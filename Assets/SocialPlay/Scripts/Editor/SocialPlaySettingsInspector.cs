@@ -162,7 +162,7 @@ public class SocialPlaySettingsInspector : Editor
         if (string.IsNullOrEmpty(appId) || string.IsNullOrEmpty(appSecret))
         {
             EditorGUILayout.HelpBox("Go To http://developer.socialplay.com to get your AppID and AppSecret", MessageType.Warning);
-        }        
+        }
 
         GUILayout.Label("Android", "BoldLabel");
         string androidKey = EditorGUILayout.TextField("Key", mSettings.androidKey);

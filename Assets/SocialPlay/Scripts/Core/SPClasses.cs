@@ -113,7 +113,7 @@ public class BundleItem
 
 public class BundleItemDetails
 {
-    public int Value;
+    public float Value;
     public string BundleDetailName;
 }
 

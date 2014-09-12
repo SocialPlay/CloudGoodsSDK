@@ -5,7 +5,7 @@ using Newtonsoft.Json.Linq;
 
 public class StoreOrganizer : MonoBehaviour
 {
-    public NGUIStoreLoader storeLoader;
+    public UnityUIStoreLoader storeLoader;
     private ISortItem currentSort;
     private int currentSortDirection = 1;
     public List<FilterItem> activeFilters;
@@ -16,6 +16,7 @@ public class StoreOrganizer : MonoBehaviour
         StoreItemFilter.FilterUpdate += StoreItemFilter_FilterUpdate;
         SearchNameFilter.searchUpdate += SearchNameFilter_searchUpdate;
         SortStoreItemsBy.SortUpdate += SortStoreItemsBy_SortUpdate;
+        UnityUISearchNameFilter.searchUpdate += SearchNameFilter_searchUpdate;
     }
 
     void OnDisable()
@@ -23,6 +24,7 @@ public class StoreOrganizer : MonoBehaviour
         StoreItemFilter.FilterUpdate -= StoreItemFilter_FilterUpdate;
         SearchNameFilter.searchUpdate -= SearchNameFilter_searchUpdate;
         SortStoreItemsBy.SortUpdate -= SortStoreItemsBy_SortUpdate;
+        UnityUISearchNameFilter.searchUpdate -= SearchNameFilter_searchUpdate;
     }
 
     void SortStoreItemsBy_SortUpdate(ISortItem CurrentSort, int direction)

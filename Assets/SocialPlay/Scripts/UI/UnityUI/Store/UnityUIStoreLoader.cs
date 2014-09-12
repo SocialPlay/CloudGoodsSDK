@@ -13,19 +13,18 @@ public class UnityUIStoreLoader : MonoBehaviour
 
     public int maxGridAmount = 32;
 
-    UIGrid pageGrid;
-
     List<StoreItem> items = new List<StoreItem>();
     List<StoreItem> filteredList = new List<StoreItem>();
 
     List<GameObject> currentPageItems = new List<GameObject>();
+
+    UnityEngine.Events.UnityAction OnPageButtonClicked;
 
     int currentPage = 0;
 
     // Use this for initialization
     void Awake()
     {
-        pageGrid = pageGridObject.GetComponent<UIGrid>();
         SP.OnStoreListLoaded += OnStoreListLoaded;
     }
 
@@ -55,9 +54,10 @@ public class UnityUIStoreLoader : MonoBehaviour
             currentPageItems.Add(newItem);
 
             UnityUIStoreItem itemInfo = newItem.GetComponent<UnityUIStoreItem>();
-            itemInfo.SetItemData(listItems[i]);
+            itemInfo.Init(listItems[i], this);
 
-            //UIEventListener.Get(itemInfo.gameObject).onClick += DisplayItemPurchasePanel;
+            Button storeButton = newItem.GetComponent<Button>();
+            storeButton.onClick.AddListener(itemInfo.OnStoreItemClicked);
         }
 
         SetPageButtons(GetPageAmount(listItems.Count));
@@ -81,16 +81,15 @@ public class UnityUIStoreLoader : MonoBehaviour
 
     private void ClearCurrentGrid()
     {
-        //grid.transform.DetachChildren();
+        transform.DetachChildren();
 
-        //foreach (GameObject gridItemObj in currentPageItems)
-        //{
-        //    Destroy(gridItemObj);
-        //}
+        foreach (GameObject gridItemObj in currentPageItems)
+        {
+            Destroy(gridItemObj);
+        }
 
-        //currentPageItems.Clear();
+        currentPageItems.Clear();
 
-        //grid.Reposition();
     }
 
     int GetPageAmount(int itemCount)
@@ -116,9 +115,19 @@ public class UnityUIStoreLoader : MonoBehaviour
             newPage.transform.localScale = new Vector3(1, 1, 1);
 
             UnityUIPageInfo pageInfo = newPage.GetComponent<UnityUIPageInfo>();
-            pageInfo.SetPage(i);
+            pageInfo.Init(i, this);
+
+            OnPageButtonClicked += pageInfo.StoreCurrentPage;
+
+            Button pageButton = newPage.GetComponent<Button>();
+            pageButton.onClick.AddListener(OnPageButtonClicked);
 
         }
+    }
+
+    void PageClicked()
+    {
+        Debug.Log("page button clicked");
     }
 
     void ClearPageButtons()
@@ -137,15 +146,13 @@ public class UnityUIStoreLoader : MonoBehaviour
         }
     }
 
-    void SetPage(GameObject pageButton)
+    public void SetPage(int pageNum)
     {
-        PageInfo pageInfo = pageButton.GetComponent<PageInfo>();
-
-        if (pageInfo.pageNumber != currentPage)
+        if (pageNum != currentPage)
         {
-            currentPage = pageInfo.pageNumber;
+            currentPage = pageNum;
 
-            LoadStoreWithPaging(filteredList, pageInfo.pageNumber);
+            LoadStoreWithPaging(filteredList, pageNum);
         }
     }
 
@@ -158,6 +165,6 @@ public class UnityUIStoreLoader : MonoBehaviour
     {
         itemPurchasePanel.SetActive(true);
 
-        itemPurchasePanel.GetComponent<ItemPurchase>().DisplayItemPurchasePanel(itemButton.GetComponent<UIStoreItem>());
+        itemPurchasePanel.GetComponent<UnityUIItemPurchase>().DisplayItemPurchasePanel(itemButton.GetComponent<UnityUIStoreItem>());
     }
 }
