@@ -2,8 +2,11 @@
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public class UnityUIBundlePurchasing : MonoBehaviour {
+
+    public static Action<string> OnPurchaseSuccessful;
 
     public UnityUIPurchaseButtonDisplay PremiumCurrencyPurchaseButton;
     public UnityUIPurchaseButtonDisplay StandardCurrencyPurchaseButton;
@@ -121,7 +124,8 @@ public class UnityUIBundlePurchasing : MonoBehaviour {
     void OnReceivedPurchaseCallback(string data)
     {
         Debug.Log("OnReceivedPurchaseCallback " + data);
-        //TODO handle callback for success and error
-        //PurchaseConfirmationWindow.SetActive(true);
+
+        if (OnPurchaseSuccessful != null)
+            OnPurchaseSuccessful(data);
     }
 }

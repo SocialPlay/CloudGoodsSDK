@@ -8,6 +8,7 @@ public class UnityUIPurchaseSuccessful : MonoBehaviour {
 	// Use this for initialization
 	void Awake () {
         UnityUIItemPurchase.OnPurchasedItem += UnityUIItemPurchase_OnPurchasedItem;
+        UnityUIBundlePurchasing.OnPurchaseSuccessful += UnityUIItemPurchase_OnPurchasedItem;
 	}
 
     void UnityUIItemPurchase_OnPurchasedItem(string obj)
