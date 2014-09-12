@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 public class BundlePurchasing : MonoBehaviour 
 {
-
     public PurchaseButtonDisplay PaidCurrencyPurchaseButton;
     public PurchaseButtonDisplay FreeCurrencyPurchaseButton;
 
