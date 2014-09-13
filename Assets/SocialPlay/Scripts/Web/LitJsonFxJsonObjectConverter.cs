@@ -313,6 +313,7 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter
             itemBundle.CreditPrice = int.Parse(itemBundleData[i]["CreditPrice"].ToString());
             itemBundle.CoinPrice = int.Parse(itemBundleData[i]["CoinPrice"].ToString());
             itemBundle.State = (SocialPlayBundle)Enum.Parse(typeof(SocialPlayBundle), itemBundleData[i]["State"].ToString());
+            itemBundle.Image = itemBundleData[i]["Image"].ToString();
 
             //TODO Implement itembundle behaviours
 
@@ -333,7 +334,7 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter
                 {
                     BundleItemDetails bundleDetails = new BundleItemDetails();
                     bundleDetails.BundleDetailName = bundleItemDetailData[k]["Name"].ToString();
-                    bundleDetails.Value = int.Parse(bundleItemDetailData[k]["Value"].ToString());
+                    bundleDetails.Value = float.Parse(bundleItemDetailData[k]["Value"].ToString());
 
                     bundleItem.bundleItemDetails.Add(bundleDetails);
                 }

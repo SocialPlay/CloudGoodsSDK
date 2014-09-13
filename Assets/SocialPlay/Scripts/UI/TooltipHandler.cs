@@ -29,6 +29,7 @@ public class TooltipHandler : MonoBehaviour
 
     public static void Show(string tooltip)
     {
+        if (handler == null) return;
         handler.gameObject.SetActive(true);
         handler.tooltipText.text = tooltip;
         handler.isShowing = true;
@@ -36,6 +37,7 @@ public class TooltipHandler : MonoBehaviour
 
     public static void Hide()
     {
+        if (handler == null) return;
         handler.gameObject.SetActive(false);
         handler.isShowing = false;
     }

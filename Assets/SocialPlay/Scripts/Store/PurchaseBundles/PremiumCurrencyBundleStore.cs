@@ -24,14 +24,20 @@ public class PremiumCurrencyBundleStore : MonoBehaviour
     IGridLoader gridLoader;
     IPlatformPurchaser platformPurchasor;
     bool isPurchaseRequest = false;
-    
+
     string domain;
+
+    public CurrencyType type = CurrencyType.Standard;
+
+
 
     void Awake()
     {
         SP.OnRegisteredUserToSession += OnRegisteredUserToSession;
-
     }
+
+
+
 
 #if UNITY_WEBPLAYER
     void Start()
@@ -51,7 +57,7 @@ public class PremiumCurrencyBundleStore : MonoBehaviour
 
     void OnRegisteredUserToSession(string obj)
     {
-        if(!isInitialized) Initialize();
+        if (!isInitialized) Initialize();
     }
 
     public void Initialize()
@@ -62,7 +68,7 @@ public class PremiumCurrencyBundleStore : MonoBehaviour
         {
 
 #if UNITY_WEBPLAYER
-            if(!string.IsNullOrEmpty(domain) && (domain.StartsWith("fbsbx") || domain.StartsWith("facebook")))
+            if (!string.IsNullOrEmpty(domain) && (domain.StartsWith("fbsbx") || domain.StartsWith("facebook")))
             {
                 currentplatform = 1;
                 platformPurchasor = gameObject.AddComponent<FaceBookPurchaser>();
@@ -118,7 +124,7 @@ public class PremiumCurrencyBundleStore : MonoBehaviour
 
     void OnDisable()
     {
-        if(platformPurchasor != null) platformPurchasor.RecievedPurchaseResponse -= OnRecievedPurchaseResponse;
+        if (platformPurchasor != null) platformPurchasor.RecievedPurchaseResponse -= OnRecievedPurchaseResponse;
     }
 
     void OnPurchaseBundlesRecieved(List<PaidCurrencyBundleItem> data)
@@ -130,33 +136,36 @@ public class PremiumCurrencyBundleStore : MonoBehaviour
 
     void OnItemInGrid(PaidCurrencyBundleItem item, GameObject obj)
     {
-        UICreditBundle nguiItem = obj.GetComponent<UICreditBundle>();
-        nguiItem.Amount = item.Amount.ToString();
-        nguiItem.Cost = item.Cost.ToString();
+        UICreditBundle creditBundle = obj.GetComponent<UICreditBundle>();
+        creditBundle.Amount = item.Amount.ToString();
+        creditBundle.Cost = item.Cost.ToString();
 
         if (item.CreditPlatformIDs.ContainsKey("Android_Product_ID"))
         {
-            nguiItem.ProductID = item.CreditPlatformIDs["Android_Product_ID"];
+            creditBundle.ProductID = item.CreditPlatformIDs["Android_Product_ID"];
         }
 
         if (item.CreditPlatformIDs.ContainsKey("IOS_Product_ID"))
-            nguiItem.ProductID = item.CreditPlatformIDs["IOS_Product_ID"].ToString();
+            creditBundle.ProductID = item.CreditPlatformIDs["IOS_Product_ID"].ToString();
 
-        nguiItem.BundleID = item.ID.ToString();
+        creditBundle.BundleID = item.ID.ToString();
 
-        nguiItem.CurrencyName = item.CurrencyName;
-        nguiItem.Description = item.Description;
-        //nguiItem.CurrencyIcon = creditBundleIcon.Get(nguiItem.Amount, nguiItem.CurrencyIcon);
+        creditBundle.CurrencyName = "";
+        creditBundle.Description = item.Description;
+
+        //// This is temporal until its added on the portal
+        //if (SocialPlaySettings.CreditBundlesDescription.Count != 0)
+        //    creditBundle.Description = (item.ID - 1) <= SocialPlaySettings.CreditBundlesDescription.Count ? SocialPlaySettings.CreditBundlesDescription[item.ID - 1] : "";
 
         if (!string.IsNullOrEmpty(item.CurrencyIcon))
         {
             SP.GetItemTexture(item.CurrencyIcon, delegate(ImageStatus imageStatus, Texture2D texture)
             {
-                nguiItem.SetIcon(texture);
+                creditBundle.SetIcon(texture);
             });
         }
 
-        nguiItem.OnPurchaseRequest = OnPurchaseRequest;
+        creditBundle.OnPurchaseRequest = OnPurchaseRequest;
     }
 
     void OnPurchaseRequest(UICreditBundle item)

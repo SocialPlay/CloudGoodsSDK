@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using System;
 
 public class UICreditBundle : MonoBehaviour
@@ -9,7 +10,7 @@ public class UICreditBundle : MonoBehaviour
         set { amount.text = value; }
     }
 
-    public UITexture CurrencyIcon
+    public RawImage CurrencyIcon
     {
         get { return currencyIcon; }
         set { currencyIcon = value; }
@@ -36,22 +37,34 @@ public class UICreditBundle : MonoBehaviour
     public string ProductID { get; set; }
     public string BundleID { get; set; }
 
-    public UILabel amount;
-    public UILabel currenyName;
-    public UITexture currencyIcon;
-    public UILabel cost;
-    public UILabel description;
-    public UIButton PurchaseButton;
+    public Text amount;
+    public Text currenyName;
+    public RawImage currencyIcon;
+    public Text cost;
+    public Text description;
     public Action<UICreditBundle> OnPurchaseRequest;
 
     Action<GameObject> purchaseRequestCallback;
 
-    void Awake()
+
+    void Start()
     {
-        EventDelegate.Add(PurchaseButton.onClick, OnPurchase);
+        if (string.IsNullOrEmpty(SP.PremiumCurrencyName))
+        {
+            SP.OnPremiumCurrencyName += OnPremiumCurrencyName;
+        }
+        else
+        {        
+            CurrencyName = SP.PremiumCurrencyName;
+        }
     }
 
-    void OnPurchase()
+    void OnPremiumCurrencyName(string premiumName)
+    {
+        CurrencyName = premiumName;
+    }
+
+    public void MakePurchaseRequest()
     {
         if (OnPurchaseRequest != null) OnPurchaseRequest(this);
     }
@@ -60,8 +73,7 @@ public class UICreditBundle : MonoBehaviour
     {
         if (currencyIcon != null)
         {
-            currencyIcon.mainTexture = texture;
-            TweenAlpha.Begin(currencyIcon.cachedGameObject, 0.3f, 1).from = 0;
+            currencyIcon.texture = texture;
         }
     }
 

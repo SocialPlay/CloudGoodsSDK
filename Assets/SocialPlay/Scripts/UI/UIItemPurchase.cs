@@ -9,7 +9,7 @@ public class UIItemPurchase : UIStoreItem
     public UILabel valueLabel;
     public int amount = 1;
     public int location = 0;
-    public CurrencyType currency = CurrencyType.Credits;
+    public CurrencyType currency = CurrencyType.Premium;
     public string amountFormat = "X {0}";
     public bool localize = true;
     public UILabel buttonLabel;

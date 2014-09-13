@@ -25,12 +25,12 @@ public class SP : MonoBehaviour//, IServiceCalls
     static public event Action<SocialPlayUser> OnUserAuthorized;
     static public event Action<List<StoreItem>> OnStoreListLoaded;
     static public event Action<List<ItemData>> OnItemsLoaded;
-    static public event Action<int> OnFreeCurrency;
-    static public event Action<int> OnPaidCurrency;
-    static public event Action<string> OnFreeCurrencyName;
-    static public event Action<string> OnPaidCurrencyName;
-    static public event Action<Texture2D> OnFreeCurrencyTexture;
-    static public event Action<Texture2D> OnPaidCurrencyTexture;
+    static public event Action<int> OnStandardCurrency;
+    static public event Action<int> OnPremiumCurrency;
+    static public event Action<string> OnStandardCurrencyName;
+    static public event Action<string> OnPremiumCurrencyName;
+    static public event Action<Texture2D> OnStandardCurrencyTexture;
+    static public event Action<Texture2D> OnPremiumCurrencyTexture;
 
     #endregion
 
@@ -142,7 +142,7 @@ public class SP : MonoBehaviour//, IServiceCalls
             if (mFree != value)
             {
                 mFree = value;
-                if (OnFreeCurrency != null) OnFreeCurrency(mFree);
+                if (OnStandardCurrency != null) OnStandardCurrency(mFree);
             }
         }
     }
@@ -159,7 +159,7 @@ public class SP : MonoBehaviour//, IServiceCalls
             if (mPaid != value)
             {
                 mPaid = value;
-                if (OnPaidCurrency != null) OnPaidCurrency(mPaid);
+                if (OnPremiumCurrency != null) OnPremiumCurrency(mPaid);
             }
         }
     }
@@ -188,6 +188,49 @@ public class SP : MonoBehaviour//, IServiceCalls
         {
             if (tPaid != null)
                 return tPaid;
+            else
+            {
+                if (isGettingWorldInfo == false)
+                {
+                    GetWorldCurrencyInfo(null);
+                    isGettingWorldInfo = true;
+                }
+
+                return null;
+            }
+        }
+    }
+
+    static public string StandardCurrencyName
+    {
+        get
+        {
+            if (!string.IsNullOrEmpty(sfree))
+            {
+                return sfree;
+            }
+            else
+            {
+                if (isGettingWorldInfo == false)
+                {
+                    GetWorldCurrencyInfo(null);
+                    isGettingWorldInfo = true;
+                }
+
+                return null;
+            }
+        }
+
+    }
+
+    static public string PremiumCurrencyName
+    {
+        get
+        {
+            if (!string.IsNullOrEmpty(sPaid))
+            {
+                return sPaid;
+            }
             else
             {
                 if (isGettingWorldInfo == false)
@@ -256,6 +299,8 @@ public class SP : MonoBehaviour//, IServiceCalls
     static int mPaid = 0;
     static Texture2D tFree;
     static Texture2D tPaid;
+    static string sfree;
+    static string sPaid;
     static SP mInst;
     static SP Get()
     {
@@ -773,12 +818,24 @@ public class SP : MonoBehaviour//, IServiceCalls
 
             if (callback != null) callback(worldCurrencyInfo);
 
+            if (!string.IsNullOrEmpty(worldCurrencyInfo.FreeCurrencyName))
+            {
+                sfree = worldCurrencyInfo.FreeCurrencyName;
+                if (OnStandardCurrencyName != null) OnStandardCurrencyName(sPaid);
+            }
+
+            if (!string.IsNullOrEmpty(worldCurrencyInfo.PaidCurrencyName))
+            {
+                sPaid = worldCurrencyInfo.PaidCurrencyName;
+                if (OnPremiumCurrencyName != null) OnPremiumCurrencyName(sPaid);
+            }
+
             if (!string.IsNullOrEmpty(worldCurrencyInfo.PaidCurrencyImage))
             {
                 SP.GetItemTexture(worldCurrencyInfo.PaidCurrencyImage, delegate(ImageStatus imageStatus, Texture2D texture)
                 {
                     tPaid = texture;
-                    if (OnPaidCurrencyTexture != null) OnPaidCurrencyTexture(texture);
+                    if (OnPremiumCurrencyTexture != null) OnPremiumCurrencyTexture(texture);
                 });
             }
 
@@ -787,7 +844,7 @@ public class SP : MonoBehaviour//, IServiceCalls
                 SP.GetItemTexture(worldCurrencyInfo.FreeCurrencyImage, delegate(ImageStatus imageStatus, Texture2D texture)
                 {
                     tFree = texture;
-                    if (OnFreeCurrencyTexture != null) OnFreeCurrencyTexture(texture);
+                    if (OnStandardCurrencyTexture != null) OnStandardCurrencyTexture(texture);
                 });
             }
         }));
