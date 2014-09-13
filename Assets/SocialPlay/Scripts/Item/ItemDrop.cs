@@ -17,7 +17,7 @@ public class ItemDrop : MonoBehaviour
         {
             item.AssetBundle((UnityEngine.Object bundleObj) =>
                 {
-                    GameObject dropObject = GameObjectInitilizer.initilizer.InitilizeGameObject(bundleObj != null ? bundleObj : dropModelDefault);
+                    GameObject dropObject = GameObject.Instantiate(bundleObj != null ? bundleObj : dropModelDefault) as GameObject;
 
                     ItemData itemData = dropObject.AddComponent<ItemDataComponent>().itemData;
                     itemData.SetItemData(item);

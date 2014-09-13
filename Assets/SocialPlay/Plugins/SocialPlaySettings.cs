@@ -5,6 +5,13 @@ using System.Collections.Generic;
 [System.Serializable]
 public class SocialPlaySettings : ScriptableObject
 {
+    [System.Serializable]
+    public class DropPrefab
+    {
+        public GameObject prefab;
+        public List<ItemFilterSystem> itemFilters = new List<ItemFilterSystem>();
+    }
+
     public enum ScreenType
     {
         Settings,
@@ -25,6 +32,7 @@ public class SocialPlaySettings : ScriptableObject
     public Texture2D defaultTexture;
     public GameObject defaultItemDrop;
     public GameObject defaultUIItem;
+    public List<DropPrefab> dropPrefabs = new List<DropPrefab>();
 
     static SocialPlaySettings mInst;
 
@@ -34,6 +42,14 @@ public class SocialPlaySettings : ScriptableObject
         {
             if (mInst == null) mInst = (SocialPlaySettings)Resources.Load("SocialPlaySettings", typeof(SocialPlaySettings));
             return mInst;
+        }
+    }
+
+    static public List<DropPrefab> DropPrefabs
+    {
+        get
+        {
+            return instance.dropPrefabs;
         }
     }
 
