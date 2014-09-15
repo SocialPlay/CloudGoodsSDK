@@ -1,7 +1,7 @@
 ﻿
 using UnityEngine;
 
-[RequireComponent(typeof(ItemData))]
+[RequireComponent(typeof(ItemDataComponent))]
 public class NGUIDragDropItem : MonoBehaviour
 {
 

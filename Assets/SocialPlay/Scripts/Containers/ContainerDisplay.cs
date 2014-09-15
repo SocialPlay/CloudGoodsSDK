@@ -6,7 +6,7 @@ using System.Collections.Generic;
 [RequireComponent(typeof(ItemContainer))]
 public class ContainerDisplay : MonoBehaviour
 {
-    internal UIGrid itemGrid;
+    public UIGrid itemGrid;
 
     public GameObject itemPrefab;
     public bool StartWindowActive = true;
@@ -118,24 +118,12 @@ public class ContainerDisplay : MonoBehaviour
     protected void AddedItem(ItemData itemData, bool isSave)
     {
         Create(itemData);
-
-        /*foreach (UIWidget item in go.GetComponentsInChildren<UIWidget>())
-        {
-            item.enabled = true;
-        }
-        foreach (MonoBehaviour item in go.GetComponentsInChildren<MonoBehaviour>())
-        {
-            if (item != null)
-            {
-                item.enabled = true;
-            }
-        }*/
         itemGrid.repositionNow = true;
     }
 
     protected void RemovedItem(ItemData itemData, int amount, bool isBeingMoved)
     {
-        Debug.Log("removed item: " + itemData.stackSize + "  amoutn: " + amount);       
+        Debug.Log("removed item: " + itemData.stackSize + "  amoutn: " + amount);
 
         if (!isBeingMoved)
         {
@@ -159,7 +147,7 @@ public class ContainerDisplay : MonoBehaviour
     {
         isActive = StartWindowActive;
         gameObject.SetActive(true);
-        itemGrid = GetComponentInChildren<UIGrid>();
+        if (itemGrid == null) itemGrid = GetComponentInChildren<UIGrid>();
     }
 
     private void GetDisplayActions()

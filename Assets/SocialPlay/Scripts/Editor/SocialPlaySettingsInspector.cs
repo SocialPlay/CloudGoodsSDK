@@ -168,9 +168,11 @@ public class SocialPlaySettingsInspector : Editor
         string androidKey = EditorGUILayout.TextField("Key", mSettings.androidKey);
 
         GUILayout.Label("Defaults", "BoldLabel");
-        Texture2D defaultTexture = EditorGUILayout.ObjectField("Default Texture", mSettings.defaultTexture, typeof(Texture2D), false) as Texture2D;
-        GameObject defaultItemDrop = EditorGUILayout.ObjectField("Default Item Drop", mSettings.defaultItemDrop, typeof(GameObject), false) as GameObject;
+        Texture2D defaultTexture = EditorGUILayout.ObjectField("Default Texture", mSettings.defaultTexture, typeof(Texture2D), false) as Texture2D;        
         GameObject defaultUIItem = EditorGUILayout.ObjectField("Default UI Item", mSettings.defaultUIItem, typeof(GameObject), false) as GameObject;
+        GameObject defaultItemDrop = EditorGUILayout.ObjectField("Default Drop Prefab", mSettings.defaultItemDrop, typeof(GameObject), false) as GameObject;
+
+        //DrawDropPrefabs();
 
         EditorGUILayout.Separator();
 
@@ -193,6 +195,82 @@ public class SocialPlaySettingsInspector : Editor
 
         EditorGUILayout.Separator();
     }
+
+    static void DrawDropPrefabs()
+    {
+        GUILayout.BeginVertical("ShurikenEffectBg", GUILayout.MinHeight(20f));
+
+        EditorGUILayout.LabelField("Drop Prefabs", EditorStyles.boldLabel);        
+
+        if (GUILayout.Button("Add New", EditorStyles.miniButton, GUILayout.Width(200)))
+            mSettings.dropPrefabs.Add(new SocialPlaySettings.DropPrefab());
+
+        for (int i = 0; i < mSettings.dropPrefabs.Count; ++i)
+        {
+            GUILayout.BeginHorizontal();
+            GUI.backgroundColor = Color.white;
+            {
+                GameObject prefab = EditorGUILayout.ObjectField("Prefab", mSettings.dropPrefabs[i].prefab, typeof(GameObject), false) as GameObject;
+                //string iden = EditorGUILayout.TextField(mSettings.androidProductNames[i]);                
+
+                GUI.backgroundColor = Color.red;
+                if (GUILayout.Button("X", GUILayout.Width(20f)))
+                {
+                    mSettings.dropPrefabs.RemoveAt(i);
+                    --i;
+                }
+                else if (prefab != mSettings.dropPrefabs[i].prefab)
+                {
+                    mSettings.dropPrefabs[i].prefab = prefab;
+                    NGUIEditorTools.RegisterUndo("Drop Prefab", mSettings);
+                }
+                GUI.backgroundColor = Color.white;
+            }
+            GUILayout.EndHorizontal();
+
+            DrawItemFilters(mSettings.dropPrefabs[i].itemFilters);
+        }
+        EditorGUILayout.Separator();
+
+        GUILayout.EndVertical();
+    }
+
+    static void DrawItemFilters(List<ItemFilterSystem> itemFilters)
+    {
+        //GUILayout.BeginVertical("ShurikenEffectBg", GUILayout.MinHeight(20f));
+
+        EditorGUILayout.LabelField("Item Filters", EditorStyles.boldLabel);
+
+        if (GUILayout.Button("Add New", EditorStyles.miniButton, GUILayout.Width(200)))
+            itemFilters.Add(new ItemFilterSystem());
+
+        for (int i = 0; i < itemFilters.Count; ++i)
+        {
+            GUILayout.BeginHorizontal();
+            GUI.backgroundColor = Color.white;
+            {
+                /*string iden = EditorGUILayout.TextField(mSettings.androidProductNames[i]);
+
+                GUI.backgroundColor = Color.red;
+                if (GUILayout.Button("X", GUILayout.Width(20f)))
+                {
+                    drop.itemFilters.RemoveAt(i);
+                    --i;
+                }
+                else if (iden != drop.itemFilters[i])
+                {
+                    mSettings.androidProductNames[i] = iden;
+                    NGUIEditorTools.RegisterUndo("Drop Prefab Item Filter", mSettings);
+                }*/
+                GUI.backgroundColor = Color.white;
+            }
+            GUILayout.EndHorizontal();
+        }
+        EditorGUILayout.Separator();
+
+        //GUILayout.EndVertical();
+    }
+
     #endregion
 
     static void DrawAboutGUI()

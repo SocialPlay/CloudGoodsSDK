@@ -6,6 +6,7 @@ using System;
 public class ItemDataComponent : MonoBehaviour
 {
     public Action<ItemData> onPickup;
+    public bool addOnPickup = true;
     public bool pickupOnClick = true;
     public bool destroyOnPickup = true;
     [HideInInspector]
@@ -38,16 +39,16 @@ public class ItemDataComponent : MonoBehaviour
 
     void OnClick()
     {
-        if(pickupOnClick) Pickup();
+        if (pickupOnClick) Pickup(addOnPickup);
     }
 
-    public virtual void SetData(ItemData itemData){}
+    public virtual void SetData(ItemData itemData) { }
 
     /// <summary>
     /// Convenient method to use it to pickup items.
     /// </summary>
 
-    public void Pickup()
+    public void Pickup(bool addToContainer)
     {
 
 #if UNITY_EDITOR
@@ -56,7 +57,7 @@ public class ItemDataComponent : MonoBehaviour
 
         if (onPickup != null) onPickup(itemData);
 
-        GameItemContainerInserter.instance.PutGameItem(new List<ItemData>(new ItemData[1] { itemData }));
+        if (addToContainer) GameItemContainerInserter.instance.PutGameItem(new List<ItemData>(new ItemData[1] { itemData }));
 
         if (destroyOnPickup) GameObject.Destroy(gameObject);
     }
