@@ -13,6 +13,8 @@ public class UnityUIStoreLoader : MonoBehaviour
 
     public int maxGridAmount = 32;
 
+    public bool isLoadingPage = false;
+
     List<StoreItem> items = new List<StoreItem>();
     List<StoreItem> filteredList = new List<StoreItem>();
 
@@ -36,31 +38,38 @@ public class UnityUIStoreLoader : MonoBehaviour
 
     public void LoadStoreWithPaging(List<StoreItem> listItems, int pageNum)
     {
-        filteredList = listItems;
-
-        if (currentPageItems.Count > 0)
-            ClearCurrentGrid();
-
-        currentPageItems = new List<GameObject>();
-
-        int PageMax = GetPageMax(listItems.Count, pageNum);
-
-        for (int i = pageNum * maxGridAmount; i < (pageNum * maxGridAmount + PageMax); i++)
+        if (isLoadingPage == false)
         {
-            GameObject newItem = (GameObject)GameObject.Instantiate(itemButtonPrefab);
-            newItem.transform.parent = transform;
-            newItem.transform.localPosition = Vector3.zero;
-            newItem.transform.localScale = Vector3.one;
-            currentPageItems.Add(newItem);
+            isLoadingPage = true;
 
-            UnityUIStoreItem itemInfo = newItem.GetComponent<UnityUIStoreItem>();
-            itemInfo.Init(listItems[i], this);
+            filteredList = listItems;
 
-            Button storeButton = newItem.GetComponent<Button>();
-            storeButton.onClick.AddListener(itemInfo.OnStoreItemClicked);
+            if (currentPageItems.Count > 0)
+                ClearCurrentGrid();
+
+            currentPageItems.Clear();
+
+            int PageMax = GetPageMax(listItems.Count, pageNum);
+
+            for (int i = pageNum * maxGridAmount; i < (pageNum * maxGridAmount + PageMax); i++)
+            {
+                GameObject newItem = (GameObject)GameObject.Instantiate(itemButtonPrefab);
+                newItem.transform.parent = transform;
+                newItem.transform.localPosition = Vector3.zero;
+                newItem.transform.localScale = Vector3.one;
+                currentPageItems.Add(newItem);
+
+                UnityUIStoreItem itemInfo = newItem.GetComponent<UnityUIStoreItem>();
+                itemInfo.Init(listItems[i], this);
+
+                Button storeButton = newItem.GetComponent<Button>();
+                storeButton.onClick.AddListener(itemInfo.OnStoreItemClicked);
+            }
+
+            SetPageButtons(GetPageAmount(listItems.Count));
+
+            isLoadingPage = false;
         }
-
-        SetPageButtons(GetPageAmount(listItems.Count));
     }
 
     int GetPageMax(int itemAmount, int pageNum)
@@ -89,8 +98,7 @@ public class UnityUIStoreLoader : MonoBehaviour
         }
 
         currentPageItems.Clear();
-
-    }
+  }
 
     int GetPageAmount(int itemCount)
     {
@@ -125,17 +133,15 @@ public class UnityUIStoreLoader : MonoBehaviour
         }
     }
 
-    void PageClicked()
-    {
-        Debug.Log("page button clicked");
-    }
-
     void ClearPageButtons()
     {
         List<Transform> pageObj = new List<Transform>();
         for (int i = 0; i < pageGridObject.transform.childCount; i++)
         {
-            pageObj.Add(pageGridObject.transform.GetChild(i));
+            Transform pageTrans = pageGridObject.transform.GetChild(i);
+            pageObj.Add(pageTrans);
+            UnityUIPageInfo pageInfo = pageTrans.gameObject.GetComponent<UnityUIPageInfo>();
+            OnPageButtonClicked -= pageInfo.StoreCurrentPage;
         }
 
         pageGridObject.transform.DetachChildren();

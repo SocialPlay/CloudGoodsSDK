@@ -37,8 +37,18 @@ public class ItemDragdrop : MonoBehaviour {
     {
         if (isDragging)
         {
-            Collider col = collider;
-            if (col != null) col.enabled = true;
+            Ray ray = Camera.main.ScreenPointToRay(new Vector3(200, 200, 0));
+            Debug.DrawRay(ray.origin, ray.direction * 10, Color.yellow);
+
+            RaycastHit Hit;
+
+            if (Physics.Raycast(ray, out Hit, 100))
+            {
+                if (Hit.collider.gameObject.GetComponent<ItemContainer>())
+                {
+                    Debug.Log("Hit container");
+                }
+            }
 
             transform.parent = lastParent;
             transform.localPosition = lastPosition;
