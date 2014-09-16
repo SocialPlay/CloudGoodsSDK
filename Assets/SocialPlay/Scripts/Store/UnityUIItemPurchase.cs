@@ -12,6 +12,7 @@ public class UnityUIItemPurchase : MonoBehaviour {
     public Text itemNameDisplay;
     public Text itemCreditCostDisplay;
     public Text itemCoinCostDisplay;
+    public Text itemDetailsDisplay;
 
     public Text itemQuantityAmount;
 
@@ -93,10 +94,23 @@ public class UnityUIItemPurchase : MonoBehaviour {
         itemCreditCostDisplay.text = item.storeItem.premiumCurrencyValue.ToString();
         itemCoinCostDisplay.text = item.storeItem.standardCurrencyValue.ToString();
         itemQuantityAmount.text = "1";
+        SetItemDetailDisplay(item);
 
         itemTexture.texture = item.gameObject.GetComponentInChildren<RawImage>().texture;
 
         ChangePurchaseButtonDisplay(item.storeItem.premiumCurrencyValue, item.storeItem.standardCurrencyValue);
+    }
+
+    void SetItemDetailDisplay(UnityUIStoreItem storeItem)
+    {
+        string statusText = "";
+
+        foreach (StoreItemDetail detail in storeItem.storeItem.itemDetail)
+        {
+            statusText += detail.propertyName + " : " + detail.propertyValue + "\n";
+        }
+
+        itemDetailsDisplay.text = statusText;
     }
 
     public void PurchaseItemWithPremiumCurrency()
