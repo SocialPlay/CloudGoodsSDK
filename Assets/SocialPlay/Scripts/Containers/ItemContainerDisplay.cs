@@ -7,7 +7,7 @@ using System.Collections.Generic;
 public class ItemContainerDisplay : MonoBehaviour
 {
     public ItemContainer myContainer;
-    public GameObject displayObject;
+   // public GameObject displayObject;
     public Transform childTarget;
 
     private List<ItemDataDisplay> currentDisplayObjects = new List<ItemDataDisplay>();
@@ -57,9 +57,11 @@ public class ItemContainerDisplay : MonoBehaviour
 
     }
 
+
+
     void myContainer_AddedItem(ItemData itemData, bool arg2)
     {
-        GameObject newItem = GameObject.Instantiate(displayObject) as GameObject;
+        GameObject newItem = GameObject.Instantiate(SocialPlaySettings.DefaultUIItem) as GameObject;
         ItemDataDisplay newDisplay = newItem.GetComponent<ItemDataDisplay>();
         newItem.GetComponent<ItemDataComponent>().itemData = itemData;
         newItem.name = itemData.itemName;
@@ -67,6 +69,15 @@ public class ItemContainerDisplay : MonoBehaviour
         newItem.transform.localPosition = Vector3.zero;
         newItem.transform.localScale = Vector3.one;
         currentDisplayObjects.Add(newDisplay);
+    }
+
+    void Start()
+    {
+        if (SocialPlaySettings.DefaultUIItem == null)
+        {
+            Debug.LogError("Default UI Item is not set int he settigns file");
+            this.gameObject.SetActive(false);
+        }
     }
 
     public ItemDataDisplay FindDisplayMatch(ItemData item)
