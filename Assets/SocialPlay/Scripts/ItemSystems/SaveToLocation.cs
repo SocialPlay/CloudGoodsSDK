@@ -50,7 +50,6 @@ public class SaveToLocation : MonoBehaviour
     {
         if (isSave == true)
         {
-            Debug.Log("Saving Added: " + data.stackSize);
             data.isLocked = true;
             SP.MoveItemStack(data.stackID, data.stackSize, GetOwnerID(), DestinationOwnerType.ToString(), DestinationLocation, delegate(Guid x)
             {
@@ -65,11 +64,8 @@ public class SaveToLocation : MonoBehaviour
     {
         if (!isMoving)
         {
-            Debug.Log("Saving Removig: " + data.stackSize);
-
             SP.DeductStackAmount(data.stackID, -amount, delegate(string x)
             {
-                Debug.Log("Removed : " + x);
                 Container.RefreshContainer();
             });
         }

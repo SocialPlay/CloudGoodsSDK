@@ -90,7 +90,6 @@ public class ItemContainer : MonoBehaviour
     {
         if (AddedItem != null)
         {
-            Debug.Log("Item Stakc size: " + item.stackSize);
             AddedItem(item, isSave);
         }
     }
@@ -156,7 +155,6 @@ public class ItemContainer : MonoBehaviour
 
     public void Add(ItemData itemData, int amount = -1, bool isSave = true)
     {
-        Debug.Log("item stack size: " + itemData.stackSize);
         containerAddAction.AddItem(itemData, amount, isSave);
     }
 
