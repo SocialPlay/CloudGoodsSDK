@@ -9,6 +9,6 @@ public class ContainerMoveItemAction : ContainerActions {
     public override void DoAction(ItemDataComponent itemObject)
     {
         ItemData itemData = itemObject.GetComponent<ItemDataComponent>().itemData;
-        ItemContainerManager.MoveItem(itemData, null, MoveToContainer);
+        ItemContainerManager.MoveItem(itemData, itemData.ownerContainer, MoveToContainer);
     } 
 }

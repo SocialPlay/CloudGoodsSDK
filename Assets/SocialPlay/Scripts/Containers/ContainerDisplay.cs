@@ -83,7 +83,7 @@ public class ContainerDisplay : MonoBehaviour
             NGUITools.SetActive(idc.gameObject, true);
             mList.Add(idc);
             idc.itemData = item;
-            idc.SetData(item);
+            //idc.SetData(item);
             return idc;
         }
 

@@ -68,7 +68,6 @@ public class ItemDataDisplay : MonoBehaviour
     {
         if (statusMsg != ImageStatus.Error && itemImage != null)
         {
-            Debug.Log("Load Image");
             itemImage.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.zero);
         }
     }
