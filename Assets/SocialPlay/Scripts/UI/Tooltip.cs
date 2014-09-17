@@ -19,6 +19,7 @@ public class Tooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     public void OnPointerExit(PointerEventData eventData)
     {
+        currentTooltip = null;
         TooltipHandler.Hide();
         isOver = false;
     }
