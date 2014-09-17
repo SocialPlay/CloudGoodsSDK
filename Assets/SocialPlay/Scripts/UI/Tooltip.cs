@@ -1,47 +1,37 @@
 ﻿using UnityEngine;
+using UnityEngine.EventSystems;
 using System.Collections;
 
-public class Tooltip : MonoBehaviour
+
+public class Tooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     static float delay = 0f;
     static Tooltip currentTooltip;
     ITooltipSetup toolTipSetup;
 
+    bool isOver = false;
 
-    void OnMouseEnter()
+    public void OnPointerEnter(PointerEventData eventData)
     {
         delay = 0f;
+        isOver = true;
     }
 
-
-    void OnMouseExit()
+    public void OnPointerExit(PointerEventData eventData)
     {
         TooltipHandler.Hide();
+        isOver = false;
     }
 
-    void OnMouseOver()
+    public void Update()
     {
-        if (currentTooltip == this)
-        {
-            return;
-        }
+        if (!isOver || currentTooltip == this) return;
+
         delay += Time.deltaTime;
         if (delay < 3)
         {
-            OnTooltip(true);
-            currentTooltip = this;
-        }
-    }
-
-    void OnTooltip(bool show)
-    {
-        if (show)
-        {
             Display();
-        }
-        else
-        {
-            TooltipHandler.Hide();
+            currentTooltip = this;
         }
     }
 
@@ -51,4 +41,6 @@ public class Tooltip : MonoBehaviour
 
         TooltipHandler.Show(toolTipSetup.Setup());
     }
+
+
 }
