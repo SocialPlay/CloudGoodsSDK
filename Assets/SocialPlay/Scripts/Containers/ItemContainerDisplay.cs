@@ -36,13 +36,41 @@ public class ItemContainerDisplay : MonoBehaviour
     void OnEnable()
     {
         myContainer.AddedItem += myContainer_AddedItem;
-        myContainer.RemovedItem += myContainer_RemovedItem; 
-    }
+        myContainer.ModifiedItem += myContainer_ModifiedItem;
+        myContainer.RemovedItem += myContainer_RemovedItem;
+        myContainer.ClearItems += myContainer_ClearItems;
+    } 
 
     void OnDisable()
     {
-        myContainer.AddedItem += myContainer_AddedItem;
-        myContainer.RemovedItem += myContainer_RemovedItem;
+        myContainer.AddedItem -= myContainer_AddedItem;
+        myContainer.ModifiedItem -= myContainer_ModifiedItem;
+        myContainer.RemovedItem -= myContainer_RemovedItem;
+        myContainer.ClearItems -= myContainer_ClearItems;
+    }
+
+    void myContainer_AddedItem(ItemData itemData, bool isSaving)
+    {
+        GameObject newItem = GameObject.Instantiate(SocialPlaySettings.DefaultUIItem) as GameObject;
+        ItemDataDisplay newDisplay = newItem.GetComponent<ItemDataDisplay>();
+        newItem.GetComponent<ItemDataComponent>().itemData = itemData;
+        newItem.name = itemData.itemName;
+        newItem.transform.parent = childTarget;
+        newItem.transform.localPosition = Vector3.zero;
+        newItem.transform.localScale = Vector3.one;
+        currentDisplayObjects.Add(newDisplay);
+    }
+
+
+    void myContainer_ModifiedItem(ItemData itemData, bool isSaving)
+    {
+        foreach (ItemDataDisplay display in currentDisplayObjects)
+        {
+            if(display.itemObject.itemData.IsSameItemAs(itemData)){
+                display.itemObject.itemData.stackSize += itemData.stackSize;
+                return;
+            }
+        }
     }
 
 
@@ -54,22 +82,20 @@ public class ItemContainerDisplay : MonoBehaviour
             currentDisplayObjects.Remove(selected);
             Destroy(selected.gameObject);
         }
-
     }
 
-
-
-    void myContainer_AddedItem(ItemData itemData, bool arg2)
+    void myContainer_ClearItems()
     {
-        GameObject newItem = GameObject.Instantiate(SocialPlaySettings.DefaultUIItem) as GameObject;
-        ItemDataDisplay newDisplay = newItem.GetComponent<ItemDataDisplay>();
-        newItem.GetComponent<ItemDataComponent>().itemData = itemData;
-        newItem.name = itemData.itemName;
-        newItem.transform.parent = childTarget;
-        newItem.transform.localPosition = Vector3.zero;
-        newItem.transform.localScale = Vector3.one;
-        currentDisplayObjects.Add(newDisplay);
+        foreach (ItemDataDisplay item in currentDisplayObjects)
+        {
+            Destroy(item.gameObject);
+        }
+        currentDisplayObjects.Clear();
     }
+
+
+
+  
 
     void Start()
     {

@@ -12,7 +12,7 @@ public class ItemContainer : MonoBehaviour
 
     public LoadItemsForContainer itemLoader;
 
-    internal List<ItemData> containerItems = new List<ItemData>(); 
+    public List<ItemData> containerItems = new List<ItemData>();
 
     /// <summary>
     /// Called after the contaienr added an item.
@@ -39,7 +39,7 @@ public class ItemContainer : MonoBehaviour
     /// </summary>
     public event Action ClearItems;
 
-    
+
 
     private ItemContainerRestrictor restriction = null;
 
@@ -176,7 +176,7 @@ public class ItemContainer : MonoBehaviour
     {
         foreach (ItemData item in containerItems)
         {
-            if (item.itemName.Equals(modified.itemName))
+            if (item.IsSameItemAs(modified))
             {
                 if (amount == -1 || item.stackSize <= amount)
                     containerItems.Remove(item);
@@ -203,18 +203,13 @@ public class ItemContainer : MonoBehaviour
     }
 
     public void Clear()
-    {
-        //foreach (ItemData item in containerItems)
-        //{
-        //    Destroy(item.gameObject);
-        //}
-
+    {       
         containerItems.Clear();
         ClearItemEvent();
     }
 
 
-  
+
 
     public void RefreshContainer()
     {

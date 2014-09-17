@@ -25,13 +25,13 @@ public class UICreditBundle : MonoBehaviour
     public string Cost
     {
         get { return cost.text; }
-        set { cost.text = value; }
+        set { cost.text = costPrefix + value; }
     }
 
     public string Description
     {
-        get { return description == null ? "" : description.text; }
-        set { if (description != null) description.text = value; }
+        get { return ""; }// return description == null ? "" : description.text; }
+        set { } //if (description != null) description.text = value; }
     }
 
     public string ProductID { get; set; }
@@ -40,8 +40,9 @@ public class UICreditBundle : MonoBehaviour
     public Text amount;
     public Text currenyName;
     public RawImage currencyIcon;
+    public string costPrefix = "$ ";
     public Text cost;
-    public Text description;
+    // public Text description;
     public Action<UICreditBundle> OnPurchaseRequest;
 
     Action<GameObject> purchaseRequestCallback;
@@ -54,7 +55,7 @@ public class UICreditBundle : MonoBehaviour
             SP.OnPremiumCurrencyName += OnPremiumCurrencyName;
         }
         else
-        {        
+        {
             CurrencyName = SP.PremiumCurrencyName;
         }
     }

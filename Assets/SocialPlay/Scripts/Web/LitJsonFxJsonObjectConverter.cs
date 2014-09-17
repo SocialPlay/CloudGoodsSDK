@@ -151,7 +151,6 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter
     public Guid ConvertToGuid(string dataString)
     {
         string guidString = ParseString(dataString);
-        Debug.Log(dataString);
         Guid newGuid = new Guid(guidString);
         return newGuid;
     }
