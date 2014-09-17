@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class DropMe : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler
+public class UnityUIItemDropComponent : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler
 {
 	public void OnDrop(PointerEventData data)
 	{

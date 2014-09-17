@@ -3,7 +3,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Image))]
-public class DragMe : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class UnityUIItemDragComponent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
 	public bool dragOnSurfaces = true;
 	

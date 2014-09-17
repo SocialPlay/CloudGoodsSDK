@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class StoreItemBundleTooltip : MonoBehaviour {
+public class StoreItemBundleTooltip : MonoBehaviour, ITooltipSetup {
 
     UnityUIStoreItem item;
 
@@ -13,7 +13,6 @@ public class StoreItemBundleTooltip : MonoBehaviour {
 
         foreach (StoreItemDetail detail in item.storeItem.itemDetail)
         {
-            Debug.Log(detail.propertyName);
             formated = string.Format("{0}\n{1}: {2}", formated, detail.propertyName, detail.propertyValue.ToString());
         }
 
