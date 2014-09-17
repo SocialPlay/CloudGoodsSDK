@@ -35,7 +35,6 @@ public class Tooltip : MonoBehaviour
 
     void OnTooltip(bool show)
     {
-        Debug.Log("On mouse over");
         if (show)
         {
             Display();
