@@ -19,11 +19,11 @@ public class UnityUIBundlePurchasing : MonoBehaviour {
 
     public int purchaseContainerLocation = 0;
 
-    ItemBundle currentItemBundle;
+    public ItemBundle currentItemBundle;
 
     List<GameObject> bundleObjects = new List<GameObject>();
 
-    public GameObject bundleGrid;
+    //public GameObject bundleGrid;
 
     public void ClosePurchaseWindow()
     {
@@ -38,25 +38,23 @@ public class UnityUIBundlePurchasing : MonoBehaviour {
 
         BundleName.text = bundle.Name;
 
-        SetUpBundleItemsDisplay(bundle.bundleItems);
+        //SetUpBundleItemsDisplay(bundle.bundleItems);
     }
 
-    void SetUpBundleItemsDisplay(List<BundleItem> bundleItems)
-    {
-        ClearGrid(bundleGrid);
+    //void SetUpBundleItemsDisplay(List<BundleItem> bundleItems)
+    //{
+    //    foreach (BundleItem bundleItem in bundleItems)
+    //    {
+    //        GameObject bundleItemObj = (GameObject)GameObject.Instantiate(bundleItemDisplayPrefab);
 
-        foreach (BundleItem bundleItem in bundleItems)
-        {
-            GameObject bundleItemObj = (GameObject)GameObject.Instantiate(bundleItemDisplayPrefab);
+    //        bundleItemObj.transform.parent = bundleGrid.transform;
 
-            bundleItemObj.transform.parent = bundleGrid.transform;
+    //        UnityUIBundleItemInfo bundleInfo = bundleItemObj.GetComponent<UnityUIBundleItemInfo>();
+    //        bundleInfo.SetupBundleItemDisplay(bundleItem);
 
-            UnityUIBundleItemInfo bundleInfo = bundleItemObj.GetComponent<UnityUIBundleItemInfo>();
-            bundleInfo.SetupBundleItemDisplay(bundleItem);
-
-            bundleObjects.Add(bundleItemObj);
-        }
-    }
+    //        bundleObjects.Add(bundleItemObj);
+    //    }
+    //}
 
     private void ChangePurchaseButtonDisplay(int itemCreditCost, int itemCoinCost, SocialPlayBundle state)
     {

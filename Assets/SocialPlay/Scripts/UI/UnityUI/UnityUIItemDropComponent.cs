@@ -7,12 +7,15 @@ public class UnityUIItemDropComponent : MonoBehaviour, IDropHandler, IPointerEnt
 {
 	public void OnDrop(PointerEventData data)
 	{
-        var originalObj = data.pointerDrag;
-        if (originalObj == null)
-            return;
+        if (data != null && data.pointerDrag.GetComponent<ItemDataComponent>() != null)
+        {
+            var originalObj = data.pointerDrag;
+            if (originalObj == null)
+                return;
 
-        if(originalObj.GetComponent<ItemDataComponent>().itemData.ownerContainer != GetComponent<ItemContainer>())
-            ItemContainerManager.MoveItem(originalObj.GetComponent<ItemDataComponent>().itemData, originalObj.GetComponent<ItemDataComponent>().itemData.ownerContainer, GetComponent<ItemContainer>());
+            if (originalObj.GetComponent<ItemDataComponent>().itemData.ownerContainer != GetComponent<ItemContainer>())
+                ItemContainerManager.MoveItem(originalObj.GetComponent<ItemDataComponent>().itemData, originalObj.GetComponent<ItemDataComponent>().itemData.ownerContainer, GetComponent<ItemContainer>());
+        }
 	}
 
 	public void OnPointerEnter(PointerEventData data)
