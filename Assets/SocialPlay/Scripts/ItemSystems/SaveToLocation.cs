@@ -41,7 +41,7 @@ public class SaveToLocation : MonoBehaviour
             {
                 data.stackID = x;
                 data.isLocked = false;
-                Container.RefreshContainer();
+                //Container.RefreshContainer();
             });
         }
     }

@@ -1,58 +1,69 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using System.Collections;
 
-public class ItemDataDisplay : MonoBehaviour
+public class ItemDataDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     internal ItemDataComponent itemObject;
     internal ItemContainerDisplay holdingContainer;
     public Text amountText;
-    public Image itemImage;
+    public RawImage itemImage;
 
     //MouseClicks
+    bool isOver = false;
     public bool first_click = false;
     public float running_timer = 0;
     private float delay = 0.3f;
 
-    void OnMouseUpAsButton()//Click
+
+    public void OnPointerEnter(PointerEventData eventData)
     {
-        holdingContainer.PerformSingleClick(itemObject);
+        isOver = true;
+        first_click = false;
+        running_timer = 0;
     }
 
-    void OnMouseOver()
+    public void OnPointerExit(PointerEventData eventData)
     {
-        if (Input.GetMouseButtonUp(1))
-        {
-            holdingContainer.PerformRightClick(itemObject);
-        }
-        if (Input.GetMouseButtonUp(0))
-        {
-            if (!first_click)
-            {
-                first_click = true;
-                running_timer = 0;
-            }
-            else
-            {
-                first_click = false;
-                if (running_timer < delay)
-                {
-                    ///Double click
-                    holdingContainer.PerformDoubleClick(itemObject);
-                }
-            }
-        }
+        isOver = false;
+        first_click = false;
+        running_timer = 0;
+    }
+
+    void Update()
+    {
         if (first_click)
         {
             running_timer += Time.deltaTime;
         }
+        if (!isOver) return;
+        if (Input.GetMouseButtonUp(0))
+        {
+            holdingContainer.PerformSingleClick(itemObject);
+            if (!first_click)
+            {
+                Debug.Log("Second click");
+                Debug.Log
+                    ("Double click: " + (running_timer <= delay));
+                first_click = false;
+                if (running_timer <= delay)
+                {
+                    holdingContainer.PerformDoubleClick(itemObject);
+                }
+            }
+            else
+            {
+                first_click = true;
+                Debug.Log("First click");
+            }
+        }
+        else if (Input.GetMouseButtonUp(1))
+        {
+            holdingContainer.PerformRightClick(itemObject);
+        }
     }
-
-    void OnMouseExit()
-    {
-        first_click = false;
-        running_timer = 0;
-    }
+  
 
     public void Start()
     {
@@ -68,7 +79,12 @@ public class ItemDataDisplay : MonoBehaviour
     {
         if (statusMsg != ImageStatus.Error && itemImage != null)
         {
-            itemImage.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.zero);
+            itemImage.texture = texture;
         }
     }
+
+
+
+
+
 }
