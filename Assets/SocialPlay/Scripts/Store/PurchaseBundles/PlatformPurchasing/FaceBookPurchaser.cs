@@ -10,7 +10,7 @@ public class FaceBookPurchaser : MonoBehaviour, IPlatformPurchaser
     public event Action<string> OnPurchaseErrorEvent;
     public int currentBundleID = 0;
 
-    public void Purchase(UICreditBundle bundleItem, int amount, string userID)
+    public void Purchase(PremiumBundle bundleItem, int amount, string userID)
     {
         currentBundleID = int.Parse(bundleItem.BundleID);
         //Console.WriteLine("Credit bundle purchase:  ID: " + id + " Amount: " + amount);
