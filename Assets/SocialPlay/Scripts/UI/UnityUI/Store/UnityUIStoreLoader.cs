@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
-public class UnityUIStoreLoader : MonoBehaviour
+public class UnityUIStoreLoader : StoreLoader
 {
     public GameObject itemPurchasePanel;
 
@@ -11,32 +11,11 @@ public class UnityUIStoreLoader : MonoBehaviour
     public GameObject itemButtonPrefab;
     public GameObject pageGridObject;
 
-    public int maxGridAmount = 32;
-
-    public bool isLoadingPage = false;
-
-    List<StoreItem> items = new List<StoreItem>();
-    List<StoreItem> filteredList = new List<StoreItem>();
-
-    List<GameObject> currentPageItems = new List<GameObject>();
+    bool isLoadingPage = false;
 
     UnityEngine.Events.UnityAction OnPageButtonClicked;
 
-    int currentPage = 0;
-
-    // Use this for initialization
-    void Awake()
-    {
-        SP.OnStoreListLoaded += OnStoreListLoaded;
-    }
-
-    void OnStoreListLoaded(List<StoreItem> listItems)
-    {
-        items = listItems;
-        LoadStoreWithPaging(items, 0);
-    }
-
-    public void LoadStoreWithPaging(List<StoreItem> listItems, int pageNum)
+    public override void LoadStoreWithPaging(List<StoreItem> listItems, int pageNum)
     {
         if (isLoadingPage == false)
         {
@@ -71,47 +50,7 @@ public class UnityUIStoreLoader : MonoBehaviour
             isLoadingPage = false;
         }
     }
-
-    int GetPageMax(int itemAmount, int pageNum)
-    {
-        int pageMax = 0;
-
-        if (pageNum < GetPageAmount(itemAmount) - 1)
-        {
-            pageMax = maxGridAmount;
-        }
-        else
-        {
-            pageMax = itemAmount % maxGridAmount;
-        }
-
-        return pageMax;
-    }
-
-    private void ClearCurrentGrid()
-    {
-        transform.DetachChildren();
-
-        foreach (GameObject gridItemObj in currentPageItems)
-        {
-            Destroy(gridItemObj);
-        }
-
-        currentPageItems.Clear();
-  }
-
-    int GetPageAmount(int itemCount)
-    {
-        int calcPageAmount = 0;
-
-        calcPageAmount = itemCount / maxGridAmount;
-
-        if ((itemCount % maxGridAmount) > 0)
-            calcPageAmount++;
-
-        return calcPageAmount;
-    }
-
+       
     void SetPageButtons(int pageAmount)
     {
         ClearPageButtons();
@@ -152,20 +91,7 @@ public class UnityUIStoreLoader : MonoBehaviour
         }
     }
 
-    public void SetPage(int pageNum)
-    {
-        if (pageNum != currentPage)
-        {
-            currentPage = pageNum;
-
-            LoadStoreWithPaging(filteredList, pageNum);
-        }
-    }
-
-    public List<StoreItem> GetStoreItemList()
-    {
-        return items;
-    }
+    
 
     public void DisplayItemPurchasePanel(GameObject itemButton)
     {

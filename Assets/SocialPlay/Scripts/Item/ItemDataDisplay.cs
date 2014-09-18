@@ -9,6 +9,8 @@ public class ItemDataDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExit
     internal ItemContainerDisplay holdingContainer;
     public Text amountText;
     public RawImage itemImage;
+    public Image itemFrame;
+
 
     //MouseClicks
     bool isOver = false;
@@ -63,7 +65,7 @@ public class ItemDataDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExit
             holdingContainer.PerformRightClick(itemObject);
         }
     }
-  
+
 
     public void Start()
     {
@@ -72,6 +74,8 @@ public class ItemDataDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
         if (amountText != null) amountText.text = itemObject.itemData.stackSize.ToString();
         SP.GetItemTexture(itemObject.itemData.imageName, OnReceivedItemTexture);
+
+        if (itemFrame != null) itemFrame.color = ItemQuailityColorSelector.GetColorForItem(itemObject.itemData);
     }
 
 

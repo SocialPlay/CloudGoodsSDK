@@ -4,43 +4,25 @@ using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 using System;
 
-public class SearchNameFilter : MonoBehaviour
+public class SearchNameFilter : InputValueChange
 {
-
-    //public NGUIStoreLoader storeLoader;
-
     UIInput input;
-    string lastText = "";
-
-    public static event Action<string> searchUpdate;
-    public static bool inputSelected = false;
 
     void Awake()
     {
         input = GetComponentInChildren<UIInput>();
     }
 
-    void Update()
+    protected override void Update()
     {
-        if (input != null && lastText != input.value)
+        if (input != null)
         {
-            lastText = input.value;
-            if (searchUpdate != null)
-            {         
-                searchUpdate(input.value);
-            }
+            base.Update();
         }
+    } 
 
-        inputSelected = input.isSelected;
-    }
-
-    void OnSubmit(string currentString)
+    protected override string GetCurrentValue()
     {
-        if (searchUpdate != null)
-        {
-            searchUpdate(currentString);
-        }
+        return input.value;
     }
-
-    
 }

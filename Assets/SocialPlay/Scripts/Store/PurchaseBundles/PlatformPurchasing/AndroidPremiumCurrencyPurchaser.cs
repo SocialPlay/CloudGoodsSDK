@@ -42,7 +42,7 @@ public class AndroidPremiumCurrencyPurchaser : MonoBehaviour, IPlatformPurchaser
 #endif
     }
 
-    public void Purchase(UICreditBundle bundleItem, int amount, string userID)
+    public void Purchase(PremiumBundle bundleItem, int amount, string userID)
     {
 #if UNITY_ANDROID
         if (string.IsNullOrEmpty(SocialPlaySettings.AndroidKey))

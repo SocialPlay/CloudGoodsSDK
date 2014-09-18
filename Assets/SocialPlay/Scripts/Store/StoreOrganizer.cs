@@ -5,7 +5,8 @@ using Newtonsoft.Json.Linq;
 
 public class StoreOrganizer : MonoBehaviour
 {
-    public UnityUIStoreLoader storeLoader;
+    public StoreLoader storeLoader;
+    public InputValueChange SearchInput;
     private ISortItem currentSort;
     private int currentSortDirection = 1;
     public List<FilterItem> activeFilters;
@@ -14,17 +15,25 @@ public class StoreOrganizer : MonoBehaviour
     void OnEnable()
     {
         StoreItemFilter.FilterUpdate += StoreItemFilter_FilterUpdate;
-        SearchNameFilter.searchUpdate += SearchNameFilter_searchUpdate;
+     
         SortStoreItemsBy.SortUpdate += SortStoreItemsBy_SortUpdate;
-        UnityUISearchNameFilter.searchUpdate += SearchNameFilter_searchUpdate;
+
+        if (searchFilter != null)
+        {
+            SearchInput.searchUpdate += SearchNameFilter_searchUpdate;
+        }
     }
 
     void OnDisable()
     {
         StoreItemFilter.FilterUpdate -= StoreItemFilter_FilterUpdate;
-        SearchNameFilter.searchUpdate -= SearchNameFilter_searchUpdate;
+     
         SortStoreItemsBy.SortUpdate -= SortStoreItemsBy_SortUpdate;
-        UnityUISearchNameFilter.searchUpdate -= SearchNameFilter_searchUpdate;
+
+        if (searchFilter != null)
+        {
+            SearchInput.searchUpdate -= SearchNameFilter_searchUpdate;
+        }
     }
 
     void SortStoreItemsBy_SortUpdate(ISortItem CurrentSort, int direction)
@@ -36,7 +45,7 @@ public class StoreOrganizer : MonoBehaviour
 
     void SearchNameFilter_searchUpdate(string searchFilter)
     {
-        Debug.Log(searchFilter);
+        Debug.Log("searchFilter");
         this.searchFilter = searchFilter;
         OrganizeStore();
     }
@@ -55,8 +64,7 @@ public class StoreOrganizer : MonoBehaviour
     }
 
     void OrganizeStore()
-    {
-      
+    {      
         List<StoreItem> AllItems = storeLoader.GetStoreItemList();
         if (AllItems.Count == 0)
         {

@@ -5,8 +5,6 @@ using Newtonsoft.Json.Linq;
 
 public class DisplayStoreItems : MonoBehaviour
 {
-    public UnityUIStoreLoader storeLoader;
-
     public FilterNewestItems.SortTimeType timeFilterType = FilterNewestItems.SortTimeType.hours;
     public int itemDisplayCount = 0;
     public int timeDifference = 5;
@@ -16,9 +14,6 @@ public class DisplayStoreItems : MonoBehaviour
 
     public void DisplayItems()
     {
-        if (!storeLoader)
-            storeLoader = this.gameObject.GetComponent<UnityUIStoreLoader>();
-
         SP.GetStoreItems(OnReceivedStoreItems);
     }
 

@@ -14,7 +14,7 @@ public class KongregatePurchase : MonoBehaviour, IPlatformPurchaser
     public event Action<string> RecievedPurchaseResponse;
     public event Action<string> OnPurchaseErrorEvent;
 
-    public void Purchase(UICreditBundle bundleItem, int amount, string appID)
+    public void Purchase(PremiumBundle bundleItem, int amount, string appID)
     {
         CallBackBrowserHook.CreateExternalCall(OnReceivedPurchaseResponse, "KongregatePurchaseBrowserHook", "KongregatePurchase", bundleItem.BundleID, amount, appID);
 

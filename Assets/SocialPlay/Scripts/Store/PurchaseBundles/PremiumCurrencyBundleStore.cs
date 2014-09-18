@@ -136,7 +136,7 @@ public class PremiumCurrencyBundleStore : MonoBehaviour
 
     void OnItemInGrid(PaidCurrencyBundleItem item, GameObject obj)
     {
-        UICreditBundle creditBundle = obj.GetComponent<UICreditBundle>();
+        PremiumBundle creditBundle = obj.GetComponent<PremiumBundle>();
         creditBundle.Amount = item.Amount.ToString();
         creditBundle.Cost = item.Cost.ToString();
 
@@ -168,7 +168,7 @@ public class PremiumCurrencyBundleStore : MonoBehaviour
         creditBundle.OnPurchaseRequest = OnPurchaseRequest;
     }
 
-    void OnPurchaseRequest(UICreditBundle item)
+    void OnPurchaseRequest(PremiumBundle item)
     {
         if (!isPurchaseRequest)
         {
