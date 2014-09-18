@@ -3,29 +3,30 @@ using UnityEngine.UI;
 using System.Collections;
 using System;
 
-public class UnityUISearchNameFilter : MonoBehaviour {
-
-
-    InputField input;
-    string lastText = "";
-
-    public static event Action<string> searchUpdate;
+public class UnityUISearchNameFilter : InputValueChange
+{
+     public InputField input;
 
     void Awake()
     {
-        input = GetComponentInChildren<InputField>();
+        input = GetComponent<InputField>();
+        if (input == null)
+        {
+            input = GetComponentInChildren<InputField>();
+        }
+        
     }
 
-    void Update()
+    protected override void Update()
     {
-        if (input != null && lastText != input.value)
+        if (input != null)
         {
-            lastText = input.value;
-            if (searchUpdate != null)
-            {
-                searchUpdate(input.value);
-            }
+            base.Update();
         }
     }
-    
+
+    protected override string GetCurrentValue()
+    {     
+        return input.value;
+    }
 }
