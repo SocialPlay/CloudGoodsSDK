@@ -13,7 +13,6 @@ public class UnityUIBundleItemInfo : MonoBehaviour {
 
     public void SetupBundleItemDisplay(BundleItem newBundleItem)
     {
-
         bundleItem = newBundleItem;
 
         ItemName.text = bundleItem.Name;
