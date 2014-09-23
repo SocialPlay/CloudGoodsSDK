@@ -89,7 +89,7 @@ public class SP : MonoBehaviour//, IServiceCalls
             if (string.IsNullOrEmpty(SocialPlaySettings.Url))
                 Debug.LogError("Url has not been defined. Open Social Play Settings from the menu.");
 
-            return SocialPlaySettings.Url;
+            return "http://192.168.0.197/webservice/cloudgoods/cloudgoodsservice.svc/";
         }
     }
 

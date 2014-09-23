@@ -41,11 +41,8 @@ public class ItemContainerManager
                         movingItemData.ownerContainer.Remove(movingItemData, true, targetAddState.possibleAddAmount);
                     }
 
-                    movingItemData.stackSize = StackSize;
-
-                    Debug.Log("New item data after remove: " + movingItemData.stackSize);
-
                     targetContainer.Add(movingItemData, targetAddState.possibleAddAmount);
+
                     break;
                 case ContainerAddState.ActionState.No:
                     break;

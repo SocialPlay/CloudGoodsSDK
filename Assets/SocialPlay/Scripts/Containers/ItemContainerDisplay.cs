@@ -74,13 +74,20 @@ public class ItemContainerDisplay : MonoBehaviour
     }
 
 
-    void myContainer_RemovedItem(ItemData arg1, int arg2, bool arg3)
+    void myContainer_RemovedItem(ItemData itemData, int amount, bool arg3)
     {
-        ItemDataDisplay selected = FindDisplayMatch(arg1);
+        Debug.Log("item stakc size: " + itemData.stackSize);
+        Debug.Log("amount: " + amount);
+        Debug.Log("total after move amount: " + (itemData.stackSize - amount));
+
+        ItemDataDisplay selected = FindDisplayMatch(itemData);
         if (selected != null)
         {
-            currentDisplayObjects.Remove(selected);
-            Destroy(selected.gameObject);
+            if (itemData.stackSize <= 0)
+            {
+                currentDisplayObjects.Remove(selected);
+                Destroy(selected.gameObject);
+            }
         }
     }
 
