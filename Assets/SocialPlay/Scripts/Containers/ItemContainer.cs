@@ -215,8 +215,8 @@ public class ItemContainer : MonoBehaviour
     {
         if (itemLoader != null)
         {
-            Clear();
             itemLoader.LoadItems();
+            Clear();
         }
     }
 }

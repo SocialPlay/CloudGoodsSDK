@@ -631,7 +631,11 @@ public class SP : MonoBehaviour//, IServiceCalls
 
     static public void Login(string userEmail, string password, Action<UserResponse> onSuccess)
     {
-        string url = string.Format("{0}SPLoginUserLogin?gameID={1}&userEMail={2}&userPassword={3}", Url, GuidAppID, WWW.EscapeURL(userEmail), WWW.EscapeURL(password));
+        Debug.Log("here");
+        Debug.Log("appID:" + AppID);
+        Debug.Log("guid app id: " + GuidAppID.ToString());
+
+        string url = string.Format("{0}SPLoginUserLogin?gameID={1}&userEMail={2}&userPassword={3}", Url, GuidAppID.ToString(), WWW.EscapeURL(userEmail), WWW.EscapeURL(password));
 
         WWW www = new WWW(url);
 

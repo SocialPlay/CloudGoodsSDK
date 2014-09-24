@@ -197,6 +197,8 @@ public class UnityUISPLogin : MonoBehaviour
         loginErrorLabel.text = ErrorMsg;
         if (string.IsNullOrEmpty(ErrorMsg))
         {
+            Debug.Log("login email: " + loginUserEmail.value + " login password: " + loginUserPassword.value);
+
             PlayerPrefs.SetString("SocialPlay_Login_UserEmail", loginUserEmail.value);
             SP.Login(loginUserEmail.value.ToLower(), loginUserPassword.value, null);
         }

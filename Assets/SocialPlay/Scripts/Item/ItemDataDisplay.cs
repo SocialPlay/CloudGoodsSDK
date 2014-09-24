@@ -64,6 +64,8 @@ public class ItemDataDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExit
         {
             holdingContainer.PerformRightClick(itemObject);
         }
+
+        if (amountText != null) amountText.text = itemObject.itemData.stackSize.ToString();
     }
 
 

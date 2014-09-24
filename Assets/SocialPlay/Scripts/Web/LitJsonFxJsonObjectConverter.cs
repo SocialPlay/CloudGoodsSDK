@@ -111,10 +111,10 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter
 
                                 itemData.Quality = tmpInt;
                             }
-                            if (propertyString == "Behaviours")
-                            {
-                                itemData.Behaviours = reader.Value.ToString();
-                            }
+                            //if (propertyString == "Behaviours")
+                            //{
+                            //    itemData.Behaviours = reader.Value.ToString();
+                            //}
                             if (propertyString == "BaseItemID")
                             {
                                 int tmpInt = 0;
