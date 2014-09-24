@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 
 
-public class CongfigurableItemTooltip : MonoBehaviour, ITooltipSetup
+public class ConfigurableItemTooltip : MonoBehaviour, ITooltipSetup
 {
 
     public List<DisaplyOption> displayOptions = new List<DisaplyOption>();

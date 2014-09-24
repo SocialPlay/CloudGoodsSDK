@@ -41,7 +41,7 @@ public class SaveToLocation : MonoBehaviour
             {
                 data.stackID = x;
                 data.isLocked = false;
-                Container.RefreshContainer();
+                //Container.RefreshContainer();
             });
         }
     }
@@ -55,7 +55,7 @@ public class SaveToLocation : MonoBehaviour
             {
                 data.stackID = x;
                 data.isLocked = false;
-                Container.RefreshContainer();
+                //Container.RefreshContainer();
             });
         }
     }
@@ -66,7 +66,7 @@ public class SaveToLocation : MonoBehaviour
         {
             SP.DeductStackAmount(data.stackID, -amount, delegate(string x)
             {
-                Container.RefreshContainer();
+                //Container.RefreshContainer();
             });
         }
     }

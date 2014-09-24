@@ -71,4 +71,6 @@ public class ItemGetter : MonoBehaviour
         //else Destroy(gameObject);
     }
 
+
+    
 }

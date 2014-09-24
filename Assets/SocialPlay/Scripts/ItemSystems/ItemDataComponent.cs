@@ -39,6 +39,7 @@ public class ItemDataComponent : MonoBehaviour
 
     void OnClick()
     {
+        Debug.Log("clicked");
         if (pickupOnClick) Pickup(addOnPickup);
     }
 

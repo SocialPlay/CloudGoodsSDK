@@ -64,10 +64,12 @@ public class ItemContainerDisplay : MonoBehaviour
 
     void myContainer_ModifiedItem(ItemData itemData, bool isSaving)
     {
+        Debug.Log("Moddified item value " + itemData.stackSize);
         foreach (ItemDataDisplay display in currentDisplayObjects)
         {
             if(display.itemObject.itemData.IsSameItemAs(itemData)){
                 display.itemObject.itemData.stackSize += itemData.stackSize;
+                display.amountText.text = display.itemObject.itemData.stackSize.ToString();
                 return;
             }
         }

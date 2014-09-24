@@ -23,16 +23,19 @@ public class UnityUITooltipHandler : MonoBehaviour
     }
 
     void TooltipHandler_ChangeTooltip(bool show, string tooltip)
-    {     
+    {        
+        Debug.Log("show");
         if (show)
-        {
-            gameObject.SetActive(true);
+        {        
+            tooltipText.gameObject.SetActive(true);
+            background.gameObject.SetActive(true);
             tooltipText.text = tooltip;
             isShowing = true;
         }
         else
         {
-            gameObject.SetActive(false);
+            tooltipText.gameObject.SetActive(false);
+            background.gameObject.SetActive(false);
             isShowing = false;
         }
     }
