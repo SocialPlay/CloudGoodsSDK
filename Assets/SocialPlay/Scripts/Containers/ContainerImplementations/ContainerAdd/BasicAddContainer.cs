@@ -45,11 +45,12 @@ public class BasicAddContainer : MonoBehaviour, IContainerAddAction
             {
                 item.stackSize += amount;
 
+
+                Debug.Log("add to existing stack");
+
                 itemContainer.ModifiedItemEvent(data, isSave);
 
                 data.stackSize -= amount;
-
-                Debug.Log("add to existing stack");
 
                 return true;
             }

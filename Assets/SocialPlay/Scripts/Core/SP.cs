@@ -512,7 +512,7 @@ public class SP : MonoBehaviour//, IServiceCalls
 
     static public void MoveItemStack(Guid StackToMove, int MoveAmount, string DestinationOwnerID, string DestinationOwnerType, int DestinationLocation, Action<Guid> callback)
     {
-        Debug.Log("Stack to move: " + StackToMove);
+        Debug.Log("Stack to move: " + StackToMove + " move amount: " + MoveAmount);
 
         string url = string.Format("{0}MoveItemStack?StackToMove={1}&MoveAmount={2}&DestinationOwnerID={3}&DestinationOwnerType={4}&AppID={5}&DestinationLocation={6}", Url, StackToMove, MoveAmount, DestinationOwnerID, DestinationOwnerType, GuidAppID, DestinationLocation);
         WWW www = new WWW(url);
