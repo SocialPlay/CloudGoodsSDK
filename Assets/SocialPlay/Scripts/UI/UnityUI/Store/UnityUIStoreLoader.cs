@@ -55,7 +55,7 @@ public class UnityUIStoreLoader : StoreLoader
     {
         ClearPageButtons();
 
-        for (int i = 0; i < pageAmount; i++)
+        for (int i = pageAmount-1; i > -1; i--)
         {
             GameObject newPage = (GameObject)GameObject.Instantiate(pageButtonPrefab);
             newPage.transform.parent = pageGridObject.transform;
