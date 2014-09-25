@@ -21,6 +21,16 @@ public class UnityUIBundleItemScroll : MonoBehaviour {
         SetBundleItemToDisplay(currentBundleIndex);
     }
 
+    void Update()
+    {
+        if (bundlePurchasing.currentItemBundle != itemBundle)
+        {
+            currentBundleIndex = 0;
+            itemBundle = bundlePurchasing.currentItemBundle;
+            SetBundleItemToDisplay(currentBundleIndex);
+        }
+    }
+
     void SetBundleItemToDisplay(int index)
     {
         BundleItem bundleitem = itemBundle.bundleItems[index];

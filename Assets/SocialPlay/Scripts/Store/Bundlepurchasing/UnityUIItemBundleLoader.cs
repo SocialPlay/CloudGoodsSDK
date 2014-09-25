@@ -22,4 +22,5 @@ public class UnityUIItemBundleLoader : MonoBehaviour {
             ItemBundle.SetupUnityUIItemBundle(bundle, bundlePurchasing);
         }
     }
+
 }

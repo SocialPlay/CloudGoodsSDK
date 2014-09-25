@@ -22,6 +22,7 @@ public class UnityUIItemBundle : MonoBehaviour {
 
     public void OnClickedItemBundle()
     {
+        Debug.Log(itemBundle.bundleItems.Count);
         bundlePurchasing.gameObject.SetActive(true);
         bundlePurchasing.SetupBundlePurchaseDetails(itemBundle);
     }
