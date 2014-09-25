@@ -15,7 +15,13 @@ public class NGUIPremiumBundle : PremiumBundle
         set { currencyIcon.mainTexture = value; }
     }
 
-    public override string CurrencyName
+    public override string PremiumCurrencyName
+    {
+        get { return currenyName.text; }
+        set { currenyName.text = value; }
+    }
+
+    public override string PremiumBundleName
     {
         get { return currenyName.text; }
         set { currenyName.text = value; }
@@ -58,6 +64,11 @@ public class NGUIPremiumBundle : PremiumBundle
             currencyIcon.mainTexture = texture;
             TweenAlpha.Begin(currencyIcon.cachedGameObject, 0.3f, 1).from = 0;
         }
+    }
+
+    public override void SetBundleName(string name)
+    {
+        //throw new NotImplementedException();
     }
 
 }

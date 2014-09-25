@@ -350,6 +350,8 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter
 
     public List<PaidCurrencyBundleItem> ConvertToListPaidCurrencyBundleItem(string dataString)
     {
+        Debug.Log(dataString);
+
         List<PaidCurrencyBundleItem> creditBundles = new List<PaidCurrencyBundleItem>();
 
         string parsedString = ParseString(dataString);
@@ -365,6 +367,7 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter
             creditBundle.Description = creditBundleObj[i]["Description"].ToString();
             creditBundle.ID = int.Parse(creditBundleObj[i]["ID"].ToString());
             creditBundle.CurrencyName = "$";
+            creditBundle.BundleName = creditBundleObj[i]["Name"].ToString();
 
             for (int j = 0; j < creditBundleObj[i]["Data"].Count; j++)
             {

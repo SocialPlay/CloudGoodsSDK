@@ -7,7 +7,7 @@ public class UnityUIPremiumBundle : PremiumBundle
     public override string Amount
     {
         get { return amount.text; }
-        set { amount.text = value; }
+        set { if(amount != null) amount.text = value; }
     }
 
     public override Texture CurrencyIcon
@@ -16,16 +16,22 @@ public class UnityUIPremiumBundle : PremiumBundle
         set { currencyIcon.texture = value; }
     }
 
-    public override string CurrencyName
+    public override string PremiumCurrencyName
     {
         get { return currenyName.text; }
-        set { currenyName.text = value; }
+        set { if (currenyName != null) currenyName.text = value; }
+    }
+
+    public override string PremiumBundleName
+    {
+        get { return BundleName.text; }
+        set { BundleName.text = value; }
     }
 
     public override string Cost
     {
         get { return cost.text; }
-        set { cost.text = costPrefix + value; }
+        set { if(cost != null)cost.text = costPrefix + value; }
     }
 
     public override string Description
@@ -39,6 +45,7 @@ public class UnityUIPremiumBundle : PremiumBundle
 
     public Text amount;
     public Text currenyName;
+    public Text BundleName; 
     public RawImage currencyIcon;
     public string costPrefix = "$ ";
     public Text cost;
@@ -54,4 +61,12 @@ public class UnityUIPremiumBundle : PremiumBundle
         }
     }
 
+
+    public override void SetBundleName(string name)
+    {
+        if (BundleName != null)
+        {
+            BundleName.text = name;
+        }
+    }
 }

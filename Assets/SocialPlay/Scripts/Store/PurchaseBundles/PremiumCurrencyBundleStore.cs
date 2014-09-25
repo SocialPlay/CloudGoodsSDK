@@ -150,7 +150,7 @@ public class PremiumCurrencyBundleStore : MonoBehaviour
 
         creditBundle.BundleID = item.ID.ToString();
 
-        creditBundle.CurrencyName = "";
+        creditBundle.PremiumCurrencyName = "";
         creditBundle.Description = item.Description;
 
         //// This is temporal until its added on the portal
@@ -164,6 +164,8 @@ public class PremiumCurrencyBundleStore : MonoBehaviour
                 creditBundle.SetIcon(texture);
             });
         }
+
+        creditBundle.SetBundleName(item.BundleName);
 
         creditBundle.OnPurchaseRequest = OnPurchaseRequest;
     }

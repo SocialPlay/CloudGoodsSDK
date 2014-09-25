@@ -9,7 +9,9 @@ public abstract class PremiumBundle : MonoBehaviour
 
     public abstract Texture CurrencyIcon { get; set; }
 
-    public abstract string CurrencyName { get; set; }
+    public abstract string PremiumCurrencyName { get; set; }
+
+    public abstract string PremiumBundleName { get; set; }
 
     public abstract string Cost { get; set; }
 
@@ -30,13 +32,13 @@ public abstract class PremiumBundle : MonoBehaviour
         }
         else
         {
-            CurrencyName = SP.PremiumCurrencyName;
+            PremiumCurrencyName = SP.PremiumCurrencyName;
         }
     }
 
     void OnPremiumCurrencyName(string premiumName)
     {
-        CurrencyName = premiumName;
+        PremiumCurrencyName = premiumName;
     }
 
     
@@ -46,6 +48,8 @@ public abstract class PremiumBundle : MonoBehaviour
     }
 
     public abstract void SetIcon(Texture2D texture);
+
+    public abstract void SetBundleName(string name);
  
        
 
