@@ -8,6 +8,7 @@ public class UnityUIItemBundle : MonoBehaviour {
     public ItemBundle itemBundle;
 
     public RawImage BundleImage;
+    public Text Amount;
 
     public void SetupUnityUIItemBundle(ItemBundle newItemBundle, UnityUIBundlePurchasing purchasing)
     {

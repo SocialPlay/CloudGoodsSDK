@@ -57,6 +57,8 @@ public class PremiumCurrencyBundleStore : MonoBehaviour
 
     void OnRegisteredUserToSession(string obj)
     {
+        Debug.Log("here 1");
+
         if (!isInitialized) Initialize();
     }
 
@@ -114,7 +116,7 @@ public class PremiumCurrencyBundleStore : MonoBehaviour
                     break;
             }
         }
-
+        Debug.Log("here");
         platformPurchasor.RecievedPurchaseResponse += OnRecievedPurchaseResponse;
         platformPurchasor.OnPurchaseErrorEvent += platformPurchasor_OnPurchaseErrorEvent;
         SP.GetCreditBundles(currentplatform, OnPurchaseBundlesRecieved);

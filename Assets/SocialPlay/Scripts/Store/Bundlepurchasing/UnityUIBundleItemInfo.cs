@@ -6,6 +6,7 @@ public class UnityUIBundleItemInfo : MonoBehaviour {
 
     public Text ItemName;
     public Text itemAmount;
+    public Text ItemStats;
 
     public RawImage itemImage;
 
@@ -17,6 +18,13 @@ public class UnityUIBundleItemInfo : MonoBehaviour {
 
         ItemName.text = bundleItem.Name;
         itemAmount.text = "Amount: " + bundleItem.Quantity;
+
+        ItemStats.text = "";
+
+        foreach (BundleItemDetails details in newBundleItem.bundleItemDetails)
+        {
+            ItemStats.text += details.BundleDetailName + " : " + details.Value + " \n";
+        }
 
         SP.GetItemTexture(bundleItem.Image, OnReceivedItemTexture);
     }
