@@ -20,9 +20,11 @@ public class Tooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     public void OnPointerExit(PointerEventData eventData)
     {
+       
         currentTooltip = null;
         TooltipHandler.Hide();
         isOver = false;
+       
     }
 
     public void Update()
@@ -31,8 +33,7 @@ public class Tooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
         delay += Time.deltaTime;
         if (delay < 3)
-        {
-            Debug.Log("show tooltip");
+        {          
             Display();
             currentTooltip = this;
         }

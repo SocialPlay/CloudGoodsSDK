@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using UnityEngine.EventSystems;
 
 public class UnityUITooltipHandler : MonoBehaviour
 {
@@ -23,8 +24,7 @@ public class UnityUITooltipHandler : MonoBehaviour
     }
 
     void TooltipHandler_ChangeTooltip(bool show, string tooltip)
-    {        
-        Debug.Log("show");
+    {     
         if (show)
         {        
             tooltipText.gameObject.SetActive(true);
@@ -33,23 +33,23 @@ public class UnityUITooltipHandler : MonoBehaviour
             isShowing = true;
         }
         else
-        {
+        {  
             tooltipText.gameObject.SetActive(false);
             background.gameObject.SetActive(false);
             isShowing = false;
         }
-    }
+    }  
 
     void Update()
-    {
-        if (!isShowing) return;
+    {   
+      
         if (isFollowMouse)
         {
             Vector3 newPosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, this.transform.localPosition.z);
             newPosition -= new Vector3(Screen.width / 2, Screen.height / 2, 0);
             this.transform.localPosition = newPosition;
         }
-        if (background != null)
+        if (background != null && isShowing)
         {
             background.rectTransform.sizeDelta = tooltipText.rectTransform.sizeDelta + originalDelta;
         }
