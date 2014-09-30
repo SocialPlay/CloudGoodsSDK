@@ -20,6 +20,11 @@ public class UnityUITooltipHandler : MonoBehaviour
             originalDelta = background.rectTransform.sizeDelta;
         }
         TooltipHandler.ChangeTooltip += TooltipHandler_ChangeTooltip;
+      
+    }
+
+    void Start()
+    {
         TooltipHandler_ChangeTooltip(false, null);  
     }
 
@@ -41,8 +46,7 @@ public class UnityUITooltipHandler : MonoBehaviour
     }  
 
     void Update()
-    {   
-      
+    { 
         if (isFollowMouse)
         {
             Vector3 newPosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, this.transform.localPosition.z);
