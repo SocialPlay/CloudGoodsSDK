@@ -34,7 +34,7 @@ public class ItemContainerManager
 
                     int StackSize = movingItemData.stackSize;
 
-                    Debug.Log("New item data befor remove: " + movingItemData.stackSize);
+                  //  Debug.Log("New item data befor remove: " + movingItemData.stackSize);
 
                     if (movingItemData.ownerContainer != null)
                     {

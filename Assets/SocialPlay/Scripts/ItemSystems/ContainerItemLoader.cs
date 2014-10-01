@@ -51,6 +51,7 @@ public abstract class ContainerItemLoader : MonoBehaviour
 
         foreach (ItemData item in receivedItems)
         {
+          
             container.Add(item, -1, false);
         }
 
