@@ -73,7 +73,7 @@ public class GameObjectItemDataConverter : ItemDataConverter
         {
             return statPair;
         }
-        JArray statsArray = new JArray();// = JArray.Parse(item.Detail);
+        JArray statsArray = JArray.Parse(item.Detail);
 
         return ItemStatsConverter.Converter.Generate(statsArray);
 

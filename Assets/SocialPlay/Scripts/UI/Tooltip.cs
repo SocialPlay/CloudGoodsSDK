@@ -13,18 +13,15 @@ public class Tooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        Debug.Log("Pointer enter");
         delay = 0f;
         isOver = true;
     }
 
     public void OnPointerExit(PointerEventData eventData)
-    {
-       
+    {       
         currentTooltip = null;
         TooltipHandler.Hide();
-        isOver = false;
-       
+        isOver = false;       
     }
 
     public void Update()
