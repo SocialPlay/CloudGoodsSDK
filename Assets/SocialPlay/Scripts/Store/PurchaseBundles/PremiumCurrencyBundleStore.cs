@@ -49,16 +49,13 @@ public class PremiumCurrencyBundleStore : MonoBehaviour
     public void ReceiveURL(string url)
     {
         // this will include the full URL, including url parameters etc.
-        Debug.Log("ReceiveURL " + SP.GetDomain(url) + " / full url: " + url);
         domain = SP.GetDomain(url);
         if (SP.isLogged && !isInitialized) Initialize();
     }
 #endif
 
     void OnRegisteredUserToSession(string obj)
-    {
-        Debug.Log("here 1");
-
+    { 
         if (!isInitialized) Initialize();
     }
 
@@ -116,7 +113,6 @@ public class PremiumCurrencyBundleStore : MonoBehaviour
                     break;
             }
         }
-        Debug.Log("here");
         platformPurchasor.RecievedPurchaseResponse += OnRecievedPurchaseResponse;
         platformPurchasor.OnPurchaseErrorEvent += platformPurchasor_OnPurchaseErrorEvent;
         SP.GetCreditBundles(currentplatform, OnPurchaseBundlesRecieved);
@@ -132,7 +128,7 @@ public class PremiumCurrencyBundleStore : MonoBehaviour
     void OnPurchaseBundlesRecieved(List<PaidCurrencyBundleItem> data)
     {
         gridLoader = (IGridLoader)Grid.GetComponent(typeof(IGridLoader));
-        gridLoader.ItemAdded += OnItemInGrid;
+        gridLoader.ItemAdded += OnItemInGrid; 
         gridLoader.LoadGrid(data);
     }
 
