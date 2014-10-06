@@ -9,8 +9,6 @@ using Newtonsoft.Json.Linq;
 public class ContainerDropItemAction : ContainerActions
 {
     public Transform DropTransform;
-    public GameObject DropObjModel;
-
     ItemDrop gameItemDrop;
 
     void Start()
@@ -38,7 +36,7 @@ public class ContainerDropItemAction : ContainerActions
             DropMovedItem(item, moveInfo);
         }
 
-        gameItemDrop.DropItemIntoWorld(item, DropTransform.position, DropObjModel);
+        gameItemDrop.DropItemIntoWorld(item, DropTransform.position, SP.DefaultItemDrop);
     }
 
     private static void DropMovedItem(ItemData item, MovedItemsInfo moveInfo)

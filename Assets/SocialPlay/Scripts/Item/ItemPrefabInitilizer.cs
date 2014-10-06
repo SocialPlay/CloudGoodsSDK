@@ -20,7 +20,6 @@ public class ItemPrefabInitilizer : MonoBehaviour
 
     public GameObject GetPrefabToInstantiate(ItemData itemData, GameObject defaultPrefab = null)
     {
-        Debug.Log("Prefab init");
         var prefab = defaultPrefab;
         if (instance == null) return prefab;
         foreach (var dropPrefab in instance.dropPrefabs)
