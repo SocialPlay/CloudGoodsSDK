@@ -3,15 +3,9 @@ using System.Collections;
 
 public class TestBundle : MonoBehaviour {
 
-    public GameObject testObj;
-
 	// Use this for initialization
 	void Start () {
-        SP.OnUserInfo += blah;
+        SP.RegisterGameSession(1, null);
 	}
 
-    void blah(SocialPlayUser hlash)
-    {
-        testObj.SetActive(true);
-    }
 }

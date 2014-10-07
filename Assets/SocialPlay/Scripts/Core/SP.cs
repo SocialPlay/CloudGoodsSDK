@@ -1147,7 +1147,7 @@ public class SP : MonoBehaviour//, IServiceCalls
         }
         else
         {
-            callback("WWW Error: " + www.error);
+            if (onErrorEvent != null) onErrorEvent("Error: " + www.error);
         }
     }
 
