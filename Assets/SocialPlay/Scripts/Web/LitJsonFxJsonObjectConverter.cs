@@ -10,6 +10,7 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter
 
     public List<ItemData> ConvertToItemDataList(string ObjectData)
     {
+        Debug.Log("Object data " + ObjectData);
        
         ItemDataList itemDataList = new SocialPlay.Data.ItemDataList();
 
@@ -37,9 +38,8 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter
                         {
                             //Debug.Log(reader.Value.ToString());
                             string propertyString = reader.Value.ToString();
-
+                         
                             reader.Read();
-
                             if (propertyString == "StackLocationID")
                             {
                                 itemData.StackLocationID = new Guid(reader.Value.ToString());
@@ -129,7 +129,7 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter
                             }
                             if (propertyString == "AssetBundleName")
                             {
-                                itemData.AssetBundleName = reader.Value.ToString();
+                                itemData.AssetBundleName = reader.Value.ToString();                             
                             }
                             if (propertyString == "Tags")
                             {
