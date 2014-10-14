@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
-
+using System.Collections.Generic;
 
 public class UnityUIWebserviceErrorPopup : MonoBehaviour {
 
@@ -15,10 +15,15 @@ public class UnityUIWebserviceErrorPopup : MonoBehaviour {
 
     private Ping ping;
     private float pingStartTime;
+    float pingNextStartTime = 0.0f;
+    private float pingNextMaxTime = 2.0f;
+
+    bool hasShownPopup = false;
 
 
     void Start()
     {
+        SP.OnRegisteredUserToSession += OnUserRegister;
         SP.onErrorEvent += OnWebserviceError;
 
         bool internetPossiblyAvailable;
@@ -43,8 +48,33 @@ public class UnityUIWebserviceErrorPopup : MonoBehaviour {
         pingStartTime = Time.time;
     }
 
+    void OnUserRegister(string data)
+    {
+        SP.GetOwnerItemById(0, 48254, OnReceivedOwnerItem);
+    }
+
+    void OnReceivedOwnerItem(List<ItemData> item)
+    {
+        if (item.Count > 0)
+            Debug.Log("Item found: " + item[0].itemName + " with amount of : " + item[0].stackSize);
+        else
+            Debug.Log("NO items found");
+    }
+
     public void Update()
     {
+        pingNextStartTime += Time.deltaTime;
+
+        if (ping == null)
+        {
+            if (pingNextStartTime >= pingNextMaxTime)
+            {
+                ping = new Ping(pingAddress);
+                pingStartTime = Time.time;
+                pingNextStartTime = 0.0f;
+            }
+        }
+
         if (ping != null)
         {
             bool stopCheck = true;
@@ -61,13 +91,17 @@ public class UnityUIWebserviceErrorPopup : MonoBehaviour {
 
     private void InternetIsNotAvailable()
     {
-        ErrorMessageText.text = "Please connect to the internet to continue";
-        popupWindow.SetActive(true);
+        if (!hasShownPopup)
+        {
+            ErrorMessageText.text = "Please connect to the internet to continue";
+            popupWindow.SetActive(true);
+            hasShownPopup = true;
+        }
     }
 
     private void InternetAvailable()
     {
-        Debug.Log("Internet is available! ;)");
+        hasShownPopup = false;
     }
 
 

@@ -403,6 +403,32 @@ public class SP : MonoBehaviour//, IServiceCalls
     }
 
     /// <summary>
+    /// Returns List of item datas for the itemID 
+    /// </summary>
+    /// <param name="name"></param>
+    static public void GetOwnerItemById(int location, int itemID, Action<List<ItemData>>callback)
+    {
+        if (!isLogged)
+        {
+            Debug.LogWarning("Need to login first to get items.");
+            return;
+        }
+        if (string.IsNullOrEmpty(SP.user.userGuid))
+        {
+            Debug.LogWarning("OwnerID cannot be empty");
+            return;
+        }
+        string url = string.Format("{0}GetOwnerItemById?AppID={1}&ownerID={2}&ownerType={3}&location={4}&itemID={5}", Url, AppID, user.userGuid, "User", location, itemID);
+        WWW www = new WWW(url);
+
+        Get().StartCoroutine(Get().ServiceCallGetListItemDatas(www, (List<ItemData> ownerItems) =>
+        {
+            userItems = ownerItems;
+            if (callback != null) callback(userItems);
+        }));
+    }
+
+    /// <summary>
     /// Returns true if the user have the specified item.
     /// </summary>
     /// <param name="name"></param>
