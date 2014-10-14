@@ -1132,6 +1132,15 @@ public class SP : MonoBehaviour//, IServiceCalls
         Get().StartCoroutine(Get().ServiceGetString(www, callback));
     }
 
+    static public void GetCraftQueue(Action<string> callback)
+    {
+        string url = string.Format("{0}GetCraftQueue?AppID={1}&UserID={2}", Url, GuidAppID, user.userID);
+
+        WWW www = new WWW(url);
+
+        Get().StartCoroutine(Get().ServiceGetString(www, callback));
+    }
+
     #endregion
 
     #region IEnumeratorCalls

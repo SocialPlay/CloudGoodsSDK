@@ -11,15 +11,19 @@ public class UnityUIItemRecipe : MonoBehaviour, IItemRecipe {
     public GameObject IngredientsGrid;
     public GameObject IngredientPrefab;
 
+    public RecipeDetailsWindow recipeDetailsWindow;
+
     RecipeInfo recipeInfo;
 
     public void LoadItemRecipe(RecipeInfo newRecipeInfo)
     {
-        recipeName.text = newRecipeInfo.name;
+        recipeInfo = newRecipeInfo;
 
-        SP.GetItemTexture(newRecipeInfo.imgURL, OnReceivedRecipeImage);
+        recipeName.text = recipeInfo.name;
 
-        LoadIngredients(newRecipeInfo.IngredientDetails);
+        SP.GetItemTexture(recipeInfo.imgURL, OnReceivedRecipeImage);
+
+        LoadIngredients(recipeInfo.IngredientDetails);
     }
 
     void LoadIngredients(List<IngredientDetail> itemIngredients)
@@ -37,5 +41,10 @@ public class UnityUIItemRecipe : MonoBehaviour, IItemRecipe {
     void OnReceivedRecipeImage(ImageStatus imgStatus, Texture2D img)
     {
         recipeItemImage.texture = img;
+    }
+
+    public void OnRecipeButtonClicked()
+    {
+        recipeDetailsWindow.OpenRecipeDetailsWindow(recipeInfo);
     }
 }
