@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System;
 
@@ -11,7 +12,6 @@ public class SPLogout : MonoBehaviour {
     public void LogoutUser()
     {
         SP.Logout();
-
         if (SPUserLogout != null) SPUserLogout();
     }
 	
