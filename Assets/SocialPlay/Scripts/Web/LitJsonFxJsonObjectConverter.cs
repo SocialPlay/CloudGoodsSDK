@@ -438,6 +438,24 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter
         return worldCurrencyInfo;
     }
 
+    public ConsumeResponse ConverToConsumeCreditsResponse(string dataString)
+    {
+        string parsedString = ParseString(dataString);
+
+        JsonData jsonData = LitJson.JsonMapper.ToObject(parsedString);
+
+        ConsumeResponse consumeResponse = new ConsumeResponse();
+
+        consumeResponse.Result = int.Parse(jsonData["Result"].ToString());
+
+        if(jsonData["Message"] != null)
+            consumeResponse.Message = jsonData["Message"].ToString();
+
+        consumeResponse.Balance = int.Parse(jsonData["Balance"].ToString());
+
+        return consumeResponse;
+    }
+
     string ParseString(string dataString)
     {
         string parseString = dataString.Remove(0, 1);

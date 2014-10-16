@@ -89,7 +89,8 @@ public class SP : MonoBehaviour//, IServiceCalls
             if (string.IsNullOrEmpty(SocialPlaySettings.Url))
                 Debug.LogError("Url has not been defined. Open Social Play Settings from the menu.");
 
-            return SocialPlaySettings.Url;
+            //return SocialPlaySettings.Url;
+            return "http://192.168.0.197/webservice/cloudgoods/cloudgoodsservice.svc/";
         }
     }
 
@@ -425,6 +426,27 @@ public class SP : MonoBehaviour//, IServiceCalls
         {
             userItems = ownerItems;
             if (callback != null) callback(userItems);
+        }));
+    }
+
+    static public void ConsumeItemById(int ItemID, int ConsumeAmount, int Location, Action<ConsumeResponse> callback)
+    {
+        if (!isLogged)
+        {
+            Debug.LogWarning("Need to login first to get items.");
+            return;
+        }
+        if (string.IsNullOrEmpty(SP.user.userGuid))
+        {
+            Debug.LogWarning("OwnerID cannot be empty");
+            return;
+        }
+        string url = string.Format("{0}ConsumeItemById?AppID={1}&OwnerID={2}&OwnerType={3}&ItemID={4}&ConsumeAmount={5}&Location={6}", Url, AppID, user.userGuid, "User", ItemID, ConsumeAmount, Location);
+        WWW www = new WWW(url);
+
+        Get().StartCoroutine(Get().ServiceConsumeResponse(www, (ConsumeResponse ownerItems) =>
+        {
+            if (callback != null) callback(ownerItems);
         }));
     }
 
@@ -808,6 +830,18 @@ public class SP : MonoBehaviour//, IServiceCalls
     #endregion
 
     #region StoreCalls
+
+    static public void ConsumePremiumCurrency(int amount, Action<ConsumeResponse> callback)
+    {
+        string url = Url + "ConsumePremiumCurrency?AppID=" + AppID + "&UserID=" + user.userGuid + "&Amount=" + amount;
+
+        WWW www = new WWW(url);
+
+        Get().StartCoroutine(Get().ServiceConsumeResponse(www, (ConsumeResponse value) =>
+        {
+            if (callback != null) callback(value);
+        }));
+    }
 
     static public void GetFreeCurrencyBalance(int accessLocation, Action<int> callback)
     {
@@ -1305,6 +1339,21 @@ public class SP : MonoBehaviour//, IServiceCalls
         if (www.error == null)
         {
             callback(serviceConverter.ConvertToSPLoginResponse(www.text));
+        }
+        else
+        {
+            if (onErrorEvent != null) onErrorEvent("Error: " + www.error);
+        }
+    }
+
+    IEnumerator ServiceConsumeResponse(WWW www, Action<ConsumeResponse> callback)
+    {
+        yield return www;
+
+        // check for errors
+        if (www.error == null)
+        {
+            callback(serviceConverter.ConverToConsumeCreditsResponse(www.text));
         }
         else
         {

@@ -29,4 +29,6 @@ public interface IServiceObjectConverter
 
     WorldCurrencyInfo ConvertToWorldCurrencyInfo(string dataString);
 
+    ConsumeResponse ConverToConsumeCreditsResponse(string dataString);
+
 }

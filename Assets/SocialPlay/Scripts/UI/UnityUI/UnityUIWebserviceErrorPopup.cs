@@ -50,7 +50,22 @@ public class UnityUIWebserviceErrorPopup : MonoBehaviour {
 
     void OnUserRegister(string data)
     {
-        SP.GetOwnerItemById(0, 48254, OnReceivedOwnerItem);
+        //SP.GetOwnerItemById(0, 48254, OnReceivedOwnerItem);
+
+        //SP.ConsumePremiumCurrency(1, OnConsumeCurrency);
+
+        SP.ConsumeItemById(111544, 1, 0, OnConsumeItemByID);
+    }
+
+    void OnConsumeItemByID(ConsumeResponse consumeItemResponse)
+    {
+        Debug.Log("Consume item Response: " + consumeItemResponse.Result);
+
+    }
+
+    void OnConsumeCurrency(ConsumeResponse currencyresult)
+    {
+        Debug.Log(currencyresult);
     }
 
     void OnReceivedOwnerItem(List<ItemData> item)
