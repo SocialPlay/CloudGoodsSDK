@@ -153,7 +153,7 @@ public class SocialPlaySettingsInspector : Editor
 
     static void DrawSettingsGUI()
     {
-        NGUIEditorTools.SetLabelWidth(120f);
+        //NGUIEditorTools.SetLabelWidth(120f);
         GUILayout.Label("Settings", "BoldLabel");
 
         string appId = EditorGUILayout.TextField("App ID", mSettings.appID);
@@ -189,7 +189,7 @@ public class SocialPlaySettingsInspector : Editor
             mSettings.defaultItemDrop = defaultItemDrop;
             mSettings.defaultUIItem = defaultUIItem;
             mSettings.androidKey = androidKey;
-            NGUIEditorTools.RegisterUndo("Social Play Settings", mSettings);
+            //NGUIEditorTools.RegisterUndo("Social Play Settings", mSettings);
         }
 
 
@@ -222,7 +222,7 @@ public class SocialPlaySettingsInspector : Editor
                 else if (prefab != mSettings.dropPrefabs[i].prefab)
                 {
                     mSettings.dropPrefabs[i].prefab = prefab;
-                    NGUIEditorTools.RegisterUndo("Drop Prefab", mSettings);
+                    //NGUIEditorTools.RegisterUndo("Drop Prefab", mSettings);
                 }
                 GUI.backgroundColor = Color.white;
             }

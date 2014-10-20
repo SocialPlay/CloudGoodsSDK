@@ -7,12 +7,12 @@ public class FilterItemByTags : FilterItem
 {
     public override void init()
     {
-        filterLabel.text = filterDisplayName;
+        //filterLabel.text = filterDisplayName;
     }
 
     public void SetFilterName(string name)
     {
-        filterLabel.text = name;
+        //filterLabel.text = name;
         filterBy = name;
     }
 

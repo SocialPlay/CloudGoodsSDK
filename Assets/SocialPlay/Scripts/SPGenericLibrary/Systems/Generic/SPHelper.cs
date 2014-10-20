@@ -40,12 +40,14 @@ public class SPHelper
 
     public static string SetTextColor(Color color)
     {
-        return string.Format("[{0}]", NGUIText.EncodeColor(color));
+        //return string.Format("[{0}]", NGUIText.EncodeColor(color));
+        return "";
     }
 
     public static string SetTextColor(string passedString, Color color)
     {
-        return string.Format("[{0}]{1}[-]", NGUIText.EncodeColor(color), passedString);
+        //return string.Format("[{0}]{1}[-]", NGUIText.EncodeColor(color), passedString);
+        return "";
     }
 
     /// <summary>

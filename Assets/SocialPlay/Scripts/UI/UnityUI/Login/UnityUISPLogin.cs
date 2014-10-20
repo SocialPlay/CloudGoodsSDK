@@ -29,7 +29,6 @@ public class UnityUISPLogin : MonoBehaviour
     public InputField registerUserName;
     public Text registerErrorLabel;
 
-    private UIInputLengthValidation registerUserNameValidator;
     private InputFieldValidation registerUserEmailValidator;
     private InputFieldValidation registerUserPasswordValidator;
     private InputFieldValidation registerUserPasswordConfirmValidator;
@@ -74,7 +73,6 @@ public class UnityUISPLogin : MonoBehaviour
         loginUserEmailValidator = loginUserEmail.GetComponent<InputFieldValidation>();
         loginUserPasswordValidator = loginUserPassword.GetComponent<InputFieldValidation>();
 
-        registerUserNameValidator = registerUserName.GetComponent<UIInputLengthValidation>();
         registerUserEmailValidator = registerUserEmail.GetComponent<InputFieldValidation>();
         registerUserPasswordValidator = registerUserPassword.GetComponent<InputFieldValidation>(); ;
         registerUserPasswordConfirmValidator = registerUserPasswordConfirm.GetComponent<InputFieldValidation>();
