@@ -1,42 +1,44 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 using System.Collections;
 using System;
 
-public class UnityUISPLogin : MonoBehaviour
+public class NGUI_SPLogin : MonoBehaviour
 {
+
 
     #region Login variables
     public GameObject loginTab;
-    public InputField loginUserEmail;
-    public InputField loginUserPassword;
-    public Text loginErrorLabel;
+    public UIInput loginUserEmail;
+    public UIInput loginUserPassword;
+    public UILabel loginErrorLabel;
 
-    public Toggle autoLoginToggle;
+    public UIToggle autoLoginToggle;
 
     public GameObject resendVerificationTextObject;
 
-    private InputFieldValidation loginUserEmailValidator;
-    private InputFieldValidation loginUserPasswordValidator;
+    private UIInputVisualValidation loginUserEmailValidator;
+    private UIInputVisualValidation loginUserPasswordValidator;
 
     #endregion
 
     #region Register variables
     public GameObject registerTab;
-    public InputField registerUserEmail;
-    public InputField registerUserPassword;
-    public InputField registerUserPasswordConfirm;
-    public InputField registerUserName;
-    public Text registerErrorLabel;
+    public UIInput registerUserEmail;
+    public UIInput registerUserPassword;
+    public UIInput registerUserPasswordConfirm;
+    public UIInput registerUserName;
+    public UILabel registerErrorLabel;
 
-    private InputFieldValidation registerUserEmailValidator;
-    private InputFieldValidation registerUserPasswordValidator;
-    private InputFieldValidation registerUserPasswordConfirmValidator;
+    private UIInputLengthValidation registerUserNameValidator;
+    private UIInputVisualValidation registerUserEmailValidator;
+    private UIInputVisualValidation registerUserPasswordValidator;
+    private UIInputVisualValidation registerUserPasswordConfirmValidator;
     #endregion
 
     #region Confirmations Variables
     public GameObject confirmationTab;
-    public Text confirmationStatus;
+    public UILabel confirmationStatus;
+    public UIButton confirmationButton;
 
     #endregion
 
@@ -47,7 +49,6 @@ public class UnityUISPLogin : MonoBehaviour
         SP.OnUserRegister += RegisterMessageResponce;
         SP.OnForgotPassword += ForgotPasswordResponce;
         SP.OnVerificationSent += ResentVerificationResponce;
-        SPLogout.SPUserLogout += OnLogout;
     }
 
     void OnDisable()
@@ -57,22 +58,25 @@ public class UnityUISPLogin : MonoBehaviour
         SP.OnUserRegister -= RegisterMessageResponce;
         SP.OnForgotPassword -= ForgotPasswordResponce;
         SP.OnVerificationSent -= ResentVerificationResponce;
-        SPLogout.SPUserLogout -= OnLogout;
     }
 
     void Start()
     {
+
+        ContainerKeybinding.DisableKeybinding("Login");
+
         loginTab.SetActive(true);
         registerErrorLabel.text = "";
         registerTab.SetActive(false);
         confirmationTab.SetActive(false);
 
-        loginUserEmailValidator = loginUserEmail.GetComponent<InputFieldValidation>();
-        loginUserPasswordValidator = loginUserPassword.GetComponent<InputFieldValidation>();
+        loginUserEmailValidator = loginUserEmail.GetComponent<UIInputVisualValidation>();
+        loginUserPasswordValidator = loginUserPassword.GetComponent<UIInputVisualValidation>();
 
-        registerUserEmailValidator = registerUserEmail.GetComponent<InputFieldValidation>();
-        registerUserPasswordValidator = registerUserPassword.GetComponent<InputFieldValidation>(); ;
-        registerUserPasswordConfirmValidator = registerUserPasswordConfirm.GetComponent<InputFieldValidation>();
+        registerUserNameValidator = registerUserName.GetComponent<UIInputLengthValidation>();
+        registerUserEmailValidator = registerUserEmail.GetComponent<UIInputVisualValidation>();
+        registerUserPasswordValidator = registerUserPassword.GetComponent<UIInputVisualValidation>(); ;
+        registerUserPasswordConfirmValidator = registerUserPasswordConfirm.GetComponent<UIInputVisualValidation>();
         resendVerificationTextObject.SetActive(false);
         if (!string.IsNullOrEmpty(PlayerPrefs.GetString("SocialPlay_Login_UserEmail")))
         {
@@ -81,7 +85,7 @@ public class UnityUISPLogin : MonoBehaviour
 
         if (!string.IsNullOrEmpty(PlayerPrefs.GetString("SocialPlay_UserGuid")))
         {
-            SocialPlayUser userInfo = new SocialPlayUser(PlayerPrefs.GetString("SocialPlay_UserGuid"), PlayerPrefs.GetString("SocialPlay_UserName"), PlayerPrefs.GetString("SocialPlay_UserEmail"));
+			SocialPlayUser userInfo = new SocialPlayUser(PlayerPrefs.GetString("SocialPlay_UserGuid"), PlayerPrefs.GetString("SocialPlay_UserName"), PlayerPrefs.GetString("SocialPlay_UserEmail"));
 
             SP.AuthorizeUser(userInfo);
 
@@ -91,9 +95,9 @@ public class UnityUISPLogin : MonoBehaviour
 
     #region webservice responce events
 
-    void RecivedUserGuid(SocialPlayUser obj)
+	void RecivedUserGuid(SocialPlayUser obj)
     {
-        if (autoLoginToggle != null && autoLoginToggle.isOn == true)
+        if (autoLoginToggle != null && autoLoginToggle.value == true)
         {
             PlayerPrefs.SetString("SocialPlay_UserGuid", obj.userGuid.ToString());
             PlayerPrefs.SetString("SocialPlay_UserName", obj.userName);
@@ -103,6 +107,7 @@ public class UnityUISPLogin : MonoBehaviour
         resendVerificationTextObject.SetActive(false);
         loginErrorLabel.text = "User logged in";
         this.gameObject.SetActive(false);
+        ContainerKeybinding.EnableKeybinding("Login");
     }
 
     void ResentVerificationResponce(UserResponse responce)
@@ -113,7 +118,11 @@ public class UnityUISPLogin : MonoBehaviour
 
     void ForgotPasswordResponce(UserResponse responce)
     {
+        //resendVerificationTextObject.SetActive(false);
+        //loginErrorLabel.text = responce.message;
+
         confirmationStatus.text = responce.message;
+
     }
 
     void RecivedLoginResponce(UserResponse recivedMessage)
@@ -135,10 +144,16 @@ public class UnityUISPLogin : MonoBehaviour
         if (responce.code == 0)
         {
             confirmationStatus.text = "Verification Email has been sent to your Email";
+            confirmationButton.onClick.Clear();
+            confirmationButton.onClick.Add(new EventDelegate(this, "SwitchToLogin"));
+            confirmationButton.GetComponentInChildren<UILabel>().text = "To Login";
         }
         else
         {
             confirmationStatus.text = responce.message;
+            confirmationButton.onClick.Clear();
+            confirmationButton.onClick.Add(new EventDelegate(this, "SwitchToRegister"));
+            confirmationButton.GetComponentInChildren<UILabel>().text = "Back";
         }
     }
 
@@ -169,7 +184,6 @@ public class UnityUISPLogin : MonoBehaviour
     public void SwitchToConfirmation()
     {
         confirmationStatus.text = "Waiting ...";
-        confirmationStatus.gameObject.SetActive(true);
         confirmationTab.SetActive(true);
         loginTab.SetActive(false);
         registerTab.SetActive(false);
@@ -191,8 +205,6 @@ public class UnityUISPLogin : MonoBehaviour
         loginErrorLabel.text = ErrorMsg;
         if (string.IsNullOrEmpty(ErrorMsg))
         {
-            Debug.Log("login email: " + loginUserEmail.value + " login password: " + loginUserPassword.value);
-
             PlayerPrefs.SetString("SocialPlay_Login_UserEmail", loginUserEmail.value);
             SP.Login(loginUserEmail.value.ToLower(), loginUserPassword.value, null);
         }
@@ -202,11 +214,16 @@ public class UnityUISPLogin : MonoBehaviour
     {
 
         string ErrorMsg = "";
+        if (!registerUserNameValidator.IsValidCheck())
+        {
+            if (!string.IsNullOrEmpty(ErrorMsg)) ErrorMsg += "\n";
+            ErrorMsg += "-Invalid User Name";
+        }
         if (!registerUserEmailValidator.IsValidCheck())
         {
             if (!string.IsNullOrEmpty(ErrorMsg)) ErrorMsg += "\n";
             ErrorMsg += "-Invalid Email";
-        }
+        }     
 
         if (!registerUserPasswordValidator.IsValidCheck() || !registerUserPasswordConfirmValidator.IsValidCheck())
         {
@@ -217,14 +234,8 @@ public class UnityUISPLogin : MonoBehaviour
         if (string.IsNullOrEmpty(ErrorMsg))
         {
             SwitchToConfirmation();
-            SP.Register(registerUserEmail.value, registerUserPassword.value, registerUserName.value, OnRegisteredUser);
+            SP.Register(registerUserEmail.value, registerUserPassword.value, registerUserName.value, null);
         }
-    }
-
-    void OnRegisteredUser(UserResponse userResponse)
-    {
-        confirmationStatus.gameObject.SetActive(true);
-        confirmationStatus.text = userResponse.message;
     }
 
     public void ForgotPassword()
@@ -239,6 +250,9 @@ public class UnityUISPLogin : MonoBehaviour
         if (string.IsNullOrEmpty(ErrorMsg))
         {
             SwitchToConfirmation();
+            confirmationButton.onClick.Clear();
+            confirmationButton.onClick.Add(new EventDelegate(this, "SwitchToLogin"));
+            confirmationButton.GetComponentInChildren<UILabel>().text = "Back";
             SP.ForgotPassword(loginUserEmail.value, OnSentPassword);
         }
     }
@@ -259,14 +273,12 @@ public class UnityUISPLogin : MonoBehaviour
         if (string.IsNullOrEmpty(ErrorMsg))
         {
             SwitchToConfirmation();
+            confirmationButton.onClick.Clear();
+            confirmationButton.onClick.Add(new EventDelegate(this, "SwitchToLogin"));
+            confirmationButton.GetComponentInChildren<UILabel>().text = "Back";
             SP.ResendVerificationEmail(loginUserEmail.value, null);
         }
 
-    }
-
-    void OnLogout()
-    {
-        loginTab.SetActive(true);
     }
 
     #endregion

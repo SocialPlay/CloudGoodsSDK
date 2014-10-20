@@ -14,26 +14,26 @@ public class StoreOrganizer : MonoBehaviour
 
     void OnEnable()
     {
-        StoreItemFilter.FilterUpdate += StoreItemFilter_FilterUpdate;
+        //StoreItemFilter.FilterUpdate += StoreItemFilter_FilterUpdate;
      
-        SortStoreItemsBy.SortUpdate += SortStoreItemsBy_SortUpdate;
+        //SortStoreItemsBy.SortUpdate += SortStoreItemsBy_SortUpdate;
 
-        if (searchFilter != null)
-        {
-            SearchInput.searchUpdate += SearchNameFilter_searchUpdate;
-        }
+        //if (searchFilter != null)
+        //{
+        //    SearchInput.searchUpdate += SearchNameFilter_searchUpdate;
+        //}
     }
 
     void OnDisable()
     {
-        StoreItemFilter.FilterUpdate -= StoreItemFilter_FilterUpdate;
+        //StoreItemFilter.FilterUpdate -= StoreItemFilter_FilterUpdate;
      
-        SortStoreItemsBy.SortUpdate -= SortStoreItemsBy_SortUpdate;
+        //SortStoreItemsBy.SortUpdate -= SortStoreItemsBy_SortUpdate;
 
-        if (searchFilter != null)
-        {
-            SearchInput.searchUpdate -= SearchNameFilter_searchUpdate;
-        }
+        //if (searchFilter != null)
+        //{
+        //    SearchInput.searchUpdate -= SearchNameFilter_searchUpdate;
+        //}
     }
 
     void SortStoreItemsBy_SortUpdate(ISortItem CurrentSort, int direction)
@@ -73,11 +73,11 @@ public class StoreOrganizer : MonoBehaviour
         }
         List<StoreItem> storeList = AllItems.GetRange(0, AllItems.Count);
 
-        foreach (FilterItem filter in activeFilters) storeList = filter.FilterStoreList(storeList);
+        //foreach (FilterItem filter in activeFilters) storeList = filter.FilterStoreList(storeList);
 
         storeList = SP.SearchStoreItems(storeList, searchFilter);
-        if (currentSort != null) storeList = currentSort.Sort(storeList, currentSortDirection);
-        else storeList = SortStoreItemsBy.DefaultSort(storeList);
+        //if (currentSort != null) storeList = currentSort.Sort(storeList, currentSortDirection);
+        //else storeList = SortStoreItemsBy.DefaultSort(storeList);
 
         storeLoader.LoadStoreWithPaging(storeList, 0);
 
