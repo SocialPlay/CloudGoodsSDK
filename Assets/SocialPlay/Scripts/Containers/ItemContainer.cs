@@ -57,12 +57,12 @@ public class ItemContainer : MonoBehaviour
         else
             containerAddAction = (IContainerAddAction)GetComponent(typeof(IContainerAddAction));
 
-        SP.OnRegisteredUserToSession += OnRegisteredSession;
+        CloudGoods.OnRegisteredUserToSession += OnRegisteredSession;
     }
 
     void OnDestroy()
     {
-        SP.OnRegisteredUserToSession -= OnRegisteredSession;
+        CloudGoods.OnRegisteredUserToSession -= OnRegisteredSession;
     }
 
     void OnRegisteredSession(string user)

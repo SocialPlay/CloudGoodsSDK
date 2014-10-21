@@ -13,13 +13,13 @@ public class UnityUITextureCurrency : MonoBehaviour {
         mTexture = GetComponent<RawImage>();
         if (type == CurrencyType.Standard)
         {
-            SP.OnStandardCurrencyTexture += OnFreeCurrency;
-            mTexture.texture = SP.standardCurrencyTexture;
+            CloudGoods.OnStandardCurrencyTexture += OnFreeCurrency;
+            mTexture.texture = CloudGoods.standardCurrencyTexture;
         }
         else if (type == CurrencyType.Premium)
         {
-            SP.OnPremiumCurrencyTexture += OnPaidCurrency;
-            mTexture.texture = SP.premiumCurrencyTexture;
+            CloudGoods.OnPremiumCurrencyTexture += OnPaidCurrency;
+            mTexture.texture = CloudGoods.premiumCurrencyTexture;
         }
     }
 

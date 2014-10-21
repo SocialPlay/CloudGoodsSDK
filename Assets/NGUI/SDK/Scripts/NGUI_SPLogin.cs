@@ -44,20 +44,20 @@ public class NGUI_SPLogin : MonoBehaviour
 
     void OnEnable()
     {
-        SP.OnUserLogin += RecivedLoginResponce;
-        SP.OnUserInfo += RecivedUserGuid;
-        SP.OnUserRegister += RegisterMessageResponce;
-        SP.OnForgotPassword += ForgotPasswordResponce;
-        SP.OnVerificationSent += ResentVerificationResponce;
+        CloudGoods.OnUserLogin += RecivedLoginResponce;
+        CloudGoods.OnUserInfo += RecivedUserGuid;
+        CloudGoods.OnUserRegister += RegisterMessageResponce;
+        CloudGoods.OnForgotPassword += ForgotPasswordResponce;
+        CloudGoods.OnVerificationSent += ResentVerificationResponce;
     }
 
     void OnDisable()
     {
-        SP.OnUserLogin -= RecivedLoginResponce;
-        SP.OnUserInfo -= RecivedUserGuid;
-        SP.OnUserRegister -= RegisterMessageResponce;
-        SP.OnForgotPassword -= ForgotPasswordResponce;
-        SP.OnVerificationSent -= ResentVerificationResponce;
+        CloudGoods.OnUserLogin -= RecivedLoginResponce;
+        CloudGoods.OnUserInfo -= RecivedUserGuid;
+        CloudGoods.OnUserRegister -= RegisterMessageResponce;
+        CloudGoods.OnForgotPassword -= ForgotPasswordResponce;
+        CloudGoods.OnVerificationSent -= ResentVerificationResponce;
     }
 
     void Start()
@@ -87,7 +87,7 @@ public class NGUI_SPLogin : MonoBehaviour
         {
 			SocialPlayUser userInfo = new SocialPlayUser(PlayerPrefs.GetString("SocialPlay_UserGuid"), PlayerPrefs.GetString("SocialPlay_UserName"), PlayerPrefs.GetString("SocialPlay_UserEmail"));
 
-            SP.AuthorizeUser(userInfo);
+            CloudGoods.AuthorizeUser(userInfo);
 
             RecivedUserGuid(userInfo);
         }
@@ -206,7 +206,7 @@ public class NGUI_SPLogin : MonoBehaviour
         if (string.IsNullOrEmpty(ErrorMsg))
         {
             PlayerPrefs.SetString("SocialPlay_Login_UserEmail", loginUserEmail.value);
-            SP.Login(loginUserEmail.value.ToLower(), loginUserPassword.value, null);
+            CloudGoods.Login(loginUserEmail.value.ToLower(), loginUserPassword.value, null);
         }
     }
 
@@ -234,7 +234,7 @@ public class NGUI_SPLogin : MonoBehaviour
         if (string.IsNullOrEmpty(ErrorMsg))
         {
             SwitchToConfirmation();
-            SP.Register(registerUserEmail.value, registerUserPassword.value, registerUserName.value, null);
+            CloudGoods.Register(registerUserEmail.value, registerUserPassword.value, registerUserName.value, null);
         }
     }
 
@@ -253,7 +253,7 @@ public class NGUI_SPLogin : MonoBehaviour
             confirmationButton.onClick.Clear();
             confirmationButton.onClick.Add(new EventDelegate(this, "SwitchToLogin"));
             confirmationButton.GetComponentInChildren<UILabel>().text = "Back";
-            SP.ForgotPassword(loginUserEmail.value, OnSentPassword);
+            CloudGoods.ForgotPassword(loginUserEmail.value, OnSentPassword);
         }
     }
 
@@ -276,7 +276,7 @@ public class NGUI_SPLogin : MonoBehaviour
             confirmationButton.onClick.Clear();
             confirmationButton.onClick.Add(new EventDelegate(this, "SwitchToLogin"));
             confirmationButton.GetComponentInChildren<UILabel>().text = "Back";
-            SP.ResendVerificationEmail(loginUserEmail.value, null);
+            CloudGoods.ResendVerificationEmail(loginUserEmail.value, null);
         }
 
     }

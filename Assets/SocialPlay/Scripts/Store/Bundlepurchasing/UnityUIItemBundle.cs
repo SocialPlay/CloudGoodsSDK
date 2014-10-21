@@ -15,7 +15,7 @@ public class UnityUIItemBundle : MonoBehaviour {
         itemBundle = newItemBundle;
         bundlePurchasing = purchasing;
 
-        SP.GetItemTexture(itemBundle.Image, OnReceivedItemTexture);
+        CloudGoods.GetItemTexture(itemBundle.Image, OnReceivedItemTexture);
 
         Button button = GetComponent<Button>();
         button.onClick.AddListener(OnClickedItemBundle);

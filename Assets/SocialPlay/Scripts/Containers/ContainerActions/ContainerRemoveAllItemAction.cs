@@ -19,7 +19,7 @@ public class ContainerRemoveAllItemAction : ContainerActions
             Debug.Log(data.stackID);
             stackIDs.Add(data.stackID);
         }
-        SP.RemoveItemStacks(stackIDs, delegate(string x) { });
+        CloudGoods.RemoveItemStacks(stackIDs, delegate(string x) { });
 
         foreach (ItemData data in itemsFromContainer)
         {

@@ -51,7 +51,7 @@ public class FaceBookPurchaser : MonoBehaviour, IPlatformPurchaser
 
         BundlePurchaseRequest bundlePurchaseRequest = new BundlePurchaseRequest();
         bundlePurchaseRequest.BundleID = currentBundleID;
-        bundlePurchaseRequest.UserID = SP.user.userID.ToString();
+        bundlePurchaseRequest.UserID = CloudGoods.user.userID.ToString();
         bundlePurchaseRequest.ReceiptToken = parsedData["payment_id"].ToString();
 
         //TODO implement platform check for platform premium currency bundle purchase
@@ -59,7 +59,7 @@ public class FaceBookPurchaser : MonoBehaviour, IPlatformPurchaser
 
         string bundleJsonString = JsonConvert.SerializeObject(bundlePurchaseRequest);
 
-        SP.PurchaseCreditBundles(bundleJsonString, OnPurchaseCreditsCallback);
+        CloudGoods.PurchaseCreditBundles(bundleJsonString, OnPurchaseCreditsCallback);
 
         if (RecievedPurchaseResponse != null)
             RecievedPurchaseResponse(data);

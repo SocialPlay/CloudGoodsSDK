@@ -21,7 +21,7 @@ public class UnityUIItemRecipe : MonoBehaviour, IItemRecipe {
 
         recipeName.text = recipeInfo.name;
 
-        SP.GetItemTexture(recipeInfo.imgURL, OnReceivedRecipeImage);
+        CloudGoods.GetItemTexture(recipeInfo.imgURL, OnReceivedRecipeImage);
 
         LoadIngredients(recipeInfo.IngredientDetails);
     }

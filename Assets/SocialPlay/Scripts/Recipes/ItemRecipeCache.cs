@@ -23,7 +23,7 @@ public class ItemRecipeCache : MonoBehaviour {
         }
         else
         {
-            SP.GetGameRecipes((x) =>
+            CloudGoods.GetGameRecipes((x) =>
                 {
                     CachedRecipes = x;
                     callback(x);

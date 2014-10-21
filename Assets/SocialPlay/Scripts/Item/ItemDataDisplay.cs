@@ -75,7 +75,7 @@ public class ItemDataDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExit
         itemObject = this.GetComponent<ItemDataComponent>();
 
         if (amountText != null) amountText.text = itemObject.itemData.stackSize.ToString();
-        SP.GetItemTexture(itemObject.itemData.imageName, OnReceivedItemTexture);
+        CloudGoods.GetItemTexture(itemObject.itemData.imageName, OnReceivedItemTexture);
 
         if (itemFrame != null) itemFrame.color = ItemQuailityColorSelector.GetColorForItem(itemObject.itemData);
     }

@@ -116,14 +116,14 @@ public class UnityUIItemPurchase : MonoBehaviour {
     public void PurchaseItemWithPremiumCurrency()
     {
         Debug.Log(int.Parse(itemQuantityAmount.text));
-        SP.StoreItemPurchase(itemInfo.storeItem.itemID, int.Parse(itemQuantityAmount.text), CurrencyType.Premium, 0, OnReceivedItemPurchaseConfirmation);
+        CloudGoods.StoreItemPurchase(itemInfo.storeItem.itemID, int.Parse(itemQuantityAmount.text), CurrencyType.Premium, 0, OnReceivedItemPurchaseConfirmation);
         ClosePanel();
     }
 
     public void PurchaseItemWithStandardCurrency()
     {
         Debug.Log(int.Parse(itemQuantityAmount.text));
-        SP.StoreItemPurchase(itemInfo.storeItem.itemID, int.Parse(itemQuantityAmount.text), CurrencyType.Standard, 0, OnReceivedItemPurchaseConfirmation);
+        CloudGoods.StoreItemPurchase(itemInfo.storeItem.itemID, int.Parse(itemQuantityAmount.text), CurrencyType.Standard, 0, OnReceivedItemPurchaseConfirmation);
         ClosePanel();
     }
 

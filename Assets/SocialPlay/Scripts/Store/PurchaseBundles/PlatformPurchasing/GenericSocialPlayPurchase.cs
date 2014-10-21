@@ -42,7 +42,7 @@ public class GenericSocialPlayPurchase : IPlatformPurchaser
     {
         OKCallBack -= new Action<GameObject>(FaceBookPurchaser_OKCallBack);
         CancelCallBack -= new Action<GameObject>(FaceBookPurchaser_CancelCallBack);
-        SocialPlay.ServiceClient.Open.StoreItemPurchase(OnReceivedPurchaseResponse, currentUserID, currentitemID, currentAmount, "Credits", SP.GuidAppID.ToString());
+        SocialPlay.ServiceClient.Open.StoreItemPurchase(OnReceivedPurchaseResponse, currentUserID, currentitemID, currentAmount, "Credits", CloudGoods.GuidAppID.ToString());
     }
 
 

@@ -32,15 +32,15 @@ public class ItemPutterDropper : MonoBehaviour, IItemPutter
             GameObject model;
             if (prefabinitilizer != null)
             {
-                model = prefabinitilizer.GetPrefabToInstantiate(data, SP.DefaultItemDrop);
+                model = prefabinitilizer.GetPrefabToInstantiate(data, CloudGoods.DefaultItemDrop);
             }
             else if (GlobalPrefabInitilizer.prefabInit != null)
             {
-                model = GlobalPrefabInitilizer.prefabInit.GetPrefabToInstantiate(data, SP.DefaultItemDrop);
+                model = GlobalPrefabInitilizer.prefabInit.GetPrefabToInstantiate(data, CloudGoods.DefaultItemDrop);
             }
             else
             {
-                model = SP.DefaultItemDrop;
+                model = CloudGoods.DefaultItemDrop;
             }
             gameItemDrop.DropItemIntoWorld(data, dropTransform.position, model);     
         }

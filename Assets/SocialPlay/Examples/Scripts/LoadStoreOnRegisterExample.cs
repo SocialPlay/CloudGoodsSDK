@@ -8,7 +8,7 @@ public class LoadStoreOnRegisterExample : MonoBehaviour {
 
 	// Use this for initialization
 	void Awake () {
-	    SP.OnRegisteredUserToSession += OnUserRegistered;
+	    CloudGoods.OnRegisteredUserToSession += OnUserRegistered;
 	}
 
     void OnUserRegistered(string userGuid)

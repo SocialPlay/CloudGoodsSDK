@@ -49,14 +49,14 @@ public class UnityUIPurchaseButtonDisplay : MonoBehaviour {
         }
         else if (currencyType == CurrencyType.Standard)
         {
-            if (itemCost <= SP.standardCurrency)
+            if (itemCost <= CloudGoods.standardCurrency)
                 SetActive();
             else
                 SetInactive();
         }
         else if (currencyType == CurrencyType.Premium)
         {
-            if (itemCost <= SP.premiumCurrency)
+            if (itemCost <= CloudGoods.premiumCurrency)
                 SetActive();
             else
                 SetInactive();

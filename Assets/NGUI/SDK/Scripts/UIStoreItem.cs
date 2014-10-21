@@ -19,17 +19,17 @@ public class UIStoreItem : MonoBehaviour
 	{
 		if (loader != null) NGUITools.SetActive(loader, true);
 
-		if (itemID != 0) SP.OnStoreListLoaded += OnStoreListLoaded;
+		if (itemID != 0) CloudGoods.OnStoreListLoaded += OnStoreListLoaded;
 	}
 
 	protected virtual void OnDisable()
 	{
-		if (itemID != 0) SP.OnStoreListLoaded -= OnStoreListLoaded;
+		if (itemID != 0) CloudGoods.OnStoreListLoaded -= OnStoreListLoaded;
 	}
 
 	protected virtual void OnStoreListLoaded(List<StoreItem> storeList)
 	{
-		SetItemData(SP.GetStoreItem(itemID));
+		SetItemData(CloudGoods.GetStoreItem(itemID));
 	}
 
     void OnReceivedItemTexture(ImageStatus imageStatus, Texture2D texture)
@@ -48,7 +48,7 @@ public class UIStoreItem : MonoBehaviour
 		if (nameLabel != null) nameLabel.text = item.itemName;
 		//if(descriptionLabel != null) descriptionLabel.text = item. <-- There is no description on StoreItems. This is a must have.
 		storeItem = item;
-        SP.GetItemTexture(storeItem.imageURL, OnReceivedItemTexture);
+        CloudGoods.GetItemTexture(storeItem.imageURL, OnReceivedItemTexture);
 	}
 
 

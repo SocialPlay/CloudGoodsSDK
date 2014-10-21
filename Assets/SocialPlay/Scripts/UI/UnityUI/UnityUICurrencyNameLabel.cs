@@ -14,8 +14,8 @@ public class UnityUICurrencyNameLabel : MonoBehaviour
     {
         mLabel = GetComponent<Text>();
 
-        if (type == CurrencyType.Standard) SP.OnStandardCurrencyName += OnCurrencyNameChange;
-        else if (type == CurrencyType.Premium) SP.OnPremiumCurrencyName += OnCurrencyNameChange;
+        if (type == CurrencyType.Standard) CloudGoods.OnStandardCurrencyName += OnCurrencyNameChange;
+        else if (type == CurrencyType.Premium) CloudGoods.OnPremiumCurrencyName += OnCurrencyNameChange;
     }
 
     void OnCurrencyNameChange(string currency)

@@ -46,7 +46,7 @@ public class UnityUIBundleItemScroll : MonoBehaviour {
 
         ItemDetails.text = formated;
 
-        SP.GetItemTexture(bundleitem.Image, OnReceivedItemTexture);
+        CloudGoods.GetItemTexture(bundleitem.Image, OnReceivedItemTexture);
     }
 
     void OnReceivedItemTexture(ImageStatus imageStatus, Texture2D newTexture)

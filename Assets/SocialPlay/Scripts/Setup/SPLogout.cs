@@ -11,7 +11,7 @@ public class SPLogout : MonoBehaviour {
 
     public void LogoutUser()
     {
-        SP.Logout();
+        CloudGoods.Logout();
         if (SPUserLogout != null) SPUserLogout();
     }
 	

@@ -10,8 +10,8 @@ public class UILabelCurrency : MonoBehaviour
 	void Awake () 
 	{
 		mLabel = GetComponent<UILabel>();
-		if (type == CurrencyType.Standard) SP.OnStandardCurrency += OnFreeCurrency;
-		else if(type == CurrencyType.Premium) SP.OnPremiumCurrency += OnPaidCurrency;
+		if (type == CurrencyType.Standard) CloudGoods.OnStandardCurrency += OnFreeCurrency;
+		else if(type == CurrencyType.Premium) CloudGoods.OnPremiumCurrency += OnPaidCurrency;
 	}
 
 	void OnFreeCurrency(int currency)

@@ -11,8 +11,8 @@ public class UnityUILabelCurrency : MonoBehaviour {
     void Awake()
     {
         mLabel = GetComponent<Text>();
-        if (type == CurrencyType.Standard) SP.OnStandardCurrency += OnFreeCurrency;
-        else if (type == CurrencyType.Premium) SP.OnPremiumCurrency += OnPaidCurrency;
+        if (type == CurrencyType.Standard) CloudGoods.OnStandardCurrency += OnFreeCurrency;
+        else if (type == CurrencyType.Premium) CloudGoods.OnPremiumCurrency += OnPaidCurrency;
     }
 
     void OnFreeCurrency(int currency)

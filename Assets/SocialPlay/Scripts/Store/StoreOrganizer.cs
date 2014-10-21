@@ -75,7 +75,7 @@ public class StoreOrganizer : MonoBehaviour
 
         //foreach (FilterItem filter in activeFilters) storeList = filter.FilterStoreList(storeList);
 
-        storeList = SP.SearchStoreItems(storeList, searchFilter);
+        storeList = CloudGoods.SearchStoreItems(storeList, searchFilter);
         //if (currentSort != null) storeList = currentSort.Sort(storeList, currentSortDirection);
         //else storeList = SortStoreItemsBy.DefaultSort(storeList);
 

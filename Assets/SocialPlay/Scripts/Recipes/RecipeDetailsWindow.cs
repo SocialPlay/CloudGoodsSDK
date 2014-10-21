@@ -29,7 +29,7 @@ public class RecipeDetailsWindow : MonoBehaviour {
 
         RecipeItemName.text = recipeInfo.name;
 
-        SP.GetItemTexture(recipeInfo.imgURL, OnReceivedRecipeItemImage);
+        CloudGoods.GetItemTexture(recipeInfo.imgURL, OnReceivedRecipeItemImage);
 
         recipeItemDetails.text = "";
 

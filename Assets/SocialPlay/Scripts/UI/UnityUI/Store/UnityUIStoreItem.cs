@@ -44,7 +44,7 @@ public class UnityUIStoreItem : MonoBehaviour {
         //if(descriptionLabel != null) descriptionLabel.text = item. <-- There is no description on StoreItems. This is a must have.
         storeItem = item;
         storeLoader = unityStoreLoader;
-        SP.GetItemTexture(storeItem.imageURL, OnReceivedItemTexture);
+        CloudGoods.GetItemTexture(storeItem.imageURL, OnReceivedItemTexture);
     }
 
     public void OnStoreItemClicked()

@@ -39,7 +39,7 @@ public class UIItemPurchase : UIStoreItem
         if (!mInitiated)
         {
             mInitiated = true;
-            SP.GetItems(null);
+            CloudGoods.GetItems(null);
         }
     }
 
@@ -47,21 +47,21 @@ public class UIItemPurchase : UIStoreItem
     {
         base.OnEnable();
 
-        if (itemID != 0) SP.OnItemsLoaded += OnItemsLoaded;
+        if (itemID != 0) CloudGoods.OnItemsLoaded += OnItemsLoaded;
     }
 
     protected override void OnDisable()
     {
         base.OnDisable();
 
-        if (itemID != 0) SP.OnItemsLoaded -= OnItemsLoaded;
+        if (itemID != 0) CloudGoods.OnItemsLoaded -= OnItemsLoaded;
     }
 
     void OnItemsLoaded(List<ItemData> items)
     {
         Debug.Log("OnItemsLoaded " + items.Count);
 
-        mItem = SP.GetItem(itemID);
+        mItem = CloudGoods.GetItem(itemID);
 
         Debug.Log("Item found: " + mItem != null);
 
@@ -85,14 +85,14 @@ public class UIItemPurchase : UIStoreItem
 
     protected override void OnStoreListLoaded(List<StoreItem> storeList)
     {
-        mStoreItem = SP.GetStoreItem(itemID);
+        mStoreItem = CloudGoods.GetStoreItem(itemID);
         if (nameLabel != null) nameLabel.text = mStoreItem.itemName;
         if (amountLabel != null) amountLabel.text = mItem == null ? string.Format(amountFormat, 0) : string.Format(amountFormat, mItem.stackSize);
     }
 
     public void BuyOrUse()
     {
-        if (mAmount > 0) SP.UseItem(mItem, (string message) => { Debug.Log("Use Item: " + message); });
-        else SP.StoreItemPurchase(itemID, amount, currency, location);
+        if (mAmount > 0) CloudGoods.UseItem(mItem, (string message) => { Debug.Log("Use Item: " + message); });
+        else CloudGoods.StoreItemPurchase(itemID, amount, currency, location);
     }
 }

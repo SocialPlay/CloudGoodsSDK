@@ -6,7 +6,7 @@ public class TestConvertToSPLoginResponse : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        SP.Login("", "", OnReceivedSPLoginResponse);
+        CloudGoods.Login("", "", OnReceivedSPLoginResponse);
 	}
 
     void OnReceivedSPLoginResponse(UserResponse response)

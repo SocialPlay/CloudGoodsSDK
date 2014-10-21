@@ -18,9 +18,9 @@ public class GiveUserSpecificItem : MonoBehaviour {
         List<WebModels.ItemsInfo> items = new List<WebModels.ItemsInfo>();
         items.Add(itemsInfo);
 
-        Debug.Log(SP.user.userGuid);
+        Debug.Log(CloudGoods.user.userGuid);
 
-        SP.GiveOwnerItems(SP.user.userGuid, WebModels.OwnerTypes.User, items, OnReceivedUserItems);
+        CloudGoods.GiveOwnerItems(CloudGoods.user.userGuid, WebModels.OwnerTypes.User, items, OnReceivedUserItems);
     }
 
     void OnReceivedUserItems(string data)
