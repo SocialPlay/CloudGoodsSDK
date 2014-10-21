@@ -29,7 +29,6 @@ public class UnityUISPLogin : MonoBehaviour
     public InputField registerUserName;
     public Text registerErrorLabel;
 
-    private UIInputLengthValidation registerUserNameValidator;
     private InputFieldValidation registerUserEmailValidator;
     private InputFieldValidation registerUserPasswordValidator;
     private InputFieldValidation registerUserPasswordConfirmValidator;
@@ -63,9 +62,6 @@ public class UnityUISPLogin : MonoBehaviour
 
     void Start()
     {
-
-        ContainerKeybinding.DisableKeybinding("Login");
-
         loginTab.SetActive(true);
         registerErrorLabel.text = "";
         registerTab.SetActive(false);
@@ -74,7 +70,6 @@ public class UnityUISPLogin : MonoBehaviour
         loginUserEmailValidator = loginUserEmail.GetComponent<InputFieldValidation>();
         loginUserPasswordValidator = loginUserPassword.GetComponent<InputFieldValidation>();
 
-        registerUserNameValidator = registerUserName.GetComponent<UIInputLengthValidation>();
         registerUserEmailValidator = registerUserEmail.GetComponent<InputFieldValidation>();
         registerUserPasswordValidator = registerUserPassword.GetComponent<InputFieldValidation>(); ;
         registerUserPasswordConfirmValidator = registerUserPasswordConfirm.GetComponent<InputFieldValidation>();
@@ -108,7 +103,6 @@ public class UnityUISPLogin : MonoBehaviour
         resendVerificationTextObject.SetActive(false);
         loginErrorLabel.text = "User logged in";
         this.gameObject.SetActive(false);
-        ContainerKeybinding.EnableKeybinding("Login");
     }
 
     void ResentVerificationResponce(UserResponse responce)

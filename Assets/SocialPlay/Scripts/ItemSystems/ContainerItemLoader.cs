@@ -21,7 +21,6 @@ public abstract class ContainerItemLoader : MonoBehaviour
             container = this.GetComponent<ItemContainer>();
         }
 
-        if (container == null) NGUITools.FindInParents<ItemContainer>(gameObject);
     }
 
     protected string GetOwnerID()

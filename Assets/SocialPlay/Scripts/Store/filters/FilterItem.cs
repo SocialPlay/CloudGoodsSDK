@@ -7,13 +7,13 @@ public abstract class FilterItem : MonoBehaviour
 {
     public bool isActive = false;
     //public UICheckbox checkBox;
-    public UILabel filterLabel;
+    //public UILabel filterLabel;
     public string filterDisplayName;
     public string filterBy;
 
     public virtual void init()
     {
-        filterLabel.text = filterDisplayName;
+        //filterLabel.text = filterDisplayName;
     }
 
     public abstract List<StoreItem> FilterStoreList(List<StoreItem> storeList);

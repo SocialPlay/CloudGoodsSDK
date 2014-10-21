@@ -190,6 +190,13 @@ public class ItemDetail
     public float value;
 }
 
+public class ConsumeResponse
+{
+    public int Result;
+    public int Balance;
+    public string Message;
+}
+
 #endregion
 
 /*namespace CloudGoodsSDK.Models

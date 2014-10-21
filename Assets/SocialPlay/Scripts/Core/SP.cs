@@ -90,6 +90,7 @@ public class SP : MonoBehaviour//, IServiceCalls
                 Debug.LogError("Url has not been defined. Open Social Play Settings from the menu.");
 
             return SocialPlaySettings.Url;
+            //return "http://192.168.0.197/webservice/cloudgoods/cloudgoodsservice.svc/";
         }
     }
 
@@ -399,6 +400,53 @@ public class SP : MonoBehaviour//, IServiceCalls
         {
             userItems = ownerItems;
             if (callback != null) callback(userItems);
+        }));
+    }
+
+    /// <summary>
+    /// Returns List of item datas for the itemID 
+    /// </summary>
+    /// <param name="name"></param>
+    static public void GetOwnerItemById(int location, int itemID, Action<List<ItemData>>callback)
+    {
+        if (!isLogged)
+        {
+            Debug.LogWarning("Need to login first to get items.");
+            return;
+        }
+        if (string.IsNullOrEmpty(SP.user.userGuid))
+        {
+            Debug.LogWarning("OwnerID cannot be empty");
+            return;
+        }
+        string url = string.Format("{0}GetOwnerItemById?AppID={1}&ownerID={2}&ownerType={3}&location={4}&itemID={5}", Url, AppID, user.userGuid, "User", location, itemID);
+        WWW www = new WWW(url);
+
+        Get().StartCoroutine(Get().ServiceCallGetListItemDatas(www, (List<ItemData> ownerItems) =>
+        {
+            userItems = ownerItems;
+            if (callback != null) callback(userItems);
+        }));
+    }
+
+    static public void ConsumeItemById(int ItemID, int ConsumeAmount, int Location, Action<ConsumeResponse> callback)
+    {
+        if (!isLogged)
+        {
+            Debug.LogWarning("Need to login first to get items.");
+            return;
+        }
+        if (string.IsNullOrEmpty(SP.user.userGuid))
+        {
+            Debug.LogWarning("OwnerID cannot be empty");
+            return;
+        }
+        string url = string.Format("{0}ConsumeItemById?AppID={1}&OwnerID={2}&OwnerType={3}&ItemID={4}&ConsumeAmount={5}&Location={6}", Url, AppID, user.userGuid, "User", ItemID, ConsumeAmount, Location);
+        WWW www = new WWW(url);
+
+        Get().StartCoroutine(Get().ServiceConsumeResponse(www, (ConsumeResponse ownerItems) =>
+        {
+            if (callback != null) callback(ownerItems);
         }));
     }
 
@@ -783,6 +831,18 @@ public class SP : MonoBehaviour//, IServiceCalls
 
     #region StoreCalls
 
+    static public void ConsumePremiumCurrency(int amount, Action<ConsumeResponse> callback)
+    {
+        string url = Url + "ConsumePremiumCurrency?AppID=" + AppID + "&UserID=" + user.userGuid + "&Amount=" + amount;
+
+        WWW www = new WWW(url);
+
+        Get().StartCoroutine(Get().ServiceConsumeResponse(www, (ConsumeResponse value) =>
+        {
+            if (callback != null) callback(value);
+        }));
+    }
+
     static public void GetFreeCurrencyBalance(int accessLocation, Action<int> callback)
     {
         string url = Url + "GetFreeCurrencyBalance?userID=" + user.userID.ToString() + "&accessLocation=" + accessLocation + "&appID=" + AppID;
@@ -973,9 +1033,6 @@ public class SP : MonoBehaviour//, IServiceCalls
 
         Get().StartCoroutine(Get().ServiceGetString(www, (string message) =>
         {
-            Debug.Log("Purchase " + message);
-            if (message == "NSF") NGUITools.Broadcast(SocialPlayMessage.OnNotEnoughFunds.ToString());
-            else NGUITools.Broadcast(SocialPlayMessage.OnPurchaseSuccess.ToString());
             GetFreeCurrencyBalance(0, null);
             GetPaidCurrencyBalance(null);
             if (callback != null) callback(message);
@@ -1000,10 +1057,6 @@ public class SP : MonoBehaviour//, IServiceCalls
         Get().StartCoroutine(Get().ServiceGetString(www, (string message) =>
         {
             JsonData response = LitJson.JsonMapper.ToObject(message);
-
-            if (response != null && (int)response["StatusCode"] == 2) NGUITools.Broadcast(SocialPlayMessage.OnPurchaseFail.ToString());
-            else if (message == "NSF") NGUITools.Broadcast(SocialPlayMessage.OnNotEnoughFunds.ToString());
-            else NGUITools.Broadcast(SocialPlayMessage.OnPurchaseSuccess.ToString());
 
             GetOwnerItems(user.userID.ToString(), "User", 0, OnItemsLoaded);
             GetFreeCurrencyBalance(0, null);
@@ -1030,10 +1083,6 @@ public class SP : MonoBehaviour//, IServiceCalls
         Get().StartCoroutine(Get().ServiceGetString(www, (string message) =>
         {
             JsonData response = LitJson.JsonMapper.ToObject(message);
-
-            if (response != null && (int)response["StatusCode"] == 2) NGUITools.Broadcast(SocialPlayMessage.OnPurchaseFail.ToString());
-            else if (message == "NSF") NGUITools.Broadcast(SocialPlayMessage.OnNotEnoughFunds.ToString());
-            else NGUITools.Broadcast(SocialPlayMessage.OnPurchaseSuccess.ToString());
 
             GetFreeCurrencyBalance(0, null);
             GetPaidCurrencyBalance(null);
@@ -1279,6 +1328,21 @@ public class SP : MonoBehaviour//, IServiceCalls
         if (www.error == null)
         {
             callback(serviceConverter.ConvertToSPLoginResponse(www.text));
+        }
+        else
+        {
+            if (onErrorEvent != null) onErrorEvent("Error: " + www.error);
+        }
+    }
+
+    IEnumerator ServiceConsumeResponse(WWW www, Action<ConsumeResponse> callback)
+    {
+        yield return www;
+
+        // check for errors
+        if (www.error == null)
+        {
+            callback(serviceConverter.ConverToConsumeCreditsResponse(www.text));
         }
         else
         {
