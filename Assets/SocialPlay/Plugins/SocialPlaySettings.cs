@@ -23,7 +23,7 @@ public class SocialPlaySettings : ScriptableObject
 
     static public string mainPath = "Assets/SocialPlay/";
 
-    public string appID = "d5f9fa77-cc3d-450f-946b-ff16d3d68357";
+    public string appID;
     public string appSecret;
     public ScreenType screen;
     public string url = "http://webservice.socialplay.com/cloudgoods/cloudgoodsservice.svc/";
