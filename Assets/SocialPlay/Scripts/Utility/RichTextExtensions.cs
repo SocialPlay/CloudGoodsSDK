@@ -16,4 +16,15 @@ public static class RichTextExtensions
         string hex = color.r.ToString("X2") + color.g.ToString("X2") + color.b.ToString("X2");
         return "<color=#" + hex + ">" + str + "</color>";
     }
+
+    public static string ToRichColor(this bool value)
+    {
+        return value.ToRichColor(Color.green, Color.red);
+    }
+
+    public static string ToRichColor(this bool value, Color32 trueColor,Color32 falseColor){
+        Color color = value ? trueColor : falseColor;
+        string hex = color.r.ToString("X2") + color.g.ToString("X2") + color.b.ToString("X2");
+        return "<color=#" + hex + ">" + value + "</color>";
+}
 }
