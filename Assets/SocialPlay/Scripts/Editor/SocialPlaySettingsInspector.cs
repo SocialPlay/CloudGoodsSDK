@@ -14,12 +14,10 @@ public class SocialPlaySettingsInspector : Editor
     [MenuItem("Cloud Goods/Settings", false, 0)]
     static void SelectSettings()
     {
-        Selection.activeObject = SocialPlaySettingsInspector.Get();
+        Selection.activeObject = Get();
     }
 
-    static SocialPlaySettingsInspector mInst;
-    static SocialPlaySettings mSettings;
-    static SocialPlaySettings.ScreenType screen { get { return mSettings.screen; } set { mSettings.screen = value; } }
+    static SocialPlaySettings.ScreenType screen;// { get { return .screen; } set { mSettings.screen = value; } }
     static Vector2 scrollPos;
 
     static public string iconPath = SocialPlaySettings.mainPath + "Icons/";
@@ -41,13 +39,13 @@ public class SocialPlaySettingsInspector : Editor
     /// <summary>
     /// Load mSettings.
     /// </summary>
-
-    static public SocialPlaySettings Get()
+    static SocialPlaySettings Get()
     {
-        SocialPlaySettings mSettings = (SocialPlaySettings)Resources.Load("SocialPlaySettings", typeof(SocialPlaySettings));
+        SocialPlaySettings mSettings = SocialPlaySettings.instance;
 
         if (mSettings == null)
         {
+            Debug.Log("Setting is not found");
             string path = "Assets/Resources/";
             if (!System.IO.Directory.Exists(path))
             {
@@ -60,20 +58,8 @@ public class SocialPlaySettingsInspector : Editor
         return mSettings;
     }
 
-    void OnEnable()
-    {
-        if (mSettings == null)
-            mSettings = Get();
-    }
-
-    /// <summary>
-    /// Draw the inspector widget.
-    /// </summary>
-
     public override void OnInspectorGUI()
     {
-        if (mInst == null) mInst = this;
-
         GUILayout.BeginVertical(GUILayout.Width(spLogo.height));
         GUILayout.BeginHorizontal();
         if (spLogo != null) GUILayout.Label(spLogo);
@@ -98,7 +84,7 @@ public class SocialPlaySettingsInspector : Editor
         DrawGUI();
     }
 
-    static public void DrawGUI()
+    void DrawGUI()
     {
         GUI.SetNextControlName("empty");
         GUI.Button(new Rect(0, 0, 0, 0), "", GUIStyle.none);
@@ -151,129 +137,32 @@ public class SocialPlaySettingsInspector : Editor
 
     #region Settings GUI
 
-    static void DrawSettingsGUI()
+    void DrawSettingsGUI()
     {
-        //NGUIEditorTools.SetLabelWidth(120f);
+        var mSettings = target as SocialPlaySettings;
+
         GUILayout.Label("Settings", "BoldLabel");
 
-        string appId = EditorGUILayout.TextField("App ID", mSettings.appID);
-        string appSecret = EditorGUILayout.TextField("App Secret", mSettings.appSecret);
+        mSettings.appID = EditorGUILayout.TextField("App ID", mSettings.appID);
+        mSettings.appSecret = EditorGUILayout.TextField("App Secret", mSettings.appSecret);
 
-        if (string.IsNullOrEmpty(appId) || string.IsNullOrEmpty(appSecret))
+        if (string.IsNullOrEmpty(mSettings.appID) || string.IsNullOrEmpty(mSettings.appSecret))
         {
             EditorGUILayout.HelpBox("Go To http://developer.socialplay.com to get your AppID and AppSecret", MessageType.Warning);
         }
 
         GUILayout.Label("Android", "BoldLabel");
-        string androidKey = EditorGUILayout.TextField("Key", mSettings.androidKey);
+        mSettings.androidKey = EditorGUILayout.TextField("Key", mSettings.androidKey);
 
         GUILayout.Label("Defaults", "BoldLabel");
-        Texture2D defaultTexture = EditorGUILayout.ObjectField("Default Texture", mSettings.defaultTexture, typeof(Texture2D), false) as Texture2D;        
-        GameObject defaultUIItem = EditorGUILayout.ObjectField("Default UI Item", mSettings.defaultUIItem, typeof(GameObject), false) as GameObject;
-        GameObject defaultItemDrop = EditorGUILayout.ObjectField("Default Drop Prefab", mSettings.defaultItemDrop, typeof(GameObject), false) as GameObject;
-
-        //DrawDropPrefabs();
-
-        EditorGUILayout.Separator();
-
-        if (mSettings.appID != appId ||
-            mSettings.appSecret != appSecret ||
-            mSettings.defaultTexture != defaultTexture ||
-            mSettings.defaultItemDrop != defaultItemDrop ||
-            mSettings.defaultUIItem != defaultUIItem ||
-            mSettings.androidKey != androidKey)
-        {
-            mSettings.appID = appId;
-            mSettings.appSecret = appSecret;
-            mSettings.defaultTexture = defaultTexture;
-            mSettings.defaultItemDrop = defaultItemDrop;
-            mSettings.defaultUIItem = defaultUIItem;
-            mSettings.androidKey = androidKey;
-            //NGUIEditorTools.RegisterUndo("Social Play Settings", mSettings);
-        }
-
-
-        EditorGUILayout.Separator();
-    }
-
-    static void DrawDropPrefabs()
-    {
-        GUILayout.BeginVertical("ShurikenEffectBg", GUILayout.MinHeight(20f));
-
-        EditorGUILayout.LabelField("Drop Prefabs", EditorStyles.boldLabel);        
-
-        if (GUILayout.Button("Add New", EditorStyles.miniButton, GUILayout.Width(200)))
-            mSettings.dropPrefabs.Add(new SocialPlaySettings.DropPrefab());
-
-        for (int i = 0; i < mSettings.dropPrefabs.Count; ++i)
-        {
-            GUILayout.BeginHorizontal();
-            GUI.backgroundColor = Color.white;
-            {
-                GameObject prefab = EditorGUILayout.ObjectField("Prefab", mSettings.dropPrefabs[i].prefab, typeof(GameObject), false) as GameObject;
-                //string iden = EditorGUILayout.TextField(mSettings.androidProductNames[i]);                
-
-                GUI.backgroundColor = Color.red;
-                if (GUILayout.Button("X", GUILayout.Width(20f)))
-                {
-                    mSettings.dropPrefabs.RemoveAt(i);
-                    --i;
-                }
-                else if (prefab != mSettings.dropPrefabs[i].prefab)
-                {
-                    mSettings.dropPrefabs[i].prefab = prefab;
-                    //NGUIEditorTools.RegisterUndo("Drop Prefab", mSettings);
-                }
-                GUI.backgroundColor = Color.white;
-            }
-            GUILayout.EndHorizontal();
-
-            DrawItemFilters(mSettings.dropPrefabs[i].itemFilters);
-        }
-        EditorGUILayout.Separator();
-
-        GUILayout.EndVertical();
-    }
-
-    static void DrawItemFilters(List<ItemFilterSystem> itemFilters)
-    {
-        //GUILayout.BeginVertical("ShurikenEffectBg", GUILayout.MinHeight(20f));
-
-        EditorGUILayout.LabelField("Item Filters", EditorStyles.boldLabel);
-
-        if (GUILayout.Button("Add New", EditorStyles.miniButton, GUILayout.Width(200)))
-            itemFilters.Add(new ItemFilterSystem());
-
-        for (int i = 0; i < itemFilters.Count; ++i)
-        {
-            GUILayout.BeginHorizontal();
-            GUI.backgroundColor = Color.white;
-            {
-                /*string iden = EditorGUILayout.TextField(mSettings.androidProductNames[i]);
-
-                GUI.backgroundColor = Color.red;
-                if (GUILayout.Button("X", GUILayout.Width(20f)))
-                {
-                    drop.itemFilters.RemoveAt(i);
-                    --i;
-                }
-                else if (iden != drop.itemFilters[i])
-                {
-                    mSettings.androidProductNames[i] = iden;
-                    NGUIEditorTools.RegisterUndo("Drop Prefab Item Filter", mSettings);
-                }*/
-                GUI.backgroundColor = Color.white;
-            }
-            GUILayout.EndHorizontal();
-        }
-        EditorGUILayout.Separator();
-
-        //GUILayout.EndVertical();
+        mSettings.defaultTexture = EditorGUILayout.ObjectField("Default Texture", mSettings.defaultTexture, typeof(Texture2D), false) as Texture2D;
+        mSettings.defaultUIItem = EditorGUILayout.ObjectField("Default UI Item", mSettings.defaultUIItem, typeof(GameObject), false) as GameObject;
+        mSettings.defaultItemDrop = EditorGUILayout.ObjectField("Default Drop Prefab", mSettings.defaultItemDrop, typeof(GameObject), false) as GameObject;
     }
 
     #endregion
 
-    static void DrawAboutGUI()
+    void DrawAboutGUI()
     {
         GUIStyle linkStyle = new GUIStyle();
         linkStyle = new GUIStyle(GUI.skin.label);
