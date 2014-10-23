@@ -49,8 +49,8 @@ public class PremiumCurrencyBundleStore : MonoBehaviour
     public void ReceiveURL(string url)
     {
         // this will include the full URL, including url parameters etc.
-        domain = SP.GetDomain(url);
-        if (SP.isLogged && !isInitialized) Initialize();
+        domain = CloudGoods.GetDomain(url);
+        if (CloudGoods.isLogged && !isInitialized) Initialize();
     }
 #endif
 
