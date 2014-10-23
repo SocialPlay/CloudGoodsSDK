@@ -59,7 +59,7 @@ public class SocialPlaySettingsInspector : Editor
     }
 
     public override void OnInspectorGUI()
-    {
+    {     
         GUILayout.BeginVertical(GUILayout.Width(spLogo.height));
         GUILayout.BeginHorizontal();
         if (spLogo != null) GUILayout.Label(spLogo);
@@ -81,7 +81,7 @@ public class SocialPlaySettingsInspector : Editor
         GUILayout.EndHorizontal();
         GUILayout.EndVertical();
 
-        DrawGUI();
+        DrawGUI();      
     }
 
     void DrawGUI()
@@ -139,25 +139,26 @@ public class SocialPlaySettingsInspector : Editor
 
     void DrawSettingsGUI()
     {
-        var mSettings = target as SocialPlaySettings;
+        serializedObject.Update();
+        // GUILayout.Label("Settings", "BoldLabel");
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("appID"), new GUIContent("App ID"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("appSecret"), new GUIContent("App Secret"));
 
-        GUILayout.Label("Settings", "BoldLabel");
-
-        mSettings.appID = EditorGUILayout.TextField("App ID", mSettings.appID);
-        mSettings.appSecret = EditorGUILayout.TextField("App Secret", mSettings.appSecret);
-
-        if (string.IsNullOrEmpty(mSettings.appID) || string.IsNullOrEmpty(mSettings.appSecret))
+        if (string.IsNullOrEmpty(serializedObject.FindProperty("appID").stringValue) || string.IsNullOrEmpty(serializedObject.FindProperty("appSecret").stringValue))
         {
             EditorGUILayout.HelpBox("Go To http://developer.socialplay.com to get your AppID and AppSecret", MessageType.Warning);
         }
-
+        EditorGUILayout.Separator();
         GUILayout.Label("Android", "BoldLabel");
-        mSettings.androidKey = EditorGUILayout.TextField("Key", mSettings.androidKey);
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("androidKey"), new GUIContent("Key"));
 
+        EditorGUILayout.Separator();
         GUILayout.Label("Defaults", "BoldLabel");
-        mSettings.defaultTexture = EditorGUILayout.ObjectField("Default Texture", mSettings.defaultTexture, typeof(Texture2D), false) as Texture2D;
-        mSettings.defaultUIItem = EditorGUILayout.ObjectField("Default UI Item", mSettings.defaultUIItem, typeof(GameObject), false) as GameObject;
-        mSettings.defaultItemDrop = EditorGUILayout.ObjectField("Default Drop Prefab", mSettings.defaultItemDrop, typeof(GameObject), false) as GameObject;
+        serializedObject.FindProperty("defaultTexture").objectReferenceValue = EditorGUILayout.ObjectField("Default Texture", serializedObject.FindProperty("defaultTexture").objectReferenceValue, typeof(Texture2D), false) as Texture2D;
+
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("defaultUIItem"), new GUIContent("Default UI Item", "Default UI Item"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("defaultItemDrop"), new GUIContent("Default Drop Prefab", "The Item that will be droped if no asset is found for the item spawning into the world"));
+        serializedObject.ApplyModifiedProperties();
     }
 
     #endregion

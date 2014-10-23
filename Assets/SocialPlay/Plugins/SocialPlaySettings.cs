@@ -32,7 +32,7 @@ public class SocialPlaySettings : ScriptableObject
     public Texture2D defaultTexture;
     public GameObject defaultItemDrop;
     public GameObject defaultUIItem;
-    public List<DropPrefab> dropPrefabs = new List<DropPrefab>();
+    //public List<DropPrefab> dropPrefabs = new List<DropPrefab>();
 
     static SocialPlaySettings mInst;
 
@@ -45,13 +45,13 @@ public class SocialPlaySettings : ScriptableObject
         }
     }
 
-    static public List<DropPrefab> DropPrefabs
-    {
-        get
-        {
-            return instance.dropPrefabs;
-        }
-    }
+    //static public List<DropPrefab> DropPrefabs
+    //{
+    //    get
+    //    {
+    //        return instance.dropPrefabs;
+    //    }
+    //}
 
     static public GameObject DefaultItemDrop
     {
