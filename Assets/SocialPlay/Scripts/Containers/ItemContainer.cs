@@ -146,6 +146,14 @@ public class ItemContainer : MonoBehaviour
 
         if (IsItemQuantityLimited == true)
         {
+            foreach (ItemData item in containerItems)
+            {
+                if (item.IsSameItemAs(modified))
+                {
+                    return new ContainerAddState(ContainerAddState.ActionState.No, 0);
+                }
+            }
+
             if (addAbleAmount >= ItemQuantityLimit)
                 addAbleAmount = ItemQuantityLimit;
         }

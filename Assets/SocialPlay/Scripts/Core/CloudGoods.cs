@@ -14,7 +14,7 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
 {
     #region Global Events/Callbacks
 
-    static public Action<string> onErrorEvent;
+    static public event Action<string> onErrorEvent;
     static public event Action<UserResponse> OnUserLogin;
     static public event Action<string> onLogout;
     static public event Action<SocialPlayUser> OnUserInfo;
