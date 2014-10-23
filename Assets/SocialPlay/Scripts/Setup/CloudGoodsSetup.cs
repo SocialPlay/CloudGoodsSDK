@@ -9,7 +9,7 @@ public class CloudGoodsSetup : MonoBehaviour
 
     void Start()
     {
-       SP.OnUserAuthorized += OnReceivedSocialPlayUser;
+       CloudGoods.OnUserAuthorized += OnReceivedSocialPlayUser;
 
         WebPlatformLink webplatformLink = new WebPlatformLink();
         webplatformLink.Initiate();

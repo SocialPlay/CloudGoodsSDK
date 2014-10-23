@@ -36,7 +36,7 @@ public class ItemDropperParentingTest : MonoBehaviour {
             droppedItems.Add(newItem);
         }
 
-        List<ItemData> items = SP.itemDataConverter.ConvertItems(droppedItems);
+        List<ItemData> items = CloudGoods.itemDataConverter.ConvertItems(droppedItems);
         
         itemGetter.OnReceivedGeneratedItems(items);
 	}

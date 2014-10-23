@@ -12,7 +12,7 @@ public class RecipeIngredient : MonoBehaviour {
     {
         ingredientAmount.text = ingredientDetail.amount.ToString();
 
-        SP.GetItemTexture(ingredientDetail.imgURL, OnReceivedIngredientImage);
+        CloudGoods.GetItemTexture(ingredientDetail.imgURL, OnReceivedIngredientImage);
     }
 
     void OnReceivedIngredientImage(ImageStatus status, Texture2D texture)

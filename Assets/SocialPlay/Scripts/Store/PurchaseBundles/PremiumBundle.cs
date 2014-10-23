@@ -26,13 +26,13 @@ public abstract class PremiumBundle : MonoBehaviour
 
     void Start()
     {
-        if (string.IsNullOrEmpty(SP.PremiumCurrencyName))
+        if (string.IsNullOrEmpty(CloudGoods.PremiumCurrencyName))
         {
-            SP.OnPremiumCurrencyName += OnPremiumCurrencyName;
+            CloudGoods.OnPremiumCurrencyName += OnPremiumCurrencyName;
         }
         else
         {
-            PremiumCurrencyName = SP.PremiumCurrencyName;
+            PremiumCurrencyName = CloudGoods.PremiumCurrencyName;
         }
     }
 

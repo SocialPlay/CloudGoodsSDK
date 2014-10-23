@@ -7,7 +7,7 @@ public class LoadStoreOnRegister : MonoBehaviour {
 
     void Start()
     {
-        SP.OnRegisteredUserToSession += UserRegistered;
+        CloudGoods.OnRegisteredUserToSession += UserRegistered;
     }
 
     void UserRegistered(string userID)

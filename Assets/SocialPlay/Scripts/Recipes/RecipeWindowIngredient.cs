@@ -16,7 +16,7 @@ public class RecipeWindowIngredient : MonoBehaviour {
         if (containerAmountOfIngredient < ingredientDetail.amount)
             ingredientAmount.color = Color.red;
 
-        SP.GetItemTexture(ingredientDetail.imgURL, OnReceivedIngredientImage);
+        CloudGoods.GetItemTexture(ingredientDetail.imgURL, OnReceivedIngredientImage);
     }
 
     void OnReceivedIngredientImage(ImageStatus status, Texture2D texture)

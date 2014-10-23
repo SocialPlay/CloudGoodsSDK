@@ -43,9 +43,6 @@ public class BasicAddContainer : MonoBehaviour, IContainerAddAction
         {
             if (item.varianceID.Equals(data.varianceID))
             {
-                item.stackSize += amount;
-
-
                 Debug.Log("add to existing stack");
 
                 itemContainer.ModifiedItemEvent(data, isSave);

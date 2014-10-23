@@ -32,18 +32,21 @@ public class ItemContainerManager
             {
                 case ContainerAddState.ActionState.Add:
 
-                    int StackSize = movingItemData.stackSize;
+                    ItemData newItemData = new ItemData();
+                    newItemData.SetItemData(movingItemData);
 
-                  //  Debug.Log("New item data befor remove: " + movingItemData.stackSize);
+                    Debug.Log("stack before remove: " + newItemData.stackSize + " moveable stack before Remove: " + movingItemData.stackSize);
 
                     if (movingItemData.ownerContainer != null)
                     {
                         movingItemData.ownerContainer.Remove(movingItemData, true, targetAddState.possibleAddAmount);
                     }
 
-                    movingItemData.stackSize = StackSize;
+                    Debug.Log("stack after remove: " + newItemData.stackSize + " moveable stack after Remove: " + movingItemData.stackSize);
 
-                    targetContainer.Add(movingItemData, targetAddState.possibleAddAmount);
+                    targetContainer.Add(newItemData, targetAddState.possibleAddAmount);
+
+                    Debug.Log("stack after add: " + newItemData.stackSize + " moveable stack after add: " + movingItemData.stackSize);
 
                     break;
                 case ContainerAddState.ActionState.No:

@@ -22,7 +22,7 @@ public class ItemGeneratorSpeedTest : MonoBehaviour
             try
             {
                 Debug.Log("Recived items :" + www.text.ToRichColor(Color.white));
-                callback(SP.serviceConverter.ConvertToItemDataList(www.text), setup, timeKeeper);
+                callback(CloudGoods.serviceConverter.ConvertToItemDataList(www.text), setup, timeKeeper);
             }
             catch (Exception e)
             {
@@ -43,7 +43,7 @@ public class ItemGeneratorSpeedTest : MonoBehaviour
         {
             SocialPlaySettings.instance.url = webserviceOverride;
         }
-        SP.OnUserAuthorized += SP_OnUserAuthorized;
+        CloudGoods.OnUserAuthorized += SP_OnUserAuthorized;
     }
 
     void OnApplicationQuit()
@@ -85,7 +85,7 @@ public class ItemGeneratorSpeedTest : MonoBehaviour
             andTagsString = andTagsString.Remove(andTagsString.Length - 1);
         }
 
-        string url = string.Format("{0}GenerateItemsAtLocation?OwnerID={1}&OwnerType={2}&Location={3}&AppID={4}&MinimumEnergyOfItem={5}&TotalEnergyToGenerate={6}&ANDTags={7}&ORTags={8}", setup.Url, SP.user.sessionID, "Session", currentStats.Location, SP.AppID, currentStats.MinimumEnergyOfItem, currentStats.TotalEnergyToGenerate, andTagsString, "");
+        string url = string.Format("{0}GenerateItemsAtLocation?OwnerID={1}&OwnerType={2}&Location={3}&AppID={4}&MinimumEnergyOfItem={5}&TotalEnergyToGenerate={6}&ANDTags={7}&ORTags={8}", setup.Url, CloudGoods.user.sessionID, "Session", currentStats.Location, CloudGoods.AppID, currentStats.MinimumEnergyOfItem, currentStats.TotalEnergyToGenerate, andTagsString, "");
        Debug.Log("Sending URL :" + url.ToRichColor(Color.white));
         WWW www = new WWW(url);
         currentRun.Add(currentKeeper);

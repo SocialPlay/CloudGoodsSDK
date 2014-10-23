@@ -113,13 +113,13 @@ public class UnityUIBundlePurchasing : MonoBehaviour {
 
     public void PurchaseBundleWithStandardCurrency()
     {
-        SP.PurchaseItemBundles(currentItemBundle.ID, CurrencyType.Standard, purchaseContainerLocation, OnReceivedPurchaseCallback);
+        CloudGoods.PurchaseItemBundles(currentItemBundle.ID, CurrencyType.Standard, purchaseContainerLocation, OnReceivedPurchaseCallback);
         ClosePurchaseWindow();
     }
 
     public void PurchaseBundleWithPremiumCurrency()
     {
-        SP.PurchaseItemBundles(currentItemBundle.ID, CurrencyType.Premium, purchaseContainerLocation, OnReceivedPurchaseCallback);
+        CloudGoods.PurchaseItemBundles(currentItemBundle.ID, CurrencyType.Premium, purchaseContainerLocation, OnReceivedPurchaseCallback);
         ClosePurchaseWindow();
     }
 

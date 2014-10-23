@@ -14,7 +14,7 @@ public class DisplayStoreItems : MonoBehaviour
 
     public void DisplayItems()
     {
-        SP.GetStoreItems(OnReceivedStoreItems);
+        CloudGoods.GetStoreItems(OnReceivedStoreItems);
     }
 
     void OnReceivedStoreItems(List<StoreItem> storeItems)

@@ -26,7 +26,7 @@ public class ContainerMoveAllItemsAction : ContainerActions
             stacks.StackInfos.Add(info);
         }
         string convert = JsonConvert.SerializeObject(stacks);
-        SP.MoveItemStacks(convert, SP.user.userID.ToString(), "User", DestinationLocation, delegate(MoveMultipleItemsResponse x)
+        CloudGoods.MoveItemStacks(convert, CloudGoods.user.userID.ToString(), "User", DestinationLocation, delegate(MoveMultipleItemsResponse x)
         {
             ItemData[] containerItems = new ItemData[SourceContainer.containerItems.Count];
             SourceContainer.containerItems.CopyTo(containerItems);

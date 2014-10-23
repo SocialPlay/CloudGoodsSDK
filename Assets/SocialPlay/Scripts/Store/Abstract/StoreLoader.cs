@@ -15,7 +15,7 @@ public abstract class StoreLoader : MonoBehaviour
     // Use this for initialization
     protected virtual void Awake()
     {
-        SP.OnStoreListLoaded += OnStoreListLoaded;
+        CloudGoods.OnStoreListLoaded += OnStoreListLoaded;
     }
 
     protected void OnStoreListLoaded(List<StoreItem> listItems)

@@ -30,16 +30,16 @@ public abstract class ContainerItemLoader : MonoBehaviour
             //case ItemOwnerTypes.Instance:
             //    return ItemSystemGameData.InstanceID.ToString();
             case ItemOwnerTypes.Session:
-                return SP.user.sessionID.ToString();
+                return CloudGoods.user.sessionID.ToString();
             case ItemOwnerTypes.User:
-                return SP.user.userID.ToString();
+                return CloudGoods.user.userID.ToString();
         }
         return "";
     }
 
     protected void RecivedItems(List<ItemData> receivedItems)
     {      
-        if (SP.itemDataConverter == null)
+        if (CloudGoods.itemDataConverter == null)
         {
             throw new Exception("Item conversion is not setup correctly!");
         }

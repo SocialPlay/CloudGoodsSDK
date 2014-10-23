@@ -30,14 +30,14 @@ public class iOSPremiumCurrencyPurchaser : MonoBehaviour, IPlatformPurchaser
         {
             BundlePurchaseRequest bundlePurchaseRequest = new BundlePurchaseRequest();
             bundlePurchaseRequest.BundleID = currentBundleID;
-            bundlePurchaseRequest.UserID = SP.user.userID.ToString();
+            bundlePurchaseRequest.UserID = CloudGoods.user.userID.ToString();
             bundlePurchaseRequest.ReceiptToken = UnityEngine.Random.Range(1, 1000000).ToString();
 
             bundlePurchaseRequest.PaymentPlatform = 4;
 
 			string bundleJsonString = JsonMapper.ToJson(bundlePurchaseRequest);
 
-            SP.PurchaseCreditBundles(bundleJsonString, OnReceivedSocialplayCreditsResponse);
+            CloudGoods.PurchaseCreditBundles(bundleJsonString, OnReceivedSocialplayCreditsResponse);
         }
         else if (data == "Failed" || data == "Cancelled")
         {
@@ -49,7 +49,7 @@ public class iOSPremiumCurrencyPurchaser : MonoBehaviour, IPlatformPurchaser
     {
 
 		RecievedPurchaseResponse("Success");
-        SP.GetPaidCurrencyBalance(null);
+        CloudGoods.GetPaidCurrencyBalance(null);
     }
 	
 }

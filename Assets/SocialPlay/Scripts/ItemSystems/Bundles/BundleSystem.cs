@@ -219,7 +219,7 @@ namespace SocialPlay.Bundles
 
         static void ExceptionIfURLNotSet()
         {
-            if (string.IsNullOrEmpty(SP.BundlesUrl))
+            if (string.IsNullOrEmpty(CloudGoods.BundlesUrl))
             {
                 throw new Exception("URL must be set before calling Get");
             }

@@ -6,7 +6,7 @@ public class TestConvertToListItemBundle : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        SP.GetItemBundles(OnReceivedItemBundles);
+        CloudGoods.GetItemBundles(OnReceivedItemBundles);
 	}
 
     void OnReceivedItemBundles(List<ItemBundle> itemBundles)

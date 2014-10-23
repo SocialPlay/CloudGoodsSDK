@@ -7,9 +7,9 @@ public class CallWithGetTextureOnSameFrame : MonoBehaviour
 
     void Start()
     {
-        SP.ItemTextures.Clear();
-        SP.GetItemTexture("http://www.desicomments.com/dc3/01/209982/209982.gif", OnReceivedItemTexture);
-        SP.GetItemTexture("http://www.desicomments.com/dc3/01/209982/209982.gif", OnReceivedItemTexture); 
+        CloudGoods.ItemTextures.Clear();
+        CloudGoods.GetItemTexture("http://www.desicomments.com/dc3/01/209982/209982.gif", OnReceivedItemTexture);
+        CloudGoods.GetItemTexture("http://www.desicomments.com/dc3/01/209982/209982.gif", OnReceivedItemTexture); 
     }
 
     void OnReceivedItemTexture(ImageStatus statusMsg, Texture2D texture)

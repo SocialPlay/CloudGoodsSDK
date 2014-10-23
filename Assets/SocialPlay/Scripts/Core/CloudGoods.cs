@@ -10,13 +10,13 @@ using System.Collections.Generic;
 using System.Text;
 using System.Security.Cryptography;
 
-public class SP : MonoBehaviour//, IServiceCalls
+public class CloudGoods : MonoBehaviour//, IServiceCalls
 {
     #region Global Events/Callbacks
 
     static public Action<string> onErrorEvent;
     static public event Action<UserResponse> OnUserLogin;
-    //static public event Action onLogout;
+    static public event Action<string> onLogout;
     static public event Action<SocialPlayUser> OnUserInfo;
     static public event Action<UserResponse> OnUserRegister;
     static public event Action<UserResponse> OnForgotPassword;
@@ -302,14 +302,14 @@ public class SP : MonoBehaviour//, IServiceCalls
     static Texture2D tPaid;
     static string sfree;
     static string sPaid;
-    static SP mInst;
-    static SP Get()
+    static CloudGoods mInst;
+    static CloudGoods Get()
     {
         if (mInst == null)
         {
             GameObject go = new GameObject("_CloudGoods");
             DontDestroyOnLoad(go);
-            mInst = go.AddComponent<SP>();
+            mInst = go.AddComponent<CloudGoods>();
         }
         return mInst;
     }
@@ -333,7 +333,7 @@ public class SP : MonoBehaviour//, IServiceCalls
         if (OnUserAuthorized != null)
             OnUserAuthorized(user);
 
-        SP.RegisterGameSession(1, (Guid sessionGuid) =>
+        CloudGoods.RegisterGameSession(1, (Guid sessionGuid) =>
         {
             user.sessionID = sessionGuid;
             if (OnRegisteredUserToSession != null) OnRegisteredUserToSession(user.userID.ToString());
@@ -414,7 +414,7 @@ public class SP : MonoBehaviour//, IServiceCalls
             Debug.LogWarning("Need to login first to get items.");
             return;
         }
-        if (string.IsNullOrEmpty(SP.user.userGuid))
+        if (string.IsNullOrEmpty(CloudGoods.user.userGuid))
         {
             Debug.LogWarning("OwnerID cannot be empty");
             return;
@@ -436,7 +436,7 @@ public class SP : MonoBehaviour//, IServiceCalls
             Debug.LogWarning("Need to login first to get items.");
             return;
         }
-        if (string.IsNullOrEmpty(SP.user.userGuid))
+        if (string.IsNullOrEmpty(CloudGoods.user.userGuid))
         {
             Debug.LogWarning("OwnerID cannot be empty");
             return;
@@ -898,7 +898,7 @@ public class SP : MonoBehaviour//, IServiceCalls
 
             if (!string.IsNullOrEmpty(worldCurrencyInfo.PaidCurrencyImage))
             {
-                SP.GetItemTexture(worldCurrencyInfo.PaidCurrencyImage, delegate(ImageStatus imageStatus, Texture2D texture)
+                CloudGoods.GetItemTexture(worldCurrencyInfo.PaidCurrencyImage, delegate(ImageStatus imageStatus, Texture2D texture)
                 {
                     tPaid = texture;
                     if (OnPremiumCurrencyTexture != null) OnPremiumCurrencyTexture(texture);
@@ -907,7 +907,7 @@ public class SP : MonoBehaviour//, IServiceCalls
 
             if (!string.IsNullOrEmpty(worldCurrencyInfo.FreeCurrencyImage))
             {
-                SP.GetItemTexture(worldCurrencyInfo.FreeCurrencyImage, delegate(ImageStatus imageStatus, Texture2D texture)
+                CloudGoods.GetItemTexture(worldCurrencyInfo.FreeCurrencyImage, delegate(ImageStatus imageStatus, Texture2D texture)
                 {
                     tFree = texture;
                     if (OnStandardCurrencyTexture != null) OnStandardCurrencyTexture(texture);

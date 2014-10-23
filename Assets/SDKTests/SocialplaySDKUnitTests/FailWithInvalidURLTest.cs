@@ -5,8 +5,8 @@ public class FailWithInvalidURLTest : MonoBehaviour {
 
     void Start()
     {
-        SP.ItemTextures.Clear();
-        SP.GetItemTexture("", OnReceivedItemTexture);
+        CloudGoods.ItemTextures.Clear();
+        CloudGoods.GetItemTexture("", OnReceivedItemTexture);
     }
 
     void OnReceivedItemTexture(ImageStatus statusMsg, Texture2D texture)

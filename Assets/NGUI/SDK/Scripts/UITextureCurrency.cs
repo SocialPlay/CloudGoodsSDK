@@ -12,13 +12,13 @@ public class UITextureCurrency : MonoBehaviour
         mTexture = GetComponent<UITexture>();
         if (type == CurrencyType.Standard)
         {
-            SP.OnStandardCurrencyTexture += OnFreeCurrency;
-            mTexture.mainTexture = SP.standardCurrencyTexture;            
+            CloudGoods.OnStandardCurrencyTexture += OnFreeCurrency;
+            mTexture.mainTexture = CloudGoods.standardCurrencyTexture;            
         }
         else if (type == CurrencyType.Premium)
         {
-            SP.OnPremiumCurrencyTexture += OnPaidCurrency;
-            mTexture.mainTexture = SP.premiumCurrencyTexture;
+            CloudGoods.OnPremiumCurrencyTexture += OnPaidCurrency;
+            mTexture.mainTexture = CloudGoods.premiumCurrencyTexture;
         }
 
         if(mTexture.mainTexture != null) TweenAlpha.Begin(mTexture.cachedGameObject, 0.3f, 1).from = 0;

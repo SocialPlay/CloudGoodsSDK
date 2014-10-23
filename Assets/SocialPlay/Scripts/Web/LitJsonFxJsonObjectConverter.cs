@@ -35,7 +35,7 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter
             CreateItemData(itemDataList, reader);
         }
 
-        List<ItemData> items = SP.itemDataConverter.ConvertItems(itemDataList);
+        List<ItemData> items = CloudGoods.itemDataConverter.ConvertItems(itemDataList);
 
         return items;
     }

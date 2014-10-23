@@ -7,15 +7,15 @@ public class UserNameLabel : MonoBehaviour
 
     void OnEnable()
     {
-		SP.OnUserAuthorized += OnUserAuthorized;
+		CloudGoods.OnUserAuthorized += OnUserAuthorized;
     }
     void OnDisable()
     {
-		SP.OnUserAuthorized -= OnUserAuthorized;
+		CloudGoods.OnUserAuthorized -= OnUserAuthorized;
     }
 
 	void OnUserAuthorized(SocialPlayUser user)
     {
-        label.text = SP.user.userName;
+        label.text = CloudGoods.user.userName;
     }
 }

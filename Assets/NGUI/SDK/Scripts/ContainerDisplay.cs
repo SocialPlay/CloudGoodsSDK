@@ -42,7 +42,7 @@ public class ContainerDisplay : MonoBehaviour
 
     protected void Start()
     {
-        if (itemPrefab == null) itemPrefab = SP.DefaultUIItem;
+        if (itemPrefab == null) itemPrefab = CloudGoods.DefaultUIItem;
         SetupWindow();
     }
 

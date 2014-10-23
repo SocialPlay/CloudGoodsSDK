@@ -8,7 +8,7 @@ public class TestConvertToItemDataList : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        SP.GenerateItemsAtLocation("", 0, 0, 0, OnReceivedGeneratedItems, "");
+        CloudGoods.GenerateItemsAtLocation("", 0, 0, 0, OnReceivedGeneratedItems, "");
     }
 
     void OnReceivedGeneratedItems(List<ItemData> receivedItems)

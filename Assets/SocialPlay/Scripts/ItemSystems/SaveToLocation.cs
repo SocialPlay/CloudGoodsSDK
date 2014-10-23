@@ -37,7 +37,7 @@ public class SaveToLocation : MonoBehaviour
         {
             Debug.Log("Saving Modified: " + data.stackSize);
             data.isLocked = true;
-            SP.MoveItemStack(data.stackID, data.stackSize, GetOwnerID(), DestinationOwnerType.ToString(), DestinationLocation, delegate(Guid x)
+            CloudGoods.MoveItemStack(data.stackID, data.stackSize, GetOwnerID(), DestinationOwnerType.ToString(), DestinationLocation, delegate(Guid x)
             {
                 data.stackID = x;
                 data.isLocked = false;
@@ -51,7 +51,7 @@ public class SaveToLocation : MonoBehaviour
         if (isSave == true)
         {
             data.isLocked = true;
-            SP.MoveItemStack(data.stackID, data.stackSize, GetOwnerID(), DestinationOwnerType.ToString(), DestinationLocation, delegate(Guid x)
+            CloudGoods.MoveItemStack(data.stackID, data.stackSize, GetOwnerID(), DestinationOwnerType.ToString(), DestinationLocation, delegate(Guid x)
             {
                 data.stackID = x;
                 data.isLocked = false;
@@ -64,7 +64,7 @@ public class SaveToLocation : MonoBehaviour
     {
         if (!isMoving)
         {
-            SP.DeductStackAmount(data.stackID, -amount, delegate(string x)
+            CloudGoods.DeductStackAmount(data.stackID, -amount, delegate(string x)
             {
                 //Container.RefreshContainer();
             });
@@ -78,9 +78,9 @@ public class SaveToLocation : MonoBehaviour
             //case ItemOwnerTypes.Instance:
             //    return ItemSystemGameData.InstanceID.ToString();
             case ItemOwnerTypes.Session:
-                return SP.user.sessionID.ToString();
+                return CloudGoods.user.sessionID.ToString();
             case ItemOwnerTypes.User:
-                return SP.user.userID.ToString();
+                return CloudGoods.user.userID.ToString();
         }
         return "";
     }

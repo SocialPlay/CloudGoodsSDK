@@ -11,7 +11,7 @@ public class DisplayItemBundles : MonoBehaviour {
     public List<ItemBundle> ItemBundles = new List<ItemBundle>();
 
 	void Start () {
-	    SP.OnRegisteredUserToSession += OnReceivedUserAuth;
+	    CloudGoods.OnRegisteredUserToSession += OnReceivedUserAuth;
 	}
 
     void OnReceivedUserAuth(string data)
@@ -21,7 +21,7 @@ public class DisplayItemBundles : MonoBehaviour {
 
     public void GetItemBundles()
     {
-        SP.GetItemBundles(OnReceivedItemBundles);
+        CloudGoods.GetItemBundles(OnReceivedItemBundles);
     }
 
     void OnReceivedItemBundles(List<ItemBundle> newItemBundles)

@@ -7,7 +7,7 @@ public class TestBundle : MonoBehaviour {
     public ItemRecipeLoader itemRecipeLoader;
 
 	void Start () {
-        SP.OnRegisteredUserToSession += OnUserRegistered;
+        CloudGoods.OnRegisteredUserToSession += OnUserRegistered;
 	}
 
     void OnUserRegistered(string data)

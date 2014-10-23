@@ -93,7 +93,7 @@ public class AndroidPremiumCurrencyPurchaser : MonoBehaviour, IPlatformPurchaser
         {
             BundlePurchaseRequest bundlePurchaseRequest = new BundlePurchaseRequest();
             bundlePurchaseRequest.BundleID = currentBundleID;
-            bundlePurchaseRequest.UserID = SP.user.userID.ToString();
+            bundlePurchaseRequest.UserID = CloudGoods.user.userID.ToString();
             bundlePurchaseRequest.ReceiptToken = message;
 
             //TODO implement platform check for platform premium currency bundle purchase
@@ -101,7 +101,7 @@ public class AndroidPremiumCurrencyPurchaser : MonoBehaviour, IPlatformPurchaser
 
             string bundleJsonString = JsonConvert.SerializeObject(bundlePurchaseRequest);
 
-            SP.PurchaseCreditBundles(bundleJsonString, OnReceivedPurchaseResponse);
+            CloudGoods.PurchaseCreditBundles(bundleJsonString, OnReceivedPurchaseResponse);
         }
         else
         {

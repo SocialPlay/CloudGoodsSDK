@@ -26,7 +26,7 @@ public class UnityUIBundleItemInfo : MonoBehaviour {
             ItemStats.text += details.BundleDetailName + " : " + details.Value + " \n";
         }
 
-        SP.GetItemTexture(bundleItem.Image, OnReceivedItemTexture);
+        CloudGoods.GetItemTexture(bundleItem.Image, OnReceivedItemTexture);
     }
 
     void OnReceivedItemTexture(ImageStatus imgStatus, Texture2D texture)

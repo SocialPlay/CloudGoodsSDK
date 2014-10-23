@@ -33,7 +33,7 @@ public class PremiumCurrencyBundleStore : MonoBehaviour
 
     void Awake()
     {
-        SP.OnRegisteredUserToSession += OnRegisteredUserToSession;
+        CloudGoods.OnRegisteredUserToSession += OnRegisteredUserToSession;
     }
 
 
@@ -115,7 +115,7 @@ public class PremiumCurrencyBundleStore : MonoBehaviour
         }
         platformPurchasor.RecievedPurchaseResponse += OnRecievedPurchaseResponse;
         platformPurchasor.OnPurchaseErrorEvent += platformPurchasor_OnPurchaseErrorEvent;
-        SP.GetCreditBundles(currentplatform, OnPurchaseBundlesRecieved);
+        CloudGoods.GetCreditBundles(currentplatform, OnPurchaseBundlesRecieved);
 
         isInitialized = true;
     }
@@ -157,7 +157,7 @@ public class PremiumCurrencyBundleStore : MonoBehaviour
 
         if (!string.IsNullOrEmpty(item.CurrencyIcon))
         {
-            SP.GetItemTexture(item.CurrencyIcon, delegate(ImageStatus imageStatus, Texture2D texture)
+            CloudGoods.GetItemTexture(item.CurrencyIcon, delegate(ImageStatus imageStatus, Texture2D texture)
             {
                 creditBundle.SetIcon(texture);
             });
@@ -173,7 +173,7 @@ public class PremiumCurrencyBundleStore : MonoBehaviour
         if (!isPurchaseRequest)
         {
             isPurchaseRequest = true;
-            platformPurchasor.Purchase(item, 1, SP.user.userID.ToString());
+            platformPurchasor.Purchase(item, 1, CloudGoods.user.userID.ToString());
         }
     }
 

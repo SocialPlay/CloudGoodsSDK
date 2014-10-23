@@ -5,7 +5,7 @@ public class TestConvertToString : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        SP.GetFreeCurrencyBalance(0, OnStringCallback);
+        CloudGoods.GetFreeCurrencyBalance(0, OnStringCallback);
 	}
 
     void OnStringCallback(int stringCallback)

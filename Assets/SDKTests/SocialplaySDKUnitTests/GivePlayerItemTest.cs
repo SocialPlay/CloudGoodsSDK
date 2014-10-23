@@ -12,7 +12,7 @@ public class GivePlayerItemTest : MonoBehaviour
     public void GivePlayerItemButton()
     {
         Debug.Log("Test");
-        SP.GiveOwnerItems("", WebModels.OwnerTypes.User, itemsToGive, RecivedItem);
+        CloudGoods.GiveOwnerItems("", WebModels.OwnerTypes.User, itemsToGive, RecivedItem);
     }
 
     void RecivedItem(string msg)

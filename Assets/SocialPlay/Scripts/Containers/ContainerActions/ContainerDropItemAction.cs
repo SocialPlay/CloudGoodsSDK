@@ -21,7 +21,7 @@ public class ContainerDropItemAction : ContainerActions
         ItemData itemData = itemObject.GetComponent<ItemDataComponent>().itemData;
         string itemStacks = ConvertContainerItemToSerializedJsonObject(itemData);
 
-        SP.MoveItemStacks(itemStacks, SP.user.userID.ToString(), "Session", 0, OnItemMoved(itemData));
+        CloudGoods.MoveItemStacks(itemStacks, CloudGoods.user.userID.ToString(), "Session", 0, OnItemMoved(itemData));
     }
 
     private System.Action<MoveMultipleItemsResponse> OnItemMoved(ItemData item)
@@ -36,7 +36,7 @@ public class ContainerDropItemAction : ContainerActions
             DropMovedItem(item, moveInfo);
         }
 
-        gameItemDrop.DropItemIntoWorld(item, DropTransform.position, SP.DefaultItemDrop);
+        gameItemDrop.DropItemIntoWorld(item, DropTransform.position, CloudGoods.DefaultItemDrop);
     }
 
     private static void DropMovedItem(ItemData item, MovedItemsInfo moveInfo)

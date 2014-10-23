@@ -51,7 +51,7 @@ public class ItemGetter : MonoBehaviour
 
         }
 
-        SP.GenerateItemsAtLocation("Session", 0, minEnergy, MaxEnergy, OnReceivedGeneratedItems, andTagsString);
+        CloudGoods.GenerateItemsAtLocation("Session", 0, minEnergy, MaxEnergy, OnReceivedGeneratedItems, andTagsString);
     }
 
     public void OnReceivedGeneratedItems(List<ItemData> generatedItems)

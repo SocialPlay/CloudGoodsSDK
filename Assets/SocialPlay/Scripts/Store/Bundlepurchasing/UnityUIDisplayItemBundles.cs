@@ -10,7 +10,7 @@ public class UnityUIDisplayItemBundles : MonoBehaviour {
 
     public void GetItemBundles()
     {
-        SP.GetItemBundles(OnReceivedItemBundles);
+        CloudGoods.GetItemBundles(OnReceivedItemBundles);
     }
 
     void OnReceivedItemBundles(List<ItemBundle> newItemBundles)

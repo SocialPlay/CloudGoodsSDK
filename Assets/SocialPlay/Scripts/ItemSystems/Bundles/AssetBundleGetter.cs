@@ -16,7 +16,7 @@ namespace SocialPlay.Bundles
     {
         public static void LoadFromCacheOrDownload(string assetName, int bundleVersion, Action<string, AssetBundle> callback, bool isAlwaysCallback=false)
         {
-            string assetURL = SP.BundlesUrl +assetName + ".unity3d";
+            string assetURL = CloudGoods.BundlesUrl +assetName + ".unity3d";
 
             int version = bundleVersion;
 

@@ -23,8 +23,8 @@ public class UnityUIWebserviceErrorPopup : MonoBehaviour {
 
     void Start()
     {
-        SP.OnRegisteredUserToSession += OnUserRegister;
-        SP.onErrorEvent += OnWebserviceError;
+        CloudGoods.OnRegisteredUserToSession += OnUserRegister;
+        CloudGoods.onErrorEvent += OnWebserviceError;
 
         bool internetPossiblyAvailable;
         switch (Application.internetReachability)
@@ -54,7 +54,7 @@ public class UnityUIWebserviceErrorPopup : MonoBehaviour {
 
         //SP.ConsumePremiumCurrency(1, OnConsumeCurrency);
 
-        SP.ConsumeItemById(111544, 1, 0, OnConsumeItemByID);
+        CloudGoods.ConsumeItemById(111544, 1, 0, OnConsumeItemByID);
     }
 
     void OnConsumeItemByID(ConsumeResponse consumeItemResponse)

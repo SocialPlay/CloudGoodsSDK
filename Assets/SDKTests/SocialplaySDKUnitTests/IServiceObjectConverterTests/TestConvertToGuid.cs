@@ -8,7 +8,7 @@ public class TestConvertToGuid : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		SP.MoveItemStack(Guid.Empty, 0, "", "", 0, OnGuidCallback);
+		CloudGoods.MoveItemStack(Guid.Empty, 0, "", "", 0, OnGuidCallback);
 	}
 
     void OnGuidCallback(Guid guid)

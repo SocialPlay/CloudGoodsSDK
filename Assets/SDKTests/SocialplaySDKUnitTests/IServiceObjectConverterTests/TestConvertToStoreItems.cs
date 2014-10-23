@@ -6,7 +6,7 @@ public class TestConvertToStoreItems : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-	    SP.GetStoreItems(OnReceivedStoreItems);
+	    CloudGoods.GetStoreItems(OnReceivedStoreItems);
 	}
 	
 	void OnReceivedStoreItems(List<StoreItem> storeItemInfo)

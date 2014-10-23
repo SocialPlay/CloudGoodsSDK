@@ -18,7 +18,7 @@ public class BundleItemInfo : MonoBehaviour {
         ItemName.text = bundleItem.Name;
         itemAmount.text = "Amount: " + bundleItem.Quantity;
 
-        SP.GetItemTexture(bundleItem.Image, OnReceivedItemTexture);
+        CloudGoods.GetItemTexture(bundleItem.Image, OnReceivedItemTexture);
     }
 
     void OnReceivedItemTexture(ImageStatus imgStatus, Texture2D texture)

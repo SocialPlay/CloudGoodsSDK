@@ -10,7 +10,7 @@ public class SocialplaySystemErrorDisplay : MonoBehaviour {
 
     void Awake()
     {
-        SP.onErrorEvent += OnWebserviceErrorReceived;
+        CloudGoods.onErrorEvent += OnWebserviceErrorReceived;
     }
 
     void OnWebserviceErrorReceived(string errorMsg)

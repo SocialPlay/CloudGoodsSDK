@@ -31,7 +31,7 @@ public class NGUIContainerGameItem : ItemDataComponent
     {
         frameSprite.color = ItemQuailityColorSelector.GetColorForItem(item);
         itemAmountLabel.text = item.stackSize.ToString();
-        SP.GetItemTexture(item.imageName, OnReceivedTexture);
+        CloudGoods.GetItemTexture(item.imageName, OnReceivedTexture);
 
         if (mLastStack != item.stackSize)
         {

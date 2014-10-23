@@ -16,7 +16,7 @@ public class ItemRecipeLoader : MonoBehaviour {
     public void LoadItemRecipes()
     {
         ItemRecipeCache.instance.GetRecipes(OnReceivedItemRecipes);
-        SP.GetOwnerItems(SP.user.userGuid, "User", 0, OnReceivedOwnerItems);
+        CloudGoods.GetOwnerItems(CloudGoods.user.userGuid, "User", 0, OnReceivedOwnerItems);
     }
 
     void OnReceivedOwnerItems(List<ItemData> ownerItems)
