@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using System;
 
-public class SPLogout : MonoBehaviour {
+public class CloudGoodsLogout : MonoBehaviour {
 
     public GameObject SPLoginSystem;
 

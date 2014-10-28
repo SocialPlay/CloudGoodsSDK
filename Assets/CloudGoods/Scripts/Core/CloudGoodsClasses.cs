@@ -91,7 +91,7 @@ public class ItemBundle
     //State 2 = Credit purchase only
     //State 3 = Coin Purchase only
     //State 4 = Free
-    public SocialPlayBundle State;
+    public CloudGoodsBundle State;
 
     public string Name;
     public string Description;

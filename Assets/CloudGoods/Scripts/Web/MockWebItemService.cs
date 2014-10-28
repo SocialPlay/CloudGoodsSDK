@@ -29,7 +29,7 @@ public class MockWebItemService : MonoBehaviour, IServiceCalls
         callback(ServiceConverter.ConvertToGuid("\"73bcdbe5-48b8-4e8e-97bb-7fbb5b4b6155\""));
     }
 
-	public void GetUserFromWorld(SocialPlayPlatform platform, string platformUserID, string userName, string userEmail, Action<SocialPlayUser> callback)
+	public void GetUserFromWorld(CloudGoodsPlatform platform, string platformUserID, string userName, string userEmail, Action<SocialPlayUser> callback)
     {
         callback(ServiceConverter.ConvertToUserInfo("\"{\"userGuid\":\"c6afc667-bf54-4948-ad00-530b539f4122\",\"isNewUserToWorld\":false,\"userName\":\"Editor Test User\",\"userEmail\":null}\""));
     }
@@ -74,7 +74,7 @@ public class MockWebItemService : MonoBehaviour, IServiceCalls
 
     }
 
-    public void GetCreditBundles(SocialPlayPlatform platform, Action<List<PaidCurrencyBundleItem>> callback)
+    public void GetCreditBundles(CloudGoodsPlatform platform, Action<List<PaidCurrencyBundleItem>> callback)
     {
         callback(ServiceConverter.ConvertToListPaidCurrencyBundleItem("\"[{\"ID\":1,\"Name\":\"15 Credits\",\"Image\":null,\"Description\":null,\"Cost\":1.00,\"CreditAmount\":15},{\"ID\":2,\"Name\":\"30 Credits\",\"Image\":null,\"Description\":null,\"Cost\":2.00,\"CreditAmount\":30},{\"ID\":3,\"Name\":\"75 Credits\",\"Image\":null,\"Description\":null,\"Cost\":5.00,\"CreditAmount\":75},{\"ID\":4,\"Name\":\"150 Credits\",\"Image\":null,\"Description\":null,\"Cost\":10.00,\"CreditAmount\":150},{\"ID\":5,\"Name\":\"300 Credits\",\"Image\":null,\"Description\":null,\"Cost\":20.00,\"CreditAmount\":300},{\"ID\":6,\"Name\":\"750 Credits\",\"Image\":null,\"Description\":null,\"Cost\":50.00,\"CreditAmount\":750}]\""));
     }

@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class SPHelper
+public class CloudGoodsHelper
 {
     public static void SetLayerRecursively(GameObject obj, int layer)
     {

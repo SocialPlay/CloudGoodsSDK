@@ -633,7 +633,7 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
 
     #region UserManagement
 
-    static public void GetUserFromWorld(SocialPlayPlatform platform, string platformUserID, string userName, string userEmail, Action<SocialPlayUser> callback)
+    static public void GetUserFromWorld(CloudGoodsPlatform platform, string platformUserID, string userName, string userEmail, Action<SocialPlayUser> callback)
     {
         string url = Url + "GetUserFromWorld?appID=" + GuidAppID + "&platformID=" + (int)platform + "&platformUserID=" + platformUserID + "&userName=" + WWW.EscapeURL(userName) + "&loginUserEmail=" + userEmail;
 
@@ -669,7 +669,7 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
         Get().StartCoroutine(Get().ServiceGetString(www, callback));
     }
 
-    static public void LoginWithPlatformUser(SocialPlayPlatform platform, string platformUserID, string userName)
+    static public void LoginWithPlatformUser(CloudGoodsPlatform platform, string platformUserID, string userName)
     {
         GetUserFromWorld(platform, platformUserID, userName, null, (SocialPlayUser user) =>
         {

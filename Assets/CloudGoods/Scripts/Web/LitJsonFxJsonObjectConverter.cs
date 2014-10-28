@@ -327,7 +327,7 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter
             itemBundle.Description = itemBundleData[i]["Description"].ToString();
             itemBundle.CreditPrice = int.Parse(itemBundleData[i]["CreditPrice"].ToString());
             itemBundle.CoinPrice = int.Parse(itemBundleData[i]["CoinPrice"].ToString());
-            itemBundle.State = (SocialPlayBundle)Enum.Parse(typeof(SocialPlayBundle), itemBundleData[i]["State"].ToString());
+            itemBundle.State = (CloudGoodsBundle)Enum.Parse(typeof(CloudGoodsBundle), itemBundleData[i]["State"].ToString());
             itemBundle.Image = itemBundleData[i]["Image"].ToString();
 
             //TODO Implement itembundle behaviours

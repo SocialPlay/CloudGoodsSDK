@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using System;
 
-public class UnityUISPLogin : MonoBehaviour
+public class UnityUICloudGoodsLogin : MonoBehaviour
 {
 
     #region Login variables
@@ -47,7 +47,7 @@ public class UnityUISPLogin : MonoBehaviour
         CloudGoods.OnUserRegister += RegisterMessageResponce;
         CloudGoods.OnForgotPassword += ForgotPasswordResponce;
         CloudGoods.OnVerificationSent += ResentVerificationResponce;
-        SPLogout.SPUserLogout += OnLogout;
+        CloudGoodsLogout.SPUserLogout += OnLogout;
     }
 
     void OnDisable()
@@ -57,7 +57,7 @@ public class UnityUISPLogin : MonoBehaviour
         CloudGoods.OnUserRegister -= RegisterMessageResponce;
         CloudGoods.OnForgotPassword -= ForgotPasswordResponce;
         CloudGoods.OnVerificationSent -= ResentVerificationResponce;
-        SPLogout.SPUserLogout -= OnLogout;
+        CloudGoodsLogout.SPUserLogout -= OnLogout;
     }
 
     void Start()

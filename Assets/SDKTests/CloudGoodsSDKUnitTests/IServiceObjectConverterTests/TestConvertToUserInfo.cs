@@ -6,7 +6,7 @@ public class TestConvertToUserInfo : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		CloudGoods.GetUserFromWorld(SocialPlayPlatform.SocialPlay, "", "", "", OnReceivedUserInfo);
+		CloudGoods.GetUserFromWorld(CloudGoodsPlatform.SocialPlay, "", "", "", OnReceivedUserInfo);
 	}
 	
 	// Update is called once per frame

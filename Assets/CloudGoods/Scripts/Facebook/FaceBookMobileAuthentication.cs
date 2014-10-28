@@ -42,7 +42,7 @@ public class FaceBookMobileAuthentication : MonoBehaviour
    
         if (string.IsNullOrEmpty(response.Error))
         {
-			CloudGoods.LoginWithPlatformUser(SocialPlayPlatform.Facebook, FB.UserId, FBInfo["first_name"].ToString());
+			CloudGoods.LoginWithPlatformUser(CloudGoodsPlatform.Facebook, FB.UserId, FBInfo["first_name"].ToString());
 
 			/*if (OnRecivedUserInfo != null)
 			{
