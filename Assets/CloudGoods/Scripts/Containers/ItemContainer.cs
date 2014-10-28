@@ -10,7 +10,7 @@ public class ItemContainer : MonoBehaviour
 
     public bool IsItemQuantityLimited = false;
 
-    public LoadItemsForContainer itemLoader;
+    public PersistentItemContainer itemLoader;
 
     public List<ItemData> containerItems = new List<ItemData>();
 
@@ -50,7 +50,7 @@ public class ItemContainer : MonoBehaviour
 
     void Awake()
     {
-        if (itemLoader == null) itemLoader = GetComponentInChildren<LoadItemsForContainer>();
+        if (itemLoader == null) itemLoader = GetComponentInChildren<PersistentItemContainer>();
 
         if (GetComponent(typeof(IContainerAddAction)) == null)
             containerAddAction = gameObject.AddComponent<BasicAddContainer>();

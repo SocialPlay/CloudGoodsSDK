@@ -139,9 +139,9 @@ public class ItemPurchase : MonoBehaviour
 
     void ReloadContainerItems()
     {
-        foreach (LoadItemsForContainer loader in GameObject.FindObjectsOfType(typeof(LoadItemsForContainer)))
+        foreach (PersistentItemContainer loader in GameObject.FindObjectsOfType(typeof(PersistentItemContainer)))
         {
-            if (loader.sourceLocation == 0)
+            if (loader.Location == 0)
             {
                 loader.transform.parent.GetComponent<ItemContainer>().Clear();
                 loader.LoadItems();

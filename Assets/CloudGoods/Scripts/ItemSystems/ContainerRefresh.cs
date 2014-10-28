@@ -14,7 +14,7 @@ public class ContainerRefresh : MonoBehaviour
         for (int c = 0; c < containerObjects.Count; c++)
         {
             containerObjects[c].GetComponent<ItemContainer>().Clear();
-            containerObjects[c].GetComponentInChildren<ContainerItemLoader>().LoadItems();
+            containerObjects[c].GetComponentInChildren<PersistentItemContainer>().LoadItems();
         }
     }
 }
