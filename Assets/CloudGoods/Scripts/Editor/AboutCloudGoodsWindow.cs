@@ -2,7 +2,7 @@
 using UnityEditor;
 using System.Collections;
 
-public class AboutSocialPlayWindow : EditorWindow
+public class AboutCloudGoodsWindow : EditorWindow
 {
     GUIStyle titleStyle = new GUIStyle();
     GUIStyle linkStyle = new GUIStyle();
@@ -10,7 +10,7 @@ public class AboutSocialPlayWindow : EditorWindow
     //Texture2D Logo2 = null;
     Rect logoPos = new Rect(5, 5, 128, 128);
     Rect lastRect;
-    static AboutSocialPlayWindow window = null;
+    static AboutCloudGoodsWindow window = null;
 
 
     // Add menu named "My Window" to the Window menu
@@ -19,12 +19,12 @@ public class AboutSocialPlayWindow : EditorWindow
     {
         if (window == null)
         {
-            window = ScriptableObject.CreateInstance(typeof(AboutSocialPlayWindow)) as AboutSocialPlayWindow;
+            window = ScriptableObject.CreateInstance(typeof(AboutCloudGoodsWindow)) as AboutCloudGoodsWindow;
             window.ShowUtility();
         }
         else
         {
-            EditorWindow.FocusWindowIfItsOpen(typeof(AboutSocialPlayWindow));
+            EditorWindow.FocusWindowIfItsOpen(typeof(AboutCloudGoodsWindow));
         }
         Init();
     }

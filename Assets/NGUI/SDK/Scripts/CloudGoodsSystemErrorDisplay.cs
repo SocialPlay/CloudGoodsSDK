@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class SocialplaySystemErrorDisplay : MonoBehaviour {
+public class CloudGoodsSystemErrorDisplay : MonoBehaviour {
 
     public GameObject ErrorMessagePopup;
     public GameObject ConfirmButton;

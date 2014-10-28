@@ -8,8 +8,8 @@ using System.IO;
 /// Inspector class used to edit Inventory Databases.
 /// </summary>
 
-[CustomEditor(typeof(SocialPlaySettings))]
-public class SocialPlaySettingsInspector : Editor
+[CustomEditor(typeof(CloudGoodsSettings))]
+public class CloudGoodsSettingsInspector : Editor
 {
     [MenuItem("Cloud Goods/Settings", false, 0)]
     static void SelectSettings()
@@ -17,10 +17,10 @@ public class SocialPlaySettingsInspector : Editor
         Selection.activeObject = Get();
     }
 
-    static SocialPlaySettings.ScreenType screen;// { get { return .screen; } set { mSettings.screen = value; } }
+    static CloudGoodsSettings.ScreenType screen;// { get { return .screen; } set { mSettings.screen = value; } }
     static Vector2 scrollPos;
 
-    static public string iconPath = SocialPlaySettings.mainPath + "Icons/";
+    static public string iconPath = CloudGoodsSettings.mainPath + "Icons/";
 
     static public Texture2D spLogo { get { if (mLogo == null) mLogo = AssetDatabase.LoadAssetAtPath(iconPath + "SocialPlay_Logo_small.png", typeof(Texture2D)) as Texture2D; return mLogo; } }
 
@@ -39,9 +39,9 @@ public class SocialPlaySettingsInspector : Editor
     /// <summary>
     /// Load mSettings.
     /// </summary>
-    static SocialPlaySettings Get()
+    static CloudGoodsSettings Get()
     {
-        SocialPlaySettings mSettings = SocialPlaySettings.instance;
+        CloudGoodsSettings mSettings = CloudGoodsSettings.instance;
 
         if (mSettings == null)
         {
@@ -52,8 +52,8 @@ public class SocialPlaySettingsInspector : Editor
                 System.IO.Directory.CreateDirectory(path);
                 AssetDatabase.Refresh();
             }
-            mSettings = (SocialPlaySettings)ScriptableObject.CreateInstance("SocialPlaySettings");
-            AssetDatabase.CreateAsset(mSettings, path + "SocialPlaySettings.asset");
+            mSettings = (CloudGoodsSettings)ScriptableObject.CreateInstance("CloudGoodsSettings");
+            AssetDatabase.CreateAsset(mSettings, path + "CloudGoodsSettings.asset");
         }
         return mSettings;
     }
@@ -67,7 +67,7 @@ public class SocialPlaySettingsInspector : Editor
         title.alignment = TextAnchor.MiddleLeft;
 
         GUILayout.BeginVertical();
-        GUILayout.Label("Cloud Goods (v) " + SocialPlaySettings.VERSION, title);
+        GUILayout.Label("Cloud Goods (v) " + CloudGoodsSettings.VERSION, title);
 
         GUILayout.BeginHorizontal();
 
@@ -102,23 +102,23 @@ public class SocialPlaySettingsInspector : Editor
         activeTabStyleRight.normal = activeTabStyleRight.active;
 
         GUILayout.BeginHorizontal();
-        for (int i = 0, imax = (int)SocialPlaySettings.ScreenType._LastDoNotUse; i < imax; i++)
+        for (int i = 0, imax = (int)CloudGoodsSettings.ScreenType._LastDoNotUse; i < imax; i++)
         {
             GUIStyle active = activeTabStyleLeft;
             if (i > 2) active = activeTabStyle;
-            if (i == (int)SocialPlaySettings.ScreenType._LastDoNotUse - 1) active = activeTabStyleRight;
+            if (i == (int)CloudGoodsSettings.ScreenType._LastDoNotUse - 1) active = activeTabStyleRight;
 
             GUIStyle inactive = inactiveTabStyleLeft;
             if (i > 2) inactive = inactiveTabStyle;
-            if (i == (int)SocialPlaySettings.ScreenType._LastDoNotUse - 1) inactive = inactiveTabStyleRight;
+            if (i == (int)CloudGoodsSettings.ScreenType._LastDoNotUse - 1) inactive = inactiveTabStyleRight;
 
-            GUI.backgroundColor = screen == (SocialPlaySettings.ScreenType)i ? Color.cyan : Color.white;
+            GUI.backgroundColor = screen == (CloudGoodsSettings.ScreenType)i ? Color.cyan : Color.white;
 
-            GUIContent mName = new GUIContent(((SocialPlaySettings.ScreenType)i).ToString());
-            if (GUILayout.Button(((SocialPlaySettings.ScreenType)i == SocialPlaySettings.ScreenType.Settings) ? settingsContent : mName, screen == (SocialPlaySettings.ScreenType)i ? active : inactive))
+            GUIContent mName = new GUIContent(((CloudGoodsSettings.ScreenType)i).ToString());
+            if (GUILayout.Button(((CloudGoodsSettings.ScreenType)i == CloudGoodsSettings.ScreenType.Settings) ? settingsContent : mName, screen == (CloudGoodsSettings.ScreenType)i ? active : inactive))
             {
                 GUI.FocusControl("empty");
-                screen = (SocialPlaySettings.ScreenType)i;
+                screen = (CloudGoodsSettings.ScreenType)i;
             }
         }
         GUI.backgroundColor = Color.white;
@@ -126,10 +126,10 @@ public class SocialPlaySettingsInspector : Editor
 
         switch (screen)
         {
-            case SocialPlaySettings.ScreenType.Settings:
+            case CloudGoodsSettings.ScreenType.Settings:
                 DrawSettingsGUI();
                 break;
-            case SocialPlaySettings.ScreenType.About:
+            case CloudGoodsSettings.ScreenType.About:
                 DrawAboutGUI();
                 break;
         }

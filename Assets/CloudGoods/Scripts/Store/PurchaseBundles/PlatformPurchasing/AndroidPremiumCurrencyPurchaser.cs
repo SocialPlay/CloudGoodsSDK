@@ -24,7 +24,7 @@ public class AndroidPremiumCurrencyPurchaser : MonoBehaviour, IPlatformPurchaser
     void initStore()
     {
 #if UNITY_ANDROID
-        if (string.IsNullOrEmpty(SocialPlaySettings.AndroidKey))
+        if (string.IsNullOrEmpty(CloudGoodsSettings.AndroidKey))
         {
             Debug.LogError("No Android key has been set, cannot initialize premium bundle store");
             return;
@@ -36,7 +36,7 @@ public class AndroidPremiumCurrencyPurchaser : MonoBehaviour, IPlatformPurchaser
         {
             using (AndroidJavaObject obj_Activity = cls.GetStatic<AndroidJavaObject>("currentActivity"))
             {
-                cls_StorePurchaser.CallStatic("initStore", obj_Activity, SocialPlaySettings.AndroidKey);
+                cls_StorePurchaser.CallStatic("initStore", obj_Activity, CloudGoodsSettings.AndroidKey);
             }
         }
 #endif
@@ -45,7 +45,7 @@ public class AndroidPremiumCurrencyPurchaser : MonoBehaviour, IPlatformPurchaser
     public void Purchase(PremiumBundle bundleItem, int amount, string userID)
     {
 #if UNITY_ANDROID
-        if (string.IsNullOrEmpty(SocialPlaySettings.AndroidKey))
+        if (string.IsNullOrEmpty(CloudGoodsSettings.AndroidKey))
         {
             Debug.LogError("No Android key has been set, cannot purchase from premium store");
             return;

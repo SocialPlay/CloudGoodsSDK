@@ -41,7 +41,7 @@ public class ItemGeneratorSpeedTest : MonoBehaviour
     {
         if (!string.IsNullOrEmpty(webserviceOverride))
         {
-            SocialPlaySettings.instance.url = webserviceOverride;
+            CloudGoodsSettings.instance.url = webserviceOverride;
         }
         CloudGoods.OnUserAuthorized += SP_OnUserAuthorized;
     }
@@ -53,7 +53,7 @@ public class ItemGeneratorSpeedTest : MonoBehaviour
 
     public void RevertSettings()
     {
-        SocialPlaySettings.instance.url = "http://webservice.socialplay.com/cloudgoods/cloudgoodsservice.svc/";
+        CloudGoodsSettings.instance.url = "http://webservice.socialplay.com/cloudgoods/cloudgoodsservice.svc/";
     }
 
     void SP_OnUserAuthorized(SocialPlayUser player)

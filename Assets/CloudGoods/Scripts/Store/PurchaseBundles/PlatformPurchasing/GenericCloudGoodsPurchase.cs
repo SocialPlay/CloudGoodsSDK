@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System;
 
-public class GenericSocialPlayPurchase : IPlatformPurchaser
+public class GenericCloudGoodsPurchase : IPlatformPurchaser
 {
 
     public event Action<GameObject> OKCallBack;

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class SocialplayTestUserLogin : MonoBehaviour
+public class CloudGoodsTestUserLogin : MonoBehaviour
 {
     void Start()
     {

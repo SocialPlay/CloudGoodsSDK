@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class SocialplayFacebookLogin : MonoBehaviour {
+public class CloudGoodsFacebookLogin : MonoBehaviour {
 
     public static bool isFBInitialized = false;
 

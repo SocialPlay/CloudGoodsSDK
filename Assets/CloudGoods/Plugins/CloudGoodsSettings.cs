@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 [System.Serializable]
-public class SocialPlaySettings : ScriptableObject
+public class CloudGoodsSettings : ScriptableObject
 {
     [System.Serializable]
     public class DropPrefab
@@ -21,7 +21,7 @@ public class SocialPlaySettings : ScriptableObject
 
     static public string VERSION = "1.0";
 
-    static public string mainPath = "Assets/SocialPlay/";
+    static public string mainPath = "Assets/CloudGoods/";
 
     public string appID;
     public string appSecret;
@@ -34,13 +34,13 @@ public class SocialPlaySettings : ScriptableObject
     public GameObject defaultUIItem;
     //public List<DropPrefab> dropPrefabs = new List<DropPrefab>();
 
-    static SocialPlaySettings mInst;
+    static CloudGoodsSettings mInst;
 
-    static public SocialPlaySettings instance
+    static public CloudGoodsSettings instance
     {
         get
         {
-            if (mInst == null) mInst = (SocialPlaySettings)Resources.Load("SocialPlaySettings", typeof(SocialPlaySettings));
+            if (mInst == null) mInst = (CloudGoodsSettings)Resources.Load("CloudGoodsSettings", typeof(CloudGoodsSettings));
             return mInst;
         }
     }

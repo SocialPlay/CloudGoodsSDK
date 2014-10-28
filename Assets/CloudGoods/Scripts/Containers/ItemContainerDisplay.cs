@@ -51,7 +51,7 @@ public class ItemContainerDisplay : MonoBehaviour
 
     void myContainer_AddedItem(ItemData itemData, bool isSaving)
     {
-        GameObject newItem = GameObject.Instantiate(SocialPlaySettings.DefaultUIItem) as GameObject;
+        GameObject newItem = GameObject.Instantiate(CloudGoodsSettings.DefaultUIItem) as GameObject;
         ItemDataDisplay newDisplay = newItem.GetComponent<ItemDataDisplay>();
         newItem.GetComponent<ItemDataComponent>().itemData = itemData;
         newItem.name = itemData.itemName;
@@ -108,7 +108,7 @@ public class ItemContainerDisplay : MonoBehaviour
 
     void Start()
     {
-        if (SocialPlaySettings.DefaultUIItem == null)
+        if (CloudGoodsSettings.DefaultUIItem == null)
         {
             Debug.LogError("Default UI Item is not set int he settigns file");
             this.gameObject.SetActive(false);

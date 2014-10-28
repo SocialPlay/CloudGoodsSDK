@@ -46,7 +46,7 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
     {
         get
         {
-            if (string.IsNullOrEmpty(SocialPlaySettings.AppSecret))
+            if (string.IsNullOrEmpty(CloudGoodsSettings.AppSecret))
             {
                 Debug.LogError("AppSecret has not been defined. Open Social Play Settings from the menu.");
 
@@ -54,7 +54,7 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
                     onErrorEvent("AppSecret has not been defined. Open Social Play Settings from the menu.");
             }
 
-            return SocialPlaySettings.AppSecret;
+            return CloudGoodsSettings.AppSecret;
         }
     }
 
@@ -66,7 +66,7 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
     {
         get
         {
-            if (string.IsNullOrEmpty(SocialPlaySettings.AppID))
+            if (string.IsNullOrEmpty(CloudGoodsSettings.AppID))
             {
                 Debug.LogError("AppID has not been defined. Open Social Play Settings from the menu.");
 
@@ -74,7 +74,7 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
                     onErrorEvent("AppID has not been defined. Open Cloud Goods Settings from the menu.");
             }
 
-            return SocialPlaySettings.AppID;
+            return CloudGoodsSettings.AppID;
         }
     }
 
@@ -86,10 +86,10 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
     {
         get
         {
-            if (string.IsNullOrEmpty(SocialPlaySettings.Url))
+            if (string.IsNullOrEmpty(CloudGoodsSettings.Url))
                 Debug.LogError("Url has not been defined. Open Social Play Settings from the menu.");
 
-            return SocialPlaySettings.Url;
+            return CloudGoodsSettings.Url;
             //return "http://192.168.0.197/webservice/cloudgoods/cloudgoodsservice.svc/";
         }
     }
@@ -102,10 +102,10 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
     {
         get
         {
-            if (string.IsNullOrEmpty(SocialPlaySettings.BundlesUrl))
+            if (string.IsNullOrEmpty(CloudGoodsSettings.BundlesUrl))
                 Debug.LogError("BundlesUrl has not been defined. Open Social Play Settings from the menu.");
 
-            return SocialPlaySettings.BundlesUrl;
+            return CloudGoodsSettings.BundlesUrl;
         }
     }
 
@@ -253,10 +253,10 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
     {
         get
         {
-            if (SocialPlaySettings.DefaultItemDrop == null)
+            if (CloudGoodsSettings.DefaultItemDrop == null)
                 Debug.LogError("DefaultItemDrop has not been defined. Open Social Play Settings from the menu.");
 
-            return SocialPlaySettings.DefaultItemDrop;
+            return CloudGoodsSettings.DefaultItemDrop;
         }
     }
 
@@ -268,10 +268,10 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
     {
         get
         {
-            if (SocialPlaySettings.DefaultUIItem == null)
+            if (CloudGoodsSettings.DefaultUIItem == null)
                 Debug.LogError("DefaultUIItem has not been defined. Open Social Play Settings from the menu.");
 
-            return SocialPlaySettings.DefaultUIItem;
+            return CloudGoodsSettings.DefaultUIItem;
         }
     }
 
@@ -820,8 +820,8 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
         }
         else
         {
-            if (SocialPlaySettings.DefaultTexture != null)
-                callback(ImageStatus.Cache, SocialPlaySettings.DefaultTexture);
+            if (CloudGoodsSettings.DefaultTexture != null)
+                callback(ImageStatus.Cache, CloudGoodsSettings.DefaultTexture);
             else
                 callback(ImageStatus.Error, null);
         }
