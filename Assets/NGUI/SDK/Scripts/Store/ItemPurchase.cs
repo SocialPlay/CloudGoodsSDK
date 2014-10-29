@@ -18,8 +18,8 @@ public class ItemPurchase : MonoBehaviour
     public GameObject increaseQuantityButton;
     public GameObject decreaseQuantityButton;
 
-    public PurchaseButtonDisplay PaidCurrencyPurchaseButton;
-    public PurchaseButtonDisplay FreeCurrencyPurchaseButton;
+    public PurchaseButtonDisplay PremiumCurrencyPurchaseButton;
+    public PurchaseButtonDisplay StandardCurrencyPurchaseButton;
 
     public UITexture itemTexture;
 
@@ -27,8 +27,8 @@ public class ItemPurchase : MonoBehaviour
     {
         UIEventListener.Get(increaseQuantityButton).onClick += IncreaseQuantityAmount;
         UIEventListener.Get(decreaseQuantityButton).onClick += DecreaseQuantityAmount;
-        UIEventListener.Get(PaidCurrencyPurchaseButton.ActiveButton.gameObject).onClick += PurchaseItemWithCredits;
-        UIEventListener.Get(FreeCurrencyPurchaseButton.ActiveButton.gameObject).onClick += PurchaseItemWithCoins;
+        UIEventListener.Get(PremiumCurrencyPurchaseButton.ActiveButton.gameObject).onClick += PurchaseItemWithPremium;
+        UIEventListener.Get(StandardCurrencyPurchaseButton.ActiveButton.gameObject).onClick += PurchaseItemWithStandard;
 
     }
 
@@ -36,8 +36,8 @@ public class ItemPurchase : MonoBehaviour
     {
         UIEventListener.Get(increaseQuantityButton).onClick -= IncreaseQuantityAmount;
         UIEventListener.Get(decreaseQuantityButton).onClick -= DecreaseQuantityAmount;
-        UIEventListener.Get(PaidCurrencyPurchaseButton.ActiveButton.gameObject).onClick -= PurchaseItemWithCredits;
-        UIEventListener.Get(FreeCurrencyPurchaseButton.ActiveButton.gameObject).onClick -= PurchaseItemWithCoins;
+        UIEventListener.Get(PremiumCurrencyPurchaseButton.ActiveButton.gameObject).onClick -= PurchaseItemWithPremium;
+        UIEventListener.Get(StandardCurrencyPurchaseButton.ActiveButton.gameObject).onClick -= PurchaseItemWithStandard;
 
     }
 
@@ -100,8 +100,8 @@ public class ItemPurchase : MonoBehaviour
 
     private void ChangePurchaseButtonDisplay(int itemCreditCost, int itemCoinCost)
     {
-        FreeCurrencyPurchaseButton.SetState(itemCoinCost);
-        PaidCurrencyPurchaseButton.SetState(itemCreditCost);
+        StandardCurrencyPurchaseButton.SetState(itemCoinCost);
+        PremiumCurrencyPurchaseButton.SetState(itemCreditCost);
     }
 
     public void DisplayItemPurchasePanel(UIStoreItem item)
@@ -117,13 +117,13 @@ public class ItemPurchase : MonoBehaviour
         ChangePurchaseButtonDisplay(item.storeItem.premiumCurrencyValue, item.storeItem.standardCurrencyValue);
     }
 
-    void PurchaseItemWithCredits(GameObject button)
+    void PurchaseItemWithPremium(GameObject button)
     {
         CloudGoods.StoreItemPurchase(itemInfo.storeItem.itemID, int.Parse(itemQuantityAmount.text), CurrencyType.Premium, 0, OnReceivedItemPurchaseConfirmation);
         ClosePanel();
     }
 
-    void PurchaseItemWithCoins(GameObject button)
+    void PurchaseItemWithStandard(GameObject button)
     {
 		CloudGoods.StoreItemPurchase(itemInfo.storeItem.itemID, int.Parse(itemQuantityAmount.text), CurrencyType.Standard, 0, OnReceivedItemPurchaseConfirmation);
         ClosePanel();

@@ -7,8 +7,9 @@ public class NGUIDragDropItem : MonoBehaviour
 
     public ItemData myItemData
     {
-        get {
-            if (data == null)data= this.GetComponent<ItemDataComponent>().itemData;
+        get
+        {
+            if (data == null) data = this.GetComponent<ItemDataComponent>().itemData;
             return data;
         }
         set
@@ -40,10 +41,11 @@ public class NGUIDragDropItem : MonoBehaviour
 
     void Drop()
     {
+        ReturnToPreviousPossition();
         Collider col = UICamera.lastHit.collider;
         Debug.Log(col);
         ItemContainer container = (col != null) ? col.gameObject.GetComponent<ItemContainer>() : null;
-        ReturnToPreviousPossition();
+
 
         if (container == null)
         {

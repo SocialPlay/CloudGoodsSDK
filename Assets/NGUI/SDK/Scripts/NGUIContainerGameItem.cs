@@ -23,6 +23,7 @@ public class NGUIContainerGameItem : ItemDataComponent
             mLastStack = item.stackSize;
             TweenAlpha.Begin(updateSprite.cachedGameObject, 1, 0).from = 1;
         }
+        this.gameObject.name = item.itemName + " (" + item.varianceID + ")";
     }
 
     void OnReceivedTexture(ImageStatus statusMsg, Texture2D texture)

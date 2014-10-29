@@ -45,12 +45,7 @@ public class NGUIPremiumBundle : PremiumBundle
     public UITexture currencyIcon;
     public UILabel cost;
     public UILabel description;
-    public UIButton PurchaseButton;
 
-    void Awake()
-    {
-        EventDelegate.Add(PurchaseButton.onClick, OnPurchase);
-    }
 
     void OnPurchase()
     {
