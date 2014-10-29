@@ -31,7 +31,7 @@ public class ItemDataComponent : MonoBehaviour
         }
     }
 
-    ItemData mData;
+   protected ItemData mData;
 
     /// <summary>
     /// if pickupOnClick is true the item can be picked up on Click event.

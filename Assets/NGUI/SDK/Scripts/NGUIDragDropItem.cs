@@ -5,7 +5,19 @@ using UnityEngine;
 public class NGUIDragDropItem : MonoBehaviour
 {
 
-    ItemData myItemData;
+    public ItemData myItemData
+    {
+        get {
+            if (data == null)data= this.GetComponent<ItemDataComponent>().itemData;
+            return data;
+        }
+        set
+        {
+            data = value;
+        }
+    }
+    private ItemData data;
+
     Transform mTrans;
     bool mIsDragging = false;
     //bool mSticky = false;
@@ -67,7 +79,6 @@ public class NGUIDragDropItem : MonoBehaviour
     void Awake()
     {
         mTrans = transform;
-        myItemData = this.GetComponent<ItemDataComponent>().itemData;
     }
 
     /// <summary>
@@ -80,7 +91,7 @@ public class NGUIDragDropItem : MonoBehaviour
         {
             //if (!mIsDragging)
             //{
-                mIsDragging = true;
+            mIsDragging = true;
             //    mParent = mTrans.parent;
             //    mTrans.parent = UIDragDropRoot.root;
 
@@ -95,7 +106,7 @@ public class NGUIDragDropItem : MonoBehaviour
             //}
             //else
             //{
-                mTrans.localPosition += (Vector3)delta;
+            mTrans.localPosition += (Vector3)delta;
             //}
         }
     }
@@ -112,7 +123,7 @@ public class NGUIDragDropItem : MonoBehaviour
     {
         Collider col = collider;
         if (col != null) col.enabled = true;
-        if ( mIsDragging) Drop();
+        if (mIsDragging) Drop();
         mIsDragging = false;
     }
 
