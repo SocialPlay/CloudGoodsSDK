@@ -1,56 +1,39 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System;
 
-public class ItemPurchase : MonoBehaviour
-{
+public class UnityUIItemPurchase : MonoBehaviour {
 
     public static event Action<string> OnPurchasedItem;
 
-	UIStoreItem itemInfo;
+    UnityUIStoreItem itemInfo;
 
-    public UILabel itemNameDisplay;
-    public UILabel itemCreditCostDisplay;
-    public UILabel itemCoinCostDisplay;
+    public Text itemNameDisplay;
+    public Text itemCreditCostDisplay;
+    public Text itemCoinCostDisplay;
+    public Text itemDetailsDisplay;
 
-    public UILabel itemQuantityAmount;
+    public Text itemQuantityAmount;
 
     public GameObject increaseQuantityButton;
     public GameObject decreaseQuantityButton;
 
-    public PurchaseButtonDisplay PaidCurrencyPurchaseButton;
-    public PurchaseButtonDisplay FreeCurrencyPurchaseButton;
+    public UnityUIPurchaseButtonDisplay PremiumCurrencyPurchaseButton;
+    public UnityUIPurchaseButtonDisplay StandardCurrencyPurchaseButton;
 
-    public UITexture itemTexture;
+    public RawImage itemTexture;
 
-    void OnEnable()
-    {
-        UIEventListener.Get(increaseQuantityButton).onClick += IncreaseQuantityAmount;
-        UIEventListener.Get(decreaseQuantityButton).onClick += DecreaseQuantityAmount;
-        UIEventListener.Get(PaidCurrencyPurchaseButton.ActiveButton.gameObject).onClick += PurchaseItemWithCredits;
-        UIEventListener.Get(FreeCurrencyPurchaseButton.ActiveButton.gameObject).onClick += PurchaseItemWithCoins;
-
-    }
-
-    void OnDisable()
-    {
-        UIEventListener.Get(increaseQuantityButton).onClick -= IncreaseQuantityAmount;
-        UIEventListener.Get(decreaseQuantityButton).onClick -= DecreaseQuantityAmount;
-        UIEventListener.Get(PaidCurrencyPurchaseButton.ActiveButton.gameObject).onClick -= PurchaseItemWithCredits;
-        UIEventListener.Get(FreeCurrencyPurchaseButton.ActiveButton.gameObject).onClick -= PurchaseItemWithCoins;
-
-    }
-
-    void IncreaseQuantityAmount(GameObject increaseButton)
+    public void IncreaseQuantityAmount()
     {
         int quantityAmount = int.Parse(itemQuantityAmount.text);
         int itemCreditCost = int.Parse(itemCreditCostDisplay.text);
         int itemCoinCost = int.Parse(itemCoinCostDisplay.text);
 
-        if(itemCreditCost >= 0)
+        if (itemCreditCost >= 0)
             itemCreditCost = itemCreditCost / quantityAmount;
 
-        if(itemCoinCost >= 0)
+        if (itemCoinCost >= 0)
             itemCoinCost = itemCoinCost / quantityAmount;
 
         quantityAmount++;
@@ -60,7 +43,7 @@ public class ItemPurchase : MonoBehaviour
 
     }
 
-    void DecreaseQuantityAmount(GameObject decreaseButton)
+    public void DecreaseQuantityAmount()
     {
         int quantityAmount = int.Parse(itemQuantityAmount.text);
         int itemCreditCost = int.Parse(itemCreditCostDisplay.text);
@@ -91,7 +74,7 @@ public class ItemPurchase : MonoBehaviour
             itemCoinCost = -1;
 
         itemCreditCostDisplay.text = itemCreditCost.ToString();
-            itemCoinCostDisplay.text = itemCoinCost.ToString();
+        itemCoinCostDisplay.text = itemCoinCost.ToString();
 
         itemQuantityAmount.text = quantityAmount.ToString();
 
@@ -100,35 +83,50 @@ public class ItemPurchase : MonoBehaviour
 
     private void ChangePurchaseButtonDisplay(int itemCreditCost, int itemCoinCost)
     {
-        FreeCurrencyPurchaseButton.SetState(itemCoinCost);
-        PaidCurrencyPurchaseButton.SetState(itemCreditCost);
+        StandardCurrencyPurchaseButton.SetState(itemCoinCost);
+        PremiumCurrencyPurchaseButton.SetState(itemCreditCost);
     }
 
-    public void DisplayItemPurchasePanel(UIStoreItem item)
+    public void DisplayItemPurchasePanel(UnityUIStoreItem item)
     {
         itemInfo = item;
-		itemNameDisplay.text = item.storeItem.itemName;
-		itemCreditCostDisplay.text = item.storeItem.premiumCurrencyValue.ToString();
+        itemNameDisplay.text = item.storeItem.itemName;
+        itemCreditCostDisplay.text = item.storeItem.premiumCurrencyValue.ToString();
         itemCoinCostDisplay.text = item.storeItem.standardCurrencyValue.ToString();
         itemQuantityAmount.text = "1";
+        SetItemDetailDisplay(item);
 
-        itemTexture.mainTexture = item.gameObject.GetComponentInChildren<UITexture>().mainTexture;
+        itemTexture.texture = item.gameObject.GetComponentInChildren<RawImage>().texture;
 
         ChangePurchaseButtonDisplay(item.storeItem.premiumCurrencyValue, item.storeItem.standardCurrencyValue);
     }
 
-    void PurchaseItemWithCredits(GameObject button)
+    void SetItemDetailDisplay(UnityUIStoreItem storeItem)
     {
+        string statusText = "";
+
+        foreach (StoreItemDetail detail in storeItem.storeItem.itemDetail)
+        {
+            statusText += detail.propertyName + " : " + detail.propertyValue + "\n";
+        }
+
+        itemDetailsDisplay.text = statusText;
+    }
+
+    public void PurchaseItemWithPremiumCurrency()
+    {
+        Debug.Log(int.Parse(itemQuantityAmount.text));
         CloudGoods.StoreItemPurchase(itemInfo.storeItem.itemID, int.Parse(itemQuantityAmount.text), CurrencyType.Premium, 0, OnReceivedItemPurchaseConfirmation);
         ClosePanel();
     }
 
-    void PurchaseItemWithCoins(GameObject button)
+    public void PurchaseItemWithStandardCurrency()
     {
-		CloudGoods.StoreItemPurchase(itemInfo.storeItem.itemID, int.Parse(itemQuantityAmount.text), CurrencyType.Standard, 0, OnReceivedItemPurchaseConfirmation);
+        Debug.Log(int.Parse(itemQuantityAmount.text));
+        CloudGoods.StoreItemPurchase(itemInfo.storeItem.itemID, int.Parse(itemQuantityAmount.text), CurrencyType.Standard, 0, OnReceivedItemPurchaseConfirmation);
         ClosePanel();
     }
-	
+
     void OnReceivedItemPurchaseConfirmation(string msg)
     {
         ReloadContainerItems();
