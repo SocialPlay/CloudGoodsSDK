@@ -14,7 +14,7 @@ public class UserNameLabel : MonoBehaviour
 		CloudGoods.OnUserAuthorized -= OnUserAuthorized;
     }
 
-	void OnUserAuthorized(SocialPlayUser user)
+	void OnUserAuthorized(CloudGoodsUser user)
     {
         label.text = CloudGoods.user.userName;
     }

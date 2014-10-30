@@ -239,12 +239,12 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter
         return storeItems;
     }
 
-    public SocialPlayUser ConvertToUserInfo(string dataString)
+    public CloudGoodsUser ConvertToUserInfo(string dataString)
     {
         string userInfoString = ParseString(dataString);
         JsonData data = LitJson.JsonMapper.ToObject(userInfoString);
 
-        SocialPlayUser userinfo = new SocialPlayUser(data["userGuid"].ToString(), data["userName"].ToString(), "");
+        CloudGoodsUser userinfo = new CloudGoodsUser(data["userGuid"].ToString(), data["userName"].ToString(), "");
 
         if (data["userEmail"] != null) userinfo.userEmail = data["userEmail"].ToString();
 
@@ -411,12 +411,12 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter
 
         JsonData data = LitJson.JsonMapper.ToObject(parsedString);
 
-        SocialPlayUser userInfo = null;
+        CloudGoodsUser userInfo = null;
 
         if (data["code"].ToString() == "0")
         {
             JsonData userData = LitJson.JsonMapper.ToObject(data["message"].ToString());
-            userInfo = new SocialPlayUser(userData["ID"].ToString(), userData["name"].ToString(), userData["email"].ToString());
+            userInfo = new CloudGoodsUser(userData["ID"].ToString(), userData["name"].ToString(), userData["email"].ToString());
         }
 
         UserResponse responce = new UserResponse(int.Parse(data["code"].ToString()), data["message"].ToString(), userInfo);

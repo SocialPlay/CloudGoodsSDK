@@ -12,7 +12,7 @@ public interface IServiceCalls
 
     void MoveItemStack(Guid StackToMove, int MoveAmount, string DestinationOwnerID, string DestinationOwnerType, int DestinationLocation, Action<Guid> callback);
 
-    void GetUserFromWorld(CloudGoodsPlatform platform, string platformUserID, string userName, string userEmail, Action<SocialPlayUser> callback);
+    void GetUserFromWorld(CloudGoodsPlatform platform, string platformUserID, string userName, string userEmail, Action<CloudGoodsUser> callback);
 
     void GetStoreItems(Action<List<StoreItem>> callback);
 

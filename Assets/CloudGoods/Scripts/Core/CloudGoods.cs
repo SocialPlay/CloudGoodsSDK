@@ -17,12 +17,12 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
     static public event Action<string> onErrorEvent;
     static public event Action<UserResponse> OnUserLogin;
     static public event Action<string> onLogout;
-    static public event Action<SocialPlayUser> OnUserInfo;
+    static public event Action<CloudGoodsUser> OnUserInfo;
     static public event Action<UserResponse> OnUserRegister;
     static public event Action<UserResponse> OnForgotPassword;
     static public event Action<UserResponse> OnVerificationSent;
     static public event Action<string> OnRegisteredUserToSession;
-    static public event Action<SocialPlayUser> OnUserAuthorized;
+    static public event Action<CloudGoodsUser> OnUserAuthorized;
     static public event Action<List<StoreItem>> OnStoreListLoaded;
     static public event Action<List<ItemData>> OnItemsLoaded;
     static public event Action<int> OnStandardCurrency;
@@ -288,7 +288,7 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
     /// Current user information.
     /// </summary>
 
-    static public SocialPlayUser user { get; private set; }
+    static public CloudGoodsUser user { get; private set; }
 
     #region Private Members
 
@@ -318,7 +318,7 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
 
     #region Game Authentication
 
-    static public void AuthorizeUser(SocialPlayUser userInfo)
+    static public void AuthorizeUser(CloudGoodsUser userInfo)
     {
         user = userInfo;
         user.userID = new Guid(user.userGuid.ToString());
@@ -633,7 +633,7 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
 
     #region UserManagement
 
-    static public void GetUserFromWorld(CloudGoodsPlatform platform, string platformUserID, string userName, string userEmail, Action<SocialPlayUser> callback)
+    static public void GetUserFromWorld(CloudGoodsPlatform platform, string platformUserID, string userName, string userEmail, Action<CloudGoodsUser> callback)
     {
         string url = Url + "GetUserFromWorld?appID=" + GuidAppID + "&platformID=" + (int)platform + "&platformUserID=" + platformUserID + "&userName=" + WWW.EscapeURL(userName) + "&loginUserEmail=" + userEmail;
 
@@ -671,7 +671,7 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
 
     static public void LoginWithPlatformUser(CloudGoodsPlatform platform, string platformUserID, string userName)
     {
-        GetUserFromWorld(platform, platformUserID, userName, null, (SocialPlayUser user) =>
+        GetUserFromWorld(platform, platformUserID, userName, null, (CloudGoodsUser user) =>
         {
             AuthorizeUser(user);
         });
@@ -703,7 +703,7 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
 
                     //UserResponse responce = new UserResponse(int.Parse(data["code"].ToString()), data["message"].ToString(), userInfo);
 
-                    SocialPlayUser ui = new SocialPlayUser(userInfo.ID.ToString(), userInfo.name, userInfo.email);
+                    CloudGoodsUser ui = new CloudGoodsUser(userInfo.ID.ToString(), userInfo.name, userInfo.email);
                     AuthorizeUser(ui);
                     OnUserInfo(ui);
                 }
@@ -868,6 +868,7 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
             if (callback != null) callback(premiumCurrency);
         }));
     }
+
 
     static public void GetWorldCurrencyInfo(Action<WorldCurrencyInfo> callback)
     {
@@ -1209,7 +1210,7 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
         }
     }
 
-    IEnumerator ServiceGetUserInfo(WWW www, Action<SocialPlayUser> callback)
+    IEnumerator ServiceGetUserInfo(WWW www, Action<CloudGoodsUser> callback)
     {
         yield return www;
 

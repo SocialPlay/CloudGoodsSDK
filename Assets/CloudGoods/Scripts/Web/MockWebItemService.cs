@@ -29,7 +29,7 @@ public class MockWebItemService : MonoBehaviour, IServiceCalls
         callback(ServiceConverter.ConvertToGuid("\"73bcdbe5-48b8-4e8e-97bb-7fbb5b4b6155\""));
     }
 
-	public void GetUserFromWorld(CloudGoodsPlatform platform, string platformUserID, string userName, string userEmail, Action<SocialPlayUser> callback)
+	public void GetUserFromWorld(CloudGoodsPlatform platform, string platformUserID, string userName, string userEmail, Action<CloudGoodsUser> callback)
     {
         callback(ServiceConverter.ConvertToUserInfo("\"{\"userGuid\":\"c6afc667-bf54-4948-ad00-530b539f4122\",\"isNewUserToWorld\":false,\"userName\":\"Editor Test User\",\"userEmail\":null}\""));
     }
