@@ -11,24 +11,9 @@ public class NGUIContainerGameItem : ItemDataComponent
 
     int mLastStack;
 
-    void Start()
-    {
-        /*if (Image != null)
-        {
-            if (Image.atlas.GetSprite(item.itemData.itemID.ToString()) != null)
-            {
-                Image.spriteName = item.itemData.itemID.ToString();
-            }
-            else
-            {
-                Destroy(Image.gameObject);
-                SetImageTexture();
-            }
-        }*/
-    }
-
     public override void SetData(ItemData item)
     {
+        mData = item;
         frameSprite.color = ItemQuailityColorSelector.GetColorForItem(item);
         itemAmountLabel.text = item.stackSize.ToString();
         CloudGoods.GetItemTexture(item.imageName, OnReceivedTexture);
@@ -38,6 +23,7 @@ public class NGUIContainerGameItem : ItemDataComponent
             mLastStack = item.stackSize;
             TweenAlpha.Begin(updateSprite.cachedGameObject, 1, 0).from = 1;
         }
+        this.gameObject.name = item.itemName + " (" + item.varianceID + ")";
     }
 
     void OnReceivedTexture(ImageStatus statusMsg, Texture2D texture)

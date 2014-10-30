@@ -9,9 +9,7 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter
 {
 
     public List<ItemData> ConvertToItemDataList(string ObjectData)
-    {
-        Debug.Log("Object data " + ObjectData);
-       
+    {       
         ItemDataList itemDataList = new SocialPlay.Data.ItemDataList();
 
         string parsedString = ParseString(ObjectData);
@@ -44,15 +42,13 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter
     {
         if (reader.Token.ToString() == "ObjectStart")
         {
-            Debug.Log("here");
             SocialPlay.Data.ItemData itemData = new SocialPlay.Data.ItemData();
             while (reader.Token.ToString() != "ObjectEnd")
             {
                 reader.Read();
 
                 if (reader.Token.ToString() == "PropertyName")
-                {
-                    Debug.Log(reader.Value.ToString());
+                {          
                     string propertyString = reader.Value.ToString();
 
                     reader.Read();
@@ -155,16 +151,13 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter
                     }
                 }
             }
-
-            Debug.Log("item data: " + itemData.Name);
-
             itemDataList.Add(itemData);
         }
     }
 
 
     public Guid ConvertToGuid(string dataString)
-    {
+    {      
         string guidString = ParseString(dataString);
         Guid newGuid = new Guid(guidString);
         return newGuid;

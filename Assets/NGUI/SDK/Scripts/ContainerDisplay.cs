@@ -88,11 +88,13 @@ public class ContainerDisplay : MonoBehaviour
         }
 
         GameObject go = NGUITools.AddChild(itemGrid.gameObject, itemPrefab);
-        ItemDataComponent ent = go.GetComponent<ItemDataComponent>();
-        if (ent == null) ent = go.AddComponent<ItemDataComponent>();
+        ItemDataComponent ent = go.GetComponent<NGUIContainerGameItem>();
+        if (ent == null) ent = go.AddComponent<NGUIContainerGameItem>();
         ent.itemData = item;
         ent.SetData(item);
         mList.Add(ent);
+
+
         return ent;
     }
 

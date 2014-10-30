@@ -158,6 +158,9 @@ public class CloudGoodsSettingsInspector : Editor
 
         EditorGUILayout.PropertyField(serializedObject.FindProperty("defaultUIItem"), new GUIContent("Default UI Item", "Default UI Item"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("defaultItemDrop"), new GUIContent("Default Drop Prefab", "The Item that will be droped if no asset is found for the item spawning into the world"));
+
+        CloudGoodsSettings.BuildPlatformType type = (CloudGoodsSettings.BuildPlatformType)serializedObject.FindProperty("buildPlatform").enumValueIndex;
+        serializedObject.FindProperty("buildPlatform").enumValueIndex = (int)(CloudGoodsSettings.BuildPlatformType)EditorGUILayout.EnumPopup("Platform build Type", type); 
         serializedObject.ApplyModifiedProperties();
     }
 

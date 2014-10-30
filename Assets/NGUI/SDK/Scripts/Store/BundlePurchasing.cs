@@ -4,8 +4,8 @@ using System.Collections.Generic;
 
 public class BundlePurchasing : MonoBehaviour 
 {
-    public PurchaseButtonDisplay PaidCurrencyPurchaseButton;
-    public PurchaseButtonDisplay FreeCurrencyPurchaseButton;
+    public PurchaseButtonDisplay PremiumCurrencyPurchaseButton;
+    public PurchaseButtonDisplay StandardCurrencyPurchaseButton;
 
     public GameObject bundleItemDisplayPrefab;
 
@@ -64,39 +64,39 @@ public class BundlePurchasing : MonoBehaviour
         BundleDisplayGrid.repositionNow = true;
     }
 
-    private void ChangePurchaseButtonDisplay(int itemCreditCost, int itemCoinCost, CloudGoodsBundle state)
+    private void ChangePurchaseButtonDisplay(int itemCreditCost, int itemCoinCost, SocialPlayBundle state)
     {
         switch (state)
         {
-            case CloudGoodsBundle.CreditPurchasable:
-                PaidCurrencyPurchaseButton.InsufficientFundsLabel.text = "Insufficent Funds";
-                PaidCurrencyPurchaseButton.SetState(itemCreditCost);
-                FreeCurrencyPurchaseButton.InsufficientFundsLabel.text = "Credit Purchase Only";
-                FreeCurrencyPurchaseButton.SetState(-1);
+            case SocialPlayBundle.CreditPurchasable:
+                PremiumCurrencyPurchaseButton.InsufficientFundsLabel.text = "Insufficent Funds";
+                PremiumCurrencyPurchaseButton.SetState(itemCreditCost);
+                StandardCurrencyPurchaseButton.InsufficientFundsLabel.text = "Credit Purchase Only";
+                StandardCurrencyPurchaseButton.SetState(-1);
 
                 CreditAmount.text = itemCreditCost.ToString();
                 CoinAmount.text = "N/A";
                 break;
-            case CloudGoodsBundle.CoinPurchasable:
-                FreeCurrencyPurchaseButton.InsufficientFundsLabel.text = "Insufficent Funds";
-				FreeCurrencyPurchaseButton.SetState(itemCoinCost);
-                PaidCurrencyPurchaseButton.InsufficientFundsLabel.text = "Coin Purchase Only";
-                PaidCurrencyPurchaseButton.SetState(-1);
+            case SocialPlayBundle.CoinPurchasable:
+                StandardCurrencyPurchaseButton.InsufficientFundsLabel.text = "Insufficent Funds";
+				StandardCurrencyPurchaseButton.SetState(itemCoinCost);
+                PremiumCurrencyPurchaseButton.InsufficientFundsLabel.text = "Coin Purchase Only";
+                PremiumCurrencyPurchaseButton.SetState(-1);
 
                 CreditAmount.text = "N/A";
                 CoinAmount.text = itemCoinCost.ToString();
                 break;
-            case CloudGoodsBundle.Free:
+            case SocialPlayBundle.Free:
                 CreditAmount.text = "Free";
                 CoinAmount.text = "Free";
-                FreeCurrencyPurchaseButton.SetState(0);
-                PaidCurrencyPurchaseButton.SetState(0);
+                StandardCurrencyPurchaseButton.SetState(0);
+                PremiumCurrencyPurchaseButton.SetState(0);
                 break;
             default:
-                FreeCurrencyPurchaseButton.InsufficientFundsLabel.text = "Insufficent Funds";
-                PaidCurrencyPurchaseButton.InsufficientFundsLabel.text = "Insufficent Funds";
-                FreeCurrencyPurchaseButton.SetState(itemCoinCost);
-                PaidCurrencyPurchaseButton.SetState(itemCreditCost);
+                StandardCurrencyPurchaseButton.InsufficientFundsLabel.text = "Insufficent Funds";
+                PremiumCurrencyPurchaseButton.InsufficientFundsLabel.text = "Insufficent Funds";
+                StandardCurrencyPurchaseButton.SetState(itemCoinCost);
+                PremiumCurrencyPurchaseButton.SetState(itemCreditCost);
                 CreditAmount.text = itemCreditCost.ToString();
                 CoinAmount.text = itemCoinCost.ToString();
                 break;
@@ -117,13 +117,13 @@ public class BundlePurchasing : MonoBehaviour
         gridObj.repositionNow = true;
     }
 
-    public void PurchaseBundleWithCoin()
+    public void PurchaseBundleWithStandard()
     {
         CloudGoods.PurchaseItemBundles(currentItemBundle.ID, CurrencyType.Standard, purchaseContainerLocation, OnReceivedPurchaseCallback);
         ClosePurchaseWindow();
     }
 
-    public void PurchaseBundleWithCredit()
+    public void PurchaseBundleWithPremium()
     {
 		CloudGoods.PurchaseItemBundles(currentItemBundle.ID, CurrencyType.Premium, purchaseContainerLocation, OnReceivedPurchaseCallback);
         ClosePurchaseWindow();

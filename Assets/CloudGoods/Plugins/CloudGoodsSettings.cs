@@ -19,6 +19,16 @@ public class CloudGoodsSettings : ScriptableObject
         _LastDoNotUse,
     }
 
+    public enum BuildPlatformType
+    {
+        Facebook =1,
+        Kongergate=2,
+        Android=3,
+        IOS=4,
+        CloudGoodsStandAlone=5,
+        Other=6
+    }
+
     static public string VERSION = "1.0";
 
     static public string mainPath = "Assets/CloudGoods/";
@@ -32,7 +42,7 @@ public class CloudGoodsSettings : ScriptableObject
     public Texture2D defaultTexture;
     public GameObject defaultItemDrop;
     public GameObject defaultUIItem;
-    //public List<DropPrefab> dropPrefabs = new List<DropPrefab>();
+    public BuildPlatformType buildPlatform = BuildPlatformType.CloudGoodsStandAlone;
 
     static CloudGoodsSettings mInst;
 
@@ -44,14 +54,6 @@ public class CloudGoodsSettings : ScriptableObject
             return mInst;
         }
     }
-
-    //static public List<DropPrefab> DropPrefabs
-    //{
-    //    get
-    //    {
-    //        return instance.dropPrefabs;
-    //    }
-    //}
 
     static public GameObject DefaultItemDrop
     {
@@ -114,6 +116,14 @@ public class CloudGoodsSettings : ScriptableObject
         get
         {
             return instance.androidKey;
+        }
+    }
+
+    static public BuildPlatformType BuildPlatform
+    {
+        get
+        {
+            return instance.buildPlatform;
         }
     }
 }
