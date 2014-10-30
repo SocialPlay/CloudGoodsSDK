@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using System;
 
-public class UnityUISPLogin : MonoBehaviour
+public class UnityUICloudGoodsLogin : MonoBehaviour
 {
 
     #region Login variables
@@ -15,9 +15,11 @@ public class UnityUISPLogin : MonoBehaviour
     public Toggle autoLoginToggle;
 
     public GameObject resendVerificationTextObject;
+  
 
     private InputFieldValidation loginUserEmailValidator;
     private InputFieldValidation loginUserPasswordValidator;
+
 
     #endregion
 
@@ -37,11 +39,13 @@ public class UnityUISPLogin : MonoBehaviour
     #region Confirmations Variables
     public GameObject confirmationTab;
     public Text confirmationStatus;
-
     #endregion
+
+    public bool IsKeptActiveOnAllPlatforms;
 
     void OnEnable()
     {
+        if (!IsNeeded()) return;
         CloudGoods.OnUserLogin += RecivedLoginResponce;
         CloudGoods.OnUserInfo += RecivedUserGuid;
         CloudGoods.OnUserRegister += RegisterMessageResponce;
@@ -52,6 +56,7 @@ public class UnityUISPLogin : MonoBehaviour
 
     void OnDisable()
     {
+        if (!IsNeeded()) return;
         CloudGoods.OnUserLogin -= RecivedLoginResponce;
         CloudGoods.OnUserInfo -= RecivedUserGuid;
         CloudGoods.OnUserRegister -= RegisterMessageResponce;
@@ -62,6 +67,16 @@ public class UnityUISPLogin : MonoBehaviour
 
     void Start()
     {
+
+        if (!IsNeeded())
+        {
+            Destroy(loginTab);
+            Destroy(registerTab);
+            Destroy(confirmationTab);
+            Destroy(this);
+            return;
+        }
+
         loginTab.SetActive(true);
         registerErrorLabel.text = "";
         registerTab.SetActive(false);
@@ -87,6 +102,7 @@ public class UnityUISPLogin : MonoBehaviour
 
             RecivedUserGuid(userInfo);
         }
+
     }
 
     #region webservice responce events
@@ -270,4 +286,18 @@ public class UnityUISPLogin : MonoBehaviour
     }
 
     #endregion
+
+
+    public bool IsNeeded()
+    {
+        if (IsKeptActiveOnAllPlatforms) return true;
+        if (CloudGoodsSettings.BuildPlatform == CloudGoodsSettings.BuildPlatformType.CloudGoodsStandAlone
+            || CloudGoodsSettings.BuildPlatform == CloudGoodsSettings.BuildPlatformType.IOS
+            || CloudGoodsSettings.BuildPlatform == CloudGoodsSettings.BuildPlatformType.Android
+            || CloudGoodsSettings.BuildPlatform == CloudGoodsSettings.BuildPlatformType.Other)
+        {
+            return true;
+        }
+        return false;
+    }
 }
