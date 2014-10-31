@@ -15,7 +15,7 @@ public interface IServiceObjectConverter
 
     List<StoreItem> ConvertToStoreItems(string dataString);
 
-    SocialPlayUser ConvertToUserInfo(string dataString);
+    CloudGoodsUser ConvertToUserInfo(string dataString);
 
     List<RecipeInfo> ConvertToListRecipeInfo(string dataString);
 

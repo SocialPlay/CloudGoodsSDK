@@ -15,7 +15,7 @@ public class CloudGoodsSetup : MonoBehaviour
         webplatformLink.Initiate();
     }
 
-    void OnReceivedSocialPlayUser(SocialPlayUser socialplayMsg)
+    void OnReceivedSocialPlayUser(CloudGoodsUser socialplayMsg)
     {
         if(CloudGoodsInitialized != null)
             CloudGoodsInitialized(true);

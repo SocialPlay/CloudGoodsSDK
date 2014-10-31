@@ -51,7 +51,7 @@ public class UnityUICloudGoodsLogin : MonoBehaviour
         CloudGoods.OnUserRegister += RegisterMessageResponce;
         CloudGoods.OnForgotPassword += ForgotPasswordResponce;
         CloudGoods.OnVerificationSent += ResentVerificationResponce;
-        SPLogout.SPUserLogout += OnLogout;
+        CloudGoodsLogout.SPUserLogout += OnLogout;
     }
 
     void OnDisable()
@@ -62,7 +62,7 @@ public class UnityUICloudGoodsLogin : MonoBehaviour
         CloudGoods.OnUserRegister -= RegisterMessageResponce;
         CloudGoods.OnForgotPassword -= ForgotPasswordResponce;
         CloudGoods.OnVerificationSent -= ResentVerificationResponce;
-        SPLogout.SPUserLogout -= OnLogout;
+        CloudGoodsLogout.SPUserLogout -= OnLogout;
     }
 
     void Start()
@@ -96,7 +96,7 @@ public class UnityUICloudGoodsLogin : MonoBehaviour
 
         if (!string.IsNullOrEmpty(PlayerPrefs.GetString("SocialPlay_UserGuid")))
         {
-            SocialPlayUser userInfo = new SocialPlayUser(PlayerPrefs.GetString("SocialPlay_UserGuid"), PlayerPrefs.GetString("SocialPlay_UserName"), PlayerPrefs.GetString("SocialPlay_UserEmail"));
+            CloudGoodsUser userInfo = new CloudGoodsUser(PlayerPrefs.GetString("SocialPlay_UserGuid"), PlayerPrefs.GetString("SocialPlay_UserName"), PlayerPrefs.GetString("SocialPlay_UserEmail"));
 
             CloudGoods.AuthorizeUser(userInfo);
 
@@ -107,7 +107,7 @@ public class UnityUICloudGoodsLogin : MonoBehaviour
 
     #region webservice responce events
 
-    void RecivedUserGuid(SocialPlayUser obj)
+    void RecivedUserGuid(CloudGoodsUser obj)
     {
         if (autoLoginToggle != null && autoLoginToggle.isOn == true)
         {

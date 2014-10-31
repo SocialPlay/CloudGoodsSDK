@@ -27,7 +27,7 @@ public class CloudGoodsFacebookLogin : MonoBehaviour {
 
     void OnLoggedIn()
     {
-        CloudGoods.LoginWithPlatformUser(SocialPlayPlatform.Facebook, FB.UserId, "new user");
+        CloudGoods.LoginWithPlatformUser(CloudGoodsPlatform.Facebook, FB.UserId, "new user");
     }       
 
     private void SetInit()

@@ -60,11 +60,11 @@ public class UnityUIBundlePurchasing : MonoBehaviour {
         }
     }
 
-    private void ChangePurchaseButtonDisplay(int itemCreditCost, int itemCoinCost, SocialPlayBundle state)
+    private void ChangePurchaseButtonDisplay(int itemCreditCost, int itemCoinCost, CloudGoodsBundle state)
     {
         switch (state)
         {
-            case SocialPlayBundle.CreditPurchasable:
+            case CloudGoodsBundle.CreditPurchasable:
                 PremiumCurrencyPurchaseButton.InsufficientFundsLabel.text = "Insufficent Funds";
                 PremiumCurrencyPurchaseButton.SetState(itemCreditCost);
                 StandardCurrencyPurchaseButton.InsufficientFundsLabel.text = "Credit Purchase Only";
@@ -73,7 +73,7 @@ public class UnityUIBundlePurchasing : MonoBehaviour {
                 PremiumCurrencyAmount.text = itemCreditCost.ToString();
                 StandardCurrencyAmount.text = "N/A";
                 break;
-            case SocialPlayBundle.CoinPurchasable:
+            case CloudGoodsBundle.CoinPurchasable:
                 StandardCurrencyPurchaseButton.InsufficientFundsLabel.text = "Insufficent Funds";
                 StandardCurrencyPurchaseButton.SetState(itemCoinCost);
                 PremiumCurrencyPurchaseButton.InsufficientFundsLabel.text = "Coin Purchase Only";
@@ -82,7 +82,7 @@ public class UnityUIBundlePurchasing : MonoBehaviour {
                 PremiumCurrencyAmount.text = "N/A";
                 StandardCurrencyAmount.text = itemCoinCost.ToString();
                 break;
-            case SocialPlayBundle.Free:
+            case CloudGoodsBundle.Free:
                 PremiumCurrencyAmount.text = "Free";
                 StandardCurrencyAmount.text = "Free";
                 StandardCurrencyPurchaseButton.SetState(0);

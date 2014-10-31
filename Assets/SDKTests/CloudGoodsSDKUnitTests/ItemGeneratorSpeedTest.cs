@@ -56,7 +56,7 @@ public class ItemGeneratorSpeedTest : MonoBehaviour
         CloudGoodsSettings.instance.url = "http://webservice.socialplay.com/cloudgoods/cloudgoodsservice.svc/";
     }
 
-    void SP_OnUserAuthorized(SocialPlayUser player)
+    void SP_OnUserAuthorized(CloudGoodsUser player)
     {
         isGenerating = false;
     }

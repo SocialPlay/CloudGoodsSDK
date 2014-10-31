@@ -15,7 +15,7 @@ public class GiveOwnerItemWebserviceRequest
     public string appID;
 }
 
-public class SocialPlayUser
+public class CloudGoodsUser
 {
     public string userGuid = "";
     public bool isNewUserToWorld = false;
@@ -24,7 +24,7 @@ public class SocialPlayUser
     public Guid sessionID;
     public Guid userID;
 
-    public SocialPlayUser(string newUserGuid, string newUserName, string newUserEmail)
+    public CloudGoodsUser(string newUserGuid, string newUserName, string newUserEmail)
     {
         userGuid = newUserGuid;
         userName = newUserName;
@@ -50,9 +50,9 @@ public class UserResponse
 {
     public int code;
     public string message;
-    public SocialPlayUser userInfo;
+    public CloudGoodsUser userInfo;
 
-    public UserResponse(int caseCode, string msg, SocialPlayUser newUserInfo)
+    public UserResponse(int caseCode, string msg, CloudGoodsUser newUserInfo)
     {
         code = caseCode;
         message = msg;
@@ -91,7 +91,7 @@ public class ItemBundle
     //State 2 = Credit purchase only
     //State 3 = Coin Purchase only
     //State 4 = Free
-    public SocialPlayBundle State;
+    public CloudGoodsBundle State;
 
     public string Name;
     public string Description;

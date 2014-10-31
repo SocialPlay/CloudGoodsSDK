@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public enum SocialPlayPlatform
+public enum CloudGoodsPlatform
 {
     Facebook = 1,
     SocialPlay = 2,
@@ -10,7 +10,7 @@ public enum SocialPlayPlatform
     Custom = 5
 }
 
-public enum SocialPlayBundle
+public enum CloudGoodsBundle
 {
     CreditCoinPurchaseable = 1,
     CreditPurchasable = 2,
@@ -18,7 +18,7 @@ public enum SocialPlayBundle
     Free = 4
 }
 
-public enum SocialPlayMessage
+public enum CloudGoodsMessage
 {
     OnSPLogin,
     OnSPLogout,

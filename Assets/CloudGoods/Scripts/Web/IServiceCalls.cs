@@ -12,7 +12,7 @@ public interface IServiceCalls
 
     void MoveItemStack(Guid StackToMove, int MoveAmount, string DestinationOwnerID, string DestinationOwnerType, int DestinationLocation, Action<Guid> callback);
 
-    void GetUserFromWorld(SocialPlayPlatform platform, string platformUserID, string userName, string userEmail, Action<SocialPlayUser> callback);
+    void GetUserFromWorld(CloudGoodsPlatform platform, string platformUserID, string userName, string userEmail, Action<CloudGoodsUser> callback);
 
     void GetStoreItems(Action<List<StoreItem>> callback);
 
@@ -30,7 +30,7 @@ public interface IServiceCalls
 
     void PurchaseItemBundles(int bundleID, string paymentType, int location, Action<string> callback);
 
-	void GetCreditBundles(SocialPlayPlatform platform, Action<List<PaidCurrencyBundleItem>> callback);
+	void GetCreditBundles(CloudGoodsPlatform platform, Action<List<PaidCurrencyBundleItem>> callback);
 
     void PurchaseCreditBundles(string payload, Action<string> callback);
 

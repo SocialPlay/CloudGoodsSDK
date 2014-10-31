@@ -29,7 +29,7 @@ public class WebPlatformLink
 
         try
         {
-			CloudGoods.LoginWithPlatformUser((SocialPlayPlatform)Enum.Parse(typeof(SocialPlayPlatform), jobject["platformID"].ToString()), jobject["userID"].ToString(), jobject["userName"].ToString());
+			CloudGoods.LoginWithPlatformUser((CloudGoodsPlatform)Enum.Parse(typeof(CloudGoodsPlatform), jobject["platformID"].ToString()), jobject["userID"].ToString(), jobject["userName"].ToString());
         }
         catch (Exception)
         {
