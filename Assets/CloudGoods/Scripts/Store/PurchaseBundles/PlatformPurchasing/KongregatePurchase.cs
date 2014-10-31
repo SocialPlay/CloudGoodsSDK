@@ -14,23 +14,34 @@ public class KongregatePurchase : MonoBehaviour, IPlatformPurchaser
     public event Action<string> RecievedPurchaseResponse;
     public event Action<string> OnPurchaseErrorEvent;
 
+    void Start()
+    {
+        Application.ExternalEval("function KongregateOnPurchaseResult(result) {" +
+            "GetUnity().SendMessage('PremiumCurrencyBundleStore', 'OnReceivedPurchaseResponse', result.success.toString());" +
+            "}"
+            );
+    }
+
     public void Purchase(PremiumBundle bundleItem, int amount, string appID)
     {
-        CallBackBrowserHook.CreateExternalCall(OnReceivedPurchaseResponse, "KongregatePurchaseBrowserHook", "KongregatePurchase", bundleItem.BundleID, amount, appID);
-
-        //Application.ExternalCall("KongregatePurchase", id, amount, "Credits");
-        //purchaserBrowserHook = CallBackBrowserHook.RegisterCallBack(OnRecievedPurchaseResponse, "KongregatePurchaseBrowserHook");
+        string data = "'{\"id\":\"" + bundleItem.BundleID + "\",\"amount\":\"" + amount + "\",\"type\":\"Premium\",\"appID\":\"" + CloudGoods.AppID + "\"}'";
+        Debug.Log(data);
+        string final = "kongregate.mtx.purchaseItemsRemote(" +
+           data +
+           ", KongregateOnPurchaseResult);";
+        Application.ExternalEval(final);
+        Debug.Log(final);
     }
 
     public void OnReceivedPurchaseResponse(string data)
     {
-        Console.WriteLine("OnRecievedPurchaseResponse " + data);
         Debug.Log("OnRecievedPurchaseResponse " + data);
 
         if (RecievedPurchaseResponse != null)
             RecievedPurchaseResponse(data);
-
-        //put any kongregate specific logic in here.
     }
+
+
+
 }
 

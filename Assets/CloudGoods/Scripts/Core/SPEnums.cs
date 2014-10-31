@@ -6,7 +6,7 @@ public enum SocialPlayPlatform
     Facebook = 1,
     SocialPlay = 2,
     Google = 3,
-    Twitter = 4,
+    Kongregate = 4,
     Custom = 5
 }
 
