@@ -18,7 +18,7 @@ public class KongregateLogin : MonoBehaviour
     public void OnKongregateAPILoaded(string userInfoString)
     {
         string[] parts = userInfoString.Split('|');
-        CloudGoods.LoginWithPlatformUser(SocialPlayPlatform.Kongregate, parts[0], parts[1]);
+        CloudGoods.LoginWithPlatformUser(CloudGoodsPlatform.Kongregate, parts[0], parts[1]);
     }
 
 }

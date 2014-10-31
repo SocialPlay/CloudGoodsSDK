@@ -19,8 +19,7 @@ public class UnityUITooltipHandler : MonoBehaviour
         {
             originalDelta = background.rectTransform.sizeDelta;
         }
-        TooltipHandler.ChangeTooltip += TooltipHandler_ChangeTooltip;
-      
+        TooltipHandler.ChangeTooltip += TooltipHandler_ChangeTooltip;      
     }
 
     void Start()
