@@ -10,6 +10,10 @@ public class BuildPlatformLoginSetup : MonoBehaviour
         {
             this.gameObject.AddComponent<CloudGoodsFacebookLogin>();
         }
+        if (CloudGoodsSettings.BuildPlatform == CloudGoodsSettings.BuildPlatformType.Kongergate)
+        {
+            this.gameObject.AddComponent<KongregateLogin>();
+        }
 
     }
 }

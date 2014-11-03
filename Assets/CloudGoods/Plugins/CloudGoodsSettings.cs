@@ -21,12 +21,13 @@ public class CloudGoodsSettings : ScriptableObject
 
     public enum BuildPlatformType
     {
-        Facebook =1,
-        Kongergate=2,
-        Android=3,
-        IOS=4,
-        CloudGoodsStandAlone=5,
-        Other=6
+        Automatic = 0,
+        Facebook = 1,
+        Kongergate = 2,
+        Android = 3,
+        IOS = 4,
+        CloudGoodsStandAlone = 6,
+        Other = 7
     }
 
     static public string VERSION = "1.0";
@@ -42,7 +43,7 @@ public class CloudGoodsSettings : ScriptableObject
     public Texture2D defaultTexture;
     public GameObject defaultItemDrop;
     public GameObject defaultUIItem;
-    public BuildPlatformType buildPlatform = BuildPlatformType.CloudGoodsStandAlone;
+    public BuildPlatformType buildPlatform = BuildPlatformType.Automatic;
 
     static CloudGoodsSettings mInst;
 
@@ -123,6 +124,23 @@ public class CloudGoodsSettings : ScriptableObject
     {
         get
         {
+            if (instance.buildPlatform == BuildPlatformType.Automatic)
+            {
+#if UNITY_WEBPLAYER
+                if (Application.absoluteURL.Contains("kongregate"))
+                    instance.buildPlatform = BuildPlatformType.Kongergate;
+                else if (Application.absoluteURL.Contains("facebook") || Application.absoluteURL.Contains("fbsbx"))
+                    instance.buildPlatform = BuildPlatformType.Facebook;
+                else
+                    instance.buildPlatform = BuildPlatformType.CloudGoodsStandAlone;
+
+#elif UNITY_IPHONE
+                instance.buildPlatform = BuildPlatformType.IOS;
+#elif UNITY_ANDROID
+                instance.buildPlatform = BuildPlatformType.Android;
+#endif
+            }
+
             return instance.buildPlatform;
         }
     }

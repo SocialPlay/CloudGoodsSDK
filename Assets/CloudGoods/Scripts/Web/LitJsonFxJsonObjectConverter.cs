@@ -357,9 +357,7 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter
     }
 
     public List<PaidCurrencyBundleItem> ConvertToListPaidCurrencyBundleItem(string dataString)
-    {
-        Debug.Log(dataString);
-
+    { 
         List<PaidCurrencyBundleItem> creditBundles = new List<PaidCurrencyBundleItem>();
 
         string parsedString = ParseString(dataString);
@@ -379,7 +377,6 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter
 
             for (int j = 0; j < creditBundleObj[i]["Data"].Count; j++)
             {
-                Debug.Log("Data info: " + creditBundleObj[i]["Data"][j]["Key"].ToString() + "  ,   " + creditBundleObj[i]["Data"][j]["Value"].ToString());
                 creditBundle.CreditPlatformIDs.Add(creditBundleObj[i]["Data"][j]["Key"].ToString(), creditBundleObj[i]["Data"][j]["Value"].ToString());
             }
 
@@ -399,8 +396,6 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter
     public UserResponse ConvertToSPLoginResponse(string dataString)
     {
         string parsedString = ParseString(dataString);
-
-        Debug.Log(parsedString);
 
         JsonData data = LitJson.JsonMapper.ToObject(parsedString);
 

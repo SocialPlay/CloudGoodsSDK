@@ -296,6 +296,7 @@ public class UnityUICloudGoodsLogin : MonoBehaviour
             || CloudGoodsSettings.BuildPlatform == CloudGoodsSettings.BuildPlatformType.Android
             || CloudGoodsSettings.BuildPlatform == CloudGoodsSettings.BuildPlatformType.Other)
         {
+           
             return true;
         }
         return false;

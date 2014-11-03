@@ -36,21 +36,12 @@ public class PremiumCurrencyBundleStore : MonoBehaviour
         CloudGoods.OnRegisteredUserToSession += OnRegisteredUserToSession;
     }
 
-
-
-
-#if UNITY_WEBPLAYER
     void Start()
     {
-        Application.ExternalEval("UnityObject2.instances[0].getUnity().SendMessage(\"" + name + "\", \"ReceiveURL\", document.URL);");
-    }
-
-    public void ReceiveURL(string url)
-    {
-        domain = CloudGoods.GetDomain(url);
+        this.gameObject.name = "PremiumCurrencyBundleStore";
         if (CloudGoods.isLogged && !isInitialized) Initialize();
     }
-#endif
+
 
     void OnRegisteredUserToSession(string obj)
     {
@@ -62,6 +53,9 @@ public class PremiumCurrencyBundleStore : MonoBehaviour
 
         switch (CloudGoodsSettings.BuildPlatform)
         {
+            case CloudGoodsSettings.BuildPlatformType.Automatic:
+                
+
             case CloudGoodsSettings.BuildPlatformType.Facebook:
 
                 platformPurchasor = gameObject.AddComponent<FaceBookPurchaser>();
@@ -98,6 +92,7 @@ public class PremiumCurrencyBundleStore : MonoBehaviour
 
     void OnPurchaseBundlesRecieved(List<PaidCurrencyBundleItem> data)
     {
+        Debug.Log("Got credit bundles");
         gridLoader = (IGridLoader)Grid.GetComponent(typeof(IGridLoader));
         gridLoader.ItemAdded += OnItemInGrid;
         gridLoader.LoadGrid(data);
@@ -122,10 +117,7 @@ public class PremiumCurrencyBundleStore : MonoBehaviour
         creditBundle.PremiumCurrencyName = "";
         creditBundle.Description = item.Description;
 
-        //// This is temporal until its added on the portal
-        //if (SocialPlaySettings.CreditBundlesDescription.Count != 0)
-        //    creditBundle.Description = (item.ID - 1) <= SocialPlaySettings.CreditBundlesDescription.Count ? SocialPlaySettings.CreditBundlesDescription[item.ID - 1] : "";
-
+  
         if (!string.IsNullOrEmpty(item.CurrencyIcon))
         {
             CloudGoods.GetItemTexture(item.CurrencyIcon, delegate(ImageStatus imageStatus, Texture2D texture)
