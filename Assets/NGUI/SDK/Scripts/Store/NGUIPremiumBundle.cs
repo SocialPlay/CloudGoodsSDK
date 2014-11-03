@@ -49,6 +49,8 @@ public class NGUIPremiumBundle : PremiumBundle
 
     void OnPurchase()
     {
+        Debug.Log("On Purchase click");
+
         if (OnPurchaseRequest != null) OnPurchaseRequest(this);
     }
 

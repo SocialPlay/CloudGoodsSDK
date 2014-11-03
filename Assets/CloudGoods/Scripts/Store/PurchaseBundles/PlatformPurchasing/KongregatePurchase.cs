@@ -16,6 +16,8 @@ public class KongregatePurchase : MonoBehaviour, IPlatformPurchaser
 
     public void Purchase(PremiumBundle bundleItem, int amount, string appID)
     {
+        Debug.Log("Kongregate purchase attempt");
+
         CallBackBrowserHook.CreateExternalCall(OnReceivedPurchaseResponse, "KongregatePurchaseBrowserHook", "KongregatePurchase", bundleItem.BundleID, amount, appID);
 
         //Application.ExternalCall("KongregatePurchase", id, amount, "Credits");

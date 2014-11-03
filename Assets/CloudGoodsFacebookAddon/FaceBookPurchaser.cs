@@ -12,8 +12,9 @@ public class FaceBookPurchaser : MonoBehaviour, IPlatformPurchaser
 
     public void Purchase(PremiumBundle bundleItem, int amount, string userID)
     {
+
         currentBundleID = int.Parse(bundleItem.BundleID);
-        //Console.WriteLine("Credit bundle purchase:  ID: " + id + " Amount: " + amount);
+        Console.WriteLine("Credit bundle purchase:  ID: " + bundleItem.BundleID + " Amount: " + amount);
         Debug.Log("ID: " + bundleItem.BundleID + "\nAmount: " + amount + "\nUserID: " + userID);
 
         FB.Canvas.Pay(product: "https://socialplay-staging.azurewebsites.net/CreditBundleDataFacebook?BundleID=" + bundleItem.BundleID,

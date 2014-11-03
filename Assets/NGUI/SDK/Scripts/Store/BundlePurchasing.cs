@@ -64,11 +64,11 @@ public class BundlePurchasing : MonoBehaviour
         BundleDisplayGrid.repositionNow = true;
     }
 
-    private void ChangePurchaseButtonDisplay(int itemCreditCost, int itemCoinCost, SocialPlayBundle state)
+    private void ChangePurchaseButtonDisplay(int itemCreditCost, int itemCoinCost, CloudGoodsBundle state)
     {
         switch (state)
         {
-            case SocialPlayBundle.CreditPurchasable:
+            case CloudGoodsBundle.CreditPurchasable:
                 PremiumCurrencyPurchaseButton.InsufficientFundsLabel.text = "Insufficent Funds";
                 PremiumCurrencyPurchaseButton.SetState(itemCreditCost);
                 StandardCurrencyPurchaseButton.InsufficientFundsLabel.text = "Credit Purchase Only";
@@ -77,7 +77,7 @@ public class BundlePurchasing : MonoBehaviour
                 CreditAmount.text = itemCreditCost.ToString();
                 CoinAmount.text = "N/A";
                 break;
-            case SocialPlayBundle.CoinPurchasable:
+            case CloudGoodsBundle.CoinPurchasable:
                 StandardCurrencyPurchaseButton.InsufficientFundsLabel.text = "Insufficent Funds";
 				StandardCurrencyPurchaseButton.SetState(itemCoinCost);
                 PremiumCurrencyPurchaseButton.InsufficientFundsLabel.text = "Coin Purchase Only";
@@ -86,7 +86,7 @@ public class BundlePurchasing : MonoBehaviour
                 CreditAmount.text = "N/A";
                 CoinAmount.text = itemCoinCost.ToString();
                 break;
-            case SocialPlayBundle.Free:
+            case CloudGoodsBundle.Free:
                 CreditAmount.text = "Free";
                 CoinAmount.text = "Free";
                 StandardCurrencyPurchaseButton.SetState(0);
