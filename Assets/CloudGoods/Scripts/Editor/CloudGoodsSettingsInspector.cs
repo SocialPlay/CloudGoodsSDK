@@ -140,7 +140,7 @@ public class CloudGoodsSettingsInspector : Editor
     void DrawSettingsGUI()
     {
         serializedObject.Update();
-        // GUILayout.Label("Settings", "BoldLabel");
+        GUILayout.Label("Application", "BoldLabel");
         EditorGUILayout.PropertyField(serializedObject.FindProperty("appID"), new GUIContent("App ID"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("appSecret"), new GUIContent("App Secret"));
 
@@ -148,20 +148,28 @@ public class CloudGoodsSettingsInspector : Editor
         {
             EditorGUILayout.HelpBox("Go To http://developer.socialplay.com to get your AppID and AppSecret", MessageType.Warning);
         }
+
+        EditorGUILayout.Separator();
+        GUILayout.Label("Platform", "BoldLabel");
+
+        CloudGoodsSettings.BuildPlatformType type = (CloudGoodsSettings.BuildPlatformType)serializedObject.FindProperty("buildPlatform").enumValueIndex;
+        serializedObject.FindProperty("buildPlatform").enumValueIndex = (int)(CloudGoodsSettings.BuildPlatformType)EditorGUILayout.EnumPopup("Platform build Type", type);
+        serializedObject.ApplyModifiedProperties();
+
+        EditorGUILayout.Separator();
+        GUILayout.Label("Item Container", "BoldLabel");
+
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("defaultUIItem"), new GUIContent("Default UI Item", "Default UI Item"));
+        serializedObject.FindProperty("defaultTexture").objectReferenceValue = EditorGUILayout.ObjectField("Default Texture", serializedObject.FindProperty("defaultTexture").objectReferenceValue, typeof(Texture2D), false) as Texture2D;
+
+        EditorGUILayout.Separator();
+        GUILayout.Label("Item Prefab Initializer", "BoldLabel");
+
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("defaultItemDrop"), new GUIContent("Default Drop Prefab", "The Item that will be droped if no asset is found for the item spawning into the world"));
+
         EditorGUILayout.Separator();
         GUILayout.Label("Android", "BoldLabel");
         EditorGUILayout.PropertyField(serializedObject.FindProperty("androidKey"), new GUIContent("Key"));
-
-        EditorGUILayout.Separator();
-        GUILayout.Label("Defaults", "BoldLabel");
-        serializedObject.FindProperty("defaultTexture").objectReferenceValue = EditorGUILayout.ObjectField("Default Texture", serializedObject.FindProperty("defaultTexture").objectReferenceValue, typeof(Texture2D), false) as Texture2D;
-
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("defaultUIItem"), new GUIContent("Default UI Item", "Default UI Item"));
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("defaultItemDrop"), new GUIContent("Default Drop Prefab", "The Item that will be droped if no asset is found for the item spawning into the world"));
-        
-        CloudGoodsSettings.BuildPlatformType type = (CloudGoodsSettings.BuildPlatformType)serializedObject.FindProperty("buildPlatform").enumValueIndex;
-        serializedObject.FindProperty("buildPlatform").enumValueIndex = (int)(CloudGoodsSettings.BuildPlatformType)EditorGUILayout.EnumPopup("Platform build Type", type); 
-        serializedObject.ApplyModifiedProperties();
     }
 
     #endregion

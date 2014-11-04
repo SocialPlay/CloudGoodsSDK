@@ -223,7 +223,6 @@ public class UnityUICloudGoodsLogin : MonoBehaviour
 
     public void Register()
     {
-
         string ErrorMsg = "";
         if (!registerUserEmailValidator.IsValidCheck())
         {

@@ -45,6 +45,8 @@ public class CloudGoodsSettings : ScriptableObject
     public GameObject defaultUIItem;
     public BuildPlatformType buildPlatform = BuildPlatformType.Automatic;
 
+    public List<ItemPrefabInitilizer.DropPrefab> itemInitializerPrefabs = new List<ItemPrefabInitilizer.DropPrefab>();
+
     static CloudGoodsSettings mInst;
 
     static public CloudGoodsSettings instance
