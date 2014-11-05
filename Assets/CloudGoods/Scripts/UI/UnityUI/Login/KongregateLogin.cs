@@ -6,7 +6,6 @@ public class KongregateLogin : MonoBehaviour
 
     void Start()
     {
-        Debug.Log("Logging into Kongragate");
         this.gameObject.name = "KongragateLogin";
         Application.ExternalEval(
             "if(typeof(kongregateUnitySupport) != 'undefined'){" +
@@ -17,6 +16,10 @@ public class KongregateLogin : MonoBehaviour
 
     public void OnKongregateAPILoaded(string userInfoString)
     {
+        if (BuildPlatform.Platform == BuildPlatform.BuildPlatformType.Automatic)
+        {
+            BuildPlatform.Platform = BuildPlatform.BuildPlatformType.Kongergate;
+        }
         string[] parts = userInfoString.Split('|');
         CloudGoods.LoginWithPlatformUser(CloudGoodsPlatform.Kongregate, parts[0], parts[1]);
     }

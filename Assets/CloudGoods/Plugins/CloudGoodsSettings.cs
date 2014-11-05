@@ -5,18 +5,13 @@ using System;
 
 [System.Serializable]
 public class CloudGoodsSettings : ScriptableObject
-{
-
-   
-
+{ 
     public enum ScreenType
     {
         Settings,
         About,
         _LastDoNotUse,
     }
-
-
 
     static public string VERSION = "1.0";
 

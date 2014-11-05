@@ -289,12 +289,12 @@ public class UnityUICloudGoodsLogin : MonoBehaviour
     {
         if (IsKeptActiveOnAllPlatforms) return;
 
-        if (BuildPlatform.GetPlatform() == BuildPlatform.BuildPlatformType.Automatic)
+        if (BuildPlatform.Platform == BuildPlatform.BuildPlatformType.Automatic)
         {
             BuildPlatform.OnBuildPlatformFound += platform => { RemoveIfNeeded(); };
         }
 
-        if (BuildPlatform.GetPlatform() == BuildPlatform.BuildPlatformType.Facebook || BuildPlatform.GetPlatform() == BuildPlatform.BuildPlatformType.Kongergate)
+        if (BuildPlatform.Platform == BuildPlatform.BuildPlatformType.Facebook || BuildPlatform.Platform == BuildPlatform.BuildPlatformType.Kongergate)
         {
             Destroy(loginTab);
             Destroy(registerTab);

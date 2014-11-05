@@ -50,11 +50,11 @@ public class PremiumCurrencyBundleStore : MonoBehaviour
 
     public void Initialize()
     {
-        switch (BuildPlatform.GetPlatform())
+        switch (BuildPlatform.Platform)
         {
             case BuildPlatform.BuildPlatformType.Automatic:
                 BuildPlatform.OnBuildPlatformFound += (platform) => { Initialize(); };
-                return;           
+                return;
             case BuildPlatform.BuildPlatformType.Facebook:
                 platformPurchasor = gameObject.AddComponent<FaceBookPurchaser>();
                 break;
@@ -62,7 +62,6 @@ public class PremiumCurrencyBundleStore : MonoBehaviour
                 platformPurchasor = gameObject.AddComponent<KongregatePurchase>();
                 break;
             case BuildPlatform.BuildPlatformType.Android:
-
                 platformPurchasor = gameObject.AddComponent<AndroidPremiumCurrencyPurchaser>();
                 break;
             case BuildPlatform.BuildPlatformType.IOS:
@@ -75,9 +74,15 @@ public class PremiumCurrencyBundleStore : MonoBehaviour
                 break;
 
         }
+
+        if (platformPurchasor == null)
+        {            
+            return;
+        }
+
         platformPurchasor.RecievedPurchaseResponse += OnRecievedPurchaseResponse;
         platformPurchasor.OnPurchaseErrorEvent += platformPurchasor_OnPurchaseErrorEvent;
-        CloudGoods.GetCreditBundles((int)BuildPlatform.GetPlatform(), OnPurchaseBundlesRecieved);
+        CloudGoods.GetCreditBundles((int)BuildPlatform.Platform, OnPurchaseBundlesRecieved);
 
         isInitialized = true;
     }
@@ -114,7 +119,7 @@ public class PremiumCurrencyBundleStore : MonoBehaviour
         creditBundle.PremiumCurrencyName = "";
         creditBundle.Description = item.Description;
 
-  
+
         if (!string.IsNullOrEmpty(item.CurrencyIcon))
         {
             CloudGoods.GetItemTexture(item.CurrencyIcon, delegate(ImageStatus imageStatus, Texture2D texture)

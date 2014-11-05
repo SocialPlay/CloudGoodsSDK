@@ -11,12 +11,11 @@ public class CloudGoodsFacebookLogin : MonoBehaviour {
     }
 
     public void PromptFacebookUserLogin()
-    {
+    {  
         if (FB.IsLoggedIn)
         {
             Debug.Log("Already logged in");
         }
-
         FB.Login("email,publish_actions", FBLoginCallback); 
     }
 
@@ -27,6 +26,10 @@ public class CloudGoodsFacebookLogin : MonoBehaviour {
 
     void OnLoggedIn()
     {
+        if (BuildPlatform.Platform == BuildPlatform.BuildPlatformType.Automatic)
+        {
+            BuildPlatform.Platform = BuildPlatform.BuildPlatformType.Facebook;
+        }
         CloudGoods.LoginWithPlatformUser(CloudGoodsPlatform.Facebook, FB.UserId, "new user");
     }       
 
@@ -36,6 +39,10 @@ public class CloudGoodsFacebookLogin : MonoBehaviour {
         if (FB.IsLoggedIn)
         {
             OnLoggedIn();
+        }
+        else
+        {
+            PromptFacebookUserLogin();
         }
     }
 

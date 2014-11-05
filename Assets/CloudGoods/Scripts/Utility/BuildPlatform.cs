@@ -31,61 +31,36 @@ public class BuildPlatform : MonoBehaviour
         instance = this;
     }
 
-    public static BuildPlatformType GetPlatform()
+    public static BuildPlatformType Platform
     {
-        if (instance == null)
+        get
         {
-            return BuildPlatformType.Unknown;
-        }
-        if (instance.SelectedType == BuildPlatformType.Automatic)
-        {
-#if UNITY_WEBPLAYER
-            if (!MadeRequestForDomain)
+            if (instance == null)
             {
-                MadeRequestForDomain = true;
-                selected = BuildPlatformType.Automatic;
-                DomainCheck dc = instance.gameObject.AddComponent<DomainCheck>() as DomainCheck;
-                Debug.Log(dc.name);
-
-                dc.onRecivedDomain += (url) =>
-                {
-                    Debug.Log("Recived Domain URL");
-                    domainURL = url;
-                    Debug.Log(domainURL);
-                    if (domainURL.Contains("kongregate"))
-                    {
-                        Debug.Log("Setting Platform to Kongregate");
-                        selected = BuildPlatformType.Kongergate;
-                    }
-                    else if (domainURL.Contains("facebook") || domainURL.Contains("fbsbx"))
-                    {
-                        Debug.Log("Setting platform to Facebook");
-                        selected = BuildPlatformType.Facebook;
-                    }
-                    else
-                    {
-                        Debug.Log("Setting platform to Unknown");
-                        selected = BuildPlatformType.Unknown;
-                    }
-
-                    if (OnBuildPlatformFound != null)
-                    {
-                        OnBuildPlatformFound(selected);
-                    }
-                };
+                return BuildPlatformType.Unknown;
             }
-
-#elif UNITY_IPHONE
+            if (instance.SelectedType == BuildPlatformType.Automatic)
+            {
+#if UNITY_IPHONE
                 selected = BuildPlatformType.IOS;
 #elif UNITY_ANDROID
                 selected = BuildPlatformType.Android;
 #endif
+            }
+            else
+            {
+                selected = instance.SelectedType;
+            }
+            return selected;
         }
-        else
+        set
         {
-            selected = instance.SelectedType;
+            selected = value;
+            if (OnBuildPlatformFound != null)
+            {
+                OnBuildPlatformFound(selected);
+            }
         }
-        return selected;
     }
 }
 
