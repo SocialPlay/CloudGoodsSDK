@@ -64,7 +64,6 @@ public class ItemContainerDisplay : MonoBehaviour
 
     void myContainer_ModifiedItem(ItemData itemData, bool isSaving)
     {
-       // Debug.Log("Moddified item value " + itemData.stackSize);
         foreach (ItemDataDisplay display in currentDisplayObjects)
         {
             if(display.itemObject.itemData.IsSameItemAs(itemData)){
@@ -78,10 +77,6 @@ public class ItemContainerDisplay : MonoBehaviour
 
     void myContainer_RemovedItem(ItemData itemData, int amount, bool arg3)
     {
-        Debug.Log("item stakc size: " + itemData.stackSize);
-        Debug.Log("amount: " + amount);
-        Debug.Log("total after move amount: " + (itemData.stackSize - amount));
-
         ItemDataDisplay selected = FindDisplayMatch(itemData);
         if (selected != null)
         {

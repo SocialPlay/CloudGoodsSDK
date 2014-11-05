@@ -49,7 +49,7 @@ public class iOSPremiumCurrencyPurchaser : MonoBehaviour, IPlatformPurchaser
     {
 
 		RecievedPurchaseResponse("Success");
-        CloudGoods.GetPaidCurrencyBalance(null);
+        CloudGoods.GetPremiumCurrencyBalance(null);
     }
 	
 }

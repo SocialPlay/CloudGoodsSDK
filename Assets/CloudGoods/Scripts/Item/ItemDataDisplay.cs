@@ -35,6 +35,8 @@ public class ItemDataDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
     void Update()
     {
+        if (amountText != null) amountText.text = itemObject.itemData.stackSize.ToString();
+
         if (first_click)
         {
             running_timer += Time.deltaTime;
@@ -64,8 +66,6 @@ public class ItemDataDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExit
         {
             holdingContainer.PerformRightClick(itemObject);
         }
-
-        if (amountText != null) amountText.text = itemObject.itemData.stackSize.ToString();
     }
 
 
@@ -88,9 +88,5 @@ public class ItemDataDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExit
             itemImage.texture = texture;
         }
     }
-
-
-
-
 
 }

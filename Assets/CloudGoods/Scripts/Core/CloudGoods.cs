@@ -326,8 +326,8 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
 
         //GetOwnerItems(user.userID.ToString(), "User", 0, OnItemsLoaded);
         //GetStoreItems(OnStoreListLoaded);
-        GetFreeCurrencyBalance(0, null);
-        GetPaidCurrencyBalance(null);
+        GetStandardCurrencyBalance(0, null);
+        GetPremiumCurrencyBalance(null);
         GetWorldCurrencyInfo(null);
 
         if (OnUserAuthorized != null)
@@ -583,7 +583,7 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
 
         WWW www = new WWW(url);
 
-        Get().StartCoroutine(Get().ServiceGetString(www, (string message) => { GetOwnerItems(user.userID.ToString(), "User", 0, OnItemsLoaded); GetFreeCurrencyBalance(0, null); if (callback != null) callback(message); }));
+        Get().StartCoroutine(Get().ServiceGetString(www, (string message) => { GetOwnerItems(user.userID.ToString(), "User", 0, OnItemsLoaded); GetStandardCurrencyBalance(0, null); if (callback != null) callback(message); }));
     }
 
     /// <summary>
@@ -610,7 +610,7 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
         string url = string.Format("{0}DeductStackAmount?stackID={1}&amount={2}", Url, StackRemove, amount);
         WWW www = new WWW(url);
 
-        Get().StartCoroutine(Get().ServiceGetString(www, (string message) => { GetOwnerItems(user.userID.ToString(), "User", 0, OnItemsLoaded); GetFreeCurrencyBalance(0, null); if (callback != null) callback(message); }));
+        Get().StartCoroutine(Get().ServiceGetString(www, (string message) => { GetOwnerItems(user.userID.ToString(), "User", 0, OnItemsLoaded); GetStandardCurrencyBalance(0, null); if (callback != null) callback(message); }));
     }
 
     static public void RemoveItemStacks(List<Guid> StacksToRemove, Action<string> callback)
@@ -621,7 +621,7 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
         string url = string.Format("{0}RemoveStackItems?stacks={1}", Url, stacksInfo);
         WWW www = new WWW(url);
 
-        Get().StartCoroutine(Get().ServiceGetString(www, (string message) => { GetOwnerItems(user.userID.ToString(), "User", 0, OnItemsLoaded); GetFreeCurrencyBalance(0, null); if (callback != null) callback(message); }));
+        Get().StartCoroutine(Get().ServiceGetString(www, (string message) => { GetOwnerItems(user.userID.ToString(), "User", 0, OnItemsLoaded); GetStandardCurrencyBalance(0, null); if (callback != null) callback(message); }));
     }
 
     static public void GiveOwnerItems(string ownerID, WebModels.OwnerTypes OwnerType, List<WebModels.ItemsInfo> listOfItems, Action<string> callback)
@@ -843,7 +843,7 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
         }));
     }
 
-    static public void GetFreeCurrencyBalance(int accessLocation, Action<int> callback)
+    static public void GetStandardCurrencyBalance(int accessLocation, Action<int> callback)
     {
         string url = Url + "GetFreeCurrencyBalance?userID=" + user.userID.ToString() + "&accessLocation=" + accessLocation + "&appID=" + AppID;
 
@@ -856,7 +856,7 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
         }));
     }
 
-    static public void GetPaidCurrencyBalance(Action<int> callback)
+    static public void GetPremiumCurrencyBalance(Action<int> callback)
     {
         string url = Url + "GetPaidCurrencyBalance?userID=" + user.userID.ToString() + "&appID=" + AppID;
 
@@ -1034,8 +1034,8 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
 
         Get().StartCoroutine(Get().ServiceGetString(www, (string message) =>
         {
-            GetFreeCurrencyBalance(0, null);
-            GetPaidCurrencyBalance(null);
+            GetStandardCurrencyBalance(0, null);
+            GetPremiumCurrencyBalance(null);
             if (callback != null) callback(message);
         }));
     }
@@ -1060,8 +1060,8 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
             JsonData response = LitJson.JsonMapper.ToObject(message);
 
             GetOwnerItems(user.userID.ToString(), "User", 0, OnItemsLoaded);
-            GetFreeCurrencyBalance(0, null);
-            GetPaidCurrencyBalance(null);
+            GetStandardCurrencyBalance(0, null);
+            GetPremiumCurrencyBalance(null);
             if (callback != null) callback(message);
         }));
     }
@@ -1085,8 +1085,8 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
         {
             JsonData response = LitJson.JsonMapper.ToObject(message);
 
-            GetFreeCurrencyBalance(0, null);
-            GetPaidCurrencyBalance(null);
+            GetStandardCurrencyBalance(0, null);
+            GetPremiumCurrencyBalance(null);
             if (callback != null) callback(message);
         }));
     }
@@ -1262,7 +1262,7 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
             if (onErrorEvent != null) onErrorEvent("Error: " + www.error);
         }
 
-        GetFreeCurrencyBalance(0, null);
+        GetStandardCurrencyBalance(0, null);
     }
 
     IEnumerator ServiceGetRecipeInfos(WWW www, Action<List<RecipeInfo>> callback)
@@ -1318,7 +1318,7 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
             if (onErrorEvent != null) onErrorEvent("Error: " + www.error);
         }
 
-        GetFreeCurrencyBalance(0, null);
+        GetStandardCurrencyBalance(0, null);
     }
 
     IEnumerator ServiceSpLoginResponse(WWW www, Action<UserResponse> callback)

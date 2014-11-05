@@ -50,7 +50,7 @@ public class UnityUICloudGoodsLogin : MonoBehaviour
         CloudGoods.OnUserRegister += RegisterMessageResponce;
         CloudGoods.OnForgotPassword += ForgotPasswordResponce;
         CloudGoods.OnVerificationSent += ResentVerificationResponce;
-        CloudGoodsLogout.SPUserLogout += OnLogout;
+        CloudGoodsLogout.CloudGoodsUserLogout += OnLogout;
     }
 
     void OnDisable()
@@ -60,7 +60,7 @@ public class UnityUICloudGoodsLogin : MonoBehaviour
         CloudGoods.OnUserRegister -= RegisterMessageResponce;
         CloudGoods.OnForgotPassword -= ForgotPasswordResponce;
         CloudGoods.OnVerificationSent -= ResentVerificationResponce;
-        CloudGoodsLogout.SPUserLogout -= OnLogout;
+        CloudGoodsLogout.CloudGoodsUserLogout -= OnLogout;
     }
 
     void Start()
@@ -108,7 +108,8 @@ public class UnityUICloudGoodsLogin : MonoBehaviour
 
         resendVerificationTextObject.SetActive(false);
         loginErrorLabel.text = "User logged in";
-        this.gameObject.SetActive(false);
+
+        CloseAllTabsOnLogin();
     }
 
     void ResentVerificationResponce(UserResponse responce)
@@ -175,8 +176,14 @@ public class UnityUICloudGoodsLogin : MonoBehaviour
     public void SwitchToConfirmation()
     {
         confirmationStatus.text = "Waiting ...";
-        confirmationStatus.gameObject.SetActive(true);
         confirmationTab.SetActive(true);
+        loginTab.SetActive(false);
+        registerTab.SetActive(false);
+    }
+
+    void CloseAllTabsOnLogin()
+    {
+        confirmationTab.SetActive(false);
         loginTab.SetActive(false);
         registerTab.SetActive(false);
     }
@@ -206,7 +213,6 @@ public class UnityUICloudGoodsLogin : MonoBehaviour
 
     public void Register()
     {
-
         string ErrorMsg = "";
         if (!registerUserEmailValidator.IsValidCheck())
         {
@@ -272,7 +278,8 @@ public class UnityUICloudGoodsLogin : MonoBehaviour
 
     void OnLogout()
     {
-        loginTab.SetActive(true);
+        Debug.Log("User logged out");
+        SwitchToLogin();
     }
 
     #endregion

@@ -33,6 +33,8 @@ public class CloudGoodsSettings : ScriptableObject
     public GameObject defaultUIItem;
     private string domainURL = "";
 
+    public List<ItemPrefabInitilizer.DropPrefab> itemInitializerPrefabs = new List<ItemPrefabInitilizer.DropPrefab>();
+
     static CloudGoodsSettings mInst;
 
     static public CloudGoodsSettings instance
