@@ -49,38 +49,35 @@ public class PremiumCurrencyBundleStore : MonoBehaviour
     }
 
     public void Initialize()
-    {   
-
-        switch (CloudGoodsSettings.BuildPlatform)
+    {
+        switch (BuildPlatform.GetPlatform())
         {
-            case CloudGoodsSettings.BuildPlatformType.Automatic:
-                
-
-            case CloudGoodsSettings.BuildPlatformType.Facebook:
-
+            case BuildPlatform.BuildPlatformType.Automatic:
+                BuildPlatform.OnBuildPlatformFound += (platform) => { Initialize(); };
+                return;           
+            case BuildPlatform.BuildPlatformType.Facebook:
                 platformPurchasor = gameObject.AddComponent<FaceBookPurchaser>();
                 break;
-            case CloudGoodsSettings.BuildPlatformType.Kongergate:
-
+            case BuildPlatform.BuildPlatformType.Kongergate:
                 platformPurchasor = gameObject.AddComponent<KongregatePurchase>();
                 break;
-            case CloudGoodsSettings.BuildPlatformType.Android:
+            case BuildPlatform.BuildPlatformType.Android:
 
                 platformPurchasor = gameObject.AddComponent<AndroidPremiumCurrencyPurchaser>();
                 break;
-            case CloudGoodsSettings.BuildPlatformType.IOS:
+            case BuildPlatform.BuildPlatformType.IOS:
                 platformPurchasor = gameObject.AddComponent<iOSPremiumCurrencyPurchaser>();
                 GameObject o = new GameObject("iOSConnect");
                 o.AddComponent<iOSConnect>();
                 break;
-            case CloudGoodsSettings.BuildPlatformType.CloudGoodsStandAlone:
+            case BuildPlatform.BuildPlatformType.CloudGoodsStandAlone:
                 Debug.LogWarning("Cloud Goods Stand alone has not purchase method currently.");
                 break;
 
         }
         platformPurchasor.RecievedPurchaseResponse += OnRecievedPurchaseResponse;
         platformPurchasor.OnPurchaseErrorEvent += platformPurchasor_OnPurchaseErrorEvent;
-        CloudGoods.GetCreditBundles((int)CloudGoodsSettings.BuildPlatform, OnPurchaseBundlesRecieved);
+        CloudGoods.GetCreditBundles((int)BuildPlatform.GetPlatform(), OnPurchaseBundlesRecieved);
 
         isInitialized = true;
     }

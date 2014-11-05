@@ -15,7 +15,7 @@ public class UnityUICloudGoodsLogin : MonoBehaviour
     public Toggle autoLoginToggle;
 
     public GameObject resendVerificationTextObject;
-  
+
 
     private InputFieldValidation loginUserEmailValidator;
     private InputFieldValidation loginUserPasswordValidator;
@@ -45,7 +45,6 @@ public class UnityUICloudGoodsLogin : MonoBehaviour
 
     void OnEnable()
     {
-        if (!IsNeeded()) return;
         CloudGoods.OnUserLogin += RecivedLoginResponce;
         CloudGoods.OnUserInfo += RecivedUserGuid;
         CloudGoods.OnUserRegister += RegisterMessageResponce;
@@ -56,7 +55,6 @@ public class UnityUICloudGoodsLogin : MonoBehaviour
 
     void OnDisable()
     {
-        if (!IsNeeded()) return;
         CloudGoods.OnUserLogin -= RecivedLoginResponce;
         CloudGoods.OnUserInfo -= RecivedUserGuid;
         CloudGoods.OnUserRegister -= RegisterMessageResponce;
@@ -67,15 +65,7 @@ public class UnityUICloudGoodsLogin : MonoBehaviour
 
     void Start()
     {
-
-        if (!IsNeeded())
-        {
-            Destroy(loginTab);
-            Destroy(registerTab);
-            Destroy(confirmationTab);
-            Destroy(this);
-            return;
-        }
+        RemoveIfNeeded();
 
         loginTab.SetActive(true);
         registerErrorLabel.text = "";
@@ -288,17 +278,21 @@ public class UnityUICloudGoodsLogin : MonoBehaviour
     #endregion
 
 
-    public bool IsNeeded()
+    public void RemoveIfNeeded()
     {
-        if (IsKeptActiveOnAllPlatforms) return true;
-        if (CloudGoodsSettings.BuildPlatform == CloudGoodsSettings.BuildPlatformType.CloudGoodsStandAlone
-            || CloudGoodsSettings.BuildPlatform == CloudGoodsSettings.BuildPlatformType.IOS
-            || CloudGoodsSettings.BuildPlatform == CloudGoodsSettings.BuildPlatformType.Android
-            || CloudGoodsSettings.BuildPlatform == CloudGoodsSettings.BuildPlatformType.Other)
+        if (IsKeptActiveOnAllPlatforms) return;
+
+        if (BuildPlatform.GetPlatform() == BuildPlatform.BuildPlatformType.Automatic)
         {
-           
-            return true;
+            BuildPlatform.OnBuildPlatformFound += platform => { RemoveIfNeeded(); };
         }
-        return false;
+
+        if (BuildPlatform.GetPlatform() == BuildPlatform.BuildPlatformType.Facebook || BuildPlatform.GetPlatform() == BuildPlatform.BuildPlatformType.Kongergate)
+        {
+            Destroy(loginTab);
+            Destroy(registerTab);
+            Destroy(confirmationTab);
+            Destroy(this);            
+        }    
     }
 }

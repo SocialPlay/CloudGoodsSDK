@@ -16,12 +16,12 @@ public class FaceBookPurchaser : MonoBehaviour, IPlatformPurchaser
         //Console.WriteLine("Credit bundle purchase:  ID: " + id + " Amount: " + amount);
         Debug.Log("ID: " + bundleItem.BundleID + "\nAmount: " + amount + "\nUserID: " + userID);
 
-        FB.Canvas.Pay(product: "https://socialplay-staging.azurewebsites.net/CreditBundleDataFacebook?BundleID=" + bundleItem.BundleID,
+        FB.Canvas.Pay(product: "https://developer.socialplay.com/CreditBundleDataFacebook?BundleID=" + bundleItem.BundleID,
                       quantity: amount,
                       callback: delegate(FBResult response)
                       {
                           OnReceivedPurchaseResponse(response.Text);
-                          Console.WriteLine("Purchase Response: " + response.Text);
+                          Debug.Log("Purchase Response: " + response.Text);
                       }
         );
     }
@@ -30,9 +30,9 @@ public class FaceBookPurchaser : MonoBehaviour, IPlatformPurchaser
 
     public void OnReceivedPurchaseResponse(string data)
     {
-        Debug.Log("data: "+data);
+        Debug.Log("data: " + data);
         JsonMapper.ToObject(data);
-        
+
         //JsonData parsedData = JsonMapper.ToObject(data);
         Newtonsoft.Json.Linq.JToken parsedData = Newtonsoft.Json.Linq.JToken.Parse(data);
 
