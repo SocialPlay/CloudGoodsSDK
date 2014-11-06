@@ -164,14 +164,23 @@ public class CloudGoodsSettingsInspector : Editor
         }
         for (int i = 0; i < serializedObject.FindProperty("itemInitializerPrefabs").arraySize; i++)
         {
-            GUIContent label = new GUIContent((serializedObject.FindProperty("itemInitializerPrefabs").GetArrayElementAtIndex(i).FindPropertyRelative("prefab").objectReferenceValue!=null?serializedObject.FindProperty("itemInitializerPrefabs").GetArrayElementAtIndex(i).FindPropertyRelative("prefab").objectReferenceValue.name:"Empty"));
-            if (EditorGUILayout.PropertyField(serializedObject.FindProperty("itemInitializerPrefabs").GetArrayElementAtIndex(i),label))
+            GUILayout.BeginHorizontal();
+            GUIContent label = new GUIContent((serializedObject.FindProperty("itemInitializerPrefabs").GetArrayElementAtIndex(i).FindPropertyRelative("prefab").objectReferenceValue!=null?serializedObject.FindProperty("itemInitializerPrefabs").GetArrayElementAtIndex(i).FindPropertyRelative("prefab").objectReferenceValue.name:"No Prefab Selected"));
+            bool isShowOptions = EditorGUILayout.PropertyField(serializedObject.FindProperty("itemInitializerPrefabs").GetArrayElementAtIndex(i), label);
+            if (GUILayout.Button("-"))
             {
+                serializedObject.FindProperty("itemInitializerPrefabs").DeleteArrayElementAtIndex(i);
+                break;
+            }
+            GUILayout.EndHorizontal();
+            if (isShowOptions)
+            {
+               
                 EditorGUI.indentLevel++;
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("itemInitializerPrefabs").GetArrayElementAtIndex(i).FindPropertyRelative("prefab"));
                 EditorGUILayout.BeginHorizontal();
                 SerializedProperty filter = serializedObject.FindProperty("itemInitializerPrefabs").GetArrayElementAtIndex(i).FindPropertyRelative("itemFilters");
-                bool isShowing = EditorGUILayout.PropertyField(filter, GUILayout.MaxWidth(100));
+                bool isShowingFilters = EditorGUILayout.PropertyField(filter, GUILayout.MaxWidth(100));
                 GUILayout.Label("(" + filter.arraySize.ToString() + ")");
 
                 if (GUILayout.Button("+"))
@@ -181,15 +190,14 @@ public class CloudGoodsSettingsInspector : Editor
 
                 EditorGUILayout.EndHorizontal();
 
-                if (isShowing)
+                if (isShowingFilters)
                 {
                     for (int filterIndex = 0; filterIndex < filter.arraySize; filterIndex++)
                     {
                         EditorGUILayout.BeginHorizontal();
                         GUILayout.FlexibleSpace();
                         EditorGUILayout.BeginHorizontal(GUI.skin.button);
-                        EditorGUILayout.PropertyField(filter.GetArrayElementAtIndex(filterIndex));
-                     
+                        EditorGUILayout.PropertyField(filter.GetArrayElementAtIndex(filterIndex));                     
                         EditorGUILayout.EndHorizontal();
                         if (GUILayout.Button("Remove"))
                         {
@@ -198,9 +206,10 @@ public class CloudGoodsSettingsInspector : Editor
                         EditorGUILayout.EndVertical();
                     }
                 }
-
                 EditorGUI.indentLevel--;
+                EditorGUILayout.Separator();
             }
+          
         }
 
         EditorGUILayout.Separator();
