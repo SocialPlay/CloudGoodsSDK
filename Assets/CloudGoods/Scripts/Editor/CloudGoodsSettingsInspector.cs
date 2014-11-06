@@ -157,8 +157,51 @@ public class CloudGoodsSettingsInspector : Editor
 
         EditorGUILayout.Separator();
         GUILayout.Label("Item Prefab Initializer", "BoldLabel");
-
         EditorGUILayout.PropertyField(serializedObject.FindProperty("defaultItemDrop"), new GUIContent("Default Drop Prefab", "The Item that will be droped if no asset is found for the item spawning into the world"));
+        if (GUILayout.Button(new GUIContent("Add Extra Prefab")))
+        {
+            AddPrefab();
+        }
+        for (int i = 0; i < serializedObject.FindProperty("itemInitializerPrefabs").arraySize; i++)
+        {
+            GUIContent label = new GUIContent((serializedObject.FindProperty("itemInitializerPrefabs").GetArrayElementAtIndex(i).FindPropertyRelative("prefab").objectReferenceValue!=null?serializedObject.FindProperty("itemInitializerPrefabs").GetArrayElementAtIndex(i).FindPropertyRelative("prefab").objectReferenceValue.name:"Empty"));
+            if (EditorGUILayout.PropertyField(serializedObject.FindProperty("itemInitializerPrefabs").GetArrayElementAtIndex(i),label))
+            {
+                EditorGUI.indentLevel++;
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("itemInitializerPrefabs").GetArrayElementAtIndex(i).FindPropertyRelative("prefab"));
+                EditorGUILayout.BeginHorizontal();
+                SerializedProperty filter = serializedObject.FindProperty("itemInitializerPrefabs").GetArrayElementAtIndex(i).FindPropertyRelative("itemFilters");
+                bool isShowing = EditorGUILayout.PropertyField(filter, GUILayout.MaxWidth(100));
+                GUILayout.Label("(" + filter.arraySize.ToString() + ")");
+
+                if (GUILayout.Button("+"))
+                {
+                    AddFilter(filter);
+                }
+
+                EditorGUILayout.EndHorizontal();
+
+                if (isShowing)
+                {
+                    for (int filterIndex = 0; filterIndex < filter.arraySize; filterIndex++)
+                    {
+                        EditorGUILayout.BeginHorizontal();
+                        GUILayout.FlexibleSpace();
+                        EditorGUILayout.BeginHorizontal(GUI.skin.button);
+                        EditorGUILayout.PropertyField(filter.GetArrayElementAtIndex(filterIndex));
+                     
+                        EditorGUILayout.EndHorizontal();
+                        if (GUILayout.Button("Remove"))
+                        {
+                            filter.DeleteArrayElementAtIndex(filterIndex);
+                        }
+                        EditorGUILayout.EndVertical();
+                    }
+                }
+
+                EditorGUI.indentLevel--;
+            }
+        }
 
         EditorGUILayout.Separator();
         GUILayout.Label("Android", "BoldLabel");
@@ -168,6 +211,16 @@ public class CloudGoodsSettingsInspector : Editor
     }
 
     #endregion
+
+    void AddPrefab()
+    {
+        serializedObject.FindProperty("itemInitializerPrefabs").InsertArrayElementAtIndex(serializedObject.FindProperty("itemInitializerPrefabs").arraySize);
+    }
+
+    void AddFilter(SerializedProperty prop)
+    {
+        prop.InsertArrayElementAtIndex(prop.arraySize);
+    }
 
     void DrawAboutGUI()
     {

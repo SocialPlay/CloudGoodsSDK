@@ -44,10 +44,9 @@ public class ItemPrefabInitilizer : MonoBehaviour
         return false;
     }
 
-
     [System.Serializable]
     public class DropPrefab
-    {
+    {       
         public GameObject prefab;
         public List<ItemFilterSystem> itemFilters = new List<ItemFilterSystem>();
     }
