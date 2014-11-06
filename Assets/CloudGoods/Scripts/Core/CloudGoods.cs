@@ -24,6 +24,7 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
     static public event Action<string> OnRegisteredUserToSession;
     static public event Action<CloudGoodsUser> OnUserAuthorized;
     static public event Action<List<StoreItem>> OnStoreListLoaded;
+    static public event Action<List<ItemBundle>> OnStoreItemBundleListLoaded;
     static public event Action<List<ItemData>> OnItemsLoaded;
     static public event Action<int> OnStandardCurrency;
     static public event Action<int> OnPremiumCurrency;
@@ -1284,7 +1285,11 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
         if (www.error == null)
         {
             Debug.Log(www.text);
-            callback(serviceConverter.ConvertToListItemBundle(www.text));
+            List<ItemBundle> itemBundles = serviceConverter.ConvertToListItemBundle(www.text);
+            OnStoreItemBundleListLoaded(itemBundles);
+
+            if(callback != null)
+                callback(itemBundles);
         }
         else
         {

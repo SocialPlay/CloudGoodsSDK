@@ -3,8 +3,7 @@ using System.Collections;
 
 public class LoadStoreOnRegisterExample : MonoBehaviour {
 
-    public UnityUIDisplayItemBundles itemBundles;
-    public DisplayStoreItems storeitems;
+    public StoreInitializer storeitems;
 
 	// Use this for initialization
 	void Awake () {
@@ -13,8 +12,7 @@ public class LoadStoreOnRegisterExample : MonoBehaviour {
 
     void OnUserRegistered(string userGuid)
     {
-        itemBundles.GetItemBundles();
-        storeitems.DisplayItems();
+        storeitems.InitializeStore();
     }
 
 }

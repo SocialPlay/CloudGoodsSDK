@@ -3,7 +3,7 @@ using System.Collections;
 
 public class LoadStoreOnRegister : MonoBehaviour {
 
-    public DisplayStoreItems displayStoreItems;
+    public StoreInitializer displayStoreItems;
 
     void Start()
     {
@@ -12,6 +12,6 @@ public class LoadStoreOnRegister : MonoBehaviour {
 
     void UserRegistered(string userID)
     {
-        displayStoreItems.DisplayItems();
+        displayStoreItems.InitializeStore();
     }
 }

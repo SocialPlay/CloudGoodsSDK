@@ -5,6 +5,6 @@ public class ItemGenerationSetup : MonoBehaviour
 {
 
     public string Url;
-    public GameItemContainerInserter putter;
+    public GetItemsContainerInserter putter;
 
 }

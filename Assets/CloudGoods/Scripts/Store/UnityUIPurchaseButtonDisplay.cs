@@ -21,7 +21,6 @@ public class UnityUIPurchaseButtonDisplay : MonoBehaviour {
         ActiveButton.gameObject.SetActive(false);
         InsufficientFundsLabel.text = "Insufficent Funds";
         InsufficientFundsLabel.gameObject.SetActive(true);
-        CurrencyText.gameObject.SetActive(false);
     }
 
     public void SetActive()
@@ -33,7 +32,6 @@ public class UnityUIPurchaseButtonDisplay : MonoBehaviour {
         }
         ActiveButton.gameObject.SetActive(true);
         InsufficientFundsLabel.gameObject.SetActive(false);
-        CurrencyText.gameObject.SetActive(true);
     }
 
     public void SetNotApplicable()
