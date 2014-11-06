@@ -58,7 +58,7 @@ public class ItemGenerator : MonoBehaviour
     {
         ReattachToGameObject();
 
-        itemPutter.PutGameItem(generatedItems);
+        itemPutter.GetGameItem(generatedItems);
     }
 
     void ReattachToGameObject()

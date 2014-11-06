@@ -18,7 +18,7 @@ public class GetItemsDropper : MonoBehaviour, IGetItems
         if (gameItemDrop == null) gameItemDrop = gameObject.AddComponent<ItemDrop>();
     }
 
-    public void PutGameItem(List<ItemData> items)
+    public void GetGameItem(List<ItemData> items)
     {
         DropItems(items);
     }

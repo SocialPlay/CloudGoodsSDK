@@ -5,5 +5,5 @@ using System.Collections.Generic;
 
 public interface IGetItems {
 
-    void PutGameItem(List<ItemData> items);
+    void GetGameItem(List<ItemData> items);
 }

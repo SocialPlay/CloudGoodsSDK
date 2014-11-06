@@ -20,7 +20,7 @@ public class GetItemsContainerInserter : MonoBehaviour, IGetItems
         instance = this;
     }
 
-    public void PutGameItem(List<ItemData> items)
+    public void GetGameItem(List<ItemData> items)
     {
 
         if (container == null)

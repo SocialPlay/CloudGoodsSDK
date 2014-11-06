@@ -58,7 +58,7 @@ public class ItemDataComponent : MonoBehaviour
 
         if (onPickup != null) onPickup(itemData);
 
-        if (addToContainer) GetItemsContainerInserter.instance.PutGameItem(new List<ItemData>(new ItemData[1] { itemData }));
+        if (addToContainer) GetItemsContainerInserter.instance.GetGameItem(new List<ItemData>(new ItemData[1] { itemData }));
 
         if (destroyOnPickup) GameObject.Destroy(gameObject);
     }

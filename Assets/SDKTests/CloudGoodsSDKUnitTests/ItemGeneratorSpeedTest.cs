@@ -95,7 +95,7 @@ public class ItemGeneratorSpeedTest : MonoBehaviour
     public void OnReceivedGeneratedItems(List<ItemData> generatedItems, ItemGenerationSetup setup, TimeKeepers keeper)
     {
         keeper.CloseTimmer();     
-        setup.putter.PutGameItem(generatedItems);
+        setup.putter.GetGameItem(generatedItems);
         NextStep(setup);
     }
 
