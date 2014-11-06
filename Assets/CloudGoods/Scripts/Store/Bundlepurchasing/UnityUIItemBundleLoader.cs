@@ -9,6 +9,16 @@ public class UnityUIItemBundleLoader : MonoBehaviour {
 
     public GameObject gridObject;
 
+    void Awake()
+    {
+        CloudGoods.OnStoreItemBundleListLoaded += CloudGoods_OnStoreItemBundleListLoaded;
+    }
+
+    void CloudGoods_OnStoreItemBundleListLoaded(List<ItemBundle> obj)
+    {
+        LoadBundleItems(obj);
+    }
+
     public void LoadBundleItems(List<ItemBundle> itemBundles)
     {
         foreach (ItemBundle bundle in itemBundles)

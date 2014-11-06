@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class ItemPutterDropper : MonoBehaviour, IItemPutter
+public class GetItemsDropper : MonoBehaviour, IGetItems
 {
     static public GameObject dropParent { get { if (mDrop == null) mDrop = new GameObject("DroppedItems"); return mDrop; } }
     static GameObject mDrop;
@@ -18,7 +18,7 @@ public class ItemPutterDropper : MonoBehaviour, IItemPutter
         if (gameItemDrop == null) gameItemDrop = gameObject.AddComponent<ItemDrop>();
     }
 
-    public void PutGameItem(List<ItemData> items)
+    public void GetGameItem(List<ItemData> items)
     {
         DropItems(items);
     }

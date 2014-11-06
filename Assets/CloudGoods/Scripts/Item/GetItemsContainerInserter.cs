@@ -6,10 +6,10 @@ using System;
 using Newtonsoft.Json.Linq;
 using SocialPlay.Data;
 
-public class GameItemContainerInserter : MonoBehaviour, IItemPutter
+public class GetItemsContainerInserter : MonoBehaviour, IGetItems
 {
 
-    static public GameItemContainerInserter instance;
+    static public GetItemsContainerInserter instance;
 
     public ItemContainer container;
 
@@ -20,7 +20,7 @@ public class GameItemContainerInserter : MonoBehaviour, IItemPutter
         instance = this;
     }
 
-    public void PutGameItem(List<ItemData> items)
+    public void GetGameItem(List<ItemData> items)
     {
 
         if (container == null)

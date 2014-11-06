@@ -7,7 +7,7 @@ using Newtonsoft.Json.Linq;
 using SocialPlay.Data;
 using LitJson;
 
-public class ItemGetter : MonoBehaviour
+public class ItemGenerator : MonoBehaviour
 {
     public int minEnergy = 1;
     public int MaxEnergy = 100;
@@ -15,7 +15,7 @@ public class ItemGetter : MonoBehaviour
     public List<string> AndTags;
     public List<string> OrTags;
 
-    IItemPutter itemPutter;
+    IGetItems itemPutter;
 
     Transform previousParent;
 
@@ -24,18 +24,18 @@ public class ItemGetter : MonoBehaviour
         //we do this so that if the object which sends out the packet gets deleted ( e.g. a mining node disapears after it is mined ), yet we still need this script to exist to receive the packet.
         previousParent = transform.parent;
 
-        SetupItemPutter();
+        SetupGetItems();
     }
 
-    private void SetupItemPutter()
+    private void SetupGetItems()
     {
-        itemPutter = GetComponent(typeof(IItemPutter)) as IItemPutter;
+        itemPutter = GetComponent(typeof(IGetItems)) as IGetItems;
 
         if (itemPutter == null)
-            throw new MissingComponentException("This object requires a component which implements " + typeof(IItemPutter) + " attached.");
+            throw new MissingComponentException("This object requires a component which implements " + typeof(IGetItems) + " attached.");
     }
 
-    public void GetItems()
+    public void GenerateItems()
     {
         transform.parent = null;
 
@@ -58,7 +58,7 @@ public class ItemGetter : MonoBehaviour
     {
         ReattachToGameObject();
 
-        itemPutter.PutGameItem(generatedItems);
+        itemPutter.GetGameItem(generatedItems);
     }
 
     void ReattachToGameObject()

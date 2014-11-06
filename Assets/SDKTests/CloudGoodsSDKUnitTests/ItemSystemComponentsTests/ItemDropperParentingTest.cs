@@ -6,7 +6,7 @@ using System;
 
 public class ItemDropperParentingTest : MonoBehaviour {
 
-    public ItemGetter itemGetter;
+    public ItemGenerator itemGetter;
 
 	void Start () {
 

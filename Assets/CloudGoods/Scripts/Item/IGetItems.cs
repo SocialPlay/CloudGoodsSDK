@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 
-public interface IItemPutter {
+public interface IGetItems {
 
-    void PutGameItem(List<ItemData> items);
+    void GetGameItem(List<ItemData> items);
 }
