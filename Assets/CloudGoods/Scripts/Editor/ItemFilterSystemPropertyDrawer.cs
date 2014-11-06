@@ -24,7 +24,7 @@ public class ItemFilterSystemPropertyDrawer : PropertyDrawer
 
     public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
     {
-        return displaySize.height;
+        return displaySize.height;   
     }
 
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
@@ -35,12 +35,10 @@ public class ItemFilterSystemPropertyDrawer : PropertyDrawer
         tags = property.FindPropertyRelative("TagList");
         classID = property.FindPropertyRelative("classList");
         varianceID = property.FindPropertyRelative("varianceIDList");
-        itemID = property.FindPropertyRelative("itemIDList");
-        //components = property.FindPropertyRelative("itemComponents");
+        itemID = property.FindPropertyRelative("itemIDList"); 
 
-
-        Rect invertedRect = new Rect(position.x + 100, position.y, position.width - 80, 16);
-        Rect selectionRect = new Rect(position.x + 20, invertedRect.yMax, position.width - 80, 16);
+        Rect invertedRect = new Rect(position.x, position.y, position.width - 80, 16);
+        Rect selectionRect = new Rect(position.x, invertedRect.yMax, position.width, 16);
         Rect SecondBitRect = new Rect(position.x, selectionRect.yMax, position.width, position.height - 32);
         EditorGUIUtility.LookLikeControls();
         selected = (ItemComponentSetup.SetupByType)selectedType.enumValueIndex;
@@ -48,8 +46,6 @@ public class ItemFilterSystemPropertyDrawer : PropertyDrawer
         selectedType.enumValueIndex = (int)selected;
 
         isInverted.boolValue = GUI.Toggle(invertedRect, isInverted.boolValue, invertedInfo);
-
-
 
         var ExtraRows = 0;
         switch (selected)
@@ -78,7 +74,6 @@ public class ItemFilterSystemPropertyDrawer : PropertyDrawer
                 break;
         }
         displaySize.height = 16 * (ExtraRows + 3);
-        //EditorGUIUtility.LookLikeInspector();
     }
 
 
