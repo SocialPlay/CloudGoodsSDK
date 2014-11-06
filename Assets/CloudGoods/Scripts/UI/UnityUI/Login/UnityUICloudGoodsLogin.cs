@@ -65,7 +65,10 @@ public class UnityUICloudGoodsLogin : MonoBehaviour
 
     void Start()
     {
-        RemoveIfNeeded();
+        if (!RemoveIfNeeded())
+        {
+            return;
+        }
 
         loginTab.SetActive(true);
         registerErrorLabel.text = "";
@@ -285,13 +288,14 @@ public class UnityUICloudGoodsLogin : MonoBehaviour
     #endregion
 
 
-    public void RemoveIfNeeded()
+    public bool RemoveIfNeeded()
     {
-        if (IsKeptActiveOnAllPlatforms) return;
+        if (IsKeptActiveOnAllPlatforms) return true;
 
         if (BuildPlatform.Platform == BuildPlatform.BuildPlatformType.Automatic)
         {
             BuildPlatform.OnBuildPlatformFound += platform => { RemoveIfNeeded(); };
+            return false;
         }
 
         if (BuildPlatform.Platform == BuildPlatform.BuildPlatformType.Facebook || BuildPlatform.Platform == BuildPlatform.BuildPlatformType.Kongergate)
@@ -299,7 +303,9 @@ public class UnityUICloudGoodsLogin : MonoBehaviour
             Destroy(loginTab);
             Destroy(registerTab);
             Destroy(confirmationTab);
-            Destroy(this);            
-        }    
+            Destroy(this);
+            return false;
+        }  
+        return true;
     }
 }

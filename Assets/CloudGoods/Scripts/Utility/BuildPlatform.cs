@@ -9,8 +9,6 @@ public class BuildPlatform : MonoBehaviour
 
     public BuildPlatformType SelectedType;
 
-    private static bool MadeRequestForDomain = false;
-    private static string domainURL = string.Empty;
     private static BuildPlatformType selected;
 
     public enum BuildPlatformType
