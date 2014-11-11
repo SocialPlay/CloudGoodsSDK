@@ -12,8 +12,8 @@ public class ItemData
     public string itemName = "";
     internal Guid stackID = Guid.Empty;
     internal int classID = 0;
-    internal int itemID = 0;
-    internal int varianceID = 0;
+    internal int CollectionID = 0;
+    internal int ItemID = 0;
     internal int totalEnergy = 0;
     internal int baseEnergy = 0;
     internal int salePrice = 0;
@@ -38,7 +38,7 @@ public class ItemData
 
     public override string ToString()
     {
-        return "ItemData {itemName: " + itemName + " itemID: " + itemID + " totalEnergy:" + totalEnergy + " salePrice: " + salePrice + " quality: " + quality + " isOwned: " + isOwned + " imageName: " + imageName+"}";
+        return "ItemData {itemName: " + itemName + " itemID: " + CollectionID + " totalEnergy:" + totalEnergy + " salePrice: " + salePrice + " quality: " + quality + " isOwned: " + isOwned + " imageName: " + imageName+"}";
     }
 
     public void AssetBundle(Action<UnityEngine.Object> callBack)
@@ -61,7 +61,7 @@ public class ItemData
         newItem.ownerContainer = ownerContainer;
         newItem.itemName = itemName;
         newItem.classID = classID;
-        newItem.itemID = itemID;
+        newItem.CollectionID = CollectionID;
         newItem.stackID = stackID;
         newItem.totalEnergy = totalEnergy;
         newItem.baseEnergy = baseEnergy;
@@ -71,7 +71,7 @@ public class ItemData
         newItem.quality = quality;
         newItem.imageName = imageName;
         newItem.isOwned = isOwned;
-        newItem.varianceID = varianceID;
+        newItem.ItemID = ItemID;
         newItem.stats = stats;
         newItem.assetURL = assetURL;
         newItem.tags = tags;
@@ -108,7 +108,7 @@ public class ItemData
         {
             return false;
         }
-        if (varianceID == other.varianceID && isOwned == other.isOwned)
+        if (ItemID == other.ItemID && isOwned == other.isOwned)
             return true;
         else return false;
     }
@@ -119,7 +119,7 @@ public class ItemData
         {
             return false;
         }
-        if (varianceID == other.varianceID && isOwned == other.isOwned)
+        if (ItemID == other.ItemID && isOwned == other.isOwned)
             return true;
         else return false;
     }
@@ -140,7 +140,7 @@ public class ItemData
         ownerContainer = itemData.ownerContainer;
         itemName = itemData.itemName;
         classID = itemData.classID;
-        itemID = itemData.itemID;
+        CollectionID = itemData.CollectionID;
         stackID = itemData.stackID;
         totalEnergy = itemData.totalEnergy;
         baseEnergy = itemData.baseEnergy;
@@ -150,7 +150,7 @@ public class ItemData
         quality = itemData.quality;
         imageName = itemData.imageName;
         isOwned = itemData.isOwned;
-        varianceID = itemData.varianceID;
+        ItemID = itemData.ItemID;
         stats = itemData.stats;
         assetURL = itemData.assetURL;
         tags = itemData.tags;

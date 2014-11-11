@@ -30,13 +30,10 @@ public class GetItemsDropper : MonoBehaviour, IGetItems
             ItemData data = dropItem;
 
             GameObject model;
+
             if (prefabinitilizer != null)
             {
                 model = prefabinitilizer.GetPrefabToInstantiate(data, CloudGoods.DefaultItemDrop);
-            }
-            else if (GlobalPrefabInitilizer.prefabInit != null)
-            {
-                model = GlobalPrefabInitilizer.prefabInit.GetPrefabToInstantiate(data, CloudGoods.DefaultItemDrop);
             }
             else
             {

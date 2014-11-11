@@ -2,13 +2,13 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class varianceIDItemFilter : ItemDataSelector
+public class CollectionIDItemFilter : ItemDataSelector
 {
-    public override bool isItemSelected(ItemData item, IEnumerable varianceIDs, bool IsInverted = false)
+    public override bool isItemSelected(ItemData item, IEnumerable CollectionIDs, bool IsInverted = false)
     {
-        foreach (int varianceID in varianceIDs)
+        foreach (int CollectionID in CollectionIDs)
         {
-            if (varianceID == item.varianceID)
+            if (CollectionID == item.CollectionID)
             {
                 if (!IsInverted)
                     return true;

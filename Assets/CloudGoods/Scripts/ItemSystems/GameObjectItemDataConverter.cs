@@ -28,8 +28,8 @@ public class GameObjectItemDataConverter : ItemDataConverter
             itemData.classID = item.Type;
             itemData.quality = item.Quality;
             itemData.salePrice = item.SellPrice;
-            itemData.varianceID = item.ItemID;
-            itemData.itemID = int.Parse(item.BaseItemID.ToString());
+            itemData.ItemID = item.ItemID;
+            itemData.CollectionID = int.Parse(item.BaseItemID.ToString());
             itemData.stackSize = item.Amount;
             itemData.totalEnergy = item.Energy;
             itemData.stackID = item.StackLocationID;

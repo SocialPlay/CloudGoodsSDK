@@ -10,24 +10,21 @@ public class FaceBookPurchaser : MonoBehaviour, IPlatformPurchaser
     public event Action<string> OnPurchaseErrorEvent;
     public int currentBundleID = 0;
 
+    public IFacebookPurchase FacebookPurchasing;
+
     public void Purchase(PremiumBundle bundleItem, int amount, string userID)
     {
+        if (FacebookPurchasing == null)
+        {
+            Debug.LogError("Facebook purchase not found. Please add the FacebookPurchase script from the CloudGoodsFacebookAddon folder to this object and drag it as the public reference to the facebookPurchase variable in the inspector");
+            return;
+        }
 
         currentBundleID = int.Parse(bundleItem.BundleID);
         Console.WriteLine("Credit bundle purchase:  ID: " + bundleItem.BundleID + " Amount: " + amount);
         Debug.Log("ID: " + bundleItem.BundleID + "\nAmount: " + amount + "\nUserID: " + userID);
-
-        FB.Canvas.Pay(product: "https://developer.socialplay.com/CreditBundleDataFacebook?BundleID=" + bundleItem.BundleID,
-                      quantity: amount,
-                      callback: delegate(FBResult response)
-                      {
-                          OnReceivedPurchaseResponse(response.Text);
-                          Debug.Log("Purchase Response: " + response.Text);
-                      }
-        );
+        FacebookPurchasing.Purchase(bundleItem, amount, OnReceivedPurchaseResponse);
     }
-
-
 
     public void OnReceivedPurchaseResponse(string data)
     {
@@ -69,7 +66,7 @@ public class FaceBookPurchaser : MonoBehaviour, IPlatformPurchaser
 
     void OnPurchaseCreditsCallback(string data)
     {
-        //SP.GetPaidCurrencyBalance(null);
+        CloudGoods.GetPremiumCurrencyBalance(null);
     }
 }
 
