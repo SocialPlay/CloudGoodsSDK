@@ -68,7 +68,7 @@ public class ContainerDisplay : MonoBehaviour
         {
             ItemDataComponent ch = mList[i];
 
-            if (ch.itemData.itemID == item.itemID)
+            if (ch.itemData.CollectionID == item.CollectionID)
             {
                 ch.itemData = item;
                 ch.SetData(item);

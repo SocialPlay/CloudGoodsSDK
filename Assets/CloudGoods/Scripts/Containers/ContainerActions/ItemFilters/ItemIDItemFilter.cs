@@ -4,11 +4,11 @@ using System.Collections.Generic;
 
 public class ItemIDItemFilter : ItemDataSelector
 {
-    public override bool isItemSelected(ItemData item, IEnumerable itemIDs, bool IsInverted = false)
+    public override bool isItemSelected(ItemData item, IEnumerable ItemIDs, bool IsInverted = false)
     {
-        foreach (int itemID in itemIDs)
+        foreach (int ItemID in ItemIDs)
         {
-            if (itemID == item.itemID)
+            if (ItemID == item.ItemID)
             {
                 if (!IsInverted)
                     return true;

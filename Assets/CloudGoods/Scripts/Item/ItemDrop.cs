@@ -23,7 +23,7 @@ public class ItemDrop : MonoBehaviour
                     ItemData itemData = dropObject.AddComponent<ItemDataComponent>().itemData;
                     itemData.SetItemData(item);
 
-                    dropObject.name = item.itemName + " (ID: " + item.itemID + ")";
+                    dropObject.name = item.itemName + " (ID: " + item.CollectionID + ")";
 
                     ItemComponentInitalizer.InitializeItemWithComponents(dropObject.GetComponent<ItemDataComponent>().itemData, AddComponetTo.prefab);
 

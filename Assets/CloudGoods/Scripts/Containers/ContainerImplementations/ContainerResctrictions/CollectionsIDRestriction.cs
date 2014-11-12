@@ -21,7 +21,7 @@ public class CollectionsIDRestriction : MonoBehaviour, IContainerRestriction {
         {
             foreach (int itemID in CollectionsIDList)
             {
-                if (itemData.itemID == itemID)
+                if (itemData.CollectionID == itemID)
                 {
                     Debug.LogWarning("Item Resticted for being added to container because it has a Collection ID Restriction");
                     return true;
@@ -34,7 +34,7 @@ public class CollectionsIDRestriction : MonoBehaviour, IContainerRestriction {
         {
             foreach (int itemID in CollectionsIDList)
             {
-                if (itemData.itemID == itemID)
+                if (itemData.CollectionID == itemID)
                     return false;
             }
 

@@ -65,9 +65,9 @@ public class RecipeDetailsWindow : MonoBehaviour {
 
         foreach (ItemData itemData in ownerItems)
         {
-            Debug.Log("inventory id: " + itemData.itemID + " , ingredient id: " + ingredient.ingredientID);
+            Debug.Log("inventory id: " + itemData.CollectionID + " , ingredient id: " + ingredient.ingredientID);
 
-            if (itemData.itemID == ingredient.ingredientID)
+            if (itemData.CollectionID == ingredient.ingredientID)
             {
                 Debug.Log("Checking for ingredient : " + ingredient.name + ", Inventory amount: " + itemData.stackSize + " Required amount : " + ingredient.amount);
 

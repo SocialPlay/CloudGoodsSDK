@@ -510,7 +510,7 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
         for (int i = 0, imax = userItems.Count; i < imax; i++)
         {
             //Debug.Log("UserItems " + userItems[i].itemName + " / " + userItems[i].stackSize + " / " + userItems[i].varianceID);
-            if (userItems[i].varianceID == id)
+            if (userItems[i].ItemID == id)
             {
                 item = userItems[i];
                 break;

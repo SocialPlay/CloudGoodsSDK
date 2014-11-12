@@ -41,7 +41,7 @@ public class BasicAddContainer : MonoBehaviour, IContainerAddAction
 
         foreach (ItemData item in itemContainer.containerItems)
         {
-            if (item.varianceID.Equals(data.varianceID))
+            if (item.ItemID.Equals(data.ItemID))
             {
                 Debug.Log("add to existing stack");
 

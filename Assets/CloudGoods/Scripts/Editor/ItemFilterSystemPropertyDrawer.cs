@@ -9,14 +9,14 @@ public class ItemFilterSystemPropertyDrawer : PropertyDrawer
 
     GUIContent invertedInfo = new GUIContent("Do Not Allow", "If Set only items NOT in the filter will pass");
 
-    ItemComponentSetup.SetupByType selected;
+    ItemFilterSystem.SetupByType selected;
     SerializedProperty selectedType;
     SerializedProperty isInverted;
     SerializedProperty behaviours;
     SerializedProperty tags;
     SerializedProperty classID;
-    SerializedProperty varianceID;
-    SerializedProperty itemID;
+    SerializedProperty ItemID;
+    SerializedProperty CollectionID;
     //SerializedProperty components;
 
     Rect displaySize = new Rect(0, 0, 350, 16 * 4);
@@ -34,15 +34,15 @@ public class ItemFilterSystemPropertyDrawer : PropertyDrawer
         behaviours = property.FindPropertyRelative("behaviours");
         tags = property.FindPropertyRelative("TagList");
         classID = property.FindPropertyRelative("classList");
-        varianceID = property.FindPropertyRelative("varianceIDList");
-        itemID = property.FindPropertyRelative("itemIDList"); 
+        ItemID = property.FindPropertyRelative("ItemIDList");
+        CollectionID = property.FindPropertyRelative("CollectionIDList"); 
 
         Rect invertedRect = new Rect(position.x, position.y, position.width - 80, 16);
         Rect selectionRect = new Rect(position.x, invertedRect.yMax, position.width, 16);
         Rect SecondBitRect = new Rect(position.x, selectionRect.yMax, position.width, position.height - 32);
         EditorGUIUtility.LookLikeControls();
-        selected = (ItemComponentSetup.SetupByType)selectedType.enumValueIndex;
-        selected = (ItemComponentSetup.SetupByType)EditorGUI.EnumPopup(selectionRect, selected);
+        selected = (ItemFilterSystem.SetupByType)selectedType.enumValueIndex;
+        selected = (ItemFilterSystem.SetupByType)EditorGUI.EnumPopup(selectionRect, selected);
         selectedType.enumValueIndex = (int)selected;
 
         isInverted.boolValue = GUI.Toggle(invertedRect, isInverted.boolValue, invertedInfo);
@@ -50,25 +50,25 @@ public class ItemFilterSystemPropertyDrawer : PropertyDrawer
         var ExtraRows = 0;
         switch (selected)
         {
-            case ItemComponentSetup.SetupByType.classID:
+            case ItemFilterSystem.SetupByType.classID:
                 DrawIntList(SecondBitRect, classID, "Class");
                 ExtraRows = 1 + classID.arraySize;
                 break;
-            case ItemComponentSetup.SetupByType.tag:
+            case ItemFilterSystem.SetupByType.tag:
                 DrawTag(SecondBitRect);
                 ExtraRows = 1 + tags.arraySize;
                 break;
-            case ItemComponentSetup.SetupByType.behaviour:
+            case ItemFilterSystem.SetupByType.behaviour:
                 DrawBehaviourID(SecondBitRect);
                 ExtraRows = 1 + behaviours.arraySize;
                 break;
-            case ItemComponentSetup.SetupByType.varianceID:
-                DrawIntList(SecondBitRect, varianceID,"Variance");
-                ExtraRows = 1 + varianceID.arraySize;
+            case ItemFilterSystem.SetupByType.itemID:
+                DrawIntList(SecondBitRect, ItemID,"Item");
+                ExtraRows = 1 + ItemID.arraySize;
                 break;
-            case ItemComponentSetup.SetupByType.itemID:
-                DrawIntList(SecondBitRect, itemID, "Item");
-                ExtraRows = 1 + itemID.arraySize;
+            case ItemFilterSystem.SetupByType.collectionID:
+                DrawIntList(SecondBitRect, CollectionID, "Collection");
+                ExtraRows = 1 + CollectionID.arraySize;
                 break;
             default:
                 break;

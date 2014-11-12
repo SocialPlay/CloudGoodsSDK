@@ -109,10 +109,10 @@ public class ConfigurableItemTooltip : MonoBehaviour, ITooltipSetup
                     formated = string.Format("{0}\n", formated);
                     break;
                 case DisaplyOption.varianceID:
-                    formated = string.Format("{0}\n{1}", formated, item.varianceID);
+                    formated = string.Format("{0}\n{1}", formated, item.ItemID);
                     break;
                 case DisaplyOption.itemID:
-                    formated = string.Format("{0}\n{1}", formated, item.itemID);
+                    formated = string.Format("{0}\n{1}", formated, item.CollectionID);
                     break;
                 case DisaplyOption.classID:
                     formated = string.Format("{0}\n{1}", formated, item.classID);
