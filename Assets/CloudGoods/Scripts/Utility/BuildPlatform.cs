@@ -39,6 +39,10 @@ public class BuildPlatform : MonoBehaviour
             }
             if (instance.SelectedType == BuildPlatformType.Automatic)
             {
+                if (Application.isEditor)
+                {
+                    selected = BuildPlatformType.CloudGoodsStandAlone;
+                }
 #if UNITY_IPHONE
                 selected = BuildPlatformType.IOS;
 #elif UNITY_ANDROID

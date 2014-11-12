@@ -408,7 +408,7 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
     /// Returns List of item datas for the itemID 
     /// </summary>
     /// <param name="name"></param>
-    static public void GetOwnerItemById(int location, int itemID, Action<List<ItemData>>callback)
+    static public void GetOwnerItemById(int location, int itemID, Action<List<ItemData>> callback)
     {
         if (!isLogged)
         {
@@ -1286,9 +1286,12 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
         {
             Debug.Log(www.text);
             List<ItemBundle> itemBundles = serviceConverter.ConvertToListItemBundle(www.text);
-            OnStoreItemBundleListLoaded(itemBundles);
+            if (OnStoreItemBundleListLoaded != null)
+            {
+                OnStoreItemBundleListLoaded(itemBundles);
+            }
 
-            if(callback != null)
+            if (callback != null)
                 callback(itemBundles);
         }
         else

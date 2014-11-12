@@ -145,8 +145,8 @@ public class PremiumCurrencyBundleStore : MonoBehaviour
     void OnRecievedPurchaseResponse(string data)
     {
         Debug.Log("Received purchase response:  " + data);
-
         isPurchaseRequest = false;
+        CloudGoods.GetPremiumCurrencyBalance(null);
     }
 
     void platformPurchasor_OnPurchaseErrorEvent(string obj)

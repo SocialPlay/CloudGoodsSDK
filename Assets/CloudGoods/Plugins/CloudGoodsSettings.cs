@@ -104,6 +104,13 @@ public class CloudGoodsSettings : ScriptableObject
             return instance.androidKey;
         }
     }
+    static public List<ItemPrefabInitilizer.DropPrefab> ExtraItemPrefabs
+    {
+        get
+        {
+            return instance.itemInitializerPrefabs;
+        }
+    }
 
    
 }
