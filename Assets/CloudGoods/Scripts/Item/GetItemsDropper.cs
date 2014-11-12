@@ -27,23 +27,7 @@ public class GetItemsDropper : MonoBehaviour, IGetItems
     {
         foreach (ItemData dropItem in dropItems)
         {
-<<<<<<< HEAD
-            gameItemDrop.DropItemIntoWorld(dropItem, dropTransform.position, ItemPrefabInitilizer.GetPrefabToInstantiate(dropItem));     
-=======
-            ItemData data = dropItem;
-
-            GameObject model;
-
-            if (prefabinitilizer != null)
-            {
-                model = prefabinitilizer.GetPrefabToInstantiate(data, CloudGoods.DefaultItemDrop);
-            }
-            else
-            {
-                model = CloudGoods.DefaultItemDrop;
-            }
-            gameItemDrop.DropItemIntoWorld(data, dropTransform.position, model);     
->>>>>>> b1e21c1f703b4d6b9bd208a9727fc19df2589341
+            gameItemDrop.DropItemIntoWorld(dropItem, dropTransform.position, ItemPrefabInitilizer.GetPrefabToInstantiate(dropItem));
         }
     }
 }

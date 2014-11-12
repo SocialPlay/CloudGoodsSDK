@@ -3,23 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 
 
-public class ItemPrefabInitilizer : MonoBehaviour
+public class ItemPrefabInitilizer
 {
-
-<<<<<<< HEAD
-
-
 
     public static GameObject GetPrefabToInstantiate(ItemData itemData, GameObject defaultPrefab = null)
     {
         var prefab = (defaultPrefab != null ? defaultPrefab : CloudGoodsSettings.DefaultItemDrop);
         foreach (var dropPrefab in CloudGoodsSettings.ExtraItemPrefabs)
-=======
-    public GameObject GetPrefabToInstantiate(ItemData itemData, GameObject defaultPrefab = null)
-    {
-        var prefab = defaultPrefab;
-        foreach (var dropPrefab in CloudGoodsSettings.instance.itemInitializerPrefabs)
->>>>>>> b1e21c1f703b4d6b9bd208a9727fc19df2589341
+
         {
             if (IsPrefabForItem(itemData, dropPrefab))
             {
