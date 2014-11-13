@@ -16,7 +16,7 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
 
     static public event Action<string> onErrorEvent;
     static public event Action<UserResponse> OnUserLogin;
-    static public event Action<string> onLogout;
+    static public event Action onLogout;
     static public event Action<CloudGoodsUser> OnUserInfo;
     static public event Action<UserResponse> OnUserRegister;
     static public event Action<UserResponse> OnForgotPassword;
@@ -762,6 +762,11 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
         PlayerPrefs.DeleteKey("SocialPlay_UserGuid");
         PlayerPrefs.DeleteKey("SocialPlay_UserName");
         PlayerPrefs.DeleteKey("SocialPlay_UserEmail");
+        if (onLogout != null)
+        {
+            onLogout();
+        }
+
 
         user = null;
     }

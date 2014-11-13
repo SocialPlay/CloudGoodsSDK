@@ -16,7 +16,7 @@ public abstract class InputFieldValidation : MonoBehaviour {
 
     public bool IsValidCheck(bool isSecondcheck = false)
     {
-        if (Validate(uiInput.value, isSecondcheck))
+        if (Validate(uiInput.text, isSecondcheck))
         {
             Debug.Log("is valid");
 

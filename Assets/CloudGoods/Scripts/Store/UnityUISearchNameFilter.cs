@@ -27,6 +27,6 @@ public class UnityUISearchNameFilter : InputValueChange
 
     protected override string GetCurrentValue()
     {     
-        return input.value;
+        return input.text;
     }
 }

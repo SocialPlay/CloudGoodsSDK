@@ -19,7 +19,7 @@ public class InputFieldPasswordValidation : InputFieldValidation {
                     validation.IsValidCheck(true);
                 }
             }
-            if (requiredMatchUI.value != currentInput)
+            if (requiredMatchUI.text != currentInput)
             {
                 return false;
             }
