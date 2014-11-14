@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System;
+using LitJson;
 using Newtonsoft.Json;
 
 public class AndroidPremiumCurrencyPurchaser : MonoBehaviour, IPlatformPurchaser
@@ -72,11 +73,11 @@ public class AndroidPremiumCurrencyPurchaser : MonoBehaviour, IPlatformPurchaser
 
         if (responseCode.Remove(1, responseCode.Length - 1) == "7")
         {
-            ConsumeAlreadyOwneditem();
+            ConsumeOwneditem();
         }
     }
 
-    private void ConsumeAlreadyOwneditem()
+    private void ConsumeOwneditem()
     {
         using (AndroidJavaClass cls = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
         {
@@ -87,8 +88,21 @@ public class AndroidPremiumCurrencyPurchaser : MonoBehaviour, IPlatformPurchaser
         }
     }
 
+    private void ConsumeCurrentPurchase()
+    {
+        using (AndroidJavaClass cls = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
+        {
+            using (AndroidJavaObject obj_Activity = cls.GetStatic<AndroidJavaObject>("currentActivity"))
+            {
+                cls_StorePurchaser.CallStatic("ConsumeCurrentPurchase", obj_Activity);
+            }
+        }
+    }
+
     void RecieveFromJava(string message)
     {
+        Debug.Log("Received from java message: " + message);
+
         if (message != "Fail")
         {
             BundlePurchaseRequest bundlePurchaseRequest = new BundlePurchaseRequest();
@@ -116,6 +130,19 @@ public class AndroidPremiumCurrencyPurchaser : MonoBehaviour, IPlatformPurchaser
 #endif
     public void OnReceivedPurchaseResponse(string data)
     {
+        Debug.Log("On Received purchase response: " + data);
+
+        JsonData purchaseResponseObj = LitJson.JsonMapper.ToObject(data);
+
+        if (int.Parse(purchaseResponseObj["StatusCode"].ToString()) == 1)
+        {
+            ConsumeCurrentPurchase();
+        }
+        else
+        {
+            Debug.Log("Purchase was not authentic, consuming Item");
+        }
+
         if (RecievedPurchaseResponse != null)
             RecievedPurchaseResponse(data);
     }

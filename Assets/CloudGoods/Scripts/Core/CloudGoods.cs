@@ -117,7 +117,18 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
 
     static public Guid GuidAppID
     {
-        get { return new Guid(AppID); }
+        get {
+            try
+            {
+                return new Guid(AppID);
+            }
+            catch
+            {
+                Debug.LogError("AppID is not a valid Guid. Please check your guid and try again.");
+                return Guid.Empty;
+            }
+        
+        }
     }
 
     /// <summary>
