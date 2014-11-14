@@ -7,8 +7,6 @@ public class CloudGoodsLogout : MonoBehaviour {
 
     public GameObject SPLoginSystem;
 
-    public static event Action CloudGoodsUserLogout;
-
     void Awake()
     {
         CloudGoods.OnRegisteredUserToSession += OnUserLogin;
@@ -22,14 +20,8 @@ public class CloudGoodsLogout : MonoBehaviour {
     public void LogoutUser()
     {
         Debug.Log("Logout user");
-
         CloudGoods.Logout();
-        GetComponent<Button>().interactable = false;
-        if (CloudGoodsLogout.CloudGoodsUserLogout != null)
-        {
-            Debug.Log("logout hooked on to, callign logout event");
-            CloudGoodsLogout.CloudGoodsUserLogout();
-        }
+        GetComponent<Button>().interactable = false;      
     }
 	
 }

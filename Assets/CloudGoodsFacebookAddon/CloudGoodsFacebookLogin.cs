@@ -1,22 +1,24 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class CloudGoodsFacebookLogin : MonoBehaviour {
+public class CloudGoodsFacebookLogin : MonoBehaviour
+{
 
     public static bool isFBInitialized = false;
 
     void Awake()
     {
-        FB.Init(SetInit, OnHideUnity);  
+        if (!Application.isEditor && BuildPlatform.Platform != BuildPlatform.BuildPlatformType.Automatic)
+            FB.Init(SetInit, OnHideUnity);
     }
 
     public void PromptFacebookUserLogin()
-    {  
+    {
         if (FB.IsLoggedIn)
         {
             Debug.Log("Already logged in");
         }
-        FB.Login("email,publish_actions", FBLoginCallback); 
+        FB.Login("email,publish_actions", FBLoginCallback);
     }
 
     void FBLoginCallback(FBResult FBResult)
@@ -31,7 +33,7 @@ public class CloudGoodsFacebookLogin : MonoBehaviour {
             BuildPlatform.Platform = BuildPlatform.BuildPlatformType.Facebook;
         }
         CloudGoods.LoginWithPlatformUser(CloudGoodsPlatform.Facebook, FB.UserId, "new user");
-    }       
+    }
 
     private void SetInit()
     {

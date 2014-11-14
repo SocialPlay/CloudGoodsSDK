@@ -50,7 +50,7 @@ public class UnityUICloudGoodsLogin : MonoBehaviour
         CloudGoods.OnUserRegister += RegisterMessageResponce;
         CloudGoods.OnForgotPassword += ForgotPasswordResponce;
         CloudGoods.OnVerificationSent += ResentVerificationResponce;
-        CloudGoodsLogout.CloudGoodsUserLogout += OnLogout;
+        CloudGoods.onLogout += OnLogout;
     }
 
     void OnDisable()
@@ -60,7 +60,8 @@ public class UnityUICloudGoodsLogin : MonoBehaviour
         CloudGoods.OnUserRegister -= RegisterMessageResponce;
         CloudGoods.OnForgotPassword -= ForgotPasswordResponce;
         CloudGoods.OnVerificationSent -= ResentVerificationResponce;
-        CloudGoodsLogout.CloudGoodsUserLogout -= OnLogout;
+        CloudGoods.onLogout -= OnLogout;
+        //CloudGoodsLogout.CloudGoodsUserLogout -= OnLogout;
     }
 
     void Start()
@@ -84,7 +85,7 @@ public class UnityUICloudGoodsLogin : MonoBehaviour
         resendVerificationTextObject.SetActive(false);
         if (!string.IsNullOrEmpty(PlayerPrefs.GetString("SocialPlay_Login_UserEmail")))
         {
-            loginUserEmail.value = PlayerPrefs.GetString("SocialPlay_Login_UserEmail");
+            loginUserEmail.text = PlayerPrefs.GetString("SocialPlay_Login_UserEmail");
         }
 
         if (!string.IsNullOrEmpty(PlayerPrefs.GetString("SocialPlay_UserGuid")))
@@ -207,10 +208,10 @@ public class UnityUICloudGoodsLogin : MonoBehaviour
         loginErrorLabel.text = ErrorMsg;
         if (string.IsNullOrEmpty(ErrorMsg))
         {
-            Debug.Log("login email: " + loginUserEmail.value + " login password: " + loginUserPassword.value);
+            Debug.Log("login email: " + loginUserEmail.text + " login password: " + loginUserPassword.text);
 
-            PlayerPrefs.SetString("SocialPlay_Login_UserEmail", loginUserEmail.value);
-            CloudGoods.Login(loginUserEmail.value.ToLower(), loginUserPassword.value, null);
+            PlayerPrefs.SetString("SocialPlay_Login_UserEmail", loginUserEmail.text);
+            CloudGoods.Login(loginUserEmail.text.ToLower(), loginUserPassword.text, null);
         }
     }
 
@@ -232,7 +233,7 @@ public class UnityUICloudGoodsLogin : MonoBehaviour
         if (string.IsNullOrEmpty(ErrorMsg))
         {
             SwitchToConfirmation();
-            CloudGoods.Register(registerUserEmail.value, registerUserPassword.value, registerUserName.value, OnRegisteredUser);
+            CloudGoods.Register(registerUserEmail.text, registerUserPassword.text, registerUserName.text, OnRegisteredUser);
         }
     }
 
@@ -254,7 +255,7 @@ public class UnityUICloudGoodsLogin : MonoBehaviour
         if (string.IsNullOrEmpty(ErrorMsg))
         {
             SwitchToConfirmation();
-            CloudGoods.ForgotPassword(loginUserEmail.value, OnSentPassword);
+            CloudGoods.ForgotPassword(loginUserEmail.text, OnSentPassword);
         }
     }
 
@@ -274,7 +275,7 @@ public class UnityUICloudGoodsLogin : MonoBehaviour
         if (string.IsNullOrEmpty(ErrorMsg))
         {
             SwitchToConfirmation();
-            CloudGoods.ResendVerificationEmail(loginUserEmail.value, null);
+            CloudGoods.ResendVerificationEmail(loginUserEmail.text, null);
         }
 
     }

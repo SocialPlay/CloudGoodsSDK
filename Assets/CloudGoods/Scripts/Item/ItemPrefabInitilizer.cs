@@ -3,13 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 
 
-public class ItemPrefabInitilizer : MonoBehaviour
+public class ItemPrefabInitilizer
 {
 
-    public GameObject GetPrefabToInstantiate(ItemData itemData, GameObject defaultPrefab = null)
+    public static GameObject GetPrefabToInstantiate(ItemData itemData, GameObject defaultPrefab = null)
     {
-        var prefab = defaultPrefab;
-        foreach (var dropPrefab in CloudGoodsSettings.instance.itemInitializerPrefabs)
+        var prefab = (defaultPrefab != null ? defaultPrefab : CloudGoodsSettings.DefaultItemDrop);
+        foreach (var dropPrefab in CloudGoodsSettings.ExtraItemPrefabs)
+
         {
             if (IsPrefabForItem(itemData, dropPrefab))
             {
@@ -19,7 +20,7 @@ public class ItemPrefabInitilizer : MonoBehaviour
         return prefab;
     }
 
-    bool IsPrefabForItem(ItemData itemData, DropPrefab dropPrefab)
+    static bool IsPrefabForItem(ItemData itemData, DropPrefab dropPrefab)
     {
         foreach (ItemFilterSystem filter in dropPrefab.itemFilters)
         {
@@ -33,7 +34,7 @@ public class ItemPrefabInitilizer : MonoBehaviour
 
     [System.Serializable]
     public class DropPrefab
-    {       
+    {
         public GameObject prefab;
         public List<ItemFilterSystem> itemFilters = new List<ItemFilterSystem>();
     }

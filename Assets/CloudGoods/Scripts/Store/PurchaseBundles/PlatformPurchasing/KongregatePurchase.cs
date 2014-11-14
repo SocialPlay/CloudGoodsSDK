@@ -33,8 +33,7 @@ public class KongregatePurchase : MonoBehaviour, IPlatformPurchaser
     }
 
     public void OnReceivedPurchaseResponse(string data)
-    {       
-
+    {    
         if (RecievedPurchaseResponse != null)
             RecievedPurchaseResponse(data);
     }

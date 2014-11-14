@@ -16,7 +16,7 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
 
     static public event Action<string> onErrorEvent;
     static public event Action<UserResponse> OnUserLogin;
-    static public event Action<string> onLogout;
+    static public event Action onLogout;
     static public event Action<CloudGoodsUser> OnUserInfo;
     static public event Action<UserResponse> OnUserRegister;
     static public event Action<UserResponse> OnForgotPassword;
@@ -419,7 +419,7 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
     /// Returns List of item datas for the itemID 
     /// </summary>
     /// <param name="name"></param>
-    static public void GetOwnerItemById(int location, int itemID, Action<List<ItemData>>callback)
+    static public void GetOwnerItemById(int location, int itemID, Action<List<ItemData>> callback)
     {
         if (!isLogged)
         {
@@ -773,6 +773,11 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
         PlayerPrefs.DeleteKey("SocialPlay_UserGuid");
         PlayerPrefs.DeleteKey("SocialPlay_UserName");
         PlayerPrefs.DeleteKey("SocialPlay_UserEmail");
+        if (onLogout != null)
+        {
+            onLogout();
+        }
+
 
         user = null;
     }
@@ -1297,9 +1302,12 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
         {
             Debug.Log(www.text);
             List<ItemBundle> itemBundles = serviceConverter.ConvertToListItemBundle(www.text);
-            OnStoreItemBundleListLoaded(itemBundles);
+            if (OnStoreItemBundleListLoaded != null)
+            {
+                OnStoreItemBundleListLoaded(itemBundles);
+            }
 
-            if(callback != null)
+            if (callback != null)
                 callback(itemBundles);
         }
         else
