@@ -65,9 +65,10 @@ public class AndroidPremiumCurrencyPurchaser : MonoBehaviour, IPlatformPurchaser
         }
 #endif
     }
-#if UNITY_ANDROID
+
     void OnErrorCodeFromAndroidPurchase(string responseCode)
     {
+		#if UNITY_ANDROID
         if (OnPurchaseErrorEvent != null)
             OnPurchaseErrorEvent(responseCode);
 
@@ -75,10 +76,11 @@ public class AndroidPremiumCurrencyPurchaser : MonoBehaviour, IPlatformPurchaser
         {
             ConsumeOwneditem();
         }
+#endif
     }
-
-    private void ConsumeOwneditem()
+	    private void ConsumeOwneditem()
     {
+		#if UNITY_ANDROID
         using (AndroidJavaClass cls = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
         {
             using (AndroidJavaObject obj_Activity = cls.GetStatic<AndroidJavaObject>("currentActivity"))
@@ -86,10 +88,12 @@ public class AndroidPremiumCurrencyPurchaser : MonoBehaviour, IPlatformPurchaser
                 cls_StorePurchaser.CallStatic("consumeitem", obj_Activity, currentProductID);
             }
         }
+#endif
     }
 
     private void ConsumeCurrentPurchase()
     {
+		#if UNITY_ANDROID
         using (AndroidJavaClass cls = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
         {
             using (AndroidJavaObject obj_Activity = cls.GetStatic<AndroidJavaObject>("currentActivity"))
@@ -97,10 +101,12 @@ public class AndroidPremiumCurrencyPurchaser : MonoBehaviour, IPlatformPurchaser
                 cls_StorePurchaser.CallStatic("ConsumeCurrentPurchase", obj_Activity);
             }
         }
+#endif
     }
 
     void RecieveFromJava(string message)
     {
+		#if UNITY_ANDROID
         Debug.Log("Received from java message: " + message);
 
         if (message != "Fail")
@@ -121,13 +127,14 @@ public class AndroidPremiumCurrencyPurchaser : MonoBehaviour, IPlatformPurchaser
         {
             OnPurchaseErrorEvent(message);
         }
+#endif
     }
 
     void DebugFromJava(string message)
     {
         Debug.Log("Debug from Java: " + message);
     }
-#endif
+
     public void OnReceivedPurchaseResponse(string data)
     {
         Debug.Log("On Received purchase response: " + data);
