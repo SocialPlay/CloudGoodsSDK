@@ -14,7 +14,7 @@ public class UnityUIBundlePurchasePopupHandler : MonoBehaviour {
 
 	// Use this for initialization
 	void Update () {
-        if (bundleStore.platformPurchasor != null)
+        if (bundleStore.platformPurchasor != null && platformPurchaserSet == false)
         {
             bundleStore.platformPurchasor.OnPurchaseErrorEvent += platformPurchasor_RecievedPurchaseResponse;
             bundleStore.platformPurchasor.RecievedPurchaseResponse += platformPurchasor_RecievedPurchaseResponse;
