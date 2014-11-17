@@ -1231,7 +1231,6 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
     {
         yield return www;
 
-        // check for errors
         if (www.error == null)
         {
             callback(serviceConverter.ConvertToUserInfo(www.text));
@@ -1451,12 +1450,13 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
 
     #region Utils
 
+
     /// <summary>
     /// Returns domain from string.
     /// </summary>
     /// <param name="url"></param>
     /// <returns></returns>
-
+    ///
     static public string GetDomain(string url)
     {
         if (url.StartsWith("file://"))

@@ -119,7 +119,7 @@ public class AndroidPremiumCurrencyPurchaser : MonoBehaviour, IPlatformPurchaser
         }
         else
         {
-            OnReceivedPurchaseResponse(message);
+            OnPurchaseErrorEvent(message);
         }
     }
 
@@ -137,14 +137,17 @@ public class AndroidPremiumCurrencyPurchaser : MonoBehaviour, IPlatformPurchaser
         if (int.Parse(purchaseResponseObj["StatusCode"].ToString()) == 1)
         {
             ConsumeCurrentPurchase();
+
+            if (RecievedPurchaseResponse != null)
+                RecievedPurchaseResponse("Purchase Successful");
         }
         else
         {
             Debug.Log("Purchase was not authentic, consuming Item");
-        }
 
-        if (RecievedPurchaseResponse != null)
-            RecievedPurchaseResponse(data);
+            if(OnPurchaseErrorEvent != null)
+                OnPurchaseErrorEvent("Purchase Was not Authentic");
+        }
     }
 
 }

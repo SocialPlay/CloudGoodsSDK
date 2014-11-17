@@ -22,7 +22,7 @@ public class PremiumCurrencyBundleStore : MonoBehaviour
     public bool isInitialized = false;
 
     IGridLoader gridLoader;
-    IPlatformPurchaser platformPurchasor;
+    public IPlatformPurchaser platformPurchasor;
     bool isPurchaseRequest = false;
 
     string domain;
