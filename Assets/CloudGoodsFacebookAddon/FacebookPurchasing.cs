@@ -6,7 +6,7 @@ public class FacebookPurchasing : MonoBehaviour, IFacebookPurchase {
 
     public void Purchase(PremiumBundle bundleItem, int amount, Action<string> callback)
     {
-        FB.Canvas.Pay(product: "https://developer.socialplay.com/CreditBundleDataFacebook?BundleID=" + bundleItem.BundleID,
+        FB.Canvas.Pay(product: "https://staging.socialplay.com/CreditBundleDataFacebook?BundleID=" + bundleItem.BundleID,
                       quantity: amount,
                       callback: delegate(FBResult response)
                       {

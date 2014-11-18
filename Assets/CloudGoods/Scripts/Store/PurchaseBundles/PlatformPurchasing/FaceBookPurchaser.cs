@@ -14,6 +14,12 @@ public class FaceBookPurchaser : MonoBehaviour, IPlatformPurchaser
 
     public void Purchase(PremiumBundle bundleItem, int amount, string userID)
     {
+
+        if (Type.GetType("FacebookPurchasing") != null)
+        {
+            FacebookPurchasing = this.gameObject.AddComponent(Type.GetType("FacebookPurchasing")) as IFacebookPurchase;
+        }
+
         if (FacebookPurchasing == null)
         {
             Debug.LogError("Facebook purchase not found. Please add the FacebookPurchase script from the CloudGoodsFacebookAddon folder to this object and drag it as the public reference to the facebookPurchase variable in the inspector");

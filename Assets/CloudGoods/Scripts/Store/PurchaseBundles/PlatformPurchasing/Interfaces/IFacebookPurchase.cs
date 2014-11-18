@@ -2,7 +2,8 @@
 using System.Collections;
 using System;
 
-public interface IFacebookPurchase {
+public  interface IFacebookPurchase {
 
-    void Purchase(PremiumBundle bundleItem, int amount, Action<string> callback);
+     void Purchase(PremiumBundle bundleItem, int amount, Action<string> callback);
+    
 }
