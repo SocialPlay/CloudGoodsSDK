@@ -4,6 +4,7 @@ using UnityEngine;
 [RequireComponent(typeof(ItemDataComponent))]
 public class NGUIDragDropItem : MonoBehaviour
 {
+    public static bool IsDraggingItem = false;
 
     public ItemData myItemData
     {
@@ -21,7 +22,6 @@ public class NGUIDragDropItem : MonoBehaviour
 
     Transform mTrans;
     bool mIsDragging = false;
-    //bool mSticky = false;
     Transform lastParent;
     Vector3 lastPosition = Vector3.zero;
 
@@ -42,16 +42,12 @@ public class NGUIDragDropItem : MonoBehaviour
     void Drop()
     {
         ReturnToPreviousPossition();
-        Collider col = UICamera.lastHit.collider;
-        Debug.Log(col);
+        Collider col = UICamera.lastHit.collider;    
         ItemContainer container = (col != null) ? col.gameObject.GetComponent<ItemContainer>() : null;
-
-
-        if (container == null)
+                if (container == null)
         {
             container = (col != null) ? col.transform.parent.parent.gameObject.GetComponent<ItemContainer>() : null;
         }
-
         if (container != null)
         {
             if (myItemData.ownerContainer != container)
@@ -89,27 +85,13 @@ public class NGUIDragDropItem : MonoBehaviour
 
     void OnDrag(Vector2 delta)
     {
+        Debug.Log("Draging");
         if (enabled && UICamera.currentTouchID > -2)
         {
-            //if (!mIsDragging)
-            //{
-            mIsDragging = true;
-            //    mParent = mTrans.parent;
-            //    mTrans.parent = UIDragDropRoot.root;
-
-            //    //Vector3 pos = mTrans.localPosition;
-            //    //pos.z = 0f;
-            //    //mTrans.localPosition = pos;
-
-            //    NGUITools.MarkParentAsChanged(gameObject);
-
-            //    mTrans.localPosition += (Vector3)delta;
-
-            //}
-            //else
-            //{
+            mTrans.parent = UIDragDropRoot.root;
+            mIsDragging = true;        
             mTrans.localPosition += (Vector3)delta;
-            //}
+            IsDraggingItem = true;
         }
     }
 
@@ -127,41 +109,6 @@ public class NGUIDragDropItem : MonoBehaviour
         if (col != null) col.enabled = true;
         if (mIsDragging) Drop();
         mIsDragging = false;
+        IsDraggingItem = false;
     }
-
-    ///// <summary>
-    ///// Start or stop the drag operation.
-    ///// </summary>
-
-    //void OnPress(bool isPressed)
-    //{
-    //    if (isPressed)
-    //    {
-    //        lastPosition = this.transform.position;
-    //    }
-
-    //    if (enabled)
-    //    {
-    //        if (isPressed)
-    //        {
-    //            if (!UICamera.current.stickyPress)
-    //            {
-    //                mSticky = true;
-    //                UICamera.current.stickyPress = true;
-    //            }
-    //        }
-    //        else if (mSticky)
-    //        {
-    //            mSticky = false;
-    //            UICamera.current.stickyPress = false;
-    //        }
-
-
-    //        Collider col = collider;
-    //        if (col != null) col.enabled = !isPressed;
-    //        if (!isPressed && mIsDragging) Drop();
-
-    //        mIsDragging = false;
-    //    }
-    //}
 }
