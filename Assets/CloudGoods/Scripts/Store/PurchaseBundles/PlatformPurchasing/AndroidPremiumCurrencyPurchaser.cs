@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System;
+using LitJson;
 using Newtonsoft.Json;
 
 public class AndroidPremiumCurrencyPurchaser : MonoBehaviour, IPlatformPurchaser
@@ -64,20 +65,22 @@ public class AndroidPremiumCurrencyPurchaser : MonoBehaviour, IPlatformPurchaser
         }
 #endif
     }
-#if UNITY_ANDROID
+
     void OnErrorCodeFromAndroidPurchase(string responseCode)
     {
+		#if UNITY_ANDROID
         if (OnPurchaseErrorEvent != null)
             OnPurchaseErrorEvent(responseCode);
 
         if (responseCode.Remove(1, responseCode.Length - 1) == "7")
         {
-            ConsumeAlreadyOwneditem();
+            ConsumeOwneditem();
         }
+#endif
     }
-
-    private void ConsumeAlreadyOwneditem()
+	    private void ConsumeOwneditem()
     {
+		#if UNITY_ANDROID
         using (AndroidJavaClass cls = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
         {
             using (AndroidJavaObject obj_Activity = cls.GetStatic<AndroidJavaObject>("currentActivity"))
@@ -85,10 +88,27 @@ public class AndroidPremiumCurrencyPurchaser : MonoBehaviour, IPlatformPurchaser
                 cls_StorePurchaser.CallStatic("consumeitem", obj_Activity, currentProductID);
             }
         }
+#endif
+    }
+
+    private void ConsumeCurrentPurchase()
+    {
+		#if UNITY_ANDROID
+        using (AndroidJavaClass cls = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
+        {
+            using (AndroidJavaObject obj_Activity = cls.GetStatic<AndroidJavaObject>("currentActivity"))
+            {
+                cls_StorePurchaser.CallStatic("ConsumeCurrentPurchase", obj_Activity);
+            }
+        }
+#endif
     }
 
     void RecieveFromJava(string message)
     {
+		#if UNITY_ANDROID
+        Debug.Log("Received from java message: " + message);
+
         if (message != "Fail")
         {
             BundlePurchaseRequest bundlePurchaseRequest = new BundlePurchaseRequest();
@@ -105,19 +125,36 @@ public class AndroidPremiumCurrencyPurchaser : MonoBehaviour, IPlatformPurchaser
         }
         else
         {
-            OnReceivedPurchaseResponse(message);
+            OnPurchaseErrorEvent(message);
         }
+#endif
     }
 
     void DebugFromJava(string message)
     {
         Debug.Log("Debug from Java: " + message);
     }
-#endif
+
     public void OnReceivedPurchaseResponse(string data)
     {
-        if (RecievedPurchaseResponse != null)
-            RecievedPurchaseResponse(data);
+        Debug.Log("On Received purchase response: " + data);
+
+        JsonData purchaseResponseObj = LitJson.JsonMapper.ToObject(data);
+
+        if (int.Parse(purchaseResponseObj["StatusCode"].ToString()) == 1)
+        {
+            ConsumeCurrentPurchase();
+
+            if (RecievedPurchaseResponse != null)
+                RecievedPurchaseResponse("Purchase Successful");
+        }
+        else
+        {
+            Debug.Log("Purchase was not authentic, consuming Item");
+
+            if(OnPurchaseErrorEvent != null)
+                OnPurchaseErrorEvent("Purchase Was not Authentic");
+        }
     }
 
 }

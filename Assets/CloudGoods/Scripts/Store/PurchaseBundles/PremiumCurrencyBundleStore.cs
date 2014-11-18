@@ -23,7 +23,7 @@ public class PremiumCurrencyBundleStore : MonoBehaviour
     private bool isWaitingForPlatform = false;
 
     IGridLoader gridLoader;
-    IPlatformPurchaser platformPurchasor;
+    public IPlatformPurchaser platformPurchasor;
     bool isPurchaseRequest = false;
 
     string domain;
@@ -78,7 +78,9 @@ public class PremiumCurrencyBundleStore : MonoBehaviour
             case BuildPlatform.BuildPlatformType.CloudGoodsStandAlone:
                 Debug.LogWarning("Cloud Goods Stand alone has not purchase method currently.");
                 break;
-
+            case BuildPlatform.BuildPlatformType.EditorTestPurchasing:
+                platformPurchasor = gameObject.AddComponent<EditorPremiumCurrencyPurchaser>();
+                break;
         }
 
         if (platformPurchasor == null)
@@ -88,7 +90,11 @@ public class PremiumCurrencyBundleStore : MonoBehaviour
 
         platformPurchasor.RecievedPurchaseResponse += OnRecievedPurchaseResponse;
         platformPurchasor.OnPurchaseErrorEvent += platformPurchasor_OnPurchaseErrorEvent;
-        CloudGoods.GetCreditBundles((int)BuildPlatform.Platform, OnPurchaseBundlesRecieved);
+
+        if(BuildPlatform.Platform == BuildPlatform.BuildPlatformType.EditorTestPurchasing)
+            CloudGoods.GetCreditBundles(1, OnPurchaseBundlesRecieved);
+        else
+            CloudGoods.GetCreditBundles((int)BuildPlatform.Platform, OnPurchaseBundlesRecieved);
 
         isInitialized = true;
     }
