@@ -6,7 +6,7 @@ using System.Collections;
 public class AutoFlyIn : MonoBehaviour
 {
     private TweenPosition tween = null;
-    private ContainerDisplay myContainerDisplay = null;
+    private NGUIContainerDisplay myContainerDisplay = null;
     bool isCurrentlyActive = false;
 
     public int inDirPosition, outDirPosition;
@@ -26,12 +26,12 @@ public class AutoFlyIn : MonoBehaviour
     {
         if (myContainerDisplay == null)
         {
-            myContainerDisplay = gameObject.GetComponentInChildren<ContainerDisplay>();
+            myContainerDisplay = gameObject.GetComponentInChildren<NGUIContainerDisplay>();
         }
 
         if (myContainerDisplay == null)
         {
-            myContainerDisplay = gameObject.GetComponent<ContainerDisplay>();
+            myContainerDisplay = gameObject.GetComponent<NGUIContainerDisplay>();
         }
 
         startPos = this.transform.localPosition;

@@ -1,25 +1,24 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections;
 
-public class ItemDataDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public abstract class ItemDataDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     internal ItemDataComponent itemObject;
     internal ItemContainerDisplay holdingContainer;
-    public Text amountText;
-    public RawImage itemImage;
-    public Image itemFrame;
+
 
 
     //MouseClicks
-    bool isOver = false;
-    public bool first_click = false;
-    public float running_timer = 0;
+    private bool isOver = false;
+    private bool first_click = false;
+    private float running_timer = 0;
     private float delay = 0.3f;
 
+  
 
-    public void OnPointerEnter(PointerEventData eventData)
+
+    public virtual void OnPointerEnter(PointerEventData eventData)
     {
         isOver = true;
         first_click = false;
@@ -33,9 +32,9 @@ public class ItemDataDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExit
         running_timer = 0;
     }
 
-    void Update()
+    protected void Update()
     {
-        if (amountText != null) amountText.text = itemObject.itemData.stackSize.ToString();
+        SetAmountText(itemObject.itemData.stackSize.ToString());
 
         if (first_click)
         {
@@ -47,9 +46,6 @@ public class ItemDataDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExit
             holdingContainer.PerformSingleClick(itemObject);
             if (!first_click)
             {
-                Debug.Log("Second click");
-                Debug.Log
-                    ("Double click: " + (running_timer <= delay));
                 first_click = false;
                 if (running_timer <= delay)
                 {
@@ -59,7 +55,6 @@ public class ItemDataDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExit
             else
             {
                 first_click = true;
-                Debug.Log("First click");
             }
         }
         else if (Input.GetMouseButtonUp(1))
@@ -74,19 +69,27 @@ public class ItemDataDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExit
         holdingContainer = this.transform.GetComponentInParent<ItemContainerDisplay>();
         itemObject = this.GetComponent<ItemDataComponent>();
 
-        if (amountText != null) amountText.text = itemObject.itemData.stackSize.ToString();
-        CloudGoods.GetItemTexture(itemObject.itemData.imageName, OnReceivedItemTexture);
 
-        if (itemFrame != null) itemFrame.color = ItemQuailityColorSelector.GetColorForItem(itemObject.itemData);
+        SetAmountText(itemObject.itemData.stackSize.ToString());
+        CloudGoods.GetItemTexture(itemObject.itemData.imageName, OnReceivedItemTexture);
+        SetFrameColor(ItemQuailityColorSelector.GetColorForItem(itemObject.itemData));
+
+
     }
 
 
     void OnReceivedItemTexture(ImageStatus statusMsg, Texture2D texture)
     {
-        if (statusMsg != ImageStatus.Error && itemImage != null)
+        if (statusMsg != ImageStatus.Error)
         {
-            itemImage.texture = texture;
+            UpdateTexture(texture);
         }
     }
+
+    public abstract void UpdateTexture(Texture2D newTexture);
+
+    public abstract void SetFrameColor(Color newColor);
+
+    public abstract void SetAmountText(string newAmount);
 
 }

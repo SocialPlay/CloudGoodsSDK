@@ -20,6 +20,7 @@ public class PremiumCurrencyBundleStore : MonoBehaviour
     public GameObject Grid;
     [HideInInspector]
     public bool isInitialized = false;
+    private bool isWaitingForPlatform = false;
 
     IGridLoader gridLoader;
     public IPlatformPurchaser platformPurchasor;
@@ -53,7 +54,12 @@ public class PremiumCurrencyBundleStore : MonoBehaviour
         switch (BuildPlatform.Platform)
         {
             case BuildPlatform.BuildPlatformType.Automatic:
-                BuildPlatform.OnBuildPlatformFound += (platform) => { Initialize(); };
+                if (isWaitingForPlatform) return;
+                isWaitingForPlatform = true;
+                BuildPlatform.OnBuildPlatformFound += (platform) => {
+                    Debug.Log("Recived new build platform");
+                    Initialize();
+                };
                 return;
             case BuildPlatform.BuildPlatformType.Facebook:
                 platformPurchasor = gameObject.AddComponent<FaceBookPurchaser>();

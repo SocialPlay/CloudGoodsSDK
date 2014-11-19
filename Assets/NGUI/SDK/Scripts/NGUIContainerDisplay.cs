@@ -4,58 +4,43 @@ using System.Collections;
 using System.Collections.Generic;
 
 [RequireComponent(typeof(ItemContainer))]
-public class ContainerDisplay : MonoBehaviour
+[RequireComponent(typeof(BoxCollider))]
+public class NGUIContainerDisplay : ItemContainerDisplay
 {
     public UIGrid itemGrid;
-
     public GameObject itemPrefab;
     public bool StartWindowActive = true;
-
     protected bool isActive = true;
 
-    List<ContainerDisplayAction> disaplyActions = new List<ContainerDisplayAction>();
-    ItemContainer itemContainer;
+    //List<ContainerDisplayAction> disaplyActions = new List<ContainerDisplayAction>();
+
 
     // List of all instantiated rows
     List<ItemDataComponent> mList = new List<ItemDataComponent>();
     List<ItemDataComponent> mUnused = new List<ItemDataComponent>();
 
-    protected void Awake()
-    {
-        itemContainer = GetComponent<ItemContainer>();
-    }
 
-    protected void OnEnable()
+    BoxCollider myCollider;
+    void Awake()
     {
-        itemContainer.AddedItem += AddedItem;
-        itemContainer.RemovedItem += RemovedItem;
-        itemContainer.ClearItems += ClearItems;
-    }
-
-
-    protected void OnDisable()
-    {
-        itemContainer.AddedItem -= AddedItem;
-        itemContainer.RemovedItem -= RemovedItem;
-        itemContainer.ClearItems -= ClearItems;
+        myCollider = gameObject.GetComponent<BoxCollider>();
+        if (myContainer == null)
+        {
+            myContainer = GetComponent<ItemContainer>();
+        }
     }
 
     protected void Start()
     {
         if (itemPrefab == null) itemPrefab = CloudGoods.DefaultUIItem;
         SetupWindow();
+
     }
 
-    protected void Update()
+    void Update()
     {
-        if (!isActive)
-        {
-            HideWindow();
-        }
-        if (isActive)
-        {
-            ShowWindow();
-        }
+        myCollider.enabled = NGUIDragDropItem.IsDraggingItem;
+
     }
 
     /// <summary>
@@ -88,13 +73,11 @@ public class ContainerDisplay : MonoBehaviour
         }
 
         GameObject go = NGUITools.AddChild(itemGrid.gameObject, itemPrefab);
-        ItemDataComponent ent = go.GetComponent<NGUIContainerGameItem>();
-        if (ent == null) ent = go.AddComponent<NGUIContainerGameItem>();
+        ItemDataComponent ent = go.GetComponent<ItemDataComponent>();
+        if (ent == null) ent = go.AddComponent<ItemDataComponent>();
         ent.itemData = item;
         ent.SetData(item);
         mList.Add(ent);
-
-
         return ent;
     }
 
@@ -109,38 +92,33 @@ public class ContainerDisplay : MonoBehaviour
         NGUITools.SetActive(ent.gameObject, false);
     }
 
-    void ClearItems()
+    public override void ClearItems()
     {
         for (int i = 0; i < mList.Count; ++i)
         {
-            //Delete(mList[i]);
+            Delete(mList[i]);
         }
     }
 
-    protected void AddedItem(ItemData itemData, bool isSave)
+    public override void AddedItem(ItemData itemData, bool isSave)
     {
         Create(itemData);
         itemGrid.repositionNow = true;
     }
 
-    protected void RemovedItem(ItemData itemData, int amount, bool isBeingMoved)
+    public override void RemovedItem(ItemData itemData, int amount, bool isBeingMoved)
     {
-        Debug.Log("removed item: " + itemData.stackSize + "  amoutn: " + amount);
-
         if (!isBeingMoved)
         {
             if (itemData.stackSize - amount <= 0)
             {
                 Delete(itemData.uiReference);
-                //Destroy(itemData.uiReference.gameObject);
                 itemGrid.repositionNow = true;
             }
         }
-
         if (amount == -1 || itemData.stackSize <= 0)
         {
             Delete(itemData.uiReference);
-            //Destroy(itemData.uiReference.gameObject);
             itemGrid.repositionNow = true;
         }
     }
@@ -150,46 +128,10 @@ public class ContainerDisplay : MonoBehaviour
         isActive = StartWindowActive;
         gameObject.SetActive(true);
         if (itemGrid == null) itemGrid = GetComponentInChildren<UIGrid>();
+        //GetDisplayActions();
     }
 
-    private void GetDisplayActions()
-    {
-        if (GetComponentsInChildren<ContainerDisplayAction>().Length != 0)
-        {
-            foreach (ContainerDisplayAction action in GetComponentsInChildren<ContainerDisplayAction>())
-            {
-                disaplyActions.Add(action);
-            }
-        }
 
-        if (GetComponents<ContainerDisplayAction>().Length != 0)
-        {
-            foreach (ContainerDisplayAction action in GetComponents<ContainerDisplayAction>())
-            {
-                disaplyActions.Add(action);
-            }
-        }
-    }
-
-    public void ShowWindow()
-    {
-        if (isActive) return;
-        isActive = true;
-        foreach (ContainerDisplayAction action in disaplyActions)
-        {
-            action.Activate();
-        }
-    }
-
-    public void HideWindow()
-    {
-        if (!isActive) return;
-        foreach (ContainerDisplayAction action in disaplyActions)
-        {
-            action.Deactivate();
-        }
-        isActive = false;
-    }
 
     public bool IsWindowActive()
     {

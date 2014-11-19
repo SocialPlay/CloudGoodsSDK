@@ -8,7 +8,7 @@ public class CloudGoodsFacebookLogin : MonoBehaviour
 
     void Awake()
     {
-        if (!Application.isEditor && BuildPlatform.Platform != BuildPlatform.BuildPlatformType.Automatic)
+    
             FB.Init(SetInit, OnHideUnity);
     }
 

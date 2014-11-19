@@ -7,7 +7,7 @@ using System.Collections.Generic;
 public class ItemContainerDisplay : MonoBehaviour
 {
     public ItemContainer myContainer;
-   // public GameObject displayObject;
+    // public GameObject displayObject;
     public Transform childTarget;
 
     private List<ItemDataDisplay> currentDisplayObjects = new List<ItemDataDisplay>();
@@ -35,21 +35,21 @@ public class ItemContainerDisplay : MonoBehaviour
 
     void OnEnable()
     {
-        myContainer.AddedItem += myContainer_AddedItem;
-        myContainer.ModifiedItem += myContainer_ModifiedItem;
-        myContainer.RemovedItem += myContainer_RemovedItem;
-        myContainer.ClearItems += myContainer_ClearItems;
-    } 
+        myContainer.AddedItem += AddedItem;
+        myContainer.ModifiedItem += ModifiedItem;
+        myContainer.RemovedItem += RemovedItem;
+        myContainer.ClearItems += ClearItems;
+    }
 
     void OnDisable()
     {
-        myContainer.AddedItem -= myContainer_AddedItem;
-        myContainer.ModifiedItem -= myContainer_ModifiedItem;
-        myContainer.RemovedItem -= myContainer_RemovedItem;
-        myContainer.ClearItems -= myContainer_ClearItems;
+        myContainer.AddedItem -= AddedItem;
+        myContainer.ModifiedItem -= ModifiedItem;
+        myContainer.RemovedItem -= RemovedItem;
+        myContainer.ClearItems -= ClearItems;
     }
 
-    void myContainer_AddedItem(ItemData itemData, bool isSaving)
+    public virtual void AddedItem(ItemData itemData, bool isSaving)
     {
         GameObject newItem = GameObject.Instantiate(CloudGoodsSettings.DefaultUIItem) as GameObject;
         ItemDataDisplay newDisplay = newItem.GetComponent<ItemDataDisplay>();
@@ -62,20 +62,21 @@ public class ItemContainerDisplay : MonoBehaviour
     }
 
 
-    void myContainer_ModifiedItem(ItemData itemData, bool isSaving)
+    public virtual void ModifiedItem(ItemData itemData, bool isSaving)
     {
         foreach (ItemDataDisplay display in currentDisplayObjects)
         {
-            if(display.itemObject.itemData.IsSameItemAs(itemData)){
+            if (display.itemObject.itemData.IsSameItemAs(itemData))
+            {
                 display.itemObject.itemData.stackSize += itemData.stackSize;
-                display.amountText.text = display.itemObject.itemData.stackSize.ToString();
+                display.SetAmountText(display.itemObject.itemData.stackSize.ToString());
                 return;
             }
         }
     }
 
 
-    void myContainer_RemovedItem(ItemData itemData, int amount, bool arg3)
+    public virtual void RemovedItem(ItemData itemData, int amount, bool arg3)
     {
         ItemDataDisplay selected = FindDisplayMatch(itemData);
         if (selected != null)
@@ -88,7 +89,7 @@ public class ItemContainerDisplay : MonoBehaviour
         }
     }
 
-    void myContainer_ClearItems()
+    public virtual void ClearItems()
     {
         foreach (ItemDataDisplay item in currentDisplayObjects)
         {
@@ -98,14 +99,11 @@ public class ItemContainerDisplay : MonoBehaviour
     }
 
 
-
-  
-
     void Start()
     {
         if (CloudGoodsSettings.DefaultUIItem == null)
         {
-            Debug.LogError("Default UI Item is not set int he settigns file");
+            Debug.LogError("Default UI Item is not set int the settings file");
             this.gameObject.SetActive(false);
         }
     }

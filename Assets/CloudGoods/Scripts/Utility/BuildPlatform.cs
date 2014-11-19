@@ -64,6 +64,7 @@ public class BuildPlatform : MonoBehaviour
             selected = value;
             if (OnBuildPlatformFound != null)
             {
+                Debug.Log("Setting build platform to " + selected.ToString());
                 OnBuildPlatformFound(selected);
             }
         }

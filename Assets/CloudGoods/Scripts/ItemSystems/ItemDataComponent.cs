@@ -37,11 +37,10 @@ public class ItemDataComponent : MonoBehaviour
     /// if pickupOnClick is true the item can be picked up on Click event.
     /// </summary>
 
-    void OnClick()
+   void OnClick()
     {
-        Debug.Log("clicked");
         if (pickupOnClick) Pickup(addOnPickup);
-    }
+    } 
 
     public virtual void SetData(ItemData itemData) { }
 

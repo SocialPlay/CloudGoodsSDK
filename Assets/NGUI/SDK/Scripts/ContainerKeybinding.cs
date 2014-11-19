@@ -10,7 +10,7 @@ public class ContainerKeybinding : MonoBehaviour
 
     public KeyCode binding;
     public ActionType actiontype = ActionType.toggle;
-    private ContainerDisplay containerDisplay;
+    private NGUIContainerDisplay containerDisplay;
 
     private static List<string> systemsLockingKeys = new List<string>();
 
@@ -21,7 +21,7 @@ public class ContainerKeybinding : MonoBehaviour
 
     void Awake()
     {
-        containerDisplay = gameObject.GetComponent<ContainerDisplay>();
+        containerDisplay = gameObject.GetComponent<NGUIContainerDisplay>();
         Debug.Log(containerDisplay);
     }
 
