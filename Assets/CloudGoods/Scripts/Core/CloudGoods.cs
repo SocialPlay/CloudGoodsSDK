@@ -1219,7 +1219,14 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
         // check for errors
         if (www.error == null)
         {
-            callback(serviceConverter.ConvertToString(www.text));
+            try
+            {
+                callback(serviceConverter.ConvertToString(www.text));
+            }
+            catch
+            {
+                Debug.LogError(www.text);
+            }
         }
         else
         {
@@ -1233,7 +1240,14 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
 
         if (www.error == null)
         {
-            callback(serviceConverter.ConvertToUserInfo(www.text));
+            try
+            {
+                callback(serviceConverter.ConvertToUserInfo(www.text));
+            }
+            catch
+            {
+                Debug.LogError(www.text);
+            }
         }
         else
         {
@@ -1248,7 +1262,16 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
         yield return www;
 
         if (www.error == null)
-            callback(serviceConverter.ConvertToItemDataList(www.text));
+        {
+            try
+            {
+                callback(serviceConverter.ConvertToItemDataList(www.text));
+            }
+            catch
+            {
+                Debug.LogError(www.text);
+            }
+        }
         else
         {
             if (onErrorEvent != null) onErrorEvent("Error: " + www.error);
@@ -1260,7 +1283,16 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
         yield return www;
 
         if (www.error == null)
-            callback(serviceConverter.ConvertToStoreItems(www.text));
+        {
+            try
+            {
+                callback(serviceConverter.ConvertToStoreItems(www.text));
+            }
+            catch
+            {
+                Debug.LogError(www.text);
+            }
+        }
         else
         {
             if (onErrorEvent != null) onErrorEvent("Error: " + www.error);
@@ -1272,7 +1304,16 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
         yield return www;
 
         if (www.error == null)
-            callback(serviceConverter.ConvertToGuid(www.text));
+        {
+            try
+            {
+                callback(serviceConverter.ConvertToGuid(www.text));
+            }
+            catch(Exception ex)
+            {
+                Debug.LogError("Returned text: " + www.text + " Error: " + ex.Message);
+            }
+        }
         else
         {
             if (onErrorEvent != null) onErrorEvent("Error: " + www.error);
@@ -1286,7 +1327,16 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
         yield return www;
 
         if (www.error == null)
-            callback(serviceConverter.ConvertToListRecipeInfo(www.text));
+        {
+            try
+            {
+                callback(serviceConverter.ConvertToListRecipeInfo(www.text));
+            }
+            catch
+            {
+                Debug.LogError(www.text);
+            }
+        }
         else
         {
             if (onErrorEvent != null) onErrorEvent("Error: " + www.error);
@@ -1299,15 +1349,22 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
 
         if (www.error == null)
         {
-            Debug.Log(www.text);
-            List<ItemBundle> itemBundles = serviceConverter.ConvertToListItemBundle(www.text);
-            if (OnStoreItemBundleListLoaded != null)
+            try
             {
-                OnStoreItemBundleListLoaded(itemBundles);
-            }
+                Debug.Log(www.text);
+                List<ItemBundle> itemBundles = serviceConverter.ConvertToListItemBundle(www.text);
+                if (OnStoreItemBundleListLoaded != null)
+                {
+                    OnStoreItemBundleListLoaded(itemBundles);
+                }
 
-            if (callback != null)
-                callback(itemBundles);
+                if (callback != null)
+                    callback(itemBundles);
+            }
+            catch
+            {
+                Debug.LogError(www.text);
+            }
         }
         else
         {
@@ -1320,7 +1377,14 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
         yield return www;
         Debug.Log(www.text);
         if (www.error == null)
-            callback(serviceConverter.ConvertToListPaidCurrencyBundleItem(www.text));
+            try
+            {
+                callback(serviceConverter.ConvertToListPaidCurrencyBundleItem(www.text));
+            }
+            catch
+            {
+                Debug.LogError(www.text);
+            }
         else
         {
             if (onErrorEvent != null) onErrorEvent("Error: " + www.error);
@@ -1334,7 +1398,14 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
         // check for errors
         if (www.error == null)
         {
-            callback(serviceConverter.ConvertToMoveMultipleItemsResponse(www.text));
+            try
+            {
+                callback(serviceConverter.ConvertToMoveMultipleItemsResponse(www.text));
+            }
+            catch
+            {
+                Debug.LogError(www.text);
+            }
         }
         else
         {
@@ -1351,7 +1422,14 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
         // check for errors
         if (www.error == null)
         {
-            callback(serviceConverter.ConvertToSPLoginResponse(www.text));
+            try
+            {
+                callback(serviceConverter.ConvertToSPLoginResponse(www.text));
+            }
+            catch
+            {
+                Debug.LogError(www.text);
+            }
         }
         else
         {
@@ -1366,7 +1444,14 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
         // check for errors
         if (www.error == null)
         {
-            callback(serviceConverter.ConverToConsumeCreditsResponse(www.text));
+            try
+            {
+                callback(serviceConverter.ConverToConsumeCreditsResponse(www.text));
+            }
+            catch
+            {
+                Debug.LogError(www.text);
+            }
         }
         else
         {

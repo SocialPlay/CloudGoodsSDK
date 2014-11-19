@@ -10,10 +10,8 @@ public class UnityUIPurchaseButtonDisplay : MonoBehaviour {
     public Text CurrencyText;
     public string InsufficientFundsTextOverride = "";
 
-
     public void SetInactive()
     {
-        ActiveButton.transform.parent.gameObject.SetActive(true);
         if (!string.IsNullOrEmpty(InsufficientFundsTextOverride) && InsufficientFundsTextOverride != InsufficientFundsLabel.text)
         {
             InsufficientFundsLabel.text = InsufficientFundsTextOverride;
@@ -25,7 +23,6 @@ public class UnityUIPurchaseButtonDisplay : MonoBehaviour {
 
     public void SetActive()
     {
-        ActiveButton.transform.parent.gameObject.SetActive(true);
         if (!string.IsNullOrEmpty(InsufficientFundsTextOverride) && InsufficientFundsTextOverride != InsufficientFundsLabel.text)
         {
             InsufficientFundsLabel.text = InsufficientFundsTextOverride;
@@ -41,6 +38,8 @@ public class UnityUIPurchaseButtonDisplay : MonoBehaviour {
 
     public void SetState(int itemCost)
     {
+        CurrencyText.text = itemCost.ToString();
+
         if (itemCost < 0)
         {
             SetNotApplicable();

@@ -8,14 +8,14 @@ public class UnityUIBundlePurchasing : MonoBehaviour {
 
     public static Action<string> OnPurchaseSuccessful;
 
-    public UnityUIPurchaseButtonDisplay PremiumCurrencyPurchaseButton;
-    public UnityUIPurchaseButtonDisplay StandardCurrencyPurchaseButton;
+    public GameObject PremiumCurrencyPurchaseWindowHalf;
+    public GameObject PremiumCurrencyPurchaseWindowFull;
+    public GameObject StandardCurrencyPurchaseWindowHalf;
+    public GameObject StandardCurrencyPurchaseWindowFull;
 
     public GameObject bundleItemDisplayPrefab;
 
     public Text BundleName;
-    public Text PremiumCurrencyAmount;
-    public Text StandardCurrencyAmount;
 
     public int purchaseContainerLocation = 0;
 
@@ -25,7 +25,6 @@ public class UnityUIBundlePurchasing : MonoBehaviour {
 
     public GameObject bundleGrid;
 
-    //public GameObject bundleGrid;
 
     public void ClosePurchaseWindow()
     {
@@ -34,7 +33,18 @@ public class UnityUIBundlePurchasing : MonoBehaviour {
 
     public void SetupBundlePurchaseDetails(ItemBundle bundle)
     {
-        ChangePurchaseButtonDisplay(bundle.CreditPrice, bundle.CoinPrice, bundle.State);
+        CloudGoodsBundle bundlePriceState;
+
+        if (bundle.CoinPrice <= 0 && bundle.CreditPrice <= 0)
+            bundlePriceState = CloudGoodsBundle.Free;
+        else if (bundle.CoinPrice <= 0)
+            bundlePriceState = CloudGoodsBundle.CreditPurchasable;
+        else if (bundle.CreditPrice <= 0)
+            bundlePriceState = CloudGoodsBundle.CoinPurchasable;
+        else
+            bundlePriceState = CloudGoodsBundle.CreditCoinPurchaseable;
+
+        ChangePurchaseButtonDisplay(bundle.CreditPrice, bundle.CoinPrice, bundlePriceState);
 
         currentItemBundle = bundle;
 
@@ -62,39 +72,47 @@ public class UnityUIBundlePurchasing : MonoBehaviour {
 
     private void ChangePurchaseButtonDisplay(int itemCreditCost, int itemCoinCost, CloudGoodsBundle state)
     {
+        Debug.Log("State: " + state.ToString());
         switch (state)
         {
             case CloudGoodsBundle.CreditPurchasable:
-                PremiumCurrencyPurchaseButton.InsufficientFundsLabel.text = "Insufficent Funds";
-                PremiumCurrencyPurchaseButton.SetState(itemCreditCost);
-                StandardCurrencyPurchaseButton.InsufficientFundsLabel.text = "Credit Purchase Only";
-                StandardCurrencyPurchaseButton.SetState(-1);
+                StandardCurrencyPurchaseWindowFull.SetActive(false);
+                StandardCurrencyPurchaseWindowHalf.SetActive(false);
+                PremiumCurrencyPurchaseWindowFull.SetActive(true);
+                PremiumCurrencyPurchaseWindowHalf.SetActive(false);
 
-                PremiumCurrencyAmount.text = itemCreditCost.ToString();
-                StandardCurrencyAmount.text = "N/A";
+                UnityUIPurchaseButtonDisplay premiumButtonDisplay = PremiumCurrencyPurchaseWindowFull.GetComponent<UnityUIPurchaseButtonDisplay>();
+                premiumButtonDisplay.SetState(itemCreditCost);
                 break;
             case CloudGoodsBundle.CoinPurchasable:
-                StandardCurrencyPurchaseButton.InsufficientFundsLabel.text = "Insufficent Funds";
-                StandardCurrencyPurchaseButton.SetState(itemCoinCost);
-                PremiumCurrencyPurchaseButton.InsufficientFundsLabel.text = "Coin Purchase Only";
-                PremiumCurrencyPurchaseButton.SetState(-1);
+                StandardCurrencyPurchaseWindowFull.SetActive(true);
+                StandardCurrencyPurchaseWindowHalf.SetActive(false);
+                PremiumCurrencyPurchaseWindowFull.SetActive(false);
+                PremiumCurrencyPurchaseWindowHalf.SetActive(false);
 
-                PremiumCurrencyAmount.text = "N/A";
-                StandardCurrencyAmount.text = itemCoinCost.ToString();
+                UnityUIPurchaseButtonDisplay standardButtonDisplay = StandardCurrencyPurchaseWindowFull.GetComponent<UnityUIPurchaseButtonDisplay>();
+                standardButtonDisplay.SetState(itemCoinCost);
                 break;
             case CloudGoodsBundle.Free:
-                PremiumCurrencyAmount.text = "Free";
-                StandardCurrencyAmount.text = "Free";
-                StandardCurrencyPurchaseButton.SetState(0);
-                PremiumCurrencyPurchaseButton.SetState(0);
+                StandardCurrencyPurchaseWindowFull.SetActive(false);
+                StandardCurrencyPurchaseWindowHalf.SetActive(false);
+                PremiumCurrencyPurchaseWindowFull.SetActive(true);
+                PremiumCurrencyPurchaseWindowHalf.SetActive(false);
+
+                UnityUIPurchaseButtonDisplay standardButtonDisplayFree = StandardCurrencyPurchaseWindowFull.GetComponent<UnityUIPurchaseButtonDisplay>();
+                standardButtonDisplayFree.SetState(itemCoinCost);
                 break;
             default:
-                StandardCurrencyPurchaseButton.InsufficientFundsLabel.text = "Insufficent Funds";
-                PremiumCurrencyPurchaseButton.InsufficientFundsLabel.text = "Insufficent Funds";
-                StandardCurrencyPurchaseButton.SetState(itemCoinCost);
-                PremiumCurrencyPurchaseButton.SetState(itemCreditCost);
-                PremiumCurrencyAmount.text = itemCreditCost.ToString();
-                StandardCurrencyAmount.text = itemCoinCost.ToString();
+                StandardCurrencyPurchaseWindowFull.SetActive(false);
+                StandardCurrencyPurchaseWindowHalf.SetActive(true);
+                PremiumCurrencyPurchaseWindowFull.SetActive(false);
+                PremiumCurrencyPurchaseWindowHalf.SetActive(true);
+
+                UnityUIPurchaseButtonDisplay standardButtonDisplayDefault = StandardCurrencyPurchaseWindowHalf.GetComponent<UnityUIPurchaseButtonDisplay>();
+                standardButtonDisplayDefault.SetState(itemCoinCost);
+
+                UnityUIPurchaseButtonDisplay PremiumButtonDisplayDefault = PremiumCurrencyPurchaseWindowHalf.GetComponent<UnityUIPurchaseButtonDisplay>();
+                PremiumButtonDisplayDefault.SetState(itemCoinCost);
                 break;
         }
     }
