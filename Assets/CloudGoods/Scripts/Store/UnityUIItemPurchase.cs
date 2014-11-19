@@ -10,8 +10,6 @@ public class UnityUIItemPurchase : MonoBehaviour {
     UnityUIStoreItem itemInfo;
 
     public Text itemNameDisplay;
-    public Text itemCreditCostDisplay;
-    public Text itemCoinCostDisplay;
     public Text itemDetailsDisplay;
 
     public Text itemQuantityAmount;
@@ -19,46 +17,39 @@ public class UnityUIItemPurchase : MonoBehaviour {
     public GameObject increaseQuantityButton;
     public GameObject decreaseQuantityButton;
 
-    public UnityUIPurchaseButtonDisplay PremiumCurrencyPurchaseButton;
-    public UnityUIPurchaseButtonDisplay StandardCurrencyPurchaseButton;
+    public GameObject PremiumCurrencyHalfWindow;
+    public GameObject StandardCurrencyHalfWindow;
+    public GameObject PremiumCurrencyFullWindow;
+    public GameObject StandardCurrencyFullWindow;
 
     public RawImage itemTexture;
+
+    int premiumCurrencyCost = 0;
+    int standardCurrencyCost = 0;
 
     public void IncreaseQuantityAmount()
     {
         int quantityAmount = int.Parse(itemQuantityAmount.text);
-        int itemCreditCost = int.Parse(itemCreditCostDisplay.text);
-        int itemCoinCost = int.Parse(itemCoinCostDisplay.text);
 
-        if (itemCreditCost >= 0)
-            itemCreditCost = itemCreditCost / quantityAmount;
+        if (premiumCurrencyCost >= 0)
+            premiumCurrencyCost = premiumCurrencyCost / quantityAmount;
 
-        if (itemCoinCost >= 0)
-            itemCoinCost = itemCoinCost / quantityAmount;
+        if (standardCurrencyCost >= 0)
+            standardCurrencyCost = standardCurrencyCost / quantityAmount;
 
         quantityAmount++;
 
-        ChangeAmountDisplay(quantityAmount, ref itemCreditCost, ref itemCoinCost);
-
-
+        ChangeAmountDisplay(quantityAmount, ref premiumCurrencyCost, ref standardCurrencyCost);
     }
 
     public void DecreaseQuantityAmount()
     {
         int quantityAmount = int.Parse(itemQuantityAmount.text);
-        int itemCreditCost = int.Parse(itemCreditCostDisplay.text);
-        int itemCoinCost = int.Parse(itemCoinCostDisplay.text);
-
-        if (itemCreditCost >= 0)
-            itemCreditCost = itemCreditCost / quantityAmount;
-
-        if (itemCoinCost >= 0)
-            itemCoinCost = itemCoinCost / quantityAmount;
 
         if (quantityAmount > 1)
             quantityAmount--;
 
-        ChangeAmountDisplay(quantityAmount, ref itemCreditCost, ref itemCoinCost);
+        ChangeAmountDisplay(quantityAmount, ref premiumCurrencyCost, ref standardCurrencyCost);
     }
 
     private void ChangeAmountDisplay(int quantityAmount, ref int itemCreditCost, ref int itemCoinCost)
@@ -73,9 +64,6 @@ public class UnityUIItemPurchase : MonoBehaviour {
         else
             itemCoinCost = -1;
 
-        itemCreditCostDisplay.text = itemCreditCost.ToString();
-        itemCoinCostDisplay.text = itemCoinCost.ToString();
-
         itemQuantityAmount.text = quantityAmount.ToString();
 
         ChangePurchaseButtonDisplay(itemCreditCost, itemCoinCost);
@@ -83,16 +71,52 @@ public class UnityUIItemPurchase : MonoBehaviour {
 
     private void ChangePurchaseButtonDisplay(int itemCreditCost, int itemCoinCost)
     {
-        StandardCurrencyPurchaseButton.SetState(itemCoinCost);
-        PremiumCurrencyPurchaseButton.SetState(itemCreditCost);
+        StandardCurrencyFullWindow.SetActive(false);
+        StandardCurrencyHalfWindow.SetActive(false);
+        PremiumCurrencyFullWindow.SetActive(false);
+        PremiumCurrencyHalfWindow.SetActive(false);
+
+        if (itemCreditCost < 0 && itemCreditCost < 0)
+        {
+            StandardCurrencyFullWindow.SetActive(true);
+
+            UnityUIPurchaseButtonDisplay freeButtonDisplay = StandardCurrencyFullWindow.GetComponent<UnityUIPurchaseButtonDisplay>();
+            freeButtonDisplay.SetState(itemCoinCost);
+        }
+        else if (itemCreditCost < 0)
+        {
+            StandardCurrencyFullWindow.SetActive(true);
+
+            UnityUIPurchaseButtonDisplay StandardOnlyButtonDisplay = StandardCurrencyFullWindow.GetComponent<UnityUIPurchaseButtonDisplay>();
+            StandardOnlyButtonDisplay.SetState(itemCoinCost);
+        }
+        else if (itemCoinCost < 0)
+        {
+            PremiumCurrencyFullWindow.SetActive(true);
+
+            UnityUIPurchaseButtonDisplay PremiumOnlyButtonDisplay = PremiumCurrencyFullWindow.GetComponent<UnityUIPurchaseButtonDisplay>();
+            PremiumOnlyButtonDisplay.SetState(itemCreditCost);
+        }
+        else
+        {
+            PremiumCurrencyHalfWindow.SetActive(true);
+            StandardCurrencyHalfWindow.SetActive(true);
+
+            UnityUIPurchaseButtonDisplay PremiumButtonDisplay = PremiumCurrencyHalfWindow.GetComponent<UnityUIPurchaseButtonDisplay>();
+            UnityUIPurchaseButtonDisplay StandardButtonDisplay = StandardCurrencyHalfWindow.GetComponent<UnityUIPurchaseButtonDisplay>();
+            PremiumButtonDisplay.SetState(itemCreditCost);
+            StandardButtonDisplay.SetState(itemCoinCost);
+        }
     }
 
     public void DisplayItemPurchasePanel(UnityUIStoreItem item)
     {
         itemInfo = item;
         itemNameDisplay.text = item.storeItem.itemName;
-        itemCreditCostDisplay.text = item.storeItem.premiumCurrencyValue.ToString();
-        itemCoinCostDisplay.text = item.storeItem.standardCurrencyValue.ToString();
+
+        premiumCurrencyCost = item.storeItem.premiumCurrencyValue;
+        standardCurrencyCost = item.storeItem.standardCurrencyValue;
+
         itemQuantityAmount.text = "1";
         SetItemDetailDisplay(item);
 

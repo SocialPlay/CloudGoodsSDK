@@ -39,7 +39,7 @@ public class EditorPremiumCurrencyPurchaser : MonoBehaviour, IPlatformPurchaser 
         {
             case "Successful Purchase":
                 if (RecievedPurchaseResponse != null)
-                    OnReceivedPurchaseResponse(data);
+                    RecievedPurchaseResponse(data);
                 break;
             case "Failed Purchase":
                 if (OnPurchaseErrorEvent != null)
