@@ -117,7 +117,8 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
 
     static public Guid GuidAppID
     {
-        get {
+        get
+        {
             try
             {
                 return new Guid(AppID);
@@ -127,7 +128,7 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
                 Debug.LogError("AppID is not a valid Guid. Please check your guid and try again.");
                 return Guid.Empty;
             }
-        
+
         }
     }
 
@@ -1210,6 +1211,17 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
 
     #endregion
 
+    #region Item Data Calls
+
+    static public void SaveUserData(string Key, string Value, Action<bool> callback)
+    {
+        string url = string.Format("{0}SaveUserData?UserID={1}&Key={2}&Value={3}", Url, user.userID, Key, Value);
+        WWW www = new WWW(url);
+        Get().StartCoroutine(Get().ServiceGetBool(www, callback));
+    }
+
+    #endregion
+
     #region IEnumeratorCalls
 
     IEnumerator ServiceGetString(WWW www, Action<string> callback)
@@ -1222,6 +1234,28 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
             try
             {
                 callback(serviceConverter.ConvertToString(www.text));
+            }
+            catch
+            {
+                Debug.LogError(www.text);
+            }
+        }
+        else
+        {
+            if (onErrorEvent != null) onErrorEvent("Error: " + www.error);
+        }
+    }
+
+    IEnumerator ServiceGetBool(WWW www, Action<bool> callback)
+    {
+        yield return www;
+
+        // check for errors
+        if (www.error == null)
+        {
+            try
+            {
+                callback(serviceConverter.ConvertToBool(www.text));
             }
             catch
             {
@@ -1255,7 +1289,6 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
             if (onErrorEvent != null) onErrorEvent("Error: " + www.error);
         }
     }
-
 
     IEnumerator ServiceCallGetListItemDatas(WWW www, Action<List<ItemData>> callback)
     {
@@ -1309,7 +1342,7 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
             {
                 callback(serviceConverter.ConvertToGuid(www.text));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Debug.LogError("Returned text: " + www.text + " Error: " + ex.Message);
             }

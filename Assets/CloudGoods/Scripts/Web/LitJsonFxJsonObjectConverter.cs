@@ -9,7 +9,7 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter
 {
 
     public List<ItemData> ConvertToItemDataList(string ObjectData)
-    {       
+    {
         ItemDataList itemDataList = new SocialPlay.Data.ItemDataList();
 
         string parsedString = ParseString(ObjectData);
@@ -48,7 +48,7 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter
                 reader.Read();
 
                 if (reader.Token.ToString() == "PropertyName")
-                {          
+                {
                     string propertyString = reader.Value.ToString();
 
                     reader.Read();
@@ -146,7 +146,7 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter
                     }
                     if (propertyString == "Tags")
                     {
-                        if(reader.Value != null)
+                        if (reader.Value != null)
                             itemData.Tags = reader.Value.ToString();
                     }
                 }
@@ -157,7 +157,7 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter
 
 
     public Guid ConvertToGuid(string dataString)
-    {      
+    {
         string guidString = ParseString(dataString);
         Guid newGuid = new Guid(guidString);
         return newGuid;
@@ -167,6 +167,12 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter
     {
         string newString = ParseString(dataString);
         return newString;
+    }
+
+    public bool ConvertToBool(string dataString)
+    {
+        return ParseBool(dataString);
+
     }
 
     public List<StoreItem> ConvertToStoreItems(string dataString)
@@ -357,7 +363,7 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter
     }
 
     public List<PaidCurrencyBundleItem> ConvertToListPaidCurrencyBundleItem(string dataString)
-    { 
+    {
         List<PaidCurrencyBundleItem> creditBundles = new List<PaidCurrencyBundleItem>();
 
         string parsedString = ParseString(dataString);
@@ -436,7 +442,7 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter
 
         consumeResponse.Result = int.Parse(jsonData["Result"].ToString());
 
-        if(jsonData["Message"] != null)
+        if (jsonData["Message"] != null)
             consumeResponse.Message = jsonData["Message"].ToString();
 
         consumeResponse.Balance = int.Parse(jsonData["Balance"].ToString());
@@ -454,6 +460,11 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter
 
 
         return parseString;
+    }
+
+    bool ParseBool(string dataString)
+    {
+        return bool.Parse(ParseString(dataString));
     }
 
 }

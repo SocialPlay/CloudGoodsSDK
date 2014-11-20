@@ -13,6 +13,8 @@ public interface IServiceObjectConverter
 
     string ConvertToString(string dataString);
 
+    bool ConvertToBool(string dataString);
+
     List<StoreItem> ConvertToStoreItems(string dataString);
 
     CloudGoodsUser ConvertToUserInfo(string dataString);
