@@ -2,6 +2,7 @@
 using System.Collections;
 using System;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class PersistantUserDataExample : MonoBehaviour
 {
@@ -16,20 +17,19 @@ public class PersistantUserDataExample : MonoBehaviour
     public InputField DeleteKey;
     public Text DeleteResponse;
 
-    public InputField RetriveAllUserKey;
     public Text RetriveAllUserResponse;
 
     public InputField RetriveAllValuesOfKey;
-    public Text RetriveAllValuesOfResponse;
+    public Text RetriveAllValuesOfKeyResponse;
 
 
     void Awake()
     {
-        CloudGoods.OnRegisteredUserToSession += (r) => { ShowChilder(true); };
-        ShowChilder(false);
+        CloudGoods.OnRegisteredUserToSession += (r) => { ShowChildren(true); };
+        ShowChildren(false);
     }
 
-    void ShowChilder(bool isShown)
+    void ShowChildren(bool isShown)
     {
         for (int childIndex = 0; childIndex < this.transform.childCount; childIndex++)
         {
@@ -46,22 +46,44 @@ public class PersistantUserDataExample : MonoBehaviour
 
     }
 
-    void RetriveUserDataValue()
+    public void RetriveUserDataValue()
     {
         //Guid userID, string key
+        CloudGoods.RetriveUserDataValue(RetriveKey.text, (r) => { loadResponse.text = r; });
     }
 
 
 
-    void DeleteUserDateValue()
+    public void DeleteUserDateValue()
     {
         //Guid userID, string key
+        CloudGoods.DeleteUserDateValue(DeleteKey.text, (r) => { DeleteResponse.text = r.ToRichColor(); });
     }
 
-
-
-    void RetriveAllUserDataOfKey()
+    public void RetriveAllUsersData()
     {
-        //Guid appID, string Key
+        CloudGoods.RetriveAllUserDataValues((r) =>
+        {
+            RetriveAllUserResponse.text = "";
+            foreach (KeyValuePair<string, string> data in r)
+            {
+                RetriveAllUserResponse.text += data.Key.ToRichColor(Color.white) + ":" + (data.Value != null ? data.Value : "Null") + "\n";
+            }
+
+        });
     }
+
+    public void RetriveAllUserDataOfKey()
+    {
+        CloudGoods.RetriveAllUserDataOfKey(RetriveAllValuesOfKey.text, (r) => {
+            RetriveAllValuesOfKeyResponse.text = "";
+            for (int i = 0; i < r.Count; i++)
+            {             
+                RetriveAllValuesOfKeyResponse.text += r[i].user.userName.ToRichColor(Color.white) + " : " + r[i].value + "\n";
+            }
+            //RetriveAllValuesOfKeyResponse.text = r;
+        });
+    }
+
+
 }

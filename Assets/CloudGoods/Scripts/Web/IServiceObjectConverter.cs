@@ -15,6 +15,8 @@ public interface IServiceObjectConverter
 
     bool ConvertToBool(string dataString);
 
+    Dictionary<string,string> ConvertToDictionary(string datastring);
+
     List<StoreItem> ConvertToStoreItems(string dataString);
 
     CloudGoodsUser ConvertToUserInfo(string dataString);
@@ -32,5 +34,7 @@ public interface IServiceObjectConverter
     WorldCurrencyInfo ConvertToWorldCurrencyInfo(string dataString);
 
     ConsumeResponse ConverToConsumeCreditsResponse(string dataString);
+
+    List<UserDataValue> ConvertToUserDataValueList(string dataString);
 
 }

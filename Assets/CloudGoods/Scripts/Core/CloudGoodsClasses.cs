@@ -199,6 +199,32 @@ public class ConsumeResponse
 
 #endregion
 
+#region Persistant User Data
+public class UserDataValue
+{
+    public User user;
+    public string value;
+
+    public class User
+    {
+        public string userName;
+        public int platformID;
+        public string platformUserID;
+        public string userID;
+    }
+
+    public UserDataValue(string userName, int platformID, string platformUserID, string userID, string newValue)
+    {
+        user = new User();
+        user.userName = userName;
+        user.platformID = platformID;
+        user.platformUserID = platformUserID;
+        user.userID = userID;
+        value = newValue;
+    }       
+}
+#endregion
+
 /*namespace CloudGoodsSDK.Models
 {
 	public class PlatformUser
