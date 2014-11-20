@@ -19,6 +19,8 @@ public class iOSPremiumCurrencyPurchaser : MonoBehaviour, IPlatformPurchaser
 	
 	public void Purchase(PremiumBundle bundleItem, int amount, string userID)
 	{
+		Debug.Log ("Purchase ios called");
+
 		currentBundleID = int.Parse (bundleItem.BundleID);
 		iOSConnect.RequestInAppPurchase (bundleItem.ProductID);
 	}

@@ -12,14 +12,18 @@ public class iOSConnect : MonoBehaviour {
 
     public static void RequestInAppPurchase(string productID)
     {
+
+		Debug.Log ("Request purchase produtct ID: " + productID);
         if (Application.platform != RuntimePlatform.OSXEditor)
         {
+			Debug.Log("Not editor platform");
 			_PrintMessageFromUnity(productID);
         }
     }
 
 	public void ReceivedMessageFromXCode(string message)
 	{
+		Debug.Log ("Message received from ios: " + message);
 		iOSConnect.onReceivedMessage (message);
 	}
 

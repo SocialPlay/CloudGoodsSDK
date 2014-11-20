@@ -1,8 +1,8 @@
 using UnityEngine;
 using System.Collections;
 using System;
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
+//using Newtonsoft.Json.Linq;
+//using Newtonsoft.Json;
 using LitJson;
 using SocialPlay.Data;
 using SocialPlay.Generic;
@@ -630,7 +630,7 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
     {
         RemoveMultipleItems infos = new RemoveMultipleItems();
         infos.stacks = StacksToRemove;
-        string stacksInfo = JsonConvert.SerializeObject(infos);
+        string stacksInfo = JsonMapper.ToJson(infos);
         string url = string.Format("{0}RemoveStackItems?stacks={1}", Url, stacksInfo);
         WWW www = new WWW(url);
 
@@ -1152,13 +1152,13 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
         request.appID = AppID;
         request.OwnerType = WebModels.OwnerTypes.User;
 
-        string newStringRequest = JsonConvert.SerializeObject(request);
+        string newStringRequest = JsonMapper.ToJson(request);
 
         SecurePayload payload = new SecurePayload();
         payload.token = token;
         payload.data = newStringRequest;
 
-        string securePayloadString = JsonConvert.SerializeObject(payload);
+        string securePayloadString = JsonMapper.ToJson(payload);
 
         Debug.Log(securePayloadString);
 
@@ -1193,7 +1193,7 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
 
     static public void AddInstantCraftToQueue(int ItemID, int Amount, List<KeyValuePair<string, int>> ItemIngredients, Action<string> callback)
     {
-        string url = string.Format("{0}AddInstantCraftToQueue?gameID={1}&UserID={2}&ItemID={3}&Amount={4}&ItemIngredients={5}", Url, GuidAppID, user.userID, ItemID, Amount, WWW.EscapeURL(JsonConvert.SerializeObject(ItemIngredients)));
+        string url = string.Format("{0}AddInstantCraftToQueue?gameID={1}&UserID={2}&ItemID={3}&Amount={4}&ItemIngredients={5}", Url, GuidAppID, user.userID, ItemID, Amount, WWW.EscapeURL(JsonMapper.ToJson(ItemIngredients)));
 
         WWW www = new WWW(url);
 
