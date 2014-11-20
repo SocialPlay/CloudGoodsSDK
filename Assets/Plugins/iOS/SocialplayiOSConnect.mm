@@ -97,7 +97,13 @@ SKProductsRequest *productsRequest;
     if (wasSuccessful)
     {
         // send out a notification that we’ve finished the transaction
-        UnitySendMessage("iOSConnect", "ReceivedMessageFromXCode", "Success");
+        NSURL *reciptURL = [[NSBundle mainBundle] appStoreReceiptURL];
+        NSData *receipt = [NSData dataWithContentsOfURL:reciptURL];
+        
+        const char *reciptDescription = [receipt.description UTF8String];
+        
+        // send out a notification that we’ve finished the transaction
+        UnitySendMessage("iOSConnect", "ReceivedMessageFromXCode", reciptDescription);
     }
     else
     {
