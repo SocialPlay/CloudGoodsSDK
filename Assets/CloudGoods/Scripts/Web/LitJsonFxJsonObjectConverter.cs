@@ -237,7 +237,7 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter
         string userInfoString = ParseString(dataString);
         JsonData data = LitJson.JsonMapper.ToObject(userInfoString);
 
-        CloudGoodsUser userinfo = new CloudGoodsUser(data["userGuid"].ToString(), data["userName"].ToString(), "");
+        CloudGoodsUser userinfo = new CloudGoodsUser(data["userGuid"].ToString().Trim(), data["userName"].ToString(), "");
 
         if (data["userEmail"] != null) userinfo.userEmail = data["userEmail"].ToString();
 
