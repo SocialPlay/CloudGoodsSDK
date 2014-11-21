@@ -22,9 +22,9 @@ public static class RichTextExtensions
         return value.ToRichColor(Color.green, Color.red);
     }
 
-    public static string ToRichColor(this bool value, Color32 trueColor,Color32 falseColor){
+    public static string ToRichColor(this bool value, Color32 trueColor, Color32 falseColor)
+    {
         Color color = value ? trueColor : falseColor;
-        string hex = color.r.ToString("X2") + color.g.ToString("X2") + color.b.ToString("X2");
-        return "<color=#" + hex + ">" + value + "</color>";
-}
+        return value.ToString().ToRichColor(color);
+    }
 }

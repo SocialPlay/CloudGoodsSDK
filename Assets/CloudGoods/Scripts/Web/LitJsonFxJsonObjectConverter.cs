@@ -9,7 +9,7 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter
 {
 
     public List<ItemData> ConvertToItemDataList(string ObjectData)
-    {       
+    {
         ItemDataList itemDataList = new SocialPlay.Data.ItemDataList();
 
         string parsedString = ParseString(ObjectData);
@@ -48,7 +48,7 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter
                 reader.Read();
 
                 if (reader.Token.ToString() == "PropertyName")
-                {          
+                {
                     string propertyString = reader.Value.ToString();
 
                     reader.Read();
@@ -146,7 +146,7 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter
                     }
                     if (propertyString == "Tags")
                     {
-                        if(reader.Value != null)
+                        if (reader.Value != null)
                             itemData.Tags = reader.Value.ToString();
                     }
                 }
@@ -157,7 +157,7 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter
 
 
     public Guid ConvertToGuid(string dataString)
-    {      
+    {
         string guidString = ParseString(dataString);
         Guid newGuid = new Guid(guidString);
         return newGuid;
@@ -167,6 +167,28 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter
     {
         string newString = ParseString(dataString);
         return newString;
+    }
+
+    public bool ConvertToBool(string dataString)
+    {
+        return ParseBool(dataString);
+
+    }
+
+
+    public Dictionary<string, string> ConvertToDictionary(string dataString)
+    {
+        Dictionary<string, string> dataDictionary = new Dictionary<string, string>();
+        string parsedString = ParseString(dataString);
+        JsonData dataArray = LitJson.JsonMapper.ToObject(parsedString);
+
+        for (int i = 0; i < dataArray.Count; i++)
+        {
+            string key = dataArray[i]["Key"] != null ? dataArray[i]["Key"].ToString() : null;
+            string value = dataArray[i]["Value"] != null ? dataArray[i]["Value"].ToString() : null;
+            dataDictionary.Add(key, value);
+        }
+        return dataDictionary;
     }
 
     public List<StoreItem> ConvertToStoreItems(string dataString)
@@ -357,7 +379,7 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter
     }
 
     public List<PaidCurrencyBundleItem> ConvertToListPaidCurrencyBundleItem(string dataString)
-    { 
+    {
         List<PaidCurrencyBundleItem> creditBundles = new List<PaidCurrencyBundleItem>();
 
         string parsedString = ParseString(dataString);
@@ -436,12 +458,31 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter
 
         consumeResponse.Result = int.Parse(jsonData["Result"].ToString());
 
-        if(jsonData["Message"] != null)
+        if (jsonData["Message"] != null)
             consumeResponse.Message = jsonData["Message"].ToString();
 
         consumeResponse.Balance = int.Parse(jsonData["Balance"].ToString());
 
         return consumeResponse;
+    }
+
+    public List<UserDataValue> ConvertToUserDataValueList(string dataString)
+    {
+        List<UserDataValue> allValues = new List<UserDataValue>();
+        string parsedString = ParseString(dataString);
+        JsonData dataArray = LitJson.JsonMapper.ToObject(parsedString);
+
+        for (int i = 0; i < dataArray.Count; i++)
+        {
+            string userName = dataArray[i]["userName"] != null ? dataArray[i]["userName"].ToString() : null;
+            int platformID = int.Parse(dataArray[i]["PlatformId"] != null ? dataArray[i]["PlatformId"].ToString() : "0");
+            string platformUserID = dataArray[i]["PlatformUserId"] != null ? dataArray[i]["PlatformUserId"].ToString() : null;
+            string userID = dataArray[i]["userID"] != null ? dataArray[i]["userID"].ToString() : null;
+            string newValue = dataArray[i]["Value"] != null ? dataArray[i]["Value"].ToString() : null;
+            UserDataValue value = new UserDataValue(userName, platformID, platformUserID, userID, newValue);
+            allValues.Add(value);
+        }
+        return allValues;
     }
 
     string ParseString(string dataString)
@@ -454,6 +495,11 @@ public class LitJsonFxJsonObjectConverter : IServiceObjectConverter
 
 
         return parseString;
+    }
+
+    bool ParseBool(string dataString)
+    {
+        return bool.Parse(ParseString(dataString));
     }
 
 }

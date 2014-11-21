@@ -117,7 +117,8 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
 
     static public Guid GuidAppID
     {
-        get {
+        get
+        {
             try
             {
                 return new Guid(AppID);
@@ -127,7 +128,7 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
                 Debug.LogError("AppID is not a valid Guid. Please check your guid and try again.");
                 return Guid.Empty;
             }
-        
+
         }
     }
 
@@ -1217,6 +1218,47 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
 
     #endregion
 
+    #region Item Data Calls
+
+    static public void SaveUserData(string Key, string Value, Action<bool> callback)
+    {
+        string url = string.Format("{0}SaveUserData?appId={1}&UserID={2}&Key={3}&Value={4}", Url, AppID, user.userID, WWW.EscapeURL(Key), WWW.EscapeURL(Value));
+        WWW www = new WWW(url);
+        Get().StartCoroutine(Get().ServiceGetBool(www, callback));
+    }
+
+
+
+    static public void RetriveUserDataValue(string Key, Action<string> callback)
+    {
+        string url = string.Format("{0}RetriveUserDataValue?appId={1}&UserID={2}&Key={3}", Url, AppID, user.userID, WWW.EscapeURL(Key));
+        WWW www = new WWW(url);
+        Get().StartCoroutine(Get().ServiceGetString(www, callback));
+    }
+
+    static public void DeleteUserDateValue(string Key, Action<bool> callback)
+    {
+        string url = string.Format("{0}DeleteUserDateValue?appId={1}&UserID={2}&Key={3}", Url, AppID, user.userID, WWW.EscapeURL(Key));
+        WWW www = new WWW(url);
+        Get().StartCoroutine(Get().ServiceGetBool(www, callback));
+    }
+
+    static public void RetriveAllUserDataValues(Action<Dictionary<string, string>> callback)
+    {
+        string url = string.Format("{0}RetriveAllUserDataValues?appId={1}&UserID={2}", Url, AppID, user.userID);
+        WWW www = new WWW(url);
+        Get().StartCoroutine(Get().ServiceGetDictionary(www, callback));
+    }
+
+    static public void RetriveAllUserDataOfKey(string Key, Action<List<UserDataValue>> callback)
+    {
+        string url = string.Format("{0}RetriveAllUserDataOfKey?appId={1}&UserID={2}&Key={3}", Url, AppID, user.userID, WWW.EscapeURL(Key));
+        WWW www = new WWW(url);
+        Get().StartCoroutine(Get().ServiceUserDataValueResponse(www, callback));
+    }
+
+    #endregion
+
     #region IEnumeratorCalls
 
     IEnumerator ServiceGetString(WWW www, Action<string> callback)
@@ -1232,6 +1274,48 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
             }
             catch
             {
+                Debug.LogError(www.text);
+            }
+        }
+        else
+        {
+            if (onErrorEvent != null) onErrorEvent("Error: " + www.error);
+        }
+    }
+
+    IEnumerator ServiceGetBool(WWW www, Action<bool> callback)
+    {
+        yield return www;
+
+        // check for errors
+        if (www.error == null)
+        {
+            try
+            {
+                callback(serviceConverter.ConvertToBool(www.text));
+            }
+            catch
+            {
+                Debug.LogError(www.text);
+            }
+        }
+        else
+        {
+            if (onErrorEvent != null) onErrorEvent("Error: " + www.error);
+        }
+    }
+
+    IEnumerator ServiceGetDictionary(WWW www, Action<Dictionary<string, string>> callback)
+    {
+        yield return www;
+        if (www.error == null)
+        {
+            try
+            {
+                callback(serviceConverter.ConvertToDictionary(www.text));
+            }
+            catch
+            {             
                 Debug.LogError(www.text);
             }
         }
@@ -1263,7 +1347,6 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
             if (onErrorEvent != null) onErrorEvent("Error: " + www.error);
         }
     }
-
 
     IEnumerator ServiceCallGetListItemDatas(WWW www, Action<List<ItemData>> callback)
     {
@@ -1319,7 +1402,7 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
             {
                 callback(serviceConverter.ConvertToGuid(www.text));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Debug.LogError("Returned text: " + www.text + " Error: " + ex.Message);
             }
@@ -1461,6 +1544,29 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
             }
             catch
             {
+                Debug.LogError(www.text);
+            }
+        }
+        else
+        {
+            if (onErrorEvent != null) onErrorEvent("Error: " + www.error);
+        }
+    }
+
+    IEnumerator ServiceUserDataValueResponse(WWW www, Action<List<UserDataValue>> callback)
+    {
+        yield return www;
+
+        // check for errors
+        if (www.error == null)
+        {
+            try
+            {
+                callback(serviceConverter.ConvertToUserDataValueList(www.text));
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e.Message);
                 Debug.LogError(www.text);
             }
         }
