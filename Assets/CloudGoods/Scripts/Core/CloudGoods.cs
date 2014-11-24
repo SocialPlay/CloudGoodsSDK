@@ -75,7 +75,7 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
                     onErrorEvent("AppID has not been defined. Open Cloud Goods Settings from the menu.");
             }
 
-            return CloudGoodsSettings.AppID;
+            return CloudGoodsSettings.AppID.Trim();
         }
     }
 
@@ -346,8 +346,11 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
         if (OnUserAuthorized != null)
             OnUserAuthorized(user);
 
+		Debug.Log ("get session before");
+
         CloudGoods.RegisterGameSession(1, (Guid sessionGuid) =>
         {
+			Debug.Log("Register game session finished: " + sessionGuid);
             user.sessionID = sessionGuid;
             if (OnRegisteredUserToSession != null) OnRegisteredUserToSession(user.userID.ToString());
         });
@@ -657,7 +660,9 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
 
     static public void RegisterGameSession(int instanceID, Action<Guid> callback)
     {
-        string url = Url + "RegisterSession?UserId=" + user.userID + "&AppID=" + AppID + "&InstanceId=" + instanceID;
+        string url = Url + "RegisterSession?UserId=" + user.userID + "&AppID=" + AppID.Trim() + "&InstanceId=" + instanceID;
+
+		Debug.Log (url);
 
         WWW www = new WWW(url);
 
@@ -1090,6 +1095,8 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
 
         WWW www = new WWW(url);
 
+		Debug.Log ("URL get credit bundles:" + url);
+
         Get().StartCoroutine(Get().ServiceGetCreditBundles(www, callback));
     }
 
@@ -1326,6 +1333,7 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
         {
             try
             {
+				Debug.Log("User info received: " + www.text);
                 callback(serviceConverter.ConvertToUserInfo(www.text));
             }
             catch
@@ -1388,6 +1396,8 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
 
         if (www.error == null)
         {
+			Debug.Log("Service get guid: " + www.text);
+
             try
             {
                 callback(serviceConverter.ConvertToGuid(www.text));
@@ -1399,6 +1409,7 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
         }
         else
         {
+			Debug.LogError("Error: " + www.error);
             if (onErrorEvent != null) onErrorEvent("Error: " + www.error);
         }
 

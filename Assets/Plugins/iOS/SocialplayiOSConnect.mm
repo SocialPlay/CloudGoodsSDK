@@ -64,6 +64,7 @@ SKProductsRequest *productsRequest;
     [[NSNotificationCenter defaultCenter] postNotificationName:kInAppPurchaseManagerProductsFetchedNotification object:self userInfo:nil];
 }
 
+
 - (void)paymentQueue:(SKPaymentQueue *)queue
  updatedTransactions:(NSArray *)transactions
 {
@@ -100,16 +101,46 @@ SKProductsRequest *productsRequest;
         NSURL *reciptURL = [[NSBundle mainBundle] appStoreReceiptURL];
         NSData *receipt = [NSData dataWithContentsOfURL:reciptURL];
         
-        const char *reciptDescription = [receipt.description UTF8String];
+        NSString *reciptString =  [self createEncodedString:receipt];
+        
+        const char *receiptChar = [reciptString UTF8String];
         
         // send out a notification that we’ve finished the transaction
-        UnitySendMessage("iOSConnect", "ReceivedMessageFromXCode", reciptDescription);
+        UnitySendMessage("iOSConnect", "ReceivedMessageFromXCode", receiptChar);
     }
     else
     {
         // send out a notification for the failed transactionß
         UnitySendMessage("iOSConnect", "ReceivedMessageFromXCode", "Failed");
     }
+}
+
+- (NSString*) createEncodedString:(NSData*)data
+{
+    static char table[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+    
+    const int size = ((data.length + 2)/3)*4;
+    uint8_t output[size];
+    
+    const uint8_t* input = (const uint8_t*)[data bytes];
+    for (int i = 0; i < data.length; i += 3)
+    {
+        int value = 0;
+        for (int j = i; j < (i + 3); j++)
+        {
+            value <<= 8;
+            if (j < data.length)
+                value |= (0xFF & input[j]);
+        }
+        
+        const int index = (i / 3) * 4;
+        output[index + 0] =  table[(value >> 18) & 0x3F];
+        output[index + 1] =  table[(value >> 12) & 0x3F];
+        output[index + 2] = (i + 1) < data.length ? table[(value >> 6)  & 0x3F] : '=';
+        output[index + 3] = (i + 2) < data.length ? table[(value >> 0)  & 0x3F] : '=';
+    }
+    
+    return  [[NSString alloc] initWithBytes:output length:size encoding:NSASCIIStringEncoding];
 }
 
 -(void)completeTransaction:(SKPaymentTransaction *) finishedTransaction

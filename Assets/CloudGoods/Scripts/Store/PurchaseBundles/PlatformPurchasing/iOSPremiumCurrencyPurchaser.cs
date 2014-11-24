@@ -33,7 +33,7 @@ public class iOSPremiumCurrencyPurchaser : MonoBehaviour, IPlatformPurchaser
             BundlePurchaseRequest bundlePurchaseRequest = new BundlePurchaseRequest();
             bundlePurchaseRequest.BundleID = currentBundleID;
             bundlePurchaseRequest.UserID = CloudGoods.user.userID.ToString();
-            bundlePurchaseRequest.ReceiptToken = UnityEngine.Random.Range(1, 1000000).ToString();
+			bundlePurchaseRequest.ReceiptToken = data;
 
             bundlePurchaseRequest.PaymentPlatform = 4;
 
