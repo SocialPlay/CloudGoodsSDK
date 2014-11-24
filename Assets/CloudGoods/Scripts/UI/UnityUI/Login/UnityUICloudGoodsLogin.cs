@@ -87,6 +87,10 @@ public class UnityUICloudGoodsLogin : MonoBehaviour
         {
             loginUserEmail.text = PlayerPrefs.GetString("SocialPlay_Login_UserEmail");
         }
+        else
+        {
+            loginUserEmail.text = null;
+        }
 
         if (!string.IsNullOrEmpty(PlayerPrefs.GetString("SocialPlay_UserGuid")))
         {
