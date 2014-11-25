@@ -6,6 +6,10 @@ using System;
 public class iOSConnect : MonoBehaviour {
 	
     static public Action<string> onReceivedMessage;
+	static public Action<string> onReceivedSandboxString;
+
+	static public Action<string> onReceivedErrorOnPurchase;
+	static public Action<string> onItemPurchaseCancelled;
 
     [DllImport("__Internal")]
     private static extern void _PrintMessageFromUnity(string message);
@@ -21,10 +25,31 @@ public class iOSConnect : MonoBehaviour {
         }
     }
 
-	public void ReceivedMessageFromXCode(string message)
+	public void ReceivedReceiptFromIOS(string receiptToken)
 	{
-		Debug.Log ("Message received from ios: " + message);
-		iOSConnect.onReceivedMessage (message);
+		Debug.Log ("Receipt Token received from ios: " + receiptToken);
+		iOSConnect.onReceivedMessage (receiptToken);
+	}
+
+	public void ReceivedReceiptFromSandbox(string receiptToken)
+	{
+		iOSConnect.onReceivedSandboxString (receiptToken);
+	}
+
+	public void ReceivedCancelPurchase(string cancelString)
+	{
+		Debug.LogWarning ("Cancelled Purchase");
+
+		if(onItemPurchaseCancelled != null)
+			onItemPurchaseCancelled ("Cancelled Purchase");
+	}
+
+	public void OnErrorFromIOS(string error)
+	{
+		Debug.LogError ("Error on iOS: " + error);
+
+		if(onReceivedErrorOnPurchase != null)
+			onReceivedErrorOnPurchase (error);
 	}
 
 }
