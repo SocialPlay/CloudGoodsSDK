@@ -15,7 +15,6 @@ public class iOSPremiumCurrencyPurchaser : MonoBehaviour, IPlatformPurchaser
 	void Start()
 	{
 		iOSConnect.onReceivedMessage += OnReceivedPurchaseResponse;
-		iOSConnect.onReceivedSandboxString += OnReceivedSandboxToken;
 		iOSConnect.onItemPurchaseCancelled += OnItemPurchaseCancelled;
 		iOSConnect.onReceivedErrorOnPurchase += OnItemPurchaseError;
 	}
@@ -31,12 +30,7 @@ public class iOSPremiumCurrencyPurchaser : MonoBehaviour, IPlatformPurchaser
 	{
     	SendReceiptTokenForVerification (data, 4);
 	}
-
-	void OnReceivedSandboxToken(string data)
-	{
-		SendReceiptTokenForVerification (data, 0);
-	}
-
+	
 	void OnItemPurchaseCancelled(string cancelledString)
 	{
 		OnPurchaseErrorEvent ("Cancelled");
@@ -53,14 +47,18 @@ public class iOSPremiumCurrencyPurchaser : MonoBehaviour, IPlatformPurchaser
 		bundlePurchaseRequest.BundleID = currentBundleID;
 		bundlePurchaseRequest.UserID = CloudGoods.user.userID.ToString ();
 		bundlePurchaseRequest.ReceiptToken = data;
-		bundlePurchaseRequest.PaymentPlatform = 4;
+		bundlePurchaseRequest.PaymentPlatform = platform;
 		string bundleJsonString = JsonMapper.ToJson (bundlePurchaseRequest);
+
+		Debug.Log ("Sending bundle purchase: " + bundleJsonString);
+
 		CloudGoods.PurchaseCreditBundles (bundleJsonString, OnReceivedSocialplayCreditsResponse);
 	}
 
 
     void OnReceivedSocialplayCreditsResponse(string data)
     {
+		Debug.Log ("received credit response: " + data);
 		RecievedPurchaseResponse("Success");
         CloudGoods.GetPremiumCurrencyBalance(null);
     }

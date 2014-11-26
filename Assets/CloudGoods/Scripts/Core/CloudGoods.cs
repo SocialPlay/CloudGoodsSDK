@@ -1106,8 +1106,11 @@ public class CloudGoods : MonoBehaviour//, IServiceCalls
 
         WWW www = new WWW(url);
 
+		Debug.Log ("Purchase bundles url: " + url);
+
         Get().StartCoroutine(Get().ServiceGetString(www, (string message) =>
         {
+			Debug.Log("PUrchase credit bundles callback: : " + message);
             JsonData response = LitJson.JsonMapper.ToObject(message);
 
             GetStandardCurrencyBalance(0, null);
