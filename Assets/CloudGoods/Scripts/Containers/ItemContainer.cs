@@ -14,15 +14,15 @@ public class ItemContainer : MonoBehaviour
 
     public List<ItemData> containerItems = new List<ItemData>();
 
+    public List<IContainerRestriction> containerAddRestrictions = new List<IContainerRestriction>();
+    public List<IContainerRestriction> containerRemoveRestrictions = new List<IContainerRestriction>();
+
+    public IContainerAddAction containerAddAction;
+
     /// <summary>
     /// Called after the contaienr added an item.
     /// </summary>
     public event Action<ItemData, bool> AddedItem;
-
-    /// <summary>
-    /// The developers implementation of what functionality will happen when a user tries to add an item into the container
-    /// </summary>
-    public IContainerAddAction containerAddAction;
 
     /// <summary>
     /// Called after the Container itemData the item stack size or location in the Container
@@ -39,13 +39,7 @@ public class ItemContainer : MonoBehaviour
     /// </summary>
     public event Action ClearItems;
 
-
-
     private ItemContainerRestrictor restriction = null;
-
-    public List<IContainerRestriction> containerAddRestrictions = new List<IContainerRestriction>();
-    public List<IContainerRestriction> containerRemoveRestrictions = new List<IContainerRestriction>();
-
 
 
     void Awake()
