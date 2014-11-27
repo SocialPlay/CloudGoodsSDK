@@ -122,8 +122,7 @@ NSDictionary *dictionary;
             {
         
                 const char *unityStr = [receiptString UTF8String];
-        
-                // send out a notification that we’ve finished the transaction
+
                 UnitySendMessage("iOSConnect", "ReceivedReceiptFromIOS", unityStr);
             }
         }
