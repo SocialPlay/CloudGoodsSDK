@@ -6,7 +6,6 @@ using System;
 public class iOSConnect : MonoBehaviour {
 	
     static public Action<string> onReceivedMessage;
-	static public Action<string> onReceivedSandboxString;
 
 	static public Action<string> onReceivedErrorOnPurchase;
 	static public Action<string> onItemPurchaseCancelled;
@@ -30,12 +29,7 @@ public class iOSConnect : MonoBehaviour {
 		Debug.Log ("Receipt Token received from ios: " + receiptToken);
 		iOSConnect.onReceivedMessage (receiptToken);
 	}
-
-	public void ReceivedReceiptFromSandbox(string receiptToken)
-	{
-		iOSConnect.onReceivedSandboxString (receiptToken);
-	}
-
+	
 	public void ReceivedCancelPurchase(string cancelString)
 	{
 		Debug.LogWarning ("Cancelled Purchase");
