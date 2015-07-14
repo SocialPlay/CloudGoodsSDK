@@ -1,3 +1,5 @@
+Note: This version of the SDK is no longer being supported.  Please go to the new Unity SDK at [https://github.com/SocialPlay/UnityCloudGoods](https://github.com/SocialPlay/UnityCloudGoods)
+
 ## Cloud Goods
 
 Cloud Goods is a free SDK which makes adding items and a store into your Unity game a snap. It allows your game to start generating Virtual Goods revenue quickly and painlessly. It also introduces Shared Virtual Goods: the ability to share items between your games (Imagine a mobile mini game that lets players collect resources they can use in the full desktop game).
